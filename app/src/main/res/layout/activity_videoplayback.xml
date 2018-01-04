@@ -7,7 +7,7 @@
     xmlns:zhouh="http://schemas.android.com/apk/res-auto"
     android:background="#ffcad3"
     android:orientation="vertical"
-    tools:context=".activity.ctrl.view.CtrlActivity">
+    tools:context="com.game.smartremoteapp.activity.ctrl.view.CtrlActivity">
 
     <RelativeLayout
         android:id="@+id/layout_top_select"
@@ -130,7 +130,7 @@
             </RelativeLayout>
         </FrameLayout>
 
-        <com.tencent.tmgp.jjzww.view.GifView
+        <com.game.smartremoteapp.view.GifView
             android:id="@+id/ctrl_gif_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

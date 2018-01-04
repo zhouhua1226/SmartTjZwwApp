@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"/>
 
-        <com.tencent.tmgp.jjzww.view.MyTextSwitcher
+        <com.game.smartremoteapp.view.MyTextSwitcher
             android:id="@+id/rolling_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         android:layout_height="1dp"
         android:background="#dcdcdc" />
 
-    <com.tencent.tmgp.jjzww.view.EmptyLayout
+    <com.game.smartremoteapp.view.EmptyLayout
         android:id="@+id/zww_emptylayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -116,7 +116,7 @@
             android:scrollbars="none">
         </android.support.v7.widget.RecyclerView>
 
-    </com.tencent.tmgp.jjzww.view.EmptyLayout>
+    </com.game.smartremoteapp.view.EmptyLayout>
 
 
 

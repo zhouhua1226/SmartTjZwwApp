@@ -8,7 +8,6 @@
             android:id="@+id/moppet_image"
             android:layout_width="100dp"
             android:layout_height="90dp"
-            android:src="@drawable/wawa"
             android:layout_centerHorizontal="true"/>
         <ImageView
             android:layout_below="@+id/moppet_image"
@@ -25,7 +24,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
             android:textColor="@color/gray"
-            android:text="粉红兔"/>
+            android:text=""/>
 
         <TextView
             android:id="@+id/mopper_time"
