@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.utils.Utils;
 
+
 /**
  * Created by hongxiu on 2017/9/21.
  */

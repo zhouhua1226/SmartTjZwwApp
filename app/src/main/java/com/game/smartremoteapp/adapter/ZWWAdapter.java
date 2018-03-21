@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.bean.ZwwRoomBean;
+import com.game.smartremoteapp.bean.RoomBean;
 import com.game.smartremoteapp.utils.UrlUtils;
 
 import java.util.List;
@@ -20,20 +20,16 @@ import java.util.List;
  */
 public class ZWWAdapter extends RecyclerView.Adapter<ZWWAdapter.ZWWViewHolder> {
     private Context mContext;
-    private List<ZwwRoomBean> mDatas;
+    private List<RoomBean> mDatas;
     private OnItemClickListener mOnItemClickListener;
 
-    public ZWWAdapter(Context context, List<ZwwRoomBean> list) {
+    public ZWWAdapter(Context context, List<RoomBean> list) {
         this.mContext = context;
         this.mDatas = list;
     }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
-    }
-
-    public void addData(){
-
     }
 
     @Override
@@ -45,34 +41,36 @@ public class ZWWAdapter extends RecyclerView.Adapter<ZWWAdapter.ZWWViewHolder> {
 
     @Override
     public void onBindViewHolder(ZWWViewHolder holder, final int position) {
-        ZwwRoomBean bean = mDatas.get(position);
-        //holder.money.setText(String.format(mContext.getString(R.string.money_temp), bean.getDOLL_GOLD()));
-        holder.money.setText(bean.getDOLL_GOLD()+"/次");
-        holder.name.setText(bean.getDOLL_NAME());
-        Glide.with(mContext).load(UrlUtils.PICTUREURL + bean.getDOLL_URL()).error(R.drawable.loading).into(holder.imageView);
+        RoomBean bean = mDatas.get(position);
+        holder.money.setText(bean.getDollGold()+"");
+        holder.name.setText(bean.getDollName());
+        Glide.with(mContext).load(UrlUtils.APPPICTERURL + bean.getDollUrl())
+                .error(R.drawable.loading)
+                .into(holder.imageView);
         holder.itemView.setEnabled(true);
-        if (bean.getDOLL_STATE().equals("10")) {
-            holder.connectIv.setImageResource(R.drawable.green_point);
-            holder.connectTv.setTextColor(mContext.getResources().getColor(R.color.green));
-            holder.connectTv.setText(mContext.getString(R.string.free_text));
-        } else if (bean.getDOLL_STATE().equals("11")) {
-            holder.connectIv.setImageResource(R.drawable.red_point);
-            holder.connectTv.setTextColor(mContext.getResources().getColor(R.color.redx));
-            holder.connectTv.setText(mContext.getString(R.string.busy_text));
+        if (bean.getDollState().equals("10")) {
+            holder.connectIv.setImageResource(R.drawable.ctrl_work_icon);
+            holder.connectTv.setBackgroundResource(R.drawable.room_statue_free_bg);
+            holder.connectTv.setText("空闲中");
+        } else if (bean.getDollState().equals("11")) {
+            holder.connectIv.setImageResource(R.drawable.ctrl_idling_icon);
+            holder.connectTv.setBackgroundResource(R.drawable.room_statue_busy_bg);
+            holder.connectTv.setText("游戏中");
         } else {
-            holder.connectIv.setImageResource(R.drawable.red_point);
-            holder.connectTv.setTextColor(mContext.getResources().getColor(R.color.redx));
-            holder.connectTv.setText(mContext.getString(R.string.preserve_text));
+            holder.connectIv.setImageResource(R.drawable.ctrl_repair_icon);
             holder.itemView.setEnabled(false);
+            holder.connectTv.setText("维护中");
+            holder.connectTv.setBackgroundResource(R.drawable.room_statue_sleep_bg);
         }
-        if (mOnItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(position);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
@@ -83,8 +81,7 @@ public class ZWWAdapter extends RecyclerView.Adapter<ZWWAdapter.ZWWViewHolder> {
     class ZWWViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView name;
-        private TextView money;
-        private TextView connectTv;
+        private TextView money,connectTv;
         private ImageView connectIv;
 
         public ZWWViewHolder(View itemView) {
@@ -92,12 +89,12 @@ public class ZWWAdapter extends RecyclerView.Adapter<ZWWAdapter.ZWWViewHolder> {
             imageView = (ImageView) itemView.findViewById(R.id.moppet_image);
             name = (TextView) itemView.findViewById(R.id.moppet_name_tv);
             money = (TextView) itemView.findViewById(R.id.moppet_money_tv);
-            connectTv = (TextView) itemView.findViewById(R.id.moppet_connect_tv);
             connectIv = (ImageView) itemView.findViewById(R.id.moppet_connect_iv);
+            connectTv= (TextView) itemView.findViewById(R.id.moppet_connect_tv);
         }
     }
 
-    public void notify(List<ZwwRoomBean> lists) {
+    public void notify(List<RoomBean> lists) {
         this.mDatas = lists;
         notifyDataSetChanged();
     }

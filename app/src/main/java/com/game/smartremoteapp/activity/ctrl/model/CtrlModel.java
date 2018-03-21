@@ -6,10 +6,11 @@ import android.view.SurfaceView;
 
 import com.daniulive.smartplayer.SmartPlayerJni;
 import com.eventhandle.SmartEventCallback;
-import com.gatz.netty.utils.NettyUtils;
-import com.iot.game.pooh.server.entity.json.enums.MoveType;
 import com.game.smartremoteapp.utils.EZUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.gatz.netty.utils.NettyUtils;
+import com.iot.game.pooh.server.entity.json.enums.MoveType;
+
 
 
 /**
@@ -105,7 +106,6 @@ public class CtrlModel implements SmartEventCallback {
         smartPlayer.SmartPlayerSetFastStartup(playerHandle, 1);
         smartPlayer.SmartPlayerSetLowLatencyMode(playerHandle, 1);
         smartPlayer.SmartPlayerSetBuffer(playerHandle, 0);
-        //int hwChecking = smartPlayer.SetSmartPlayerVideoHWDecoder(playerHandle, 0);  //娃娃机一定需要软解码
         int iPlaybackRet = smartPlayer.SmartPlayerStartPlayback(playerHandle, url);
         Utils.showLogE(TAG, "当前播放url:::::::" + iPlaybackRet + "===========" + url);
         if (iPlaybackRet != 0) {
@@ -136,6 +136,7 @@ public class CtrlModel implements SmartEventCallback {
                 callBack.getVideoPlayErr(EZUtils.PLAYER_ERC_PLAYERR);
                 break;
             case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_CONNECTED: //直播成功
+                callBack.getVideoPlaySucess();
                 break;
             case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_DISCONNECTED: //连接断开
                 if (!isChangerUrl) {

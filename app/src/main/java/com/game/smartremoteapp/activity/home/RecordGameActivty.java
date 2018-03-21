@@ -2,6 +2,7 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.ConsigneeBean;
-import com.game.smartremoteapp.bean.LoginInfo;
+import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -25,6 +26,10 @@ import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.SureCancelDialog;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +83,7 @@ public class RecordGameActivty extends BaseActivity {
 
     private String TAG="RecordGameActivty--";
     private VideoBackBean videoBackBean;
+    private List<VideoBackBean> list=new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -88,18 +94,19 @@ public class RecordGameActivty extends BaseActivity {
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
         videoBackBean = (VideoBackBean) getIntent().getExtras().getSerializable("record");
+        list.add(videoBackBean);
     }
 
 
     private void initData() {
         nameTv.setText(videoBackBean.getDOLL_NAME());
-        timesTv.setText(Utils.getTime(videoBackBean.getCAMERA_DATE()));
+        timesTv.setText(videoBackBean.getCREATE_DATE().replace("-","/"));
         mydollNumTv.setText("1");
         mydollExchangenumTv.setText(videoBackBean.getCONVERSIONGOLD() + "");
         mydollIdTv.setText(videoBackBean.getID() + "");
         getViewChange();
         Glide.with(this)
-                .load(UrlUtils.PICTUREURL + videoBackBean.getDOLL_URL())
+                .load(UrlUtils.APPPICTERURL + videoBackBean.getDOLL_URL())
                 .dontAnimate()
                 .transform(new GlideCircleTransform(this))
                 .into(titleImg);
@@ -118,12 +125,12 @@ public class RecordGameActivty extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        // TODO: add setContentView(...) invocation
+//        ButterKnife.bind(this);
+//    }
 
     @OnClick({R.id.image_back, R.id.image_service, R.id.gamemoney_button, R.id.shipments_button})
     public void onViewClicked(View view) {
@@ -132,7 +139,7 @@ public class RecordGameActivty extends BaseActivity {
                 this.finish();
                 break;
             case R.id.image_service:
-                MyToast.getToast(this, "我是客服按钮").show();
+                startActivity(new Intent(RecordGameActivty.this,MyCtachRecordActivity.class));
                 break;
             case R.id.gamemoney_button:
                 //兑换游戏币
@@ -144,7 +151,7 @@ public class RecordGameActivty extends BaseActivity {
                     @Override
                     public void getResult(int resultCode) {
                         if (1 == resultCode) {// 确定
-                            getExChangeWWB(String.valueOf(videoBackBean.getID()),videoBackBean.getDOLL_NAME(),"1", UserUtils.USER_ID);
+                            getExChangeWWB(String.valueOf(videoBackBean.getID()),videoBackBean.getDOLLID(),"1", UserUtils.USER_ID);
                         }else {
                             MyToast.getToast(getApplicationContext(),"兑换取消!").show();
                         }
@@ -156,30 +163,54 @@ public class RecordGameActivty extends BaseActivity {
                 //申请发货
                 Intent intent = new Intent(this, ConsignmentActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("sqfh", videoBackBean);
+                //bundle.putSerializable("sqfh", videoBackBean);
+                bundle.putSerializable("record", (Serializable) list);
                 intent.putExtras(bundle);
                 startActivityForResult(intent,0);
+                finish();
                 break;
         }
     }
 
     private void getViewChange(){
-        //0:寄存   1:发货   2:兑换游戏币
+        //0:寄存   1:待发货   2:兑换游戏币  3:已发货
         if (videoBackBean.getPOST_STATE().equals("0")) {
             mydollStateTv.setText("寄存中");
             nonesendLayout.setVisibility(View.VISIBLE);
             sendLayout.setVisibility(View.GONE);
             exchangedTv.setVisibility(View.GONE);
-        } else if(videoBackBean.getPOST_STATE().equals("1")){
-            mydollStateTv.setText("已发货");
+        }else if(videoBackBean.getPOST_STATE().equals("1")) {
+            mydollStateTv.setText("待发货");
             nonesendLayout.setVisibility(View.GONE);
             sendLayout.setVisibility(View.VISIBLE);
             exchangedTv.setVisibility(View.GONE);
             ConsigneeBean consigneeBean=Utils.getConsigneeBean(videoBackBean.getSENDGOODS());
-            sendnameTv.setText("收货人："+consigneeBean.getName());
-            sendphotoTv.setText(consigneeBean.getPhone());
-            sendaddressTv.setText("地址："+consigneeBean.getAddress());
-            sendremarkTv.setText("备注："+consigneeBean.getRemark());
+            if (consigneeBean != null) {
+                sendnameTv.setText("收货人：" + consigneeBean.getName());
+                sendphotoTv.setText(consigneeBean.getPhone());
+                sendaddressTv.setText("地址：" + consigneeBean.getAddress());
+                if (consigneeBean.getRemark() != null) {
+                    sendremarkTv.setText("备注：" + consigneeBean.getRemark());
+                }
+            }
+        }else if(videoBackBean.getPOST_STATE().equals("3")){
+            if(!videoBackBean.getSEND_ORDER_ID().equals("")) {
+                mydollStateTv.setText(Html.fromHtml("<font color='#848484'>(订单号:" + videoBackBean.getSEND_ORDER_ID() + ")</font>" + " 已发货"));
+            }else {
+                mydollStateTv.setText("已发货");
+            }
+            nonesendLayout.setVisibility(View.GONE);
+            sendLayout.setVisibility(View.VISIBLE);
+            exchangedTv.setVisibility(View.GONE);
+            ConsigneeBean consigneeBean= Utils.getConsigneeBean(videoBackBean.getSENDGOODS());
+            if (consigneeBean != null) {
+                sendnameTv.setText("收货人：" + consigneeBean.getName());
+                sendphotoTv.setText(consigneeBean.getPhone());
+                sendaddressTv.setText("地址：" + consigneeBean.getAddress());
+                if (consigneeBean.getRemark() != null) {
+                    sendremarkTv.setText("备注：" + consigneeBean.getRemark());
+                }
+            }
 
         } else if(videoBackBean.getPOST_STATE().equals("2")){
             mydollStateTv.setText("已兑换");
@@ -199,17 +230,20 @@ public class RecordGameActivty extends BaseActivity {
         if (data == null) {
             return;
         }
-        videoBackBean= (VideoBackBean) data.getExtras().getSerializable("record");
+        list= (List<VideoBackBean>) data.getExtras().getSerializable("record");
+        if(list.size()>0){
+            videoBackBean=list.get(0);
+        }
         // 根据返回码的不同，设置参数
         if (requestCode == 0) {
             getViewChange();
         }
     }
 
-    private void getExChangeWWB(String id,String dollName,String number,String userId){
-        HttpManager.getInstance().getExChangeWWB(id, dollName, number, userId, new RequestSubscriber<Result<LoginInfo>>() {
+    private void getExChangeWWB(String id,String dollId,String number,String userId){
+        HttpManager.getInstance().getExChangeWWB(id, dollId, number, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-            public void _onSuccess(Result<LoginInfo> loginInfoResult) {
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 Log.e(TAG,"兑换结果="+loginInfoResult.getMsg());
                 if(loginInfoResult.getMsg().equals("success")) {
                     UserUtils.UserBalance=loginInfoResult.getData().getAppUser().getBALANCE();

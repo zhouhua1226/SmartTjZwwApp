@@ -2,9 +2,9 @@ package com.game.smartremoteapp.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.design.widget.TabLayout;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseFragment;
@@ -17,7 +17,7 @@ import butterknife.BindView;
 /**
  * Created by zhouh on 2017/9/27.
  */
-public class RankFragment extends BaseFragment{
+public class RankFragment extends BaseFragment {
     @BindView(R.id.rankVp)
     ViewPager rankVp;
     @BindView(R.id.ranktabLy)

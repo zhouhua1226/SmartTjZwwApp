@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.Result;
@@ -17,14 +18,12 @@ import com.game.smartremoteapp.utils.BitmapUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
-import com.jph.takephoto.model.CropOptions;
 import com.game.smartremoteapp.view.MyToast;
-
+import com.jph.takephoto.model.CropOptions;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 /**
  * Created by hongxiu on 2017/9/26.
@@ -80,10 +79,10 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
     @Override
     public void takeSuccess(String imagePath) {
         Utils.showLogE(TAG,imagePath);
-        String string=UserUtils.UserPhone;
+        String string= UserUtils.UserPhone;
         String str = android.util.Base64.encodeToString(string.getBytes(), android.util.Base64.DEFAULT);
         Bitmap bitmap= BitmapUtils.compressImageFromFile(imagePath);
-        base64=Base64.encode(BitmapUtils.compressBmpFromBmp(bitmap));
+        base64= Base64.encode(BitmapUtils.compressBmpFromBmp(bitmap));
         getFaceImage(UserUtils.USER_ID,base64);
     }
 

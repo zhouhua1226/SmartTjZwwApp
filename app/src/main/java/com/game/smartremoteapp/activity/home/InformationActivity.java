@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

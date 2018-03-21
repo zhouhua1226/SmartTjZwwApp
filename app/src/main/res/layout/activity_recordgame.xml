@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@drawable/bg03">
+        android:background="@color/apptheme_bg">
 
         <ImageButton
             android:id="@+id/image_back"
@@ -47,11 +47,11 @@
 
         <ImageView
             android:id="@+id/title_img"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:padding="2dp"
+            android:padding="1dp"
             android:background="@drawable/recordgame"
             android:src="@drawable/wawa"/>
 
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="#fb7299"
+            android:textColor="@color/apptheme_bg"
             android:layout_marginRight="15dp"
             android:text="顺利抓取"/>
     </RelativeLayout>
@@ -189,7 +189,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:textColor="@color/pink"
+            android:textColor="@color/apptheme_bg"
             android:textSize="14sp"/>
 
 
@@ -261,7 +261,7 @@
             android:layout_below="@+id/text_tv"
             android:layout_width="75dp"
             android:layout_height="30dp"
-            android:background="@drawable/fillingcurrency_dialog"
+            android:background="@drawable/setting_logout_btn_bg"
             android:text="兑换游戏币"
             android:textSize="14sp"
             android:textColor="@color/white"
@@ -276,7 +276,7 @@
             android:layout_below="@+id/text_tv"
             android:layout_width="75dp"
             android:layout_height="30dp"
-            android:background="@drawable/fillingcurrency_dialog"
+            android:background="@drawable/setting_logout_btn_bg"
             android:text="申请发货"
             android:textSize="14sp"
             android:textColor="@color/white"
@@ -308,7 +308,7 @@
             android:id="@+id/sendname_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="收货人:花花"/>
+            tools:text="收货人:花花"/>
 
         <TextView
             android:textSize="14sp"
@@ -320,7 +320,7 @@
             android:id="@+id/sendaddress_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="地址:上海市虹口区吴淞路218号"/>
+            tools:text="地址:上海市虹口区吴淞路218号"/>
 
         <TextView
             android:textSize="14sp"
@@ -332,7 +332,7 @@
             android:id="@+id/sendremark_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="备注:魏黎是最帅的"/>
+            tools:text="备注:魏黎是最帅的"/>
 
 
         <TextView
@@ -344,7 +344,7 @@
             android:textColor="#5b5b5b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15335756655"/>
+            tools:text="15335756655"/>
 
 
     </RelativeLayout>

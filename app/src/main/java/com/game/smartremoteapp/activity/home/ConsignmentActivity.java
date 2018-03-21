@@ -2,29 +2,32 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.adapter.ConsignmentAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
-import com.game.smartremoteapp.bean.LoginInfo;
+import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
-import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,12 +57,33 @@ public class ConsignmentActivity extends BaseActivity {
     TextView textTv;
     @BindView(R.id.remark_et)
     EditText remarkEt;
+    @BindView(R.id.consignment_recyclerview)
+    RecyclerView consignmentRecyclerview;
+    @BindView(R.id.consignment_hdfk_tv)
+    TextView consignmentHdfkTv;
+    @BindView(R.id.consignment_wwbdkyf_tv)
+    TextView consignmentWwbdkyfTv;
+    @BindView(R.id.consignment_singleyj_layout)
+    LinearLayout consignmentSingleyjLayout;
+    @BindView(R.id.consignment_hdfk_imag)
+    ImageView consignmentHdfkImag;
+    @BindView(R.id.consignment_wwbdkyf_imag)
+    ImageView consignmentWwbdkyfImag;
+    @BindView(R.id.consignment_hdfk_layout)
+    LinearLayout consignmentHdfkLayout;
+    @BindView(R.id.consignment_wwbdkyf_layout)
+    LinearLayout consignmentWwbdkyfLayout;
 
-    private String ATG="ConsignmentActivity--";
+    private String TAG = "ConsignmentActivity--";
     private VideoBackBean videoBackBean;
-    private List<VideoBackBean> list=new ArrayList<>();
-    private String information="";
-    private String consignee="尹聪,13687632490,上海市虹口区欧阳路196号10楼612,";
+    private ConsignmentAdapter consignmentAdapter;
+    private List<VideoBackBean> list = new ArrayList<>();
+    private String information = "";
+    private String fhType = "0";
+    private boolean isFormalAddress=true;
+    private StringBuffer stringId = new StringBuffer("");
+    private StringBuffer stringDollId = new StringBuffer("");
+    private String consignee = "尹聪,13687632490,上海市虹口区欧阳路196号10楼612,";
 
     @Override
     protected int getLayoutId() {
@@ -73,27 +97,35 @@ public class ConsignmentActivity extends BaseActivity {
         initData();
     }
 
-    private void initData(){
-        videoBackBean=(VideoBackBean) getIntent().getExtras().getSerializable("sqfh");
-        nameTv.setText(videoBackBean.getDOLL_NAME());
-        timesTv.setText(Utils.getTime(videoBackBean.getCAMERA_DATE()));
-        if(!Utils.isEmpty(UserUtils.UserAddress)) {
+    private void initData() {
+        if (!Utils.isEmpty(UserUtils.UserAddress)) {
             informationTv.setText(UserUtils.UserAddress);
-        }else {
+            consignmentWwbdkyfTv.setText(Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
+        } else {
             informationTv.setText("新增收货地址");
+            consignmentWwbdkyfTv.setText("娃娃币抵扣邮费");
         }
-        Glide.with(this)
-                .load(UrlUtils.PICTUREURL+videoBackBean.getDOLL_URL())
-                .dontAnimate()
-                .transform(new GlideCircleTransform(this))
-                .into(titleImg);
+        list = (List<VideoBackBean>) getIntent().getSerializableExtra("record");//获取list方式
+        Log.e(TAG, "发货娃娃集合长度=" + list.size());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        consignmentRecyclerview.setLayoutManager(linearLayoutManager);
+        consignmentRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        consignmentAdapter = new ConsignmentAdapter(this, list);
+        consignmentRecyclerview.setAdapter(consignmentAdapter);
+
+        if (list.size() >= 2) {
+            consignmentSingleyjLayout.setVisibility(View.GONE);
+        } else {
+            consignmentSingleyjLayout.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
-        initData();
+        //initData();
+
     }
 
     @Override
@@ -108,7 +140,9 @@ public class ConsignmentActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.image_back, R.id.consignment_rl, R.id.shipping_button})
+    @OnClick({R.id.image_back, R.id.consignment_rl, R.id.shipping_button,
+            R.id.consignment_hdfk_tv, R.id.consignment_wwbdkyf_tv,
+            R.id.consignment_hdfk_layout,R.id.consignment_wwbdkyf_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -117,32 +151,91 @@ public class ConsignmentActivity extends BaseActivity {
             case R.id.consignment_rl:
                 //新增地址
                 startActivity(new Intent(this, NewAddressActivity.class));
-
                 break;
             case R.id.shipping_button:
-                information=UserUtils.UserAddress.replace(" ",",");
-                String remark=remarkEt.getText().toString();
-                String dollId= String.valueOf(videoBackBean.getID());
-                if(Utils.isEmpty(information)){
-                    MyToast.getToast(this, "请设置收货信息！").show();
-                }else {
-                    getSendGoods(dollId,"1",information,remark,UserUtils.USER_ID);
-                    //finish();
+                if(!Utils.isEmpty(UserUtils.UserAddress)){
+                    information = UserUtils.UserAddress.replace(" ", ",");
                 }
+                String remark = remarkEt.getText().toString();
+                if(Utils.isSpecialChar(remark)){
+                    MyToast.getToast(this, "您输入了特殊字符！").show();
+                    return;
+                }
+                final int length = list.size();
+                if (length > 1) {
+                    for (int i = 0; i < length; i++) {
+                        if (i == 0) {
+                            Log.e(TAG, "adsadadfad" + (list.get(i).getID()));
+                            stringId.append(list.get(i).getID());
+                            stringDollId.append(list.get(i).getDOLLID());
+                        } else {
+                            stringId.append("," + list.get(i).getID());
+                            stringDollId.append(list.get(i).getDOLLID());
+                        }
+                    }
+                    Log.e(TAG, "发货娃娃编号=" + stringId);
+                    if (Utils.isEmpty(information)) {
+                        MyToast.getToast(this, "请设置收货信息！").show();
+                    } else {
+                        getSendGoods(String.valueOf(stringId), length + "", information, remark, UserUtils.USER_ID, "0", Utils.getProvinceNum(UserUtils.UserAddress));
+                    }
+                } else {
+                    if (Utils.isEmpty(information)) {
+                            MyToast.getToast(this, "请设置收货信息！").show();
+                        } else {
+                            if (fhType.equals("1") || fhType.equals("2")) {
+                                Log.e(TAG, "单个娃娃id" + list.get(0).getID()+fhType);
+                                if(isEnough()) {
+                                    //getSendGoods(list.get(0).getID()+",", "1", information, remark, UserUtils.USER_ID, fhType);
+                                    getSendGoods(list.get(0).getID() + ",", "1", information, remark, UserUtils.USER_ID, fhType, Utils.getProvinceNum(UserUtils.UserAddress));
+                                }else {
+                                    if(isFormalAddress) {
+                                        MyToast.getToast(getApplicationContext(), "您的余额不足！").show();
+                                    }else {
+                                        MyToast.getToast(getApplicationContext(), "暂不支持您所填写的地区！").show();
+                                    }
+                                }
+                            }else {
+                                MyToast.getToast(this,"请选择邮寄付款方式！").show();
+                            }
+                        }
+
+                }
+                break;
+            case R.id.consignment_hdfk_layout:
+                //选货到付款  免邮：0  金币抵扣 ：1  货到付款 ：2
+                fhType = "2";
+                setYJType(fhType);
+                break;
+            case R.id.consignment_wwbdkyf_layout:
+                //娃娃币抵扣运费
+                fhType = "1";
+                setYJType(fhType);
                 break;
         }
     }
 
-    private void getSendGoods(String dollID,String number,String consignee,String remark,String userID){
-        HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, new RequestSubscriber<Result<LoginInfo>>() {
+    private void setYJType(String type) {
+        if (type.equals("2")) {
+            consignmentHdfkImag.setImageResource(R.drawable.consignment_select);
+            consignmentWwbdkyfImag.setImageResource(R.drawable.consignment_unselect);
+        } else if (type.equals("1")) {
+            consignmentHdfkImag.setImageResource(R.drawable.consignment_unselect);
+            consignmentWwbdkyfImag.setImageResource(R.drawable.consignment_select);
+        }
+    }
+
+    private void getSendGoods(String dollID, String number, String consignee, String remark, String userID, String mode,String costNum) {
+        //Log.e(TAG, "发货参数=" + costNum);
+        HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-            public void _onSuccess(Result<LoginInfo> loginInfoResult) {
-                Log.e(ATG,"发货结果="+loginInfoResult.getMsg());
-                videoBackBean=loginInfoResult.getData().getPlayBack();
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                Log.e(TAG, "发货结果=" + loginInfoResult.getMsg());
+                list = loginInfoResult.getData().getPlayback();
                 MyToast.getToast(getApplicationContext(), "发货成功，请耐心等待！").show();
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("record", videoBackBean);
+                bundle.putSerializable("record", (Serializable) list);
                 intent.putExtras(bundle);
                 setResult(0, intent);
                 finish();
@@ -154,6 +247,26 @@ public class ConsignmentActivity extends BaseActivity {
             }
         });
     }
+
+    /**
+     * 判断用户余额是否够付邮费
+     * @return
+     */
+    private boolean isEnough(){
+        if (!Utils.getJBDKNum(UserUtils.UserAddress).equals("")) {
+            int yf = Integer.parseInt(Utils.getJBDKNum(UserUtils.UserAddress));
+            int ye = Integer.parseInt(UserUtils.UserBalance);
+            if (ye >= yf) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            isFormalAddress=false;
+            return false;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

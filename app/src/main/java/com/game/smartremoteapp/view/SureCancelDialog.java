@@ -2,7 +2,6 @@ package com.game.smartremoteapp.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
+
 
 /**
  * Created by yincong on 2017/12/5 15:55
@@ -31,7 +31,7 @@ public class SureCancelDialog extends Dialog implements View.OnClickListener{
         super(context);
     }
 
-    public SureCancelDialog(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
+    public SureCancelDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 

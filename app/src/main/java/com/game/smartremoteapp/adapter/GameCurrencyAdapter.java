@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.bean.ExChangeMoneyBean;
+import com.game.smartremoteapp.bean.UserPaymentBean;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ import java.util.List;
 public class GameCurrencyAdapter extends RecyclerView.Adapter<GameCurrencyAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<ExChangeMoneyBean>mDatas;
+    private List<UserPaymentBean>mDatas;
     private LayoutInflater mInflater;
 
-    public GameCurrencyAdapter(Context context, List<ExChangeMoneyBean>datas){
+    public GameCurrencyAdapter(Context context, List<UserPaymentBean>datas){
         this.mContext=context;
         this.mDatas=datas;
         mInflater=LayoutInflater.from(context);
@@ -38,9 +38,9 @@ public class GameCurrencyAdapter extends RecyclerView.Adapter<GameCurrencyAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.title_tv.setText(mDatas.get(position).getDOLLNAME());
-        holder.value_tv.setText("+"+mDatas.get(position).getCONMONEY());
-        holder.times_tv.setText(mDatas.get(position).getCREATETIME());
+        holder.title_tv.setText(mDatas.get(position).getREMARK());
+        holder.value_tv.setText(mDatas.get(position).getGOLD());
+        holder.times_tv.setText(mDatas.get(position).getCREATE_TIME());
 
     }
 
@@ -63,7 +63,7 @@ public class GameCurrencyAdapter extends RecyclerView.Adapter<GameCurrencyAdapte
 
     }
 
-    public void notify(List<ExChangeMoneyBean> lists) {
+    public void notify(List<UserPaymentBean> lists) {
         this.mDatas = lists;
         notifyDataSetChanged();
     }

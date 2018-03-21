@@ -8,10 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.adapter.RecordAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
-import com.game.smartremoteapp.bean.LoginInfo;
+import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -41,7 +42,7 @@ public class RecordActivity extends BaseActivity {
     TextView cecordFailTv;
 
     private RecordAdapter recordAdapter;
-    private String userName = "";
+    private String userId = "";
     private List<VideoBackBean> listVideo = new ArrayList<>();
 
     //我的主娃娃记录
@@ -55,11 +56,11 @@ public class RecordActivity extends BaseActivity {
         initView();
         initdata();
         onClick();
-        getVideoBackList(UserUtils.USER_ID);
+        getVideoBackList(userId);
     }
 
     private void initdata() {
-        userName = UserUtils.NickName;
+        userId = UserUtils.USER_ID;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recodeRecyclerview.setLayoutManager(linearLayoutManager);
         recodeRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -92,9 +93,9 @@ public class RecordActivity extends BaseActivity {
 
 
     private void getVideoBackList(String userId) {
-        HttpManager.getInstance().getVideoBackList(userId, new RequestSubscriber<Result<LoginInfo>>() {
+        HttpManager.getInstance().getVideoBackList(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-            public void _onSuccess(Result<LoginInfo> result) {
+            public void _onSuccess(Result<HttpDataInfo> result) {
                 listVideo = result.getData().getPlayback();
                 Utils.showLogE("video记录列表", "result=" + result.getMsg()+"="+listVideo.size());
                 if(listVideo.size()!=0) {

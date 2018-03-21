@@ -13,16 +13,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easy.ysdk.EasyYSDKApi;
+import com.easy.ysdk.share.ShareInfo;
+import com.flamigo.jsdk.FlamigoPlaform;
+import com.flamigo.jsdk.api.FlamigoJApi;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.model.http.HttpManager;
+import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
+import com.gatz.netty.utils.NettyUtils;
+import com.proto.security.SecurityApi;
+import com.robust.sdk.api.RobustApi;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
 
 /**
  * Created by hongxiu on 2017/9/25.
@@ -53,10 +67,19 @@ public class SettingActivity extends BaseActivity {
     TextView settingUpdateTv;
     @BindView(R.id.setting_update_layout)
     RelativeLayout settingUpdateLayout;
+    @BindView(R.id.betrecord_rl)
+    RelativeLayout betrecordRl;
+    @BindView(R.id.setting_share_layout)
+    RelativeLayout settingShareLayout;
+    @BindView(R.id.roommusic_control_imag)
+    ImageView roommusicControlImag;
+    @BindView(R.id.roommusic_control_layout)
+    RelativeLayout roommusicControlLayout;
 
+    private String TAG = "SettingActivity";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
-    private Context context=SettingActivity.this;
+    private Context context = SettingActivity.this;
 
     @Override
     protected int getLayoutId() {
@@ -67,11 +90,9 @@ public class SettingActivity extends BaseActivity {
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
         setIsVibrator();
-        try {
-            settingUpdateTv.setText("当前版本："+Utils.getAppCodeOrName(this,1));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setIsOpenMusic();
+        settingUpdateTv.setText("当前版本：" + Utils.getAppCodeOrName(this, 1));
+
     }
 
     @Override
@@ -81,22 +102,49 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initSDK();
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    }
+
+    //初始化sdk
+    private void initSDK() {
+        //ysdk必须要初始化
+        EasyYSDKApi.onCreate(this);
+        EasyYSDKApi.handleIntent(this.getIntent());
+        EasyYSDKApi.setUserListener();
+        EasyYSDKApi.setBuglyListener();
+
+        //add hx_ysdk  初始化
+        Bundle initParams = new Bundle();
+        initParams.putString(RobustApi.InitParamsKey.CKEY, "2z8p1Wau1l9="); //测试环境ckey="2z8p1Wau1l9="  正式环境ckey="y3WfBKF1FY4="
+        RobustApi.init(this, initParams);
+
+        //分享初始化
+        FlamigoJApi.getInstance().setConfig(true);
+        FlamigoJApi.getInstance().init(this, FlamigoPlaform.DOMESTIC);
+        SecurityApi.getInstance().installation(this, "sqwoinjzdmhekzpzyvd7eqB6Vr_avatar");
+
+
+    }
+
+    //判断是否登录
+    private boolean isLogin() {
+        return RobustApi.getInstance().isLogin();
     }
 
     @OnClick({R.id.image_back, R.id.image_kf, R.id.money_rl,
-              R.id.record_rl, R.id.invitation_rl, R.id.feedback_rl,
-              R.id.gywm_rl, R.id.bt_out, R.id.vibrator_control_layout,
-              R.id.vibrator_control_imag,R.id.setting_update_layout})
+            R.id.record_rl, R.id.invitation_rl, R.id.feedback_rl,
+            R.id.gywm_rl, R.id.bt_out, R.id.vibrator_control_layout,
+            R.id.vibrator_control_imag, R.id.setting_update_layout,
+            R.id.betrecord_rl, R.id.setting_share_layout,R.id.roommusic_control_layout,
+            R.id.roommusic_control_imag})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
                 finish();
                 break;
             case R.id.image_kf:
-                Toast.makeText(this, "我是客服", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,ServiceActivity.class));
                 break;
             case R.id.money_rl:
                 //我的游戏币
@@ -105,6 +153,10 @@ public class SettingActivity extends BaseActivity {
             case R.id.record_rl:
                 //我的主娃娃记录
                 startActivity(new Intent(this, RecordActivity.class));
+                break;
+            case R.id.betrecord_rl:
+                //我的投注记录
+                startActivity(new Intent(this, BetRecordActivity.class));
                 break;
             case R.id.invitation_rl:
                 //邀请码
@@ -119,10 +171,16 @@ public class SettingActivity extends BaseActivity {
                 startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.bt_out:
-                Toast.makeText(this, "退出登录", Toast.LENGTH_SHORT).show();
-                SPUtils.remove(this, UserUtils.SP_TAG_LOGIN);
-                UserUtils.UserPhone = "";
-                Log.e("<<<<<<<<<<", "退出成功！");
+                //getLogout(UserUtils.USER_ID);
+                Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
+                loginOut();
+                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
+                SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
+                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
+                NettyUtils.destoryConnect();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 break;
             case R.id.vibrator_control_layout:
             case R.id.vibrator_control_imag:
@@ -131,8 +189,18 @@ public class SettingActivity extends BaseActivity {
                 editor.commit();
                 setBtnText(vibratorControlImag, Utils.isVibrator);
                 break;
+            case R.id.roommusic_control_layout:
+            case R.id.roommusic_control_imag:
+                boolean isMusic=(boolean)SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+                if(isMusic){
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, false);
+                }else {
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+                }
+                setIsOpenMusic();
+                break;
             case R.id.setting_update_layout:
-                MyToast.getToast(getApplicationContext(),"当前为最新版!").show();
+                MyToast.getToast(getApplicationContext(), "当前为最新版!").show();
 //                UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
 //                updateDialog.setCancelable(false);
 //                updateDialog.show();
@@ -146,35 +214,22 @@ public class SettingActivity extends BaseActivity {
 //                        }
 //                    }
 //                });
-//                SelectLoginDialog selectLoginDialog=new SelectLoginDialog(this,R.style.easy_dialog_style);
-//                selectLoginDialog.setCancelable(false);
-//                selectLoginDialog.show();
-//                selectLoginDialog.setDialogResultListener(new SelectLoginDialog.DialogResultListener() {
-//                    @Override
-//                    public void getResult(int resultCode) {
-//                        switch (resultCode){
-//                            case 0:
-//                                MyToast.getToast(context,"QQ登录").show();
-//                                break;
-//                            case 1:
-//                                MyToast.getToast(context,"微信登录").show();
-//                                break;
-//                            case 2:
-//                                MyToast.getToast(context,"其它登录").show();
-//                                break;
-//                            case 3:
-//                                MyToast.getToast(context,"游客登录").show();
-//                                break;
-//                            case 4:
-//                                MyToast.getToast(context,"取消登录").show();
-//                                break;
-//                        }
-//                    }
-//                });
 
+                //startActivity(new Intent(this, LoginActivity.class));
+                //Utils.getGuessSuccessDialog(this);
+                // Utils.getCatchResultDialog(this);
+                break;
+            case R.id.setting_share_layout:
+                Log.e(TAG,"分享参数userId="+UserUtils.USER_ID);
+                RobustApi.getInstance().shareWx(this, new ShareInfo(UserUtils.USER_ID));
                 break;
 
         }
+    }
+
+    //退出登录
+    private void loginOut() {
+        EasyYSDKApi.logout();
     }
 
     private void setIsVibrator() {
@@ -183,6 +238,7 @@ public class SettingActivity extends BaseActivity {
         if (settings.contains("isVibrator")) {
             Utils.isVibrator = settings.getBoolean("isVibrator", true);
         }
+
         if (!Utils.isVibrator)
             vibratorControlImag.setSelected(false);
         else
@@ -196,5 +252,94 @@ public class SettingActivity extends BaseActivity {
         else
             btn.setSelected(false);
     }
+
+    private void setIsOpenMusic(){
+        boolean isOpen=(boolean)SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+        if(isOpen){
+            roommusicControlImag.setSelected(true);
+        }else {
+            roommusicControlImag.setSelected(false);
+        }
+    }
+
+    private void getLogout(String userId) {
+        HttpManager.getInstance().getLogout(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                Log.e(TAG, "退出登录结果=" + loginInfoResult.getMsg());
+                if (loginInfoResult.getMsg().equals("success")) {
+                    Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
+                    SPUtils.remove(context, UserUtils.SP_TAG_LOGIN);
+                    UserUtils.UserPhone = "";
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!isLogin()) {
+            EasyYSDKApi.onResume(this);
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(!isLogin()) {
+            EasyYSDKApi.onPause(this);
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(!isLogin()) {
+            EasyYSDKApi.onStop(this);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!isLogin()) {
+            EasyYSDKApi.onDestroy(this);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(!isLogin()) {
+            EasyYSDKApi.onRestart(this);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(!isLogin()) {
+            EasyYSDKApi.handleIntent(intent);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(!isLogin()) {
+            EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
 }

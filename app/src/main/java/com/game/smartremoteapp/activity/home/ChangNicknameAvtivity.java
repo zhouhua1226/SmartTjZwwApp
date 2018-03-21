@@ -1,8 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +46,7 @@ public class ChangNicknameAvtivity extends BaseActivity {
         if (!UserUtils.NickName.equals("")) {
             nicknameEt.setText(UserUtils.NickName);
         } else {
-            nicknameEt.setText(UserUtils.UserPhone);
+            nicknameEt.setText("暂无昵称");
         }
 
     }
@@ -66,10 +64,6 @@ public class ChangNicknameAvtivity extends BaseActivity {
                 break;
             case R.id.save_bt:
                 String name = nicknameEt.getText().toString();
-                Log.e("修改昵称《《《", "用户名=" + name + "  用户id=" + UserUtils.USER_ID);
-                if (Utils.isEmpty(UserUtils.USER_ID) || Utils.isEmpty(name)) {
-                    return;
-                }
                 if (Utils.isSpecialChar(name)) {
                     MyToast.getToast(getApplicationContext(), "你输入的包含非法字符，请重新输入！").show();
                 } else {
@@ -85,6 +79,8 @@ public class ChangNicknameAvtivity extends BaseActivity {
     }
 
     public void getUserName(String userId, String nickName) {
+        //String phones = Base64.encodeToString(phone.getBytes(), Base64.DEFAULT);
+        //Log.e("修改昵称<<<", "手机号加密后=" + phones);
         HttpManager.getInstance().getUserName(userId, nickName, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> result) {

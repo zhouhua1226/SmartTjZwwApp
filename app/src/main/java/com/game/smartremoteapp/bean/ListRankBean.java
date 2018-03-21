@@ -8,14 +8,25 @@ import java.util.List;
  */
 public class ListRankBean implements Serializable {
 
-    public List<UserBean> getAppUser() {
+    private UserBean appUser;
+    private List<UserBean> list;
+
+    public UserBean getAppUser() {
         return appUser;
     }
 
-    public void setAppUser(List<UserBean> appUser) {
+    public void setAppUser(UserBean appUser) {
         this.appUser = appUser;
     }
 
-    private List<UserBean> appUser;
+    public List<UserBean> getList() {
+        return list;
+    }
+
+    public void setList(List<UserBean> list) {
+        this.list = list;
+    }
+
+
 
 }

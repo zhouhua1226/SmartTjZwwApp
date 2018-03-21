@@ -3,11 +3,11 @@ package com.game.smartremoteapp.activity.ctrl.presenter;
 import android.content.Context;
 import android.view.SurfaceView;
 
-import com.iot.game.pooh.server.entity.json.enums.MoveType;
 import com.game.smartremoteapp.activity.ctrl.model.CtrlModel;
 import com.game.smartremoteapp.activity.ctrl.model.DeviceCallBack;
 import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
 import com.game.smartremoteapp.base.BasePresenter;
+import com.iot.game.pooh.server.entity.json.enums.MoveType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,13 +110,13 @@ public class CtrlCompl implements BasePresenter, ICtrlPresenter {
     }
 
     @Override
-    public void sendGetUserInfos(String o) {
+    public void sendGetUserInfos(String o, boolean isMe) {
         List<String> list = new ArrayList<>();
         String[] os = o.split(";");
         for(int i = 0; i < os.length; i++) {
             list.add(os[i]);
         }
-        ictrlView.getUserInfos(list);
+        ictrlView.getUserInfos(list, isMe);
     }
 
     @Override

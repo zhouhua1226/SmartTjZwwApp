@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
 
+
 /**
  * Created by hongxiu on 2017/10/10.
  */

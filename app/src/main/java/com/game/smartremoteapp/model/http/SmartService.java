@@ -1,10 +1,13 @@
 package com.game.smartremoteapp.model.http;
 
+
 import com.game.smartremoteapp.bean.AppUserBean;
+import com.game.smartremoteapp.bean.BetRecordBean;
+import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
-import com.game.smartremoteapp.bean.LoginInfo;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.Token;
 import com.game.smartremoteapp.utils.UrlUtils;
 
@@ -31,7 +34,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.LOGIN)
-    Observable<Result<LoginInfo>> getLogin(
+    Observable<Result<HttpDataInfo>> getLogin(
             @Field(UrlUtils.PHONE) String phone,
             @Field(UrlUtils.SMSCODE) String code
     );
@@ -48,8 +51,8 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.LOGINWITHOUTCODE)
-    Observable<Result<LoginInfo>> getLoginWithOutCode(
-            @Field(UrlUtils.USERID) String userId);
+    Observable<Result<HttpDataInfo>> getLoginWithOutCode(
+            @Field(UrlUtils.PHONE) String phone);
 
     //头像上传
     @Headers("Content-Type: application/x-www-form-urlencoded")
@@ -82,8 +85,8 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.USERPAYURL)
-    Observable<Result<LoginInfo>> getUserPay(
-            @Field(UrlUtils.USERID) String userId,
+    Observable<Result<HttpDataInfo>> getUserPay(
+            @Field(UrlUtils.PHONE) String phone,
             @Field(UrlUtils.USEPAYMONEY) String money
     );
 
@@ -91,27 +94,29 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.USERPLAYURL)
-    Observable<Result<LoginInfo>> getUserPlayNum(
+    Observable<Result<HttpDataInfo>> getUserPlayNum(
             @Field(UrlUtils.USERID) String userId,
-            @Field(UrlUtils.USERPLAYNUM) String gold
+            @Field(UrlUtils.USERPLAYNUM) String gold,
+            @Field(UrlUtils.DOLLID) String dollId
 
     );
 
     //ListRank
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @GET(UrlUtils.LISTRANKURL)
-    Observable<Result<ListRankBean>> getListRank();
+    Observable<Result<ListRankBean>> getListRank(
+    );
 
     //视屏上传
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.UPLOADURL)
-    Observable<Result<LoginInfo>> getRegPlayBack(
-            @Field(UrlUtils.ID) int id,
+    Observable<Result<HttpDataInfo>> getRegPlayBack(
             @Field(UrlUtils.TIME) String time,
-            @Field(UrlUtils.NICKNANME) String nickName,
+            @Field(UrlUtils.USERID) String userId,
             @Field(UrlUtils.STATE) String state,
-            @Field(UrlUtils.DOLLNAME) String dollname
+            @Field(UrlUtils.DOLLID) String dollId,
+            @Field(UrlUtils.GUESSID) String guessId
 
 
     );
@@ -120,7 +125,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.VIDEOBACKURL)
-    Observable<Result<LoginInfo>> getVideoBackList(
+    Observable<Result<HttpDataInfo>> getVideoBackList(
             @Field(UrlUtils.USERID) String userId
     );
 
@@ -129,7 +134,7 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.CTRLUSERIMAGE)
     Observable<Result<AppUserBean>> getCtrlUserImage(
-            @Field(UrlUtils.USERID) String userId
+            @Field(UrlUtils.NICKNANME) String phone
     );
 
     //下注
@@ -140,20 +145,20 @@ public interface SmartService {
             @Field(UrlUtils.USERID) String userID,
             @Field(UrlUtils.WAGER) Integer wager,
             @Field(UrlUtils.GUESSKEY) String guessKey,
-            @Field(UrlUtils.PLAYBACK) Integer playBackId,
+            @Field(UrlUtils.GUESSID) String guessId,
             @Field(UrlUtils.DOLLID) String dollID
     );
 
         //跑马灯
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @GET(UrlUtils.getUserList)
-    Observable<Result<LoginInfo>> getUserList();
+    Observable<Result<HttpDataInfo>> getUserList();
 
     //开始游戏分发场次
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.CREATPLAYLISTURL)
-    Observable<Result<LoginInfo>> getCreatPlayList(
+    Observable<Result<HttpDataInfo>> getCreatPlayList(
             @Field(UrlUtils.NICKNANME) String nickName,
             @Field(UrlUtils.DOLLNAME) String dollName
     );
@@ -162,8 +167,8 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.PLAYIDURL)
-    Observable<Result<LoginInfo>> getPlayId(
-            @Field(UrlUtils.DOLLNAME) String dollName
+    Observable<Result<HttpDataInfo>> getPlayId(
+            @Field(UrlUtils.DOLLID) String dollId
     );
 
     //获取下注人数
@@ -171,14 +176,15 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.GETPONDURL)
     Observable<Result<PondResponseBean>>getPond(
-            @Field(UrlUtils.PLAYID) int playId
+            @Field(UrlUtils.PLAYID) String playId,
+            @Field(UrlUtils.DOLLID) String dollId
     );
 
     //收货人信息
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.CONSIGNEEURL)
-    Observable<Result<LoginInfo>>getConsignee(
+    Observable<Result<HttpDataInfo>>getConsignee(
             @Field(UrlUtils.CONSIGNEENAME) String name,
             @Field(UrlUtils.CONSIGNEEPHONE) String phone,
             @Field(UrlUtils.CONSIGNEEADDRESS) String address,
@@ -189,39 +195,220 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.SENDGOODSURL)
-    Observable<Result<LoginInfo>>getSendGoods(
+    Observable<Result<HttpDataInfo>>getSendGoods(
             @Field(UrlUtils.SENDGOODSID) String id,
             @Field(UrlUtils.SENDGOODSNUM) String number,
             @Field(UrlUtils.SENDGOODSSHXX) String consignee,
             @Field(UrlUtils.SENDGOODSREMARK) String remark,
-            @Field(UrlUtils.SENDGOODSUSERID) String userID
+            @Field(UrlUtils.SENDGOODSUSERID) String userId,
+            @Field(UrlUtils.SENDGOODSMODE) String mode,
+            @Field(UrlUtils.SENDGOODSCOSTNUM) String costNum
     );
+
 
     //兑换游戏币
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.EXCHANGEURL)
-    Observable<Result<LoginInfo>>getExchangeWWB(
+    Observable<Result<HttpDataInfo>>getExchangeWWB(
             @Field(UrlUtils.SENDGOODSID) String id,
-            @Field(UrlUtils.DOLLNAME) String dollName,
+            @Field(UrlUtils.DOLLID) String dollId,
             @Field(UrlUtils.SENDGOODSNUM) String number,
-            @Field(UrlUtils.USERID) String userID
+            @Field(UrlUtils.USERID) String userId
     );
 
     //兑换记录列表
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.EXCHANGELISTURL)
-    Observable<Result<LoginInfo>>getExchangeList(
+    Observable<Result<HttpDataInfo>>getExchangeList(
             @Field(UrlUtils.USERID) String userID
     );
 
+    //退出登录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.LOGOUT)
+    Observable<Result<HttpDataInfo>>getLogout(
+            @Field(UrlUtils.USERID) String userID
+    );
 
-    //兑换记录列表
+    //获取用户信息接口
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.GETUSERDATEURL)
-    Observable<Result<LoginInfo>>getUserDate(
+    Observable<Result<HttpDataInfo>>getUserDate(
             @Field(UrlUtils.USERID) String userId
     );
+
+    //WXQQ登录接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.YSDKLOGINURL)
+    Observable<Result<HttpDataInfo>>getYSDKLogin(
+            @Field(UrlUtils.WXQQ_UID) String uid,
+            @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
+            @Field(UrlUtils.WXQQ_NICKNAME) String nickName,
+            @Field(UrlUtils.WXQQ_IMAGEURL) String imageUrl,
+            @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+            @Field(UrlUtils.WXQQ_CHANNEL) String channel
+    );
+
+    //YSDK支付接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.YSDKPAYORDERURL)
+    Observable<Result<HttpDataInfo>>getYSDKPay(
+            @Field(UrlUtils.USERID) String userId,
+            @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
+            @Field(UrlUtils.WXQQ_AMOUNT) String amount
+    );
+
+    //YSDK自动登录接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.YSDKAUTHLOGINURL)
+    Observable<Result<HttpDataInfo>>getYSDKAuthLogin(
+            @Field(UrlUtils.USERID) String userId,
+            @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
+            @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+            @Field(UrlUtils.WXQQ_CHANNEL) String channel
+    );
+
+    //获取充值卡列表
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.PAYCARDLISTURL)
+    Observable<Result<HttpDataInfo>> getPayCardList();
+
+    //用户竞猜记录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETGUESSDETAIL)
+    Observable<Result<BetRecordBean>> getGuessDetail(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //用户金币流水  getPaymenlist
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.CURRENTACCOUNTURL)
+    Observable<Result<HttpDataInfo>> getPaymenList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //获取房间列表
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.DOLLLISTURL)
+    Observable<RoomListBean> getDollList();
+
+    //签到接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.USERSIGNURL)
+    Observable<Result<HttpDataInfo>> getUserSign(
+            @Field(UrlUtils.USERID) String userId,
+            @Field(UrlUtils.SIGNTYPE) String signType
+    );
+
+    //获取轮播列表
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.BANNERURL)
+    Observable<Result<HttpDataInfo>> getBannerList();
+
+    //个人排名
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RANKLISTURL)
+    Observable<Result<HttpDataInfo>> getNumRankList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //物流订单查询
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.LOGISTICSORDERURL)
+    Observable<Result<HttpDataInfo>> getLogisticsOrder(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.GETTOYTYPE)
+    Observable<Result<HttpDataInfo>> getToyType();
+
+    //房间列表下一页接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETTOYSBYTYPE)
+    Observable<Result<RoomListBean>> getToysByType(
+            @Field(UrlUtils.CURRENTTYPE) String currentType,
+            @Field(UrlUtils.NEXTPAGE) Integer nextPage
+    );
+
+    //查询邀请码接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.USERAWARDCODEURL)
+    Observable<Result<HttpDataInfo>> getUserAwardCode(
+            @Field(UrlUtils.DEVICETYPE) String deviceType,
+            @Field(UrlUtils.OSVERSION) String osVersion,
+            @Field(UrlUtils.APPVERSION) String appVersion,
+            @Field(UrlUtils.SFID) String sfId,
+            @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+            @Field(UrlUtils.WXQQ_CHANNEL) String channel,
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //兑换邀请码接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.DOAWARDBYUSERCODEURL)
+    Observable<Result<HttpDataInfo>> doAwardByUserCode(
+            @Field(UrlUtils.DEVICETYPE) String deviceType,
+            @Field(UrlUtils.OSVERSION) String osVersion,
+            @Field(UrlUtils.APPVERSION) String appVersion,
+            @Field(UrlUtils.SFID) String sfId,
+            @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+            @Field(UrlUtils.WXQQ_CHANNEL) String channel,
+            @Field(UrlUtils.USERID) String userId,
+            @Field(UrlUtils.USERAWARDCODE) String awardCode
+    );
+
+    //竞猜跑马灯  /pooh-web/app/getGuesserlast10
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.GUESSERLASTTENURL)
+    Observable<Result<HttpDataInfo>> getGuesserlast10();
+
+    //竞猜排行
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RANKBETLISTURL)
+    Observable<Result<ListRankBean>> getRankBetList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //新抓娃娃排行
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RANKDOLLLISTURL)
+    Observable<Result<ListRankBean>> getRankDollList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //支付宝充值订单信息
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.TRADEORDERALIPAY)
+    Observable<Result<String>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.PLAYID) String s);
+
+    //手机号注册
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.REGITER)
+    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone,@Field(UrlUtils.PASSWORD) String pass, @Field(UrlUtils.SMSCODE)String code);
+
+    //手机号密码登录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.LOGINPASSWORD)
+    Observable<Result<HttpDataInfo>> getLoginPassword(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PW) String pass);
 }

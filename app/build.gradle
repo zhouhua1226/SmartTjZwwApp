@@ -1,19 +1,30 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
-
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
+//    useLibrary 'org.apache.http.legacy'
+
+    signingConfigs {
+        release {
+            keyAlias 'keys'
+            keyPassword "tianji"
+            storeFile file('work.jks')
+            storePassword "tianji"
+        }
+    }
 
     defaultConfig {
         applicationId "com.game.smartremoteapp"
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
-        versionCode 1
+        versionCode 12
         versionName "1.0.0"
         multiDexEnabled true
+        signingConfig signingConfigs.release
     }
+
     splits {
 
         // Configures screen ABI split settings
@@ -30,7 +41,7 @@ android {
 
             // Specifies a list of ABIs that Gradle should create APKs for
             //include "armeabi"
-            include 'armeabi-v7a, arm64-v8a' //select ABIs to build APKs for
+            include 'armeabi' //select ABIs to build APKs for
 
             // Specify that we do not want to also generate a universal APK that includes all ABIs
             universalApk true
@@ -41,6 +52,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
@@ -62,7 +77,11 @@ android {
     }
 }
 
-
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -84,8 +103,6 @@ dependencies {
     compile 'io.netty:netty-all:4.0.36.Final'
     compile 'org.codehaus.jackson:jackson-core-asl:1.9.5'
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.5'
-    compile 'commons-beanutils:commons-beanutils:1.8.3'
-    compile 'org.apache.commons:commons-lang3:3.1'
     compile 'org.slf4j:slf4j-api:1.7.2'
     compile 'com.google.guava:guava:14.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -93,4 +110,11 @@ dependencies {
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile files('libs/smartavengine.jar')
+    compile project(':polygonimageview')
+    compile(name: 'YSDK_Android_1.3.6_841', ext: 'aar')
+    compile project(':easyysdk')
+    compile 'com.youth.banner:banner:1.4.9'
+    //最新版本
+    compile files('libs/umeng-analytics-v6.1.0.jar')
+    compile files('libs/socket_api_release_v1.0.3.jar')
 }

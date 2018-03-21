@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.model.crash;
 
+
 import com.game.smartremoteapp.base.MyApplication;
 
 /**

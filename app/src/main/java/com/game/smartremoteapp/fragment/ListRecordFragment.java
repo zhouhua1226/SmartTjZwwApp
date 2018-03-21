@@ -37,9 +37,9 @@ public class ListRecordFragment extends BaseFragment {
         initlist();
         listRecordAdapter=new ListRecordAdapter(getContext(),list);
         listrecordRecycrview.setAdapter(listRecordAdapter);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false);
         listrecordRecycrview.setLayoutManager(linearLayoutManager);
-        listrecordRecycrview.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        listrecordRecycrview.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         OnClick();
 
     }

@@ -7,8 +7,6 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 
-
-import com.iot.game.pooh.server.entity.json.announce.LotteryDrawAnnounceMessage;
 import com.game.smartremoteapp.utils.Utils;
 import com.gatz.netty.global.ConnectResultEvent;
 import com.gatz.netty.observer.HandlerObserver;
@@ -18,13 +16,11 @@ import com.hwangjr.rxbus.RxBus;
 import com.iot.game.pooh.server.entity.json.GetStatusResponse;
 import com.iot.game.pooh.server.entity.json.MoveControlResponse;
 import com.iot.game.pooh.server.entity.json.announce.GatewayPoohStatusMessage;
+import com.iot.game.pooh.server.entity.json.announce.LotteryDrawAnnounceMessage;
 import com.iot.game.pooh.server.entity.json.app.AppInRoomResponse;
 import com.iot.game.pooh.server.entity.json.app.AppOutRoomResponse;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 
-
-import rx.Observable;
-import rx.Subscriber;
 
 public class SmartRemoteService extends Service {
     private static final String TAG = "SmartRemoteService";
@@ -35,8 +31,7 @@ public class SmartRemoteService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!HandlerObserver.getInstance().getRequestSubscriberSet()) {
-            Utils.showLogE(TAG, "setObservable and setRequestSubscriber.......");
-            HandlerObserver.getInstance().setObservable(o);
+            Utils.showLogE(TAG, "setRequestSubscriber.......");
             HandlerObserver.getInstance().setRequestSubscriber(rs);
         }
         return START_REDELIVER_INTENT;
@@ -66,17 +61,7 @@ public class SmartRemoteService extends Service {
         return null;
     }
 
-    private Observable<SuberInfo> o = Observable.create(new Observable.OnSubscribe<SuberInfo>() {
-        @Override
-        public void call(Subscriber<? super SuberInfo> subscriber) {
-            SuberInfo info = HandlerObserver.getInstance().getInfo();
-            subscriber.onNext(info);
-            subscriber.onCompleted();
-        }
-    });
-
-
-    private RequestSubscriber<SuberInfo> rs = new RequestSubscriber<SuberInfo>() {
+    private RequestSubscriber rs = new RequestSubscriber() {
         @Override
         public void _onSuccess(SuberInfo suberInfo) {
             String tag =  suberInfo.getTag();

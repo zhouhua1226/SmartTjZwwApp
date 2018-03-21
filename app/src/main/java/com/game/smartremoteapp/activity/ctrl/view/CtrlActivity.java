@@ -1,13 +1,19 @@
 package com.game.smartremoteapp.activity.ctrl.view;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.util.Base64;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -15,10 +21,36 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
+import com.game.smartremoteapp.activity.home.BetRecordActivity;
+import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
+import com.game.smartremoteapp.bean.AppUserBean;
+import com.game.smartremoteapp.bean.GuessLastBean;
+import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.Marquee;
+import com.game.smartremoteapp.bean.PondResponseBean;
+import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.UserBean;
+import com.game.smartremoteapp.model.http.HttpManager;
+import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.UrlUtils;
+import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.CatchDollResultDialog;
+import com.game.smartremoteapp.view.FillingCurrencyDialog;
+import com.game.smartremoteapp.view.GifView;
+import com.game.smartremoteapp.view.GlideCircleTransform;
+import com.game.smartremoteapp.view.MyToast;
+import com.game.smartremoteapp.view.QuizInstrictionDialog;
+import com.game.smartremoteapp.view.RoomMarqueeView;
+import com.game.smartremoteapp.view.TimeCircleProgressView;
+import com.game.smartremoteapp.view.VibratorView;
 import com.gatz.netty.global.AppGlobal;
 import com.gatz.netty.global.ConnectResultEvent;
 import com.gatz.netty.utils.NettyUtils;
@@ -28,30 +60,13 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.iot.game.pooh.server.entity.json.MoveControlResponse;
 import com.iot.game.pooh.server.entity.json.announce.GatewayPoohStatusMessage;
+import com.iot.game.pooh.server.entity.json.announce.LotteryDrawAnnounceMessage;
 import com.iot.game.pooh.server.entity.json.app.AppInRoomResponse;
 import com.iot.game.pooh.server.entity.json.app.AppOutRoomResponse;
 import com.iot.game.pooh.server.entity.json.enums.MoveType;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 import com.iot.game.pooh.server.entity.json.enums.ReturnCode;
-import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
-import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
-import com.game.smartremoteapp.bean.AppUserBean;
-import com.game.smartremoteapp.bean.LoginInfo;
-import com.game.smartremoteapp.bean.PondResponseBean;
-import com.game.smartremoteapp.bean.Result;
-import com.game.smartremoteapp.model.http.HttpManager;
-import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.utils.UrlUtils;
-import com.game.smartremoteapp.utils.UserUtils;
-import com.game.smartremoteapp.utils.Utils;
-import com.game.smartremoteapp.view.FillingCurrencyDialog;
-import com.game.smartremoteapp.view.GifView;
-import com.game.smartremoteapp.view.GlideCircleTransform;
-import com.game.smartremoteapp.view.MyToast;
-import com.game.smartremoteapp.view.QuizInstrictionDialog;
-import com.game.smartremoteapp.view.TimeCircleProgressView;
-import com.game.smartremoteapp.view.VibratorView;
+import com.umeng.analytics.game.UMGameAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,13 +141,11 @@ public class CtrlActivity extends Activity implements IctrlView {
     @BindView(R.id.ctrl_betting_number_layout)
     LinearLayout ctrlBettingNumberLayout;
     @BindView(R.id.ctrl_betting_winning)
-    Button ctrlBettingWinning;
+    ImageButton ctrlBettingWinning;
     @BindView(R.id.ctrl_betting_fail)
-    Button ctrlBettingFail;
-    @BindView(R.id.ctrl_dollgold_tv1)
-    TextView ctrlDollgoldTv1;
+    ImageButton ctrlBettingFail;
     @BindView(R.id.ctrl_confirm_layout)
-    LinearLayout ctrlConfirmLayout;
+    Button ctrlConfirmLayout;
     @BindView(R.id.ctrl_beting_layout)
     RelativeLayout ctrlBetingLayout;
     @BindView(R.id.player_layout)
@@ -143,6 +156,47 @@ public class CtrlActivity extends Activity implements IctrlView {
     ImageView moneyImage;
     @BindView(R.id.ctrl_betting_back_button)
     Button ctrlBettingBackButton;
+    @BindView(R.id.startgame_text_imag)
+    ImageView startgameTextImag;
+    @BindView(R.id.ctrl_back_imag)
+    ImageView ctrlBackImag;
+    @BindView(R.id.ctrl_guessrecord_tv)
+    TextView ctrlGuessrecordTv;
+    @BindView(R.id.ctrl_betremark_tv)
+    TextView ctrlBetremarkTv;
+    @BindView(R.id.ctrl_betnum_five_tv)
+    TextView ctrlBetnumFiveTv;
+    @BindView(R.id.ctrl_betnum_six_tv)
+    TextView ctrlBetnumSixTv;
+    @BindView(R.id.ctrl_betnum_seven_tv)
+    TextView ctrlBetnumSevenTv;
+    @BindView(R.id.ctrl_betnum_eight_tv)
+    TextView ctrlBetnumEightTv;
+    @BindView(R.id.ctrl_betnum_nine_tv)
+    TextView ctrlBetnumNineTv;
+    @BindView(R.id.ctrl_betnum_zero_tv)
+    TextView ctrlBetnumZeroTv;
+    @BindView(R.id.ctrl_betnum_one_tv)
+    TextView ctrlBetnumOneTv;
+    @BindView(R.id.ctrl_betnum_two_tv)
+    TextView ctrlBetnumTwoTv;
+    @BindView(R.id.ctrl_betnum_three_tv)
+    TextView ctrlBetnumThreeTv;
+    @BindView(R.id.ctrl_betnum_four_tv)
+    TextView ctrlBetnumFourTv;
+    @BindView(R.id.ctrl_marqueeview)
+    RoomMarqueeView ctrlMarqueeview;
+    @BindView(R.id.ctrl_bet_tenflod_tv)
+    TextView ctrlBetTenflodTv;
+    @BindView(R.id.ctrl_bet_twentyfold_tv)
+    TextView ctrlBetTwentyfoldTv;
+    @BindView(R.id.ctrl_bet_fiftyfold_tv)
+    TextView ctrlBetFiftyfoldTv;
+    @BindView(R.id.ctrl_bet_hundredfold_tv)
+    TextView ctrlBetHundredfoldTv;
+    @BindView(R.id.ctrl_roomdetial_tv)
+    TextView ctrlRoomdetialTv;
+
 
     private CtrlCompl ctrlCompl;
     private FillingCurrencyDialog fillingCurrencyDialog;
@@ -151,21 +205,35 @@ public class CtrlActivity extends Activity implements IctrlView {
 
     //2017/11/18 11：10 加入振动器
     public Vibrator vibrator; // 震动器
-    private String camera_name;
     private String dollName = "未知";
     private boolean isCurrentConnect = true;
     private String upTime;
     private String upFileName;
-    private int money = 0;
+    private int money = 0;   //房间单次抓取金额
+    private int betMoney;   //投注奖金
     private String state = "";
     private QuizInstrictionDialog quizInstrictionDialog;
     private String dollId;
     private String zt = "";
-    private Boolean isOpenSucess = false; //以第一个摄像头为标准
     //播放地址流
-    private String playUrl1 = "rtmp://106.14.171.182/aita/num-1";//"rtmp://rtmp.open.ys7.com/openlive/784efe98624241eb8923bde2d7530c38";//"rtmp://106.14.171.182/user/user";  //主摄像头
-    private String playUrl2 = "rtmp://106.14.171.182/aita/num-2";//"rtmp://rtmp.open.ys7.com/openlive/784efe98624241eb8923bde2d7530c38";//"rtmp://106.14.171.182/live/livestream";//次摄像头
+    private String playUrlMain = "";
+    private String playUrlSecond = "";
     private String currentUrl;
+    //用户操作和竞猜
+    private boolean isStart = false;
+    private boolean isLottery = false;
+    private String periodsNum;
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer btn_mediaPlayer;
+    //显示的用户的name
+    private String showName = "";
+    private int prob;         //抓取概率
+    private String reward = "";    //预计奖金
+    private String showUserId = "";
+    private int betFlodNum = 1;   //默认投注倍数1
+    private List<TextView> betViewList;
+    private List<TextView> betFoldList;
+    private List<Marquee> marquees = new ArrayList<>();
 
     static {
         System.loadLibrary("SmartPlayer");
@@ -175,7 +243,12 @@ public class CtrlActivity extends Activity implements IctrlView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        ButterKnife.bind(this);
         afterCreate();
+        UMGameAgent.setDebugMode(true);   //设置输出运行时日志
+        UMGameAgent.init(this);
+        Glide.with(this).load(UserUtils.UserImage).asBitmap().
+                transform(new GlideCircleTransform(this)).into(playerMainIv);
     }
 
     private int getLayoutId() {
@@ -183,11 +256,15 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
     private void afterCreate() {
+        if (Utils.getIsOpenMusic(getApplicationContext())) {
+            playBGMusic();   //播放房间背景音乐
+        }
         Utils.showLogE(TAG, "afterCreate");
         initView();
         initData();
-        coinTv.setText(UserUtils.UserBalance);
+        coinTv.setText("  " + UserUtils.UserBalance + " 充值");
         setVibrator();   //初始化振动器
+        getGuesserlast10();
     }
 
     protected void initView() {
@@ -209,21 +286,32 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
     private void initData() {
+        setBetView();
         ctrlCompl = new CtrlCompl(this, this);
-        camera_name = getIntent().getStringExtra(Utils.TAG_CAMERA_NAME);
+        playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
+        playUrlSecond = getIntent().getStringExtra(Utils.TAG_URL_SECOND);
         dollName = getIntent().getStringExtra(Utils.TAG_ROOM_NAME);
         money = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD));
         dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
+        prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB));
+        reward = getIntent().getStringExtra(Utils.TAG_ROOM_REWARD);
+        //UserUtils.UserBetNum = YsdkUtils.loginResult.getData().getAppUser().getBET_NUM();
         if (!Utils.isEmpty(dollName)) {
             dollNameTv.setText(dollName);
         }
+        betMoney = money * betFlodNum;
         ctrlDollgoldTv.setText(money + "/次");
-        ctrlDollgoldTv1.setText(money + "/次");//下注金额
-        playerNameTv.setText(UserUtils.NickName);
+        ctrlConfirmLayout.setText(betMoney + "/次");   //下注金额
+        if (!Utils.isEmpty(reward)) {
+            ctrlBetremarkTv.setText("预计奖金" + reward + "金币");
+        } else {
+            ctrlBetremarkTv.setText("预计奖金0金币");
+        }
+        playerNameTv.setText(UserUtils.NickName + "...");
         setStartMode(getIntent().getBooleanExtra(Utils.TAG_ROOM_STATUS, true));
         ctrlQuizLayout.setEnabled(false);
-        currentUrl = playUrl1;
-        ctrlCompl.startPlayVideo(mRealPlaySv ,currentUrl);
+        currentUrl = playUrlMain;
+        ctrlCompl.startPlayVideo(mRealPlaySv, currentUrl);
     }
 
 
@@ -236,9 +324,19 @@ public class CtrlActivity extends Activity implements IctrlView {
         ctrlCompl.sendCmdCtrl(MoveType.CATCH);
         ctrlCompl.stopTimeCounter();
         ctrlCompl.sendCmdOutRoom();
-        NettyUtils.sendGetDeviceStatesCmd();
         ctrlCompl = null;
         RxBus.get().unregister(this);
+
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        if (btn_mediaPlayer != null && btn_mediaPlayer.isPlaying()) {
+            btn_mediaPlayer.stop();
+            btn_mediaPlayer.release();
+            btn_mediaPlayer = null;
+        }
     }
 
     @Override
@@ -254,28 +352,29 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
     @Override
-    public void getUserInfos(List<String> list) {
+    public void getUserInfos(List<String> list, boolean is) {
         //当前房屋的人数
         userInfos = list;
         int counter = userInfos.size();
         if (counter > 0) {
-            playerCounterIv.setText(String.format(getString(R.string.player_counter_text), counter));
-            Glide.with(this).load(UserUtils.UserImage).asBitmap().transform(new GlideCircleTransform(this)).into(playerMainIv);
+            String s  = counter + "人在线";
+            playerCounterIv.setText(s);
             if (counter == 1) {
-                playerSecondIv.setVisibility(View.INVISIBLE);
+                //显示自己
+                Glide.with(this).load(UserUtils.UserImage).asBitmap().
+                        transform(new GlideCircleTransform(this)).into(playerSecondIv);
             } else {
-                //先显示默认图片
-                Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
-                        .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
-                //显示另外一个人
-                for (int i = 0; i < counter; i++) {
-                    if (!userInfos.get(i).equals(UserUtils.NickName)) {
-                        getCtrlUserImage(userInfos.get(i));
-                        break;
+                if (is) {
+                    //显示另外一个人
+                    for (int i = 0; i < counter; i++) {
+                        if (!userInfos.get(i).equals(UserUtils.USER_ID)) {
+                            showUserId = userInfos.get(i);
+                            Utils.showLogE(TAG, "显示观察者的userId::::" + showUserId);
+                            getCtrlUserImage(showUserId);
+                            break;
+                        }
                     }
                 }
-                //显示第二个人
-                playerSecondIv.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -328,13 +427,23 @@ public class CtrlActivity extends Activity implements IctrlView {
     protected void onStop() {
         super.onStop();
         ctrlCompl.stopPlayVideo();
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        if (btn_mediaPlayer != null && btn_mediaPlayer.isPlaying()) {
+            btn_mediaPlayer.stop();
+            btn_mediaPlayer.release();
+            btn_mediaPlayer = null;
+        }
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         Utils.showLogE(TAG, "onRestart");
-        if(ctrlFailIv.getVisibility() == View.VISIBLE) {
+        if (ctrlFailIv.getVisibility() == View.VISIBLE) {
             ctrlFailIv.setVisibility(View.GONE);
         }
         ctrlGifView.setVisibility(View.VISIBLE);
@@ -367,26 +476,39 @@ public class CtrlActivity extends Activity implements IctrlView {
         }
     };
 
-    @OnClick({R.id.image_back, R.id.recharge_button,
-            R.id.startgame_ll, R.id.ctrl_fail_iv, R.id.ctrl_quiz_layout, R.id.ctrl_instruction_image, R.id.ctrl_betting_winning, R.id.ctrl_betting_fail,
+    @OnClick({R.id.image_back, R.id.recharge_button, R.id.ctrl_back_imag,
+            R.id.startgame_ll, R.id.ctrl_fail_iv, R.id.ctrl_quiz_layout,
+            R.id.ctrl_instruction_image, R.id.ctrl_betting_winning, R.id.ctrl_betting_fail,
             R.id.ctrl_confirm_layout, R.id.ctrl_betting_back_button,
-            R.id.ctrl_change_camera_iv})
+            R.id.ctrl_change_camera_iv, R.id.ctrl_guessrecord_tv, R.id.coin_tv,
+            R.id.ctrl_betnum_zero_tv, R.id.ctrl_betnum_one_tv, R.id.ctrl_betnum_two_tv,
+            R.id.ctrl_betnum_three_tv, R.id.ctrl_betnum_four_tv, R.id.ctrl_betnum_five_tv,
+            R.id.ctrl_betnum_six_tv, R.id.ctrl_betnum_seven_tv, R.id.ctrl_betnum_eight_tv,
+            R.id.ctrl_betnum_nine_tv, R.id.ctrl_bet_tenflod_tv, R.id.ctrl_bet_twentyfold_tv,
+            R.id.ctrl_bet_fiftyfold_tv, R.id.ctrl_bet_hundredfold_tv,R.id.ctrl_roomdetial_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
+            case R.id.ctrl_back_imag:
                 finish();
                 break;
             case R.id.recharge_button:
-                getMoney();
+            case R.id.coin_tv:
+                startActivity(new Intent(this, WeChatPayActivity.class));
                 break;
             case R.id.startgame_ll:
+                if (TextUtils.isEmpty(UserUtils.UserBalance)) {
+                    getUserDate(UserUtils.USER_ID);
+                    return;
+                }
                 //开始游戏按钮
                 if (Integer.parseInt(UserUtils.UserBalance) >= money) {
                     if ((Utils.connectStatus.equals(ConnectResultEvent.CONNECT_SUCCESS))
                             && (isCurrentConnect)) {
                         ctrlCompl.sendCmdCtrl(MoveType.START);
-                        coinTv.setText((Integer.parseInt(UserUtils.UserBalance) - money) + "");
-
+                        coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - money) + " 充值");
+                        isStart = true;
+                        upTime = Utils.getTime();
                     }
                     setVibratorTime(300, -1);
                     rechargeButton.setVisibility(View.GONE);
@@ -400,46 +522,167 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case R.id.ctrl_quiz_layout:
                 //竞猜
+//                if (UserUtils.UserBetNum > 9) {
+//                    MyToast.getToast(getApplicationContext(), "您今日猜中次数已达10次上限!").show();
+//                    return;
+//                }
                 ctrlButtomLayout.setVisibility(View.GONE);
                 ctrlBetingLayout.setVisibility(View.VISIBLE);
-                //getPlayId(dollName);//给围观群众分发id
+                getPond(periodsNum, dollId);
+                ctrlBettingFail.setImageResource(R.drawable.ctrl_guess_unselect_bz);
+                ctrlBettingWinning.setImageResource(R.drawable.ctrl_guess_unselect_z);
+                ctrlBettingWinning.setEnabled(true);
+                ctrlBettingFail.setEnabled(true);
+
                 break;
             case R.id.ctrl_instruction_image:
                 //说明
                 quizInstrictionDialog = new QuizInstrictionDialog(this, R.style.easy_dialog_style);
                 quizInstrictionDialog.show();
+                quizInstrictionDialog.setTitle("竞猜游戏说明");
+                quizInstrictionDialog.setContent(Utils.readAssetsTxt(this, "guessintroduce"));
                 break;
 
             case R.id.ctrl_betting_winning:
                 zt = "1";
-                ctrlBettingWinning.setBackgroundResource(R.drawable.ctrl_betting_item);
-                ctrlBettingFail.setBackgroundResource(R.drawable.fillingcureency_dialog_gray);
+                ctrlBettingFail.setImageResource(R.drawable.ctrl_guess_unselect_bz);
+                ctrlBettingWinning.setImageResource(R.drawable.ctrl_guess_select_z);
+                ctrlBettingFail.setEnabled(true);
+                ctrlBettingWinning.setEnabled(false);
                 //中
                 break;
             case R.id.ctrl_betting_fail:
                 zt = "0";
-                ctrlBettingFail.setBackgroundResource(R.drawable.ctrl_betting_item);
-                ctrlBettingWinning.setBackgroundResource(R.drawable.fillingcureency_dialog_gray);
+                ctrlBettingFail.setImageResource(R.drawable.ctrl_guess_select_bz);
+                ctrlBettingWinning.setImageResource(R.drawable.ctrl_guess_unselect_z);
+                ctrlBettingWinning.setEnabled(true);
+                ctrlBettingFail.setEnabled(false);
                 //不中
                 break;
             case R.id.ctrl_confirm_layout:
                 //下注
-                if (zt.equals("1") || zt.equals("0")) {
-                    getBets(UserUtils.USER_ID, Integer.valueOf(money).intValue(), zt, UserUtils.PlayBackId, dollId);
-                    coinTv.setText((Integer.parseInt(UserUtils.UserBalance) - money) + "");
-                    ctrlButtomLayout.setVisibility(View.VISIBLE);
-                    ctrlBetingLayout.setVisibility(View.GONE);
+                ctrlBettingWinning.setEnabled(true);
+                ctrlBettingWinning.setEnabled(true);
+                if (TextUtils.isEmpty(UserUtils.UserBalance)) {
+                    getUserDate(UserUtils.USER_ID);
+                    return;
+                }
+                if (Integer.parseInt(UserUtils.UserBalance) >= betMoney) {
+                    if (!zt.equals("")) {
+                        getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId);
+                        coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - betMoney) + " 充值");
+                        ctrlButtomLayout.setVisibility(View.VISIBLE);
+                        ctrlBetingLayout.setVisibility(View.GONE);
+                        ctrlQuizLayout.setEnabled(false);
+                        moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
+                        isLottery = true;
+                        initBet();
+                    } else {
+                        MyToast.getToast(getApplicationContext(), "请下注！").show();
+                    }
                 } else {
-                    MyToast.getToast(getApplicationContext(), "请下注！").show();
+                    MyToast.getToast(getApplicationContext(), "请充值！").show();
                 }
                 break;
             case R.id.ctrl_betting_back_button:
+                initBet();
                 ctrlBetingLayout.setVisibility(View.GONE);
                 ctrlButtomLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.ctrl_change_camera_iv:
-                currentUrl = currentUrl.equals(playUrl1)? playUrl2:playUrl1;
+                currentUrl = currentUrl.equals(playUrlMain) ? playUrlSecond : playUrlMain;
                 ctrlCompl.startPlaySwitchUrlVideo(currentUrl);
+                break;
+            case R.id.ctrl_guessrecord_tv:
+                startActivity(new Intent(this, BetRecordActivity.class));
+                break;
+            case R.id.ctrl_betnum_zero_tv:
+                zt = "0";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_one_tv:
+                zt = "1";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_two_tv:
+                zt = "2";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_three_tv:
+                zt = "3";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_four_tv:
+                zt = "4";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_five_tv:
+                zt = "5";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_six_tv:
+                zt = "6";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_seven_tv:
+                zt = "7";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_eight_tv:
+                zt = "8";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_betnum_nine_tv:
+                zt = "9";
+                setBetNumBg(zt);
+                break;
+            case R.id.ctrl_bet_tenflod_tv:
+                if (betFlodNum == 10) {
+                    ctrlBetTenflodTv.setTextColor(getResources().getColor(R.color.white));
+                    ctrlBetTenflodTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+                    betFlodNum = 1;
+                } else {
+                    betFlodNum = 10;
+                    setBetFoldBg(0);
+                }
+                setBetRewardChange(betFlodNum);
+                break;
+            case R.id.ctrl_bet_twentyfold_tv:
+                if (betFlodNum == 20) {
+                    ctrlBetTwentyfoldTv.setTextColor(getResources().getColor(R.color.white));
+                    ctrlBetTwentyfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+                    betFlodNum = 1;
+                } else {
+                    betFlodNum = 20;
+                    setBetFoldBg(1);
+                }
+                setBetRewardChange(betFlodNum);
+                break;
+            case R.id.ctrl_bet_fiftyfold_tv:
+                if (betFlodNum == 50) {
+                    ctrlBetFiftyfoldTv.setTextColor(getResources().getColor(R.color.white));
+                    ctrlBetFiftyfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+                    betFlodNum = 1;
+                } else {
+                    betFlodNum = 50;
+                    setBetFoldBg(2);
+                }
+                setBetRewardChange(betFlodNum);
+                break;
+            case R.id.ctrl_bet_hundredfold_tv:
+                if (betFlodNum == 100) {
+                    ctrlBetHundredfoldTv.setTextColor(getResources().getColor(R.color.white));
+                    ctrlBetHundredfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+                    betFlodNum = 1;
+                } else {
+                    betFlodNum = 100;
+                    setBetFoldBg(3);
+                }
+                setBetRewardChange(betFlodNum);
+                break;
+            case R.id.ctrl_roomdetial_tv:
+                String url=getIntent().getStringExtra(Utils.TAG_ROOM_DOLLURL);
+                showDetailDialog(url);
                 break;
             default:
                 break;
@@ -448,18 +691,26 @@ public class CtrlActivity extends Activity implements IctrlView {
 
 
     private void getWorkstation() {
+        ctrlInstructionImage.setVisibility(View.GONE);
+        ctrlQuizLayout.setVisibility(View.GONE);
+        ctrlDollgoldTv.setVisibility(View.GONE);
         startgameLl.setVisibility(View.GONE);
         rechargeLl.setVisibility(View.GONE);
         catchLl.setVisibility(View.VISIBLE);
         operationRl.setVisibility(View.VISIBLE);
+        catchLl.setEnabled(true);
         ctrlCompl.startTimeCounter();
     }
 
     private void getStartstation() {
+        ctrlInstructionImage.setVisibility(View.VISIBLE);
+        ctrlQuizLayout.setVisibility(View.VISIBLE);
+        ctrlDollgoldTv.setVisibility(View.VISIBLE);
         startgameLl.setVisibility(View.VISIBLE);
         rechargeLl.setVisibility(View.VISIBLE);
         catchLl.setVisibility(View.GONE);
         operationRl.setVisibility(View.GONE);
+        catchLl.setEnabled(true);
     }
 
     private void getMoney() {
@@ -514,47 +765,47 @@ public class CtrlActivity extends Activity implements IctrlView {
                 switch (view.getId()) {
                     case R.id.front_image:
                         setVibratorTime(3000, 1);
-                        if(currentUrl.equals(playUrl1)) {
+                        if (currentUrl.equals(playUrlMain)) {
                             ctrlCompl.sendCmdCtrl(MoveType.FRONT);
-                        } else if (currentUrl.equals(playUrl2)) {
+                        } else if (currentUrl.equals(playUrlSecond)) {
                             ctrlCompl.sendCmdCtrl(MoveType.LEFT);
                         } else {
                             ctrlCompl.sendCmdCtrl(MoveType.FRONT);
                         }
-                        topImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_top_s));
+                        topImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_select_up_imag));
                         break;
                     case R.id.back_image:
                         setVibratorTime(3000, 1);
-                        if(currentUrl.equals(playUrl1)) {
+                        if (currentUrl.equals(playUrlMain)) {
                             ctrlCompl.sendCmdCtrl(MoveType.BACK);
-                        } else if (currentUrl.equals(playUrl2)) {
+                        } else if (currentUrl.equals(playUrlSecond)) {
                             ctrlCompl.sendCmdCtrl(MoveType.RIGHT);
                         } else {
                             ctrlCompl.sendCmdCtrl(MoveType.BACK);
                         }
-                        belowImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_below_s));
+                        belowImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_select_down_imag));
                         break;
                     case R.id.left_image:
                         setVibratorTime(3000, 1);
-                        if(currentUrl.equals(playUrl1)) {
+                        if (currentUrl.equals(playUrlMain)) {
                             ctrlCompl.sendCmdCtrl(MoveType.LEFT);
-                        } else if (currentUrl.equals(playUrl2)) {
+                        } else if (currentUrl.equals(playUrlSecond)) {
                             ctrlCompl.sendCmdCtrl(MoveType.BACK);
                         } else {
                             ctrlCompl.sendCmdCtrl(MoveType.LEFT);
                         }
-                        leftImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_left_s));
+                        leftImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_select_left_imag));
                         break;
                     case R.id.right_image:
                         setVibratorTime(3000, 1);
-                        if (currentUrl.equals(playUrl1)) {
+                        if (currentUrl.equals(playUrlMain)) {
                             ctrlCompl.sendCmdCtrl(MoveType.RIGHT);
-                        } else if (currentUrl.equals(playUrl2)) {
+                        } else if (currentUrl.equals(playUrlSecond)) {
                             ctrlCompl.sendCmdCtrl(MoveType.FRONT);
                         } else {
                             ctrlCompl.sendCmdCtrl(MoveType.RIGHT);
                         }
-                        rightImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_right_s));
+                        rightImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_select_right_imag));
                         break;
                     case R.id.catch_ll:
                         setVibratorTime(300, -1);
@@ -567,24 +818,28 @@ public class CtrlActivity extends Activity implements IctrlView {
             case MotionEvent.ACTION_UP:
                 switch (view.getId()) {
                     case R.id.front_image:
-                        vibrator.cancel();
+                        if (vibrator != null)
+                            vibrator.cancel();
                         ctrlCompl.sendCmdCtrl(MoveType.STOP);
-                        topImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_top_n));
+                        topImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_up_imag));
                         break;
                     case R.id.back_image:
-                        vibrator.cancel();
+                        if (vibrator != null)
+                            vibrator.cancel();
                         ctrlCompl.sendCmdCtrl(MoveType.STOP);
-                        belowImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_below_n));
+                        belowImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_down_imag));
                         break;
                     case R.id.left_image:
-                        vibrator.cancel();
+                        if (vibrator != null)
+                            vibrator.cancel();
                         ctrlCompl.sendCmdCtrl(MoveType.STOP);
-                        leftImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_left_n));
+                        leftImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_left_imag));
                         break;
                     case R.id.right_image:
-                        vibrator.cancel();
+                        if (vibrator != null)
+                            vibrator.cancel();
                         ctrlCompl.sendCmdCtrl(MoveType.STOP);
-                        rightImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_action_down_right_n));
+                        rightImage.setImageDrawable(getResources().getDrawable(R.drawable.ctrl_right_imag));
                         break;
                     case R.id.catch_ll:
                         ctrlCompl.stopTimeCounter();
@@ -613,19 +868,123 @@ public class CtrlActivity extends Activity implements IctrlView {
     private void setStartMode(boolean isFree) {
         startgameLl.setEnabled(isFree);
         if (isFree) {
-            startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_bg_n);
+            startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_button);
+            startgameTextImag.setImageResource(R.drawable.begin_game_text);
+//            moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
+//            ctrlQuizLayout.setEnabled(false);
+            ctrlQuizLayout.setVisibility(View.VISIBLE);         //竞彩布局
+            betChangeView(false);
             return;
         }
-        startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_bg_d);
+        startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_button);
+        startgameTextImag.setImageResource(R.drawable.ctrl_begin_loading);
         if (userInfos.size() > 1) {
-            ctrlQuizLayout.setBackgroundResource(R.drawable.fillingcurrency_dialog);
-            ctrlQuizLayout.setEnabled(true);
+            betChangeView(true);
         } else {
-            ctrlQuizLayout.setBackgroundResource(R.drawable.fillingcureency_dialog_gray);
+            betChangeView(false);
+        }
+    }
+
+    private void betChangeView(boolean isBet) {
+//        if (prob < 100) {
+//            moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
+//            ctrlQuizLayout.setEnabled(false);
+//            return;
+//        }
+        if (isBet) {
+            if (!isLottery) {
+                moneyImage.setImageResource(R.drawable.ctrl_bet_button);
+                ctrlQuizLayout.setEnabled(true);
+            }
+        } else {
+            moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
             ctrlQuizLayout.setEnabled(false);
         }
     }
-    /**************************************************控制状态区*****************************************************/
+
+    /**
+     * #########################  竞猜页面逻辑  ################################
+     */
+    private void setBetView() {
+        betViewList = new ArrayList<>();
+        betViewList.add(ctrlBetnumZeroTv);
+        betViewList.add(ctrlBetnumOneTv);
+        betViewList.add(ctrlBetnumTwoTv);
+        betViewList.add(ctrlBetnumThreeTv);
+        betViewList.add(ctrlBetnumFourTv);
+        betViewList.add(ctrlBetnumFiveTv);
+        betViewList.add(ctrlBetnumSixTv);
+        betViewList.add(ctrlBetnumSevenTv);
+        betViewList.add(ctrlBetnumEightTv);
+        betViewList.add(ctrlBetnumNineTv);
+
+        betFoldList = new ArrayList<>();
+        betFoldList.add(ctrlBetTenflodTv);
+        betFoldList.add(ctrlBetTwentyfoldTv);
+        betFoldList.add(ctrlBetFiftyfoldTv);
+        betFoldList.add(ctrlBetHundredfoldTv);
+    }
+
+    //竞猜投注UI变动
+    private void setBetNumBg(String position) {
+        if (position.equals("")) {
+            for (int j = 0; j < betViewList.size(); j++) {
+                betViewList.get(j).setTextColor(getResources().getColor(R.color.white));
+                betViewList.get(j).setBackgroundResource(R.drawable.ctrl_betnum_unselect);
+            }
+            return;
+        }
+        int po = Integer.parseInt(position);
+        for (int i = 0; i < betViewList.size(); i++) {
+            if (po == i) {
+                betViewList.get(i).setTextColor(getResources().getColor(R.color.ctrl_textcolor));
+                betViewList.get(i).setBackgroundResource(R.drawable.ctrl_betnum_select);
+            } else {
+                betViewList.get(i).setTextColor(getResources().getColor(R.color.white));
+                betViewList.get(i).setBackgroundResource(R.drawable.ctrl_betnum_unselect);
+            }
+        }
+    }
+
+    //竞猜倍投UI变动
+    private void setBetFoldBg(int betNum) {
+        for (int i = 0; i < betFoldList.size(); i++) {
+            if (i == betNum) {
+                betFoldList.get(i).setTextColor(getResources().getColor(R.color.ctrl_textcolor));
+                betFoldList.get(i).setBackgroundResource(R.drawable.ctrl_guess_betnum_bg);
+            } else {
+                betFoldList.get(i).setTextColor(getResources().getColor(R.color.white));
+                betFoldList.get(i).setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+            }
+        }
+    }
+
+    //竞猜奖金和金额UI变动
+    private void setBetRewardChange(int num) {
+        int re = Integer.parseInt(reward) * num;
+        betMoney = money * num;
+        ctrlBetremarkTv.setText("预计奖金" + re + "金币");
+        ctrlConfirmLayout.setText(betMoney + "/次");
+    }
+
+    //竞猜归零
+    private void initBet() {
+        zt = "";
+        betFlodNum = 1;
+        setBetNumBg(zt);
+        setBetRewardChange(betFlodNum);
+        for (int i = 0; i < betFoldList.size(); i++) {
+            betFoldList.get(i).setTextColor(getResources().getColor(R.color.white));
+            betFoldList.get(i).setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
+        }
+    }
+
+
+    /**  #########################  竞彩页面逻辑  ################################  */
+
+    /**************************************************
+     * 控制状态区
+     *****************************************************/
     //控制区与状态区
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_ROOM_IN),
@@ -635,20 +994,29 @@ public class CtrlActivity extends Activity implements IctrlView {
     public void getKnxConnectStates(Object response) {
         if (response instanceof MoveControlResponse) {
             MoveControlResponse moveControlResponse = (MoveControlResponse) response;
-            Utils.showLogE(TAG, moveControlResponse.toString());
             if ((moveControlResponse.getSeq() == -2)) {
                 if (moveControlResponse.getMoveType() == null) {
                     return;
                 }
                 if (moveControlResponse.getMoveType().name().equals(MoveType.START.name())) {
                     setStartMode(false);
+                    //期号为空 竞猜流局
+                    if (moveControlResponse.getRpcSuccess()) {
+                        //获取期号
+                        periodsNum = moveControlResponse.getPeriodsNum();
+                    } else {
+                        periodsNum = "";
+                        moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
+                        ctrlQuizLayout.setEnabled(false);
+                    }
                 } else if (moveControlResponse.getMoveType().name().equals(MoveType.CATCH.name())) {
                     //TODO 其他用户下爪了 观看者
                     Utils.showLogE(TAG, "观看者观察到下爪了......");
-                    ctrlQuizLayout.setBackgroundResource(R.drawable.fillingcureency_dialog_gray);//点击下抓，竞猜变色
+                    moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
                     ctrlQuizLayout.setEnabled(false);
                     ctrlBetingLayout.setVisibility(View.GONE);
                     ctrlButtomLayout.setVisibility(View.VISIBLE);
+                    initBet();
                 }
             } else {
                 if (moveControlResponse.getReturnCode() != ReturnCode.SUCCESS) {
@@ -659,12 +1027,16 @@ public class CtrlActivity extends Activity implements IctrlView {
                         .equals(MoveType.START.name())) {
                     getWorkstation();
                     ctrlCompl.startRecordVideo();
-                }  else if (moveControlResponse.getMoveType().name()
+                    //TODO 竞猜按钮隐藏
+                    periodsNum = moveControlResponse.getPeriodsNum();//为满足后台需求，这里也需要获取一下期数
+                    ctrlQuizLayout.setVisibility(View.INVISIBLE);
+                } else if (moveControlResponse.getMoveType().name()
                         .equals(MoveType.CATCH.name())) {
                     //TODO 本人点击下爪了 下爪成功
                     Utils.showLogE(TAG, "本人点击下爪成功......");
-                    ctrlQuizLayout.setBackgroundResource(R.drawable.fillingcureency_dialog_gray);//点击下抓，竞猜变色
+                    moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
                     ctrlQuizLayout.setEnabled(false);
+                    catchLl.setEnabled(false);
                 }
             }
         } else if (response instanceof String) {
@@ -674,27 +1046,47 @@ public class CtrlActivity extends Activity implements IctrlView {
             Utils.showLogE(TAG, appOutRoomResponse.toString());
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
-                userInfos.remove(appOutRoomResponse.getNickName());
-                getUserInfos(userInfos);
+                userInfos.remove(appOutRoomResponse.getUserId());
+                if (appOutRoomResponse.getUserId().equals(showUserId)) {
+                    getUserInfos(userInfos, true);
+                } else {
+                    getUserInfos(userInfos, false);
+                }
             }
         } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
             Utils.showLogE(TAG, "=====" + appInRoomResponse.toString());
-            String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的昵称
+            String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
-            setStartMode(free);
             long seq = appInRoomResponse.getSeq();
             if ((seq != -2) && (!Utils.isEmpty(allUsers))) {
                 //TODO  我本人进来了
-                ctrlCompl.sendGetUserInfos(allUsers);
+                ctrlCompl.sendGetUserInfos(allUsers, true);
+                //是否能点击开始
+                startgameLl.setEnabled(free);
+                if (free) {
+                    startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_button);
+                    startgameTextImag.setImageResource(R.drawable.begin_game_text);
+                } else {
+                    startgameLl.setBackgroundResource(R.drawable.ctrl_startgame_button);
+                    startgameTextImag.setImageResource(R.drawable.ctrl_begin_loading);
+                }
+                ctrlQuizLayout.setVisibility(View.VISIBLE);
+                moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
+                ctrlQuizLayout.setEnabled(false);
             } else {
-                userInfos.add(appInRoomResponse.getNickName());
-                getUserInfos(userInfos);
+                boolean is = false;
+                if (userInfos.size() == 1) {
+                    is = true;
+                }
+                userInfos.add(appInRoomResponse.getUserId());
+                getUserInfos(userInfos, is);
             }
         }
-}
+    }
 
     //监控网关区
+    //TODO 网关重连过后 需要前端主动去获取一次网关的状态来最终判断网关是否存在!!!
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_CONNECT_ERR),
             @Tag(Utils.TAG_CONNECT_SUCESS)})
@@ -702,10 +1094,14 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
             Utils.showLogE(TAG, "TAG_CONNECT_ERR");
             ctrlStatusIv.setImageResource(R.drawable.point_red);
+            isCurrentConnect = false;
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
             Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
             ctrlStatusIv.setImageResource(R.drawable.point_green);
             NettyUtils.sendRoomInCmd();
+            //TODO 后续修改获取网关状态接口
+            NettyUtils.sendGetDeviceStatesCmd();
+            isCurrentConnect = true;
         }
     }
 
@@ -741,6 +1137,18 @@ public class CtrlActivity extends Activity implements IctrlView {
             //TODO 主板报错
             PoohAbnormalStatus status = (PoohAbnormalStatus) object;
             Utils.showLogE(TAG, "主板报错 错误代码:::" + status.getValue());
+            //TODO 主板异常  UI返回用户金额
+            if (isStart) {
+                //TODO 返回玩家金额
+                getUserDate(UserUtils.USER_ID);   //获取用户余额
+            } else {
+                //TODO 返回竞猜金额 如果用户竞猜
+                if (isLottery) {
+                    getUserDate(UserUtils.USER_ID);    //获取用户余额
+                }
+            }
+            isStart = false;
+            isLottery = false;
         }
     }
 
@@ -748,68 +1156,99 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_DEVICE_FREE)})
     public void getDeviceFree(GatewayPoohStatusMessage message) {
-        rechargeButton.setVisibility(View.VISIBLE);
         String roomId = message.getRoomId();
         int number = message.getGifinumber();
         Utils.showLogE(TAG, "getDeviceFree::::::" + roomId + "======" + number);
         if (roomId.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             getStartstation();
             setStartMode(true);
-            if (Utils.isEmpty(upTime)) {
-                return;
-            }
+            getUserDate(UserUtils.USER_ID);    //再次获取用户余额并更新UI
             ctrlCompl.stopRecordView(); //录制完毕
-            getPlayNum(UserUtils.USER_ID, String.valueOf(money));   //扣款
-            if (number != 0) {
-                //抓到娃娃  上传给后台
-                upFileName = "";
-                state = "1";
-            } else {
-                //删除本地视频
-                state = "0";
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean d = Utils.delFile(upFileName);
-                        Utils.showLogE(TAG, "没抓住 删除" + upFileName + "视频....." + d);
-                        upFileName = "";
-
+            if (isStart) {
+                if (number != 0) {
+                    upFileName = "";
+                    state = "1";
+                    Utils.showLogE(TAG, "抓取成功！");
+                    updataTime(upTime, state);   //抓到娃娃  上传给后台
+                    if (Utils.getIsOpenMusic(getApplicationContext())) {
+                        playBtnMusic(R.raw.catch_success_music);
                     }
-                }, 2000);  //2s后删除 保证录制完毕
+                    setCatchResultDialog(true);
+                } else {
+                    //删除本地视频
+                    state = "0";
+                    Utils.showLogE(TAG, "抓取失败！");
+                    if (Utils.getIsOpenMusic(getApplicationContext())) {
+                        playBtnMusic(R.raw.catch_fail_music);
+                    }
+                    setCatchResultDialog(false);
+                }
             }
-            updataTime(upTime, state);
+            isStart = false;  //标志复位
+            isLottery = false;
             upTime = "";
+        }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
+            @Tag(Utils.TAG_LOTTERY_DRAW)})
+    public void getConnectStates(LotteryDrawAnnounceMessage message) {
+        List<String> nickNameList = message.getBingoNickNameList();
+        if (nickNameList != null) {
+            StringBuffer sBuffer = new StringBuffer("恭喜:");
+            int count = nickNameList.size();
+            if (count > 3) {
+                sBuffer.append(nickNameList.get(0) + "," + nickNameList.get(1) + "," + nickNameList.get(2));
+            } else {
+                for (String name : nickNameList) {
+                    sBuffer.append(name);
+                    sBuffer.append(",");
+                }
+                sBuffer.deleteCharAt(sBuffer.length() - 1);
+            }
+            sBuffer.append("猜中");
+            MyToast.getToast(getApplicationContext(), sBuffer.toString()).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UMGameAgent.onResume(this);
+        if (!Utils.isEmpty(UserUtils.USER_ID)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getUserDate(UserUtils.USER_ID);    //2秒后获取用户余额并更新UI
+                }
+            }, 2000);
 
         }
     }
 
-    /************************************************* 网络请求区***************************************************/
-    //消费接口
-    private void getPlayNum(String phone, String number) {
-        String phones = Base64.encodeToString(phone.getBytes(), Base64.DEFAULT);
-        HttpManager.getInstance().getUserPlayNum(phones, number, new RequestSubscriber<Result<LoginInfo>>() {
-            @Override
-            public void _onSuccess(Result<LoginInfo> result) {
-                Log.e(TAG, "消费结果=" + result.getMsg());
-                UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-                MyToast.getToast(getApplicationContext(), "扣费失败！").show();
-            }
-        });
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UMGameAgent.onPause(this);
     }
 
+    /*************************************************
+     * 网络请求区
+     ***************************************************/
     //下注接口
-    private void getBets(String userID, Integer wager, String guessKey, Integer playBackId,
+    private void getBets(String userID, Integer wager, String guessKey, String guessId,
                          String dollID) {
-        HttpManager.getInstance().getBets(userID, wager, guessKey, playBackId, dollID, new RequestSubscriber<Result<AppUserBean>>() {
+        HttpManager.getInstance().getBets(userID, wager, guessKey, guessId, dollID, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> appUserBeanResult) {
-                coinTv.setText(appUserBeanResult.getData().getAppUser().getBALANCE());
-                UserUtils.UserBalance=appUserBeanResult.getData().getAppUser().getBALANCE();
+                if (appUserBeanResult.getData().getAppUser() != null) {
+                    String balance = appUserBeanResult.getData().getAppUser().getBALANCE();
+                    if (TextUtils.isEmpty(balance)) {
+                        coinTv.setText("  " + balance + " 充值");
+                        UserUtils.UserBalance = balance;
 
+                    }
+                }
             }
 
             @Override
@@ -818,21 +1257,17 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         });
     }
-
-
-
-
 
     //获取下注人数
+    private void getPond(String playId, String dollId) {
 
-    private void getPond(int playId){
-
-        HttpManager.getInstance().getPond(playId, new RequestSubscriber<Result<PondResponseBean>>() {
+        HttpManager.getInstance().getPond(playId, dollId, new RequestSubscriber<Result<PondResponseBean>>() {
             @Override
             public void _onSuccess(Result<PondResponseBean> loginInfoResult) {
-                ctrlBettingNumberOne.setText( loginInfoResult.getData().getPond().getGUESS_Y()+"");
-                ctrlBettingNumberTwo.setText( loginInfoResult.getData().getPond().getGUESS_N()+"");
-
+                if (loginInfoResult.getData().getPond() != null) {
+                    ctrlBettingNumberOne.setText(loginInfoResult.getData().getPond().getGUESS_Y() + "");
+                    ctrlBettingNumberTwo.setText(loginInfoResult.getData().getPond().getGUESS_N() + "");
+                }
             }
 
             @Override
@@ -842,28 +1277,40 @@ public class CtrlActivity extends Activity implements IctrlView {
         });
     }
 
-    public void getCtrlUserImage(String name) {
-        HttpManager.getInstance().getCtrlUserImage(name, new RequestSubscriber<Result<AppUserBean>>() {
+    public void getCtrlUserImage(String userId) {
+        HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-            public void _onSuccess(Result<AppUserBean> appUserBeanResult) {
-                UserUtils.UserImage1 = UrlUtils.USERFACEIMAGEURL + appUserBeanResult.getData().getAppUser().getIMAGE_URL();
-                Glide.with(getApplicationContext()).load(UserUtils.UserImage1)
-                        .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+                if (httpDataInfoResult.getCode().equals("0")) {
+                    UserBean bean = httpDataInfoResult.getData().getAppUser();
+                    if ((bean != null) && (!Utils.isEmpty(bean.getIMAGE_URL()))) {
+                        String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
+                        Glide.with(getApplicationContext()).load(showImage)
+                                .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                    } else {
+                        Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                                .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                    }
+                } else {
+                    Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                            .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                }
             }
 
             @Override
             public void _onError(Throwable e) {
-
+                Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                        .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
             }
         });
     }
 
     private void updataTime(String time, String state) {
-
-        HttpManager.getInstance().getRegPlayBack(UserUtils.id, time, UserUtils.NickName, state, dollName, new RequestSubscriber<Result<LoginInfo>>() {
+        Utils.showLogE("<<<<<<<<<<<<<", "userId2=" + UserUtils.USER_ID);
+        HttpManager.getInstance().getRegPlayBack(time, UserUtils.USER_ID, state, dollId, periodsNum, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-            public void _onSuccess(Result<LoginInfo> loginInfoResult) {
-
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                Utils.showLogE(TAG, "游戏记录上传结果=" + loginInfoResult.getMsg());
             }
 
             @Override
@@ -872,4 +1319,147 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         });
     }
+
+    //获取用户信息接口
+    private void getUserDate(String userId) {
+        HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                Log.e(TAG, "获取结果=" + loginInfoResult.getMsg());
+                if (loginInfoResult.getMsg().equals("success")) {
+                    UserBean bean = loginInfoResult.getData().getAppUser();
+                    if (bean != null) {
+                        String balance = bean.getBALANCE();
+                        //UserUtils.UserBetNum = bean.getBET_NUM();
+                        if (!TextUtils.isEmpty(balance)) {
+                            coinTv.setText("  " + balance + " 充值");
+                            UserUtils.UserBalance = balance;
+                        }
+//                        String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
+//                        Glide.with(getApplicationContext()).load(showImage)
+//                                .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                    }
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
+
+    private void getGuesserlast10() {
+        HttpManager.getInstance().getGuesserlast10(new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
+                    HttpDataInfo httpDataInfo = httpDataInfoResult.getData();
+                    if (httpDataInfo != null) {
+                        List<GuessLastBean> list = httpDataInfo.getPondList();
+                        if (list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                Marquee marquee = new Marquee();
+                                String nickname = list.get(i).getGUESSER_NAME();
+                                if (nickname.length() > 12) {
+                                    nickname.substring(0, 12);
+                                }
+                                String s = "恭喜" + "<font color='#fcf005'>" + nickname + "</font>"
+                                        + "...在第" + list.get(i).getGUESS_ID() + "期成功猜中";
+                                marquee.setTitle(s);
+                                marquees.add(marquee);
+                            }
+                            ctrlMarqueeview.setImage(true);
+                            ctrlMarqueeview.startWithList(marquees);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+
+            }
+        });
+    }
+
+
+    private void playBGMusic() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.catchroom_bgm);
+        // 设置音频流的类型
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+        Utils.showLogE(TAG, "房间背景音乐播放成功" + mediaPlayer.isPlaying());
+    }
+
+    private void playBtnMusic(int file) {
+        btn_mediaPlayer = MediaPlayer.create(this, file);
+        btn_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        btn_mediaPlayer.start();
+    }
+
+    private void setCatchResultDialog(boolean result) {
+        final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
+        catchDollResultDialog.setCancelable(false);
+        catchDollResultDialog.show();
+        catchDollResultDialog.setStartAnimation();
+        if (result) {
+            catchDollResultDialog.setTitle("恭喜您！");
+            catchDollResultDialog.setContent("本次抓娃娃成功啦。");
+            catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
+        } else {
+            catchDollResultDialog.setTitle("太可惜了！");
+            catchDollResultDialog.setContent("本次抓娃娃失败啦。");
+            catchDollResultDialog.setBackground(R.drawable.catchdialog_fail_bg);
+        }
+        catchDollResultDialog.setDialogResultListener(new CatchDollResultDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                if (resultCode == 1) {
+                    //MyToast.getToast(getApplicationContext(), "二次抢抓功能还在完善中！").show();
+                }
+            }
+        });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (catchDollResultDialog.isShowing()) {
+                    Context context = ((ContextWrapper) catchDollResultDialog.getContext()).getBaseContext();
+                    if (context instanceof Activity) {
+                        if (!((Activity) context).isFinishing() && !((Activity) context).isDestroyed())
+                            catchDollResultDialog.dismiss();
+                    } else {
+                        catchDollResultDialog.dismiss();
+                    }
+                }
+            }
+        }, 3000);
+    }
+
+    private void showDetailDialog(String url) {
+        View view = getLayoutInflater().inflate(R.layout.roomdetail_dialog, null);
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        final PopupWindow mPop = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mPop.setOutsideTouchable(true);
+        mPop.setFocusable(true);
+        mPop.showAtLocation(realplayRl, Gravity.CENTER, 0, 0);//在屏幕居中，无偏移
+        ImageView imageView = (ImageView) view.findViewById(R.id.roomdetail_dialog_iv);
+        Glide.with(this)
+                .load(UrlUtils.APPPICTERURL + url)
+                .dontAnimate()
+                .into(imageView);
+        // 重写onKeyListener
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    mPop.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 }

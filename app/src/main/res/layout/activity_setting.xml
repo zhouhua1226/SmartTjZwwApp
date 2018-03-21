@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#efefef"
     android:orientation="vertical">
-
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:background="@drawable/bg03">
+        android:background="@color/apptheme_bg">
 
         <ImageButton
             android:id="@+id/image_back"
@@ -44,7 +43,9 @@
         android:id="@+id/money_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,21 +70,25 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ededed" />
+        android:background="#ededed"
+        android:visibility="gone"
+        />
 
 
     <RelativeLayout
         android:id="@+id/record_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:text="我的抓娃娃记录"
+            android:text="视频回放"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -103,13 +108,52 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#ededed" />
+        android:background="#ededed"
+        android:visibility="gone"
+        />
+    <RelativeLayout
+        android:id="@+id/betrecord_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="我的竞猜记录"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back1" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#ededed"
+        android:visibility="gone"
+        />
 
     <RelativeLayout
         android:id="@+id/invitation_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -173,6 +217,39 @@
         android:layout_marginRight="10dp"
         android:background="#ededed" />
     <RelativeLayout
+        android:id="@+id/roommusic_control_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="房间音效"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/roommusic_control_imag"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/vibrator_control_bg" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#ededed" />
+    <RelativeLayout
         android:id="@+id/vibrator_control_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -225,11 +302,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="当前版本为：1.0.1"
+            tools:text="当前版本为：1.0.1"
             android:layout_marginLeft="90dp"
             android:textColor="@color/gray"
             android:textSize="14sp"
             />
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back1" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#ededed" />
+    <RelativeLayout
+        android:id="@+id/setting_share_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="分 享"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="45dp"
@@ -288,8 +396,9 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/login_bt"
+        android:background="@drawable/setting_logout_btn_bg"
         android:text="退出登录"
+        android:gravity="center"
         android:textColor="@color/white"
         android:textSize="14sp" />
 

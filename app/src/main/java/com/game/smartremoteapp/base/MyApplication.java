@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
@@ -7,8 +8,12 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.game.smartremoteapp.service.SmartRemoteService;
+import com.game.smartremoteapp.utils.Utils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by zhouh on 2017/9/7.
@@ -16,10 +21,13 @@ import com.umeng.message.PushAgent;
 public class MyApplication extends MultiDexApplication {
 
     private static MyApplication myApplication;
+    public static List<Activity> activities = new LinkedList<Activity>();
+    private String TAG="MyApplication--";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Utils.showLogE("MyApplication", "onCreate");
         myApplication = this;
         startCoreService();
         getPushAgent();
@@ -39,7 +47,7 @@ public class MyApplication extends MultiDexApplication {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                Log.e("MyDeviceToken",deviceToken);
+                Log.e(TAG,"友盟deviceToken="+deviceToken);
             }
 
             @Override
@@ -47,6 +55,7 @@ public class MyApplication extends MultiDexApplication {
 
             }
         });
+        mPushAgent.setDisplayNotificationNumber(2);
         mPushAgent.setDebugMode(false);
     }
 
@@ -71,5 +80,21 @@ public class MyApplication extends MultiDexApplication {
         System.exit(0);
     }
 
+    public void exit() {
+        if (activities != null) {
+            Activity activity;
+            for (int i = 0; i < activities.size(); i++) {
+                activity = activities.get(i);
+                if (activity != null) {
+                    if (!activity.isFinishing()) {
+                        activity.finish();
+                    }
+                    activity = null;
+                }
+                activities.remove(i);
+                i--;
+            }
+        }
+    }
 
 }

@@ -9,7 +9,7 @@
         android:id="@+id/layout_top_select"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@drawable/bg03">
+        android:background="@color/apptheme_bg">
 
         <ImageButton
             android:id="@+id/image_back"
@@ -152,7 +152,7 @@
                 android:textColor="@color/gray"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
-                android:text="0元"
+                android:text="0个"
                 android:layout_marginRight="15dp"
                 android:textSize="14sp"
                 android:layout_gravity="right"

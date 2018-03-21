@@ -7,4 +7,5 @@ public class EZUtils {
     public final static int PLAYER_ERC_DISCONNECTED =  10013;
     public final static int PLAYER_ERC_SWITCH_URL_ERR = 10014;
 
+    public static final int PLAYER_APLIY_SDK_PAY_FLAG =10014 ;//支付宝
 }

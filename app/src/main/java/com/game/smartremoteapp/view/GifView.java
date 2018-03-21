@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.game.smartremoteapp.R;
 
+
 /**
  * Created by zhouh on 2017/11/8.
  */

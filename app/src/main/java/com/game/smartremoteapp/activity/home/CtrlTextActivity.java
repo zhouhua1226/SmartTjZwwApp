@@ -1,13 +1,15 @@
 package com.game.smartremoteapp.activity.home;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
 import com.game.smartremoteapp.R;
 import com.gatz.netty.utils.NettyUtils;
 import com.iot.game.pooh.server.entity.json.enums.MoveType;
+
 
 public class CtrlTextActivity extends AppCompatActivity {
     private Button forntBtn, backBtn, leftBtn, rightBtn, okBtn;

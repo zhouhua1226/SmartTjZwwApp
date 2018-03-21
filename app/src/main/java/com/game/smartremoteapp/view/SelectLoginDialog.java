@@ -2,7 +2,6 @@ package com.game.smartremoteapp.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
+
 
 /**
  * Created by yincong on 2017/12/1 11:47
@@ -34,7 +34,7 @@ public class SelectLoginDialog extends Dialog implements View.OnClickListener{
         super(context);
     }
 
-    public SelectLoginDialog(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
+    public SelectLoginDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 
