@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:focusable="true"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/layout_nativagion_title"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:background="@drawable/icon_phone"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:inputType="phone"
+            android:textSize="@dimen/text_font_size_28"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:hint="手机号"
+            android:textColorHint="@color/hihtcolor"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/backcolor"
+        android:layout_height="1dp"></View>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:background="@drawable/icon_password"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:inputType="textPassword"
+            android:textSize="@dimen/text_font_size_28"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:background="@color/white"
+            android:hint="密码"
+            android:textColorHint="@color/hihtcolor"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/backcolor"
+        android:layout_height="1dp"></View>
+
+    <Button
+        android:id="@+id/bt_sure_login"
+        android:layout_width="match_parent"
+        android:layout_marginTop="70dp"
+        android:background="@color/apptheme_bg"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_font_size_30"
+        android:text="确定"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="50dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:layout_height="45dp">
+
+        <TextView
+            android:id="@+id/tv_forget_password"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/text_font_size_28"
+            android:textColor="@color/gray_drak"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="忘记密码"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/text_font_size_28"
+            android:textColor="@color/blue"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="用户注册"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>
