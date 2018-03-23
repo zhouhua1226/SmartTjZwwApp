@@ -19,7 +19,7 @@ android {
         applicationId "com.game.smartremoteapp"
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
-        versionCode 12
+        versionCode 1
         versionName "1.0.0"
         multiDexEnabled true
         signingConfig signingConfigs.release
@@ -101,12 +101,12 @@ dependencies {
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'io.netty:netty-all:4.0.36.Final'
-//    compile 'org.codehaus.jackson:jackson-core-asl:1.9.5'
-//    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.5'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.5'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.5'
     compile 'com.alibaba:fastjson:1.2.8'
     compile 'commons-beanutils:commons-beanutils:1.8.3'
     compile 'org.apache.commons:commons-lang3:3.1'
-   // compile 'org.slf4j:slf4j-api:1.7.2'
+    compile 'org.slf4j:slf4j-api:1.7.2'
     compile 'com.google.guava:guava:14.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile project(':PushSDK')

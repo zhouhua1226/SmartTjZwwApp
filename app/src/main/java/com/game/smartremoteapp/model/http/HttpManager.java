@@ -454,5 +454,14 @@ public class HttpManager {
 
     }
 
+    //自动登录
+    //YSDK自动登录接口
+    public void getAuthLogin(String userId,Subscriber<Result<HttpDataInfo>> subscriber){
+        Observable<Result<HttpDataInfo>> o =smartService.getAuthLogin(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 
 }

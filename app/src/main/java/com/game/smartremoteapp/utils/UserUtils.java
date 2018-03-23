@@ -10,7 +10,6 @@ import com.gatz.netty.UserInfo;
 import com.gatz.netty.global.AppGlobal;
 import com.gatz.netty.utils.NettyUtils;
 
-
 /**
  * Created by zhouh on 2017/9/19.
  */

@@ -32,7 +32,7 @@
     <color name="my_ranknumtv_bg">#26BAAF</color>
     <color name="midle_black">#505050</color>
     <color name="ctrl_marquee_bg">#50000000</color>
-    <color name="zww_marquee_text_bg">#d6d5ff</color>   <!-- #ffe980 -->
+    <color name="zww_marquee_text_bg">#ffe980</color>   <!-- #ffe980 -->
     <color name="ctrl_textcolor">#fcf005</color>
     <color name="zww_gary_bg">#eceaea</color>
     <color name="blue">#8DBCF6</color><!-- 141 188 246 -->

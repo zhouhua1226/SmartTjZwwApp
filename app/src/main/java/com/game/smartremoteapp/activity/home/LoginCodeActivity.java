@@ -15,6 +15,7 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
 
 import butterknife.BindView;
@@ -86,6 +87,7 @@ public class LoginCodeActivity extends BaseActivity{
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if(httpDataInfoResult.getCode()==0){
+                    YsdkUtils.loginResult = httpDataInfoResult;
                     Utils.token = httpDataInfoResult.getData().getSrsToken().getToken();
                     UserUtils.UserPhone =  httpDataInfoResult.getData().getAppUser().getPHONE();
                     UserUtils.UserName = httpDataInfoResult.getData().getAppUser().getUSERNAME();

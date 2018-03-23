@@ -102,7 +102,7 @@ public class RegisterActivity extends BaseActivity{
         HttpManager.getInstance().getRegiter(phone,pass,code, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if(httpDataInfoResult.getCode()==200){
+                if(httpDataInfoResult.getCode()==0){
                     MyToast.getToast(getApplicationContext(), "注册成功！").show();
                     finish();
                 }else{

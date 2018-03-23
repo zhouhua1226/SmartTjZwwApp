@@ -55,6 +55,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:background="@drawable/zww_exshop_bg"
+                        android:visibility="gone"
                         />
 
                     <TextView
@@ -67,6 +68,7 @@
                         android:textSize="17sp"
                         android:layout_centerVertical="true"
                         android:background="@drawable/zww_earnmoney_bg"
+                        android:visibility="gone"
                         />
 
                 </RelativeLayout>

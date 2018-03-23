@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.show(zwwjFragment);
             }
             setFocuse();
-            ivTabZww.setBackgroundResource(R.drawable.zww_icon_jj);
+            ivTabZww.setBackgroundResource(R.drawable.zww_icon);
             //一定要记得提交
             fragmentTransaction.commitAllowingStateLoss();
         }
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.show(rankFragment);
             }
             setFocuse();
-            ivTabList.setBackgroundResource(R.drawable.rank_icon_jj);
+            ivTabList.setBackgroundResource(R.drawable.rank_icon);
             //一定要记得提交
             fragmentTransaction.commitAllowingStateLoss();
         }
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.show(myCenterFragment);
             }
             setFocuse();
-            ivTabMy.setBackgroundResource(R.drawable.mycenter_icon_jj);
+            ivTabMy.setBackgroundResource(R.drawable.mycenter_icon);
             //一定要记得提交
             fragmentTransaction.commitAllowingStateLoss();
         }
@@ -300,7 +300,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void doServcerConnect() {
-        String ip = "47.100.8.129";    //123.206.120.46(壕鑫正式)   47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
+        String ip = "111.231.74.65";    //123.206.120.46(壕鑫正式)   47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
         AppClient.getInstance().setHost(ip);
         AppClient.getInstance().setPort(8580);
         if (!AppProperties.initProperties(getResources())) {

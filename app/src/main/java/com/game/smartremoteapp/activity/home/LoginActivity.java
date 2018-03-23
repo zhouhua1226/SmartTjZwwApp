@@ -1,6 +1,7 @@
 package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -75,7 +76,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        initSDK();
+        //initSDK();
         super.onCreate(savedInstanceState);
     }
 
@@ -87,26 +88,22 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initWelcome() {
-        initCreatView();
-        return;
-//        if (!(boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, false)) {
-//            setContentView(R.layout.activity_welcome);//闪屏
-//            if ((boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
-//                //用户已经注册
-//                uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
-//                if (Utils.isEmpty(uid)) {
-//                    return;
-//                }
-//                if (Utils.isNetworkAvailable(getApplicationContext())) {
-//                    antuToken = (String) SPUtils.get(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
-//                    getAccessToken(antuToken);    //获取token自动登录
-//                }
-//            } else {
-//                new Handler().postDelayed(initRunnable, 2000);
-//            }
-//        } else {
-//            initCreatView();
-//        }
+        if(isFirstInto()){
+            startActivity(new Intent(this,NavigationPageActivity.class));
+        }
+        if ((boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
+            setContentView(R.layout.activity_welcome);//闪屏
+                //用户已经注册
+                uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+                if (Utils.isEmpty(uid)) {
+                    return;
+                }
+                if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    getAuthLogin(uid);
+                }
+        } else {
+            initCreatView();
+        }
 
     }
 
@@ -129,22 +126,22 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.login_qq_tv:
-                //MyToast.getToast(getApplicationContext(), "点击qq登录！").show();
-                if (Utils.isNetworkAvailable(this)) {
-                    setGifView(true);
-                    qqLogin();
-                } else {
-                    MyToast.getToast(getApplicationContext(), "请检查网络！").show();
-                }
+                MyToast.getToast(getApplicationContext(), "功能开发中！").show();
+//                if (Utils.isNetworkAvailable(this)) {
+//                    setGifView(true);
+//                    qqLogin();
+//                } else {
+//                    MyToast.getToast(getApplicationContext(), "请检查网络！").show();
+//                }
                 break;
             case R.id.login_wx_tv:
-                //MyToast.getToast(getApplicationContext(), "点击微信登录！").show();
-                if (Utils.isNetworkAvailable(this)) {
-                    setGifView(true);
-                    weixinLogin();
-                } else {
-                    MyToast.getToast(getApplicationContext(), "请检查网络！").show();
-                }
+                MyToast.getToast(getApplicationContext(), "功能开发中！").show();
+//                if (Utils.isNetworkAvailable(this)) {
+//                    setGifView(true);
+//                    weixinLogin();
+//                } else {
+//                    MyToast.getToast(getApplicationContext(), "请检查网络！").show();
+//                }
                 break;
             case R.id.tv_login_password:
                 Utils.toActivity(this,LoginCodeActivity.class);
@@ -262,8 +259,8 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void getYSDKAuthLogin(String userId, String accessToken,String ctype,String channel) {
-        HttpManager.getInstance().getYSDKAuthLogin(userId, accessToken,ctype,channel, new RequestSubscriber<Result<HttpDataInfo>>() {
+    private void getAuthLogin(String userId) {
+        HttpManager.getInstance().getAuthLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 if (loginInfoResult == null || loginInfoResult.getData() == null
@@ -314,7 +311,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(String accessToken) {
                 YsdkUtils.access_token = accessToken;
-                getYSDKAuthLogin(uid, accessToken, UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);  //自动登录
+                //getYSDKAuthLogin(uid, accessToken, UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);  //自动登录
             }
 
             @Override
@@ -326,6 +323,16 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    private boolean isFirstInto(){
+        // 判断是否第一次打开app
+        SharedPreferences setting = getSharedPreferences("com.game.smartremoteapp", 0);
+        boolean user_first = setting.getBoolean("FIRST", true);
+        if (user_first) {
+            setting.edit().putBoolean("FIRST", false).commit();
+        }
+        Log.e(TAG,"是否第一次进入="+user_first);
+        return user_first;
+    }
 
     @Override
     protected void onResume() {

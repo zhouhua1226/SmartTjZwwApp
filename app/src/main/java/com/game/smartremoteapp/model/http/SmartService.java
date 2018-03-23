@@ -383,7 +383,7 @@ public interface SmartService {
     //竞猜排行
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
-    @GET(UrlUtils.RANKBETLISTURL)
+    @POST(UrlUtils.RANKBETLISTURL)
     Observable<Result<ListRankBean>> getRankBetList(
             @Field(UrlUtils.USERID) String userId
     );
@@ -413,4 +413,13 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.LOGINPASSWORD)
     Observable<Result<HttpDataInfo>> getLoginPassword(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PW) String pass);
+
+    //自动登录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.AUTHLOGINURL)
+    Observable<Result<HttpDataInfo>> getAuthLogin(
+            @Field(UrlUtils.USERID) String userId
+    );
+
 }

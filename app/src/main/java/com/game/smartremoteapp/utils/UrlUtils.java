@@ -221,7 +221,7 @@ public class UrlUtils {
     public static final String GUESSERLASTTENURL=URL+"/pooh-web/app/betgame/getGuesserlast10";
 
     //竞猜排行榜接口
-    public static final String RANKBETLISTURL=URL+"/pooh-web/app/rank/rankList";
+    public static final String RANKBETLISTURL=URL+"/pooh-web/app/rank/rankBetList";
 
     //新娃娃排行榜接口
     public static final String RANKDOLLLISTURL=URL+"/pooh-web/app/rank/rankAndSelfList";
@@ -234,4 +234,8 @@ public class UrlUtils {
 
     //首页动态跳图
     public static final String RUNIMGIMAGE=URL+"/pooh-web/app/runimg/images/news";
+
+    //自动登录接口
+    public static final String AUTHLOGINURL=URL+"/pooh-web/app/sms/getDoll";
+
 }
