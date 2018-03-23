@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.text.TextUtils;
 
-import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.LogUtils;
 
 
 public class DialogMaker {
@@ -27,8 +27,8 @@ public class DialogMaker {
 		} else if (progressDialog.getContext() != context) {
 			// maybe existing dialog is running in a destroyed activity cotext
 			// we should recreate one
-			Utils.showLogE("dialog", "there is a leaked window here,orign context: "
-					+ progressDialog.getContext() + " now: " + context);
+			LogUtils.loge("there is a leaked window here,orign context: "
+					+ progressDialog.getContext() + " now: " + context,"dialog");
 			dismissProgressDialog();
 			progressDialog = new EasyProgressDialog(context, message);
 		}

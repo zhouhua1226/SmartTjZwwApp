@@ -8,7 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.game.smartremoteapp.service.SmartRemoteService;
-import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 
@@ -27,11 +27,11 @@ public class MyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Utils.showLogE("MyApplication", "onCreate");
         myApplication = this;
         startCoreService();
         getPushAgent();
         setCrashHandler();
+        LogUtils.logInit(true);//初始化logger
     }
 
     private void setCrashHandler() {

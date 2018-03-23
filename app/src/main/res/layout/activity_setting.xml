@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="设置"
-            android:textColor="@color/white"
+            android:textColor="@color/brown"
             android:textSize="18sp" />
 
         <ImageButton
@@ -399,7 +399,7 @@
         android:background="@drawable/setting_logout_btn_bg"
         android:text="退出登录"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@color/brown"
         android:textSize="14sp" />
 
 </LinearLayout>

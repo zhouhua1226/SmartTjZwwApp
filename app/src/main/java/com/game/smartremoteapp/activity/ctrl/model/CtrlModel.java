@@ -7,7 +7,7 @@ import android.view.SurfaceView;
 import com.daniulive.smartplayer.SmartPlayerJni;
 import com.eventhandle.SmartEventCallback;
 import com.game.smartremoteapp.utils.EZUtils;
-import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.gatz.netty.utils.NettyUtils;
 import com.iot.game.pooh.server.entity.json.enums.MoveType;
 
@@ -107,7 +107,7 @@ public class CtrlModel implements SmartEventCallback {
         smartPlayer.SmartPlayerSetLowLatencyMode(playerHandle, 1);
         smartPlayer.SmartPlayerSetBuffer(playerHandle, 0);
         int iPlaybackRet = smartPlayer.SmartPlayerStartPlayback(playerHandle, url);
-        Utils.showLogE(TAG, "当前播放url:::::::" + iPlaybackRet + "===========" + url);
+        LogUtils.loge("当前播放url:::::::" + iPlaybackRet + "===========" + url,TAG);
         if (iPlaybackRet != 0) {
             callBack.getVideoPlayErr(EZUtils.PLAYER_PLAYBACKRET_ZERO);
         }
@@ -124,7 +124,7 @@ public class CtrlModel implements SmartEventCallback {
 
     @Override
     public void onCallback(int i, long l, long l1, String s, String s1, Object o) {
-        Utils.showLogE(TAG, "播放回调code::::::" + i + "=====" + isChangerUrl);
+        LogUtils.loge("播放回调code::::::" + i + "=====" + isChangerUrl,TAG);
         switch (i) {
             case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STARTED: //开始直播
                 callBack.getVideoPlayStart();

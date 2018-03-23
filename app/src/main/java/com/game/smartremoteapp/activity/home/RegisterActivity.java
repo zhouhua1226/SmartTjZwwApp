@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,11 +13,12 @@ import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
-import com.game.smartremoteapp.bean.Token;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -100,11 +102,16 @@ public class RegisterActivity extends BaseActivity{
         HttpManager.getInstance().getRegiter(phone,pass,code, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                MyToast.getToast(RegisterActivity.this,"短信验证码一下发").show();
+                if(httpDataInfoResult.getCode()==200){
+                    MyToast.getToast(getApplicationContext(), "注册成功！").show();
+                    finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(), httpDataInfoResult.getMsg()).show();
+                }
             }
             @Override
             public void _onError(Throwable e) {
-
+                LogUtils.logi(e.getMessage());
             }
         });
     }
@@ -124,14 +131,16 @@ public class RegisterActivity extends BaseActivity{
 
     private void getCodeTask(String phone) {
         String str = Base64.encodeToString(phone.getBytes(), Base64.DEFAULT);
-        HttpManager.getInstance().getCode(str, new RequestSubscriber<Result<Token>>() {
+        LogUtils.logi(str);
+        HttpManager.getInstance().getCode(str, new RequestSubscriber<Result<Void>>() {
             @Override
-            public void _onSuccess(Result<Token> token) {
+            public void _onSuccess(Result<Void> token) {
+                Log.e( "短信验证码------",token.toString());
                 MyToast.getToast(RegisterActivity.this,"短信验证码一下发").show();
             }
             @Override
             public void _onError(Throwable e) {
-
+                LogUtils.logi(e.getMessage());
             }
         });
     }

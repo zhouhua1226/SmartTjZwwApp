@@ -7,14 +7,14 @@ import java.io.Serializable;
  */
 public class Result<T> implements Serializable{
     private T data;
-    private String code;
+    private int code;
     private String msg;
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 

@@ -83,7 +83,6 @@ public class MyLogisticsOrderActivity extends BaseActivity {
     }
 
     private void getLogisticsOrder(String userId){
-        Utils.showLogE(TAG,"订单查询参数userId="+userId);
         if(Utils.isEmpty(userId)){
             recyclerView.setVisibility(View.GONE);
             logisticsorderFailTv.setVisibility(View.VISIBLE);

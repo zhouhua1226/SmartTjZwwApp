@@ -39,6 +39,7 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -259,7 +260,8 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (Utils.getIsOpenMusic(getApplicationContext())) {
             playBGMusic();   //播放房间背景音乐
         }
-        Utils.showLogE(TAG, "afterCreate");
+
+        LogUtils.loge("afterCreate",TAG);
         initView();
         initData();
         coinTv.setText("  " + UserUtils.UserBalance + " 充值");
@@ -270,7 +272,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     protected void initView() {
         ButterKnife.bind(this);
         RxBus.get().register(this);
-        Utils.showLogE(TAG, "=====" + UserUtils.UserPhone);
+        LogUtils.loge("=====" + UserUtils.UserPhone,TAG);
         NettyUtils.sendRoomInCmd();
         ctrlGifView.setVisibility(View.VISIBLE);
         ctrlGifView.setEnabled(false);
@@ -318,7 +320,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Utils.showLogE(TAG, "onDestroy");
+
+        LogUtils.loge("onDestroy",TAG);
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
         ctrlCompl.sendCmdCtrl(MoveType.CATCH);
@@ -369,7 +372,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                     for (int i = 0; i < counter; i++) {
                         if (!userInfos.get(i).equals(UserUtils.USER_ID)) {
                             showUserId = userInfos.get(i);
-                            Utils.showLogE(TAG, "显示观察者的userId::::" + showUserId);
+                             LogUtils.loge("显示观察者的userId::::" + showUserId,TAG);
                             getCtrlUserImage(showUserId);
                             break;
                         }
@@ -381,30 +384,30 @@ public class CtrlActivity extends Activity implements IctrlView {
 
     @Override
     public void getRecordErrCode(int code) {
-        Utils.showLogE(TAG, "录制视频失败::::::" + code);
+        LogUtils.loge("录制视频失败::::::" + code,TAG);
     }
 
     @Override
     public void getRecordSuecss() {
-        Utils.showLogE(TAG, "录制视频完毕......");
+        LogUtils.loge("录制视频完毕......",TAG);
     }
 
     @Override
     public void getRecordAttributetoNet(String time, String fileName) {
-        Utils.showLogE(TAG, "视频上传的时间::::" + time + "=====" + fileName);
+        LogUtils.loge("视频上传的时间::::" + time + "=====" + fileName,TAG);
         upTime = time;
         upFileName = fileName;
     }
 
     @Override
     public void getPlayerErcErrCode(int code) {
-        Utils.showLogE(TAG, "直播失败,错误码:::::" + code);
+        LogUtils.loge("直播失败,错误码:::::" + code,TAG);
         uiHandler.sendEmptyMessage(0);
     }
 
     @Override
     public void getPlayerSucess() {
-        Utils.showLogE(TAG, "直播Sucess:::::");
+        LogUtils.loge( "直播Sucess:::::",TAG);
         uiHandler.sendEmptyMessage(1);
     }
 
@@ -442,7 +445,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Utils.showLogE(TAG, "onRestart");
+        LogUtils.loge( "onRestart",TAG);
         if (ctrlFailIv.getVisibility() == View.VISIBLE) {
             ctrlFailIv.setVisibility(View.GONE);
         }
@@ -1011,7 +1014,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                     }
                 } else if (moveControlResponse.getMoveType().name().equals(MoveType.CATCH.name())) {
                     //TODO 其他用户下爪了 观看者
-                    Utils.showLogE(TAG, "观看者观察到下爪了......");
+                    LogUtils.loge( "观看者观察到下爪了......",TAG);
                     moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
                     ctrlQuizLayout.setEnabled(false);
                     ctrlBetingLayout.setVisibility(View.GONE);
@@ -1033,17 +1036,17 @@ public class CtrlActivity extends Activity implements IctrlView {
                 } else if (moveControlResponse.getMoveType().name()
                         .equals(MoveType.CATCH.name())) {
                     //TODO 本人点击下爪了 下爪成功
-                    Utils.showLogE(TAG, "本人点击下爪成功......");
+                    LogUtils.loge( "本人点击下爪成功......",TAG);
                     moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
                     ctrlQuizLayout.setEnabled(false);
                     catchLl.setEnabled(false);
                 }
             }
         } else if (response instanceof String) {
-            Utils.showLogE(TAG, "move faile....");
+            LogUtils.loge( "move faile....",TAG);
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
-            Utils.showLogE(TAG, appOutRoomResponse.toString());
+            LogUtils.loge(  appOutRoomResponse.toString(),TAG);
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
                 userInfos.remove(appOutRoomResponse.getUserId());
@@ -1055,7 +1058,7 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
-            Utils.showLogE(TAG, "=====" + appInRoomResponse.toString());
+            LogUtils.loge("=====" + appInRoomResponse.toString(),TAG);
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
             long seq = appInRoomResponse.getSeq();
@@ -1092,11 +1095,11 @@ public class CtrlActivity extends Activity implements IctrlView {
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_ERR");
+            LogUtils.loge("TAG_CONNECT_ERR",TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
+            LogUtils.loge("TAG_CONNECT_SUCESS",TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_green);
             NettyUtils.sendRoomInCmd();
             //TODO 后续修改获取网关状态接口
@@ -1109,7 +1112,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_DISCONNECT)})
     public void getSingleGatwayDisConnect(String id) {
-        Utils.showLogE(TAG, "getSingleGatwayDisConnect id" + id);
+        LogUtils.loge("getSingleGatwayDisConnect id" + id,TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
@@ -1119,7 +1122,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_CONNECT)})
     public void getSingleGatwayConnect(String id) {
-        Utils.showLogE(TAG, "getSingleGatwayConnect id" + id);
+        LogUtils.loge("getSingleGatwayDisConnect id" + id,TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrlStatusIv.setImageResource(R.drawable.point_green);
             isCurrentConnect = true;
@@ -1132,11 +1135,11 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (object instanceof GatewayPoohStatusMessage) {
             //TODO 主板没有返回数据
             GatewayPoohStatusMessage message = (GatewayPoohStatusMessage) object;
-            Utils.showLogE(TAG, "主板没有返回数据" + message.toString());
+            LogUtils.loge("主板没有返回数据" + message.toString(),TAG);
         } else if (object instanceof PoohAbnormalStatus) {
             //TODO 主板报错
             PoohAbnormalStatus status = (PoohAbnormalStatus) object;
-            Utils.showLogE(TAG, "主板报错 错误代码:::" + status.getValue());
+            LogUtils.loge("主板报错 错误代码:::" + status.getValue(),TAG);
             //TODO 主板异常  UI返回用户金额
             if (isStart) {
                 //TODO 返回玩家金额
@@ -1158,7 +1161,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     public void getDeviceFree(GatewayPoohStatusMessage message) {
         String roomId = message.getRoomId();
         int number = message.getGifinumber();
-        Utils.showLogE(TAG, "getDeviceFree::::::" + roomId + "======" + number);
+        LogUtils.loge("getDeviceFree::::::" + roomId + "======" + number,TAG);
         if (roomId.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             getStartstation();
             setStartMode(true);
@@ -1168,7 +1171,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 if (number != 0) {
                     upFileName = "";
                     state = "1";
-                    Utils.showLogE(TAG, "抓取成功！");
+                    LogUtils.loge("抓取成功！",TAG);
                     updataTime(upTime, state);   //抓到娃娃  上传给后台
                     if (Utils.getIsOpenMusic(getApplicationContext())) {
                         playBtnMusic(R.raw.catch_success_music);
@@ -1177,7 +1180,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 } else {
                     //删除本地视频
                     state = "0";
-                    Utils.showLogE(TAG, "抓取失败！");
+                    LogUtils.loge("抓取失败！",TAG);
                     if (Utils.getIsOpenMusic(getApplicationContext())) {
                         playBtnMusic(R.raw.catch_fail_music);
                     }
@@ -1281,7 +1284,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if (httpDataInfoResult.getCode().equals("0")) {
+                if (httpDataInfoResult.getCode()==0) {
                     UserBean bean = httpDataInfoResult.getData().getAppUser();
                     if ((bean != null) && (!Utils.isEmpty(bean.getIMAGE_URL()))) {
                         String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
@@ -1306,11 +1309,11 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
     private void updataTime(String time, String state) {
-        Utils.showLogE("<<<<<<<<<<<<<", "userId2=" + UserUtils.USER_ID);
+        LogUtils.loge("<<<<<<<<<<<<<", "userId2=" + UserUtils.USER_ID);
         HttpManager.getInstance().getRegPlayBack(time, UserUtils.USER_ID, state, dollId, periodsNum, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Utils.showLogE(TAG, "游戏记录上传结果=" + loginInfoResult.getMsg());
+                LogUtils.loge( "游戏记录上传结果=" + loginInfoResult.getMsg(),TAG);
             }
 
             @Override
@@ -1389,7 +1392,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-        Utils.showLogE(TAG, "房间背景音乐播放成功" + mediaPlayer.isPlaying());
+        LogUtils.loge( "房间背景音乐播放成功" + mediaPlayer.isPlaying(),TAG);
     }
 
     private void playBtnMusic(int file) {

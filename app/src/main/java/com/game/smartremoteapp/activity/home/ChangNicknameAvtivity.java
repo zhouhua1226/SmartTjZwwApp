@@ -13,6 +13,7 @@ import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
@@ -92,7 +93,7 @@ public class ChangNicknameAvtivity extends BaseActivity {
 
             @Override
             public void _onError(Throwable e) {
-                Utils.showLogE(TAG, "getUserName#####" + e.getMessage());
+                LogUtils.loge("getUserName#####" + e.getMessage());
             }
         });
     }

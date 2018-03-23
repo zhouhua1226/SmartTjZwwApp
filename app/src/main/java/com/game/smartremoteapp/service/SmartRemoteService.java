@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.gatz.netty.global.ConnectResultEvent;
 import com.gatz.netty.observer.HandlerObserver;
@@ -31,7 +32,7 @@ public class SmartRemoteService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!HandlerObserver.getInstance().getRequestSubscriberSet()) {
-            Utils.showLogE(TAG, "setRequestSubscriber.......");
+            LogUtils.loge("setRequestSubscriber.......",TAG);
             HandlerObserver.getInstance().setRequestSubscriber(rs);
         }
         return START_REDELIVER_INTENT;
@@ -66,7 +67,7 @@ public class SmartRemoteService extends Service {
         public void _onSuccess(SuberInfo suberInfo) {
             String tag =  suberInfo.getTag();
             Object[] objs = suberInfo.getObject();
-            Utils.showLogE(TAG, "Tag::::::" + tag);
+            LogUtils.loge("Tag::::::" + tag,TAG);
             if ((tag.equals(ConnectResultEvent.SESSION_INVALID) ||
                     (tag.equals(ConnectResultEvent.CONNECT_SESSION_INVALID)))) {
                 Utils.connectStatus = ConnectResultEvent.CONNECT_FAILURE;

@@ -23,6 +23,7 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
@@ -181,12 +182,12 @@ public class MyCtachRecordActivity extends BaseActivity {
     }
 
     private void getVideoBackList(String userId) {
-        Utils.showLogE(TAG, "抓取记录参数userId=" + userId);
+
         HttpManager.getInstance().getVideoBackList(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
                 videoList = result.getData().getPlayback();
-                Utils.showLogE(TAG, "抓取记录result=" + result.getMsg() + "=" + videoList.size());
+
                 if (videoList.size() != 0) {
                     mycatchrecodFailTv.setVisibility(View.GONE);
                     //myCenterAdapter.notify(getCatchNum(removeDuplicate(videoList),videoReList));
@@ -204,7 +205,7 @@ public class MyCtachRecordActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    Utils.showLogE("个人中心", "暂无数据");
+                    LogUtils.logi("个人中心, 暂无数据");
                     mycatchrecodRecyclerview.setVisibility(View.GONE);
                     mycatchrecodFailTv.setVisibility(View.VISIBLE);
                 }

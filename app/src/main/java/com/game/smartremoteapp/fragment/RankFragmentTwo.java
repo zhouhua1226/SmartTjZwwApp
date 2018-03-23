@@ -23,6 +23,7 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -143,7 +144,7 @@ public class RankFragmentTwo extends BaseFragment {
             @Override
             public void _onSuccess(Result<ListRankBean> listRankBeanResult) {
                 list = listRankBeanResult.getData().getList();
-                Utils.showLogE(TAG + "看看...", list.size() + "");
+                LogUtils.logi(list.size() + "");
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).getUSER_ID().equals(UserUtils.USER_ID)) {
                         isOutTen = false;
@@ -169,7 +170,7 @@ public class RankFragmentTwo extends BaseFragment {
                 } else {
                     rankList = list;
                 }
-                Utils.showLogE(TAG + "看看？？", rankList.size() + "我的=" + myNum);
+
                 listRankAdapter.notify(rankList,isShowType);
                 if (isOutTen) {
                     getNumRankList(UserUtils.USER_ID);   //如果当前用户在前十以外，则查询当前用户排名
@@ -181,7 +182,8 @@ public class RankFragmentTwo extends BaseFragment {
 
             @Override
             public void _onError(Throwable e) {
-                Utils.showLogE(TAG, "RankFragmentTwo::::" + e.getMessage());
+
+                LogUtils.loge(e.getMessage());
             }
         });
 
@@ -385,7 +387,6 @@ public class RankFragmentTwo extends BaseFragment {
         list = result.getData().getList();
         myBean=result.getData().getAppUser();
         myNum=myBean.getRANK();
-        Utils.showLogE(TAG + "看看...", list.size() + "");
         int length = list.size();
         if (length >= 1)
             firstBean = list.get(0);
@@ -405,7 +406,6 @@ public class RankFragmentTwo extends BaseFragment {
         } else {
             rankList = list;
         }
-        Utils.showLogE(TAG + "看看？？", rankList.size() + "我的=" + myNum);
         listRankAdapter.notify(rankList,isShowType);
         setViewDate(myNum);
     }

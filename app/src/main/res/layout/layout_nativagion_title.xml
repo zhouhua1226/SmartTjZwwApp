@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="@color/white"
+            android:textColor="@color/brown"
             android:textSize="@dimen/text_font_size_30" />
         <RelativeLayout
             android:id="@+id/ll_rightBtn"
@@ -60,7 +60,7 @@
                 android:focusable="false"
                 android:text="分享"
                 android:gravity="right|center"
-                android:textColor="@color/black"
+                android:textColor="@color/brown"
                 android:textSize="16sp"
                 android:visibility="gone" />
         </RelativeLayout>

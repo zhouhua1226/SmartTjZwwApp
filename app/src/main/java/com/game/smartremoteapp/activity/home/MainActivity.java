@@ -23,6 +23,7 @@ import com.game.smartremoteapp.fragment.RankFragmentTwo;
 import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -146,7 +147,7 @@ public class MainActivity extends BaseActivity {
         loginInfoResult=YsdkUtils.loginResult;
         if(loginInfoResult!=null&&!loginInfoResult.equals("")){
             if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
-                Utils.showLogE(TAG, "logIn::::" + loginInfoResult.getMsg());
+                LogUtils.logi("logIn::::" + loginInfoResult.getMsg());
                 Utils.token = loginInfoResult.getData().getAccessToken();
                 //dollLists = loginInfoResult.getData().getDollList();
                 UserUtils.SRSToken=loginInfoResult.getData().getSRStoken();
@@ -303,7 +304,7 @@ public class MainActivity extends BaseActivity {
         AppClient.getInstance().setHost(ip);
         AppClient.getInstance().setPort(8580);
         if (!AppProperties.initProperties(getResources())) {
-            Utils.showLogE(TAG, "netty初始化配置信息出错");
+            LogUtils.loge("netty初始化配置信息出错");
             return;
         }
         new Thread(new Runnable() {
@@ -321,7 +322,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(UserUtils.isUserChanger) {
+        if(UserUtils.isUserChanger) { //账号切换
             UserUtils.isUserChanger = false;
             if((YsdkUtils.loginResult.getData() != null) && (zwwjFragment != null)) {
                 UserUtils.NickName = YsdkUtils.loginResult.getData().getAppUser().getNICKNAME();
@@ -351,16 +352,16 @@ public class MainActivity extends BaseActivity {
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_ERR");
+            LogUtils.loge("TAG_CONNECT_ERR");
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
+            LogUtils.loge("TAG_CONNECT_SUCESS");
             //getDeviceStates();
         } else if (state.equals(Utils.TAG_SESSION_INVALID)) {
-            Utils.showLogE(TAG, "TAG_SESSION_INVALID");
+            LogUtils.loge( "TAG_SESSION_INVALID");
             //TODO 重连后重新连接 QQ/WEIXIN 模式检测
             getYSDKAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
         } else if (state.equals(Utils.TAG_GATEWAT_USING)) {
-            Utils.showLogE(TAG, "TAG_GATEWAT_USING");
+            LogUtils.loge( "TAG_GATEWAT_USING");
         }
     }
 
@@ -546,7 +547,7 @@ public class MainActivity extends BaseActivity {
                         //查询处理
                         isSign=loginInfoResult.getData().getSign().getSIGN_TAG();
                         signNumber = Integer.parseInt(loginInfoResult.getData().getSign().getCSDATE());
-                        Utils.showLogE(TAG,"签到天数="+signNumber);
+                        LogUtils.logi("签到天数="+signNumber);
                         for (int i = 0; i < 7; i++) {
                             if (i < signNumber) {
                                 signDayNum[i] = 1;
@@ -560,7 +561,7 @@ public class MainActivity extends BaseActivity {
                     }else {
                         //签到处理
                         String signgold=loginInfoResult.getData().getSign().getSIGNGOLD();
-                        Utils.showLogE(TAG,"签到赠送金币"+signgold);
+                        LogUtils.logi("签到赠送金币"+signgold);
                         getSignSuccessDialog(signgold);
                     }
                 }

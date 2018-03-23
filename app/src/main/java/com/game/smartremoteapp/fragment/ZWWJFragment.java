@@ -29,6 +29,7 @@ import com.game.smartremoteapp.bean.ToyTypeBean;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -254,8 +255,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     + "/";
             String url1 = rtmpUrl1 + serviceName1 + idToken + liveStream1;
             String url2 = rtmpUrl2 + serviceName2 + idToken + liveStream2;
-            Utils.showLogE(TAG, "房间推流地址1=" + url1);
-            Utils.showLogE(TAG, "房间推流地址2=" + url2);
+            LogUtils.loge("房间推流地址1=" + url1);
+            LogUtils.loge("房间推流地址2=" + url2);
             if (!TextUtils.isEmpty(url2) && !TextUtils.isEmpty(url1)) {
                 enterNext(currentRoomBeens.get(po).getDollName(),
                         url1, url2,
@@ -266,7 +267,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                         currentRoomBeens.get(po).getReward(),
                         currentRoomBeens.get(po).getDollUrl());
             } else {
-                Utils.showLogE(TAG, "当前设备没有配置摄像头!");
+                LogUtils.loge("当前设备没有配置摄像头!");
             }
         }
     }
@@ -310,7 +311,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Utils.showLogE(TAG, "获取轮播列表=" + loginInfoResult.getMsg());
                 if (loginInfoResult.getMsg().equals("success")) {
                     bannerList = loginInfoResult.getData().getRunImage();
                     if (bannerList.size() > 0) {
@@ -324,7 +324,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
             @Override
             public void _onError(Throwable e) {
-
+                LogUtils.loge(e.getMessage());
             }
         });
     }

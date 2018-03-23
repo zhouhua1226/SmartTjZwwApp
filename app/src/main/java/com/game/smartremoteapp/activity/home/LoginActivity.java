@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -88,24 +87,26 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initWelcome() {
-        if (!(boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, false)) {
-            setContentView(R.layout.activity_welcome);//闪屏
-            if ((boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
-                //用户已经注册
-                uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
-                if (Utils.isEmpty(uid)) {
-                    return;
-                }
-                if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    antuToken = (String) SPUtils.get(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
-                    getAccessToken(antuToken);    //获取token自动登录
-                }
-            } else {
-                new Handler().postDelayed(initRunnable, 2000);
-            }
-        } else {
-            initCreatView();
-        }
+        initCreatView();
+        return;
+//        if (!(boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, false)) {
+//            setContentView(R.layout.activity_welcome);//闪屏
+//            if ((boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
+//                //用户已经注册
+//                uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+//                if (Utils.isEmpty(uid)) {
+//                    return;
+//                }
+//                if (Utils.isNetworkAvailable(getApplicationContext())) {
+//                    antuToken = (String) SPUtils.get(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
+//                    getAccessToken(antuToken);    //获取token自动登录
+//                }
+//            } else {
+//                new Handler().postDelayed(initRunnable, 2000);
+//            }
+//        } else {
+//            initCreatView();
+//        }
 
     }
 
@@ -151,6 +152,7 @@ public class LoginActivity extends BaseActivity {
             default:
                 break;
         }
+
     }
 
     //初始化sdk

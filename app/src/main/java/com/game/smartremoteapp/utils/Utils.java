@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.game.smartremoteapp.R;
@@ -90,11 +89,7 @@ public class Utils {
     public static final long GET_STATUS_DELAY_TIME = 3*60*1000;
     public static final long GET_STATUS_PRE_TIME = 2*60*1000;
 
-    public static void showLogE(String TAG, String msg) {
-        if (D) {
-            Log.e(TAG, TAG + TAG_DELIMETER + msg);
-        }
-    }
+
 
     public static int getInt(String c) {
         String regEx="[^0-9]";

@@ -44,8 +44,10 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.GETSMSCODE)
-    Observable<Result<Token>> getCode(
-            @Field(UrlUtils.PHONE) String phone);
+    Observable<Result<Void>> getCode(
+            @Field(UrlUtils.PHONE) String phone,
+            @Field(UrlUtils.CTYPE) String ctype,
+            @Field(UrlUtils.CHANNEL) String channel);
 
     //不需要验证码直接登录
     @Headers("Content-Type: application/x-www-form-urlencoded")
@@ -381,7 +383,7 @@ public interface SmartService {
     //竞猜排行
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
-    @POST(UrlUtils.RANKBETLISTURL)
+    @GET(UrlUtils.RANKBETLISTURL)
     Observable<Result<ListRankBean>> getRankBetList(
             @Field(UrlUtils.USERID) String userId
     );
@@ -404,7 +406,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.REGITER)
-    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone,@Field(UrlUtils.PASSWORD) String pass, @Field(UrlUtils.SMSCODE)String code);
+    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone,@Field(UrlUtils.PASSWORD) String password, @Field(UrlUtils.SMSCODE)String code);
 
     //手机号密码登录
     @Headers("Content-Type: application/x-www-form-urlencoded")

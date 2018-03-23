@@ -90,8 +90,8 @@ public class HttpManager {
 
     }
     //验证码
-    public void getCode(String phone, RequestSubscriber<Result<Token>> subscriber) {
-        Observable<Result<Token>> o = smartService.getCode(phone);
+    public void getCode(String phone, RequestSubscriber<Result<Void>> subscriber) {
+        Observable<Result<Void>> o = smartService.getCode(phone,UrlUtils.LOGIN_CTYPE_ASDK,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

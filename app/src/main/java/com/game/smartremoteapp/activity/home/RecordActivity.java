@@ -17,8 +17,8 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
-import com.game.smartremoteapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,7 @@ public class RecordActivity extends BaseActivity {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
                 listVideo = result.getData().getPlayback();
-                Utils.showLogE("video记录列表", "result=" + result.getMsg()+"="+listVideo.size());
+                LogUtils.loge("video记录列表", "result=" + result.getMsg()+"="+listVideo.size());
                 if(listVideo.size()!=0) {
                     cecordFailTv.setVisibility(View.GONE);
                     recordAdapter.notify(listVideo);

@@ -11,10 +11,10 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
-import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
 
 import butterknife.BindView;
@@ -85,20 +85,30 @@ public class LoginCodeActivity extends BaseActivity{
         HttpManager.getInstance().getLoginPassword(phone, pass, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
-                SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, YsdkUtils.auth_token);
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, YsdkUtils.uid);
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, false);
-                MyToast.getToast(getApplicationContext(), "登录成功！").show();
-                UserUtils.isUserChanger = true;
-                Intent intent = new Intent(LoginCodeActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                if(httpDataInfoResult.getCode()==0){
+                    Utils.token = httpDataInfoResult.getData().getSrsToken().getToken();
+                    UserUtils.UserPhone =  httpDataInfoResult.getData().getAppUser().getPHONE();
+                    UserUtils.UserName = httpDataInfoResult.getData().getAppUser().getUSERNAME();
+                    UserUtils.NickName = httpDataInfoResult.getData().getAppUser().getNICKNAME();
+                    UserUtils.UserBalance = httpDataInfoResult.getData().getAppUser().getBALANCE();
+
+                    UserUtils.DOLL_ID = httpDataInfoResult.getData().getAppUser().getDOLL_ID();
+                    UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
+                    UserUtils.sessionID=httpDataInfoResult.getData().getSessionID();
+                    //zwwjFragment.setSessionId(result.getData().getSessionID());
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
+                    MyToast.getToast(getApplicationContext(), "登录成功！").show();
+                    Intent intent = new Intent(LoginCodeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(), httpDataInfoResult.getMsg()).show();
+                }
             }
             @Override
             public void _onError(Throwable e) {
-
+                LogUtils.logi(e.getMessage());
             }
         });
 

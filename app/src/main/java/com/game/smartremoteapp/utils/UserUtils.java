@@ -23,6 +23,7 @@ public class UserUtils {
     public static final String SP_TAG_PROVINCECITY="SP_TAG_PROVINCECITY";
     public static final String SP_TAG_ISEXCHANGE="SP_TAG_ISEXCHANGE";
 
+    public static String sessionID = "";
     public static String NickName = "";
     public static String UserPhone="";    //用户手机号
     public static String UserName="";    //用户名
@@ -50,7 +51,7 @@ public class UserUtils {
             userInfo.setRoomid(roomId);
         }
         userInfo.setUnitId("UNI1611090002765");
-        Utils.showLogE("setNettyInfo", "change room::::" + sessionId + "====" + userId + "=====" + userInfo.getRoomid());
+        LogUtils.loge("change room::::" + sessionId + "====" + userId + "=====" + userInfo.getRoomid(),"setNettyInfo");
         AppGlobal.getInstance().setUserInfo(userInfo);
     }
 

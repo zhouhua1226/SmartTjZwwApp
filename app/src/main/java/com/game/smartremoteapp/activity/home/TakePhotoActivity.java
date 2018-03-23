@@ -15,9 +15,9 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.Base64;
 import com.game.smartremoteapp.utils.BitmapUtils;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
-import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
 import com.jph.takephoto.model.CropOptions;
 
@@ -78,7 +78,6 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
 
     @Override
     public void takeSuccess(String imagePath) {
-        Utils.showLogE(TAG,imagePath);
         String string= UserUtils.UserPhone;
         String str = android.util.Base64.encodeToString(string.getBytes(), android.util.Base64.DEFAULT);
         Bitmap bitmap= BitmapUtils.compressImageFromFile(imagePath);
@@ -91,7 +90,6 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
         HttpManager.getInstance().getFaceImage(userId, faceImage, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> result) {
-                Utils.showLogE(TAG,result.getMsg());
                 UserUtils.UserImage= UrlUtils.USERFACEIMAGEURL+result.getData().getAppUser().getIMAGE_URL();
                 MyToast.getToast(getApplicationContext(),"修改成功！").show();
                 finish();
@@ -99,7 +97,7 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
 
             @Override
             public void _onError(Throwable e) {
-                Utils.showLogE(TAG, "getFaceImage::::" + e.getMessage());
+                LogUtils.loge("getFaceImage::::" + e.getMessage(),TAG);
             }
         });
 
