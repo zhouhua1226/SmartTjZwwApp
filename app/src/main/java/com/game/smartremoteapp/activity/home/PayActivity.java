@@ -1,6 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,18 +8,20 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flamigo.jsdk.tools.ToastUtil;
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.base.BaseActivity;
-import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.alipay.AlipayRequest;
 import com.game.smartremoteapp.alipay.PayCallback;
 import com.game.smartremoteapp.alipay.PayResult;
+import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.bean.AlipayBean;
+import com.game.smartremoteapp.bean.PayCardBean;
+import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.EZUtils;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
-import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.MyToast;
 
 import java.util.Map;
 
@@ -28,45 +30,72 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by chen on 2018/3/12.
+ * Created by chenw on 2018/3/23.
  */
 
-public class AlipayActivity extends BaseActivity {
-    @BindView(R.id.select_account_tv)
-    TextView account_tv;
-    @BindView(R.id.select_money_tv)
-    TextView money_tv;
-
+public class PayActivity extends BaseActivity{
+    @BindView(R.id.tv_order_card_bean)
+    TextView  card_bean;
+    @BindView(R.id.tv_order_card_money)
+    TextView  card_money;
+    @BindView(R.id.tv_order_pay_money)
+    TextView  pay_money;
+    private PayCardBean mPayCardBean;
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_apliy;
-    }
-    @Override
-    protected void afterCreate(Bundle savedInstanceState) {
-        initView();
-    }
-    @Override
-    protected void initView() {
-        ButterKnife.bind(this);
+        return R.layout.activity_pay;
     }
 
-    @OnClick({R.id.image_back,R.id.image_service,R.id.layout_wechat,R.id.layout_apliy})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
+    @Override
+    protected void afterCreate(Bundle savedInstanceState) {
+        ButterKnife.bind(this);
+        initView();
+    }
+
+    @Override
+    protected void initView() {
+        mPayCardBean= (PayCardBean) getIntent().getSerializableExtra("PayCardBean");
+        card_bean.setText("订单名称："+mPayCardBean.getGOLD()+"金币");
+        card_money.setText("订单金额："+mPayCardBean.getAMOUNT()+"元");
+        double payMoney=Double.parseDouble(mPayCardBean.getAMOUNT()) *Double.parseDouble(mPayCardBean.getDISCOUNT());
+        pay_money.setText("0.01元");
+    }
+    @OnClick({R.id.image_back,R.id.image_service,R.id.wechat_pay,R.id.apliy_pay})
+    public void onViewClicked(View view){
+        switch (view.getId()){
             case R.id.image_back:
-                this.finish();
+                finish();
                 break;
             case R.id.image_service:
-                Utils.toActivity(this,ServiceActivity.class);
+                startActivity(new Intent(this,ServiceActivity.class));
                 break;
-            case R.id.layout_wechat:
-                ToastUtil.show("正在维护中...");
+            case R.id.wechat_pay:
+                MyToast.getToast(PayActivity.this,"正在维护中...").show();
                 break;
-            case R.id.layout_apliy:
-                 getOrderInfo();
+            case R.id.apliy_pay:
+                getOrderInfo();
                 break;
         }
     }
+
+    /**
+     * 获取支付宝支付信息
+     */
+    private void  getOrderInfo(){
+        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,"7", new RequestSubscriber<Result<AlipayBean>>() {
+            @Override
+            public void _onSuccess(Result<AlipayBean> result) {
+                if(result.getCode()==0){
+                    startApliyPay(result.getData().getAlipay()); //调用支付宝支付接口
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+                LogUtils.logi(e.getMessage());
+            }
+        });
+    }
+
     /**
      * 调取支付支付界面
      */
@@ -84,6 +113,7 @@ public class AlipayActivity extends BaseActivity {
             }
         });
     }
+
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -100,11 +130,15 @@ public class AlipayActivity extends BaseActivity {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         //  notifyPayResult("支付成功");
+                        MyToast.getToast(PayActivity.this,"支付成功").show();
+                        finish();
                     }else if(TextUtils.equals(resultStatus, "8000")||TextUtils.equals(resultStatus, "6004")){
                         //正在处理中，支付结果未知
-                       // notifyPayResult("正在支付中，请与客服联系");
+                        // notifyPayResult("正在支付中，请与客服联系");
+                        MyToast.getToast(PayActivity.this,"正在支付中，请与客服联系").show();
                     }else{
-                     //   notifyPayResult("支付失败");
+                        //   notifyPayResult("支付失败");
+                        MyToast.getToast(PayActivity.this,"支付失败").show();
                     }
                     break;
                 }
@@ -113,22 +147,4 @@ public class AlipayActivity extends BaseActivity {
             }
         }
     };
-    /**
-     * 获取支付宝支付信息
-     */
-    private void  getOrderInfo(){
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,"7", new RequestSubscriber<Result<String>>() {
-            @Override
-            public void _onSuccess(Result<String> result) {
-                  if(result!=null){
-                      startApliyPay(result.getData()); //调用支付宝支付接口
-                  }
-            }
-            @Override
-            public void _onError(Throwable e) {
-               // Utils.showLogE(TAG, "orderinfo::::" + e.getMessage());
-            }
-        });
-    }
-
 }

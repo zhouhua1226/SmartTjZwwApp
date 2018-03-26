@@ -1,6 +1,7 @@
 package com.game.smartremoteapp.model.http;
 
 
+import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -400,7 +401,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.TRADEORDERALIPAY)
-    Observable<Result<String>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.PLAYID) String s);
+    Observable<Result<AlipayBean>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.PLAYID) String s);
 
     //手机号注册
     @Headers("Content-Type: application/x-www-form-urlencoded")

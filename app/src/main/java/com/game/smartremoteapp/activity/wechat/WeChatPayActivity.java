@@ -15,6 +15,7 @@ import com.easy.ysdk.pay.PayReviewer;
 import com.flamigo.jsdk.FlamigoPlaform;
 import com.flamigo.jsdk.api.FlamigoJApi;
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.activity.home.PayActivity;
 import com.game.smartremoteapp.activity.home.ServiceActivity;
 import com.game.smartremoteapp.adapter.WeChatPayAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -27,6 +28,7 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.MarqueeView;
@@ -89,9 +91,12 @@ public class WeChatPayActivity extends BaseActivity {
         weChatPayAdapter.setmOnItemClickListener(new WeChatPayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                wechatpayGifView.setVisibility(View.VISIBLE);
-                int money = Integer.parseInt(mylist.get(position).getAMOUNT()) * 100;
-                getYSDKPay(UserUtils.USER_ID, YsdkUtils.access_token, String.valueOf(money));
+              //  wechatpayGifView.setVisibility(View.VISIBLE);
+              //  int money = Integer.parseInt(mylist.get(position).getAMOUNT()) * 100;
+               // getYSDKPay(UserUtils.USER_ID, YsdkUtils.access_token, String.valueOf(money));
+                Intent intent=new Intent(WeChatPayActivity.this, PayActivity.class);
+                intent.putExtra("PayCardBean",mylist.get(position));
+                Utils.toActivity(WeChatPayActivity.this, intent);
             }
         });
     }
@@ -249,7 +254,7 @@ public class WeChatPayActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        initSDK();
+       // initSDK();
         super.onCreate(savedInstanceState);
     }
 
@@ -277,63 +282,63 @@ public class WeChatPayActivity extends BaseActivity {
             }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!isLogin()) {
-            EasyYSDKApi.onResume(this);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (!isLogin()) {
-            EasyYSDKApi.onPause(this);
-        }
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (!isLogin()) {
-            EasyYSDKApi.onStop(this);
-        }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (!isLogin()) {
-            EasyYSDKApi.onDestroy(this);
-            EasyYSDKApi.unRegistPayActivity();
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (!isLogin()) {
-            EasyYSDKApi.onRestart(this);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (!isLogin()) {
-            EasyYSDKApi.handleIntent(intent);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (!isLogin()) {
-            EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (!isLogin()) {
+//            EasyYSDKApi.onResume(this);
+//        }
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        if (!isLogin()) {
+//            EasyYSDKApi.onPause(this);
+//        }
+//    }
+//
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if (!isLogin()) {
+//            EasyYSDKApi.onStop(this);
+//        }
+//    }
+//
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (!isLogin()) {
+//            EasyYSDKApi.onDestroy(this);
+//            EasyYSDKApi.unRegistPayActivity();
+//        }
+//    }
+//
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        if (!isLogin()) {
+//            EasyYSDKApi.onRestart(this);
+//        }
+//    }
+//
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        if (!isLogin()) {
+//            EasyYSDKApi.handleIntent(intent);
+//        }
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (!isLogin()) {
+//            EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 }

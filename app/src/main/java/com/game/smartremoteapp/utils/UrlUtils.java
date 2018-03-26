@@ -37,7 +37,7 @@ public class UrlUtils {
     public static final String GUESSKEY = "guessKey";
     public static final String PLAYBACK = "playBackId";
     public static final String DOLLID = "dollId";
-    public static final String PLAYID = "playId";
+    public static final String PLAYID = "pid";
     //设置收货人信息接口字段
     public static final String CONSIGNEENAME="name";
     public static final String CONSIGNEEPHONE="phone";
@@ -188,7 +188,7 @@ public class UrlUtils {
     public static final String GETGUESSDETAIL=URL+"/pooh-web/app/betgame/getGuessDetailTop10";
 
     //金币流水接口
-    public static final String CURRENTACCOUNTURL=URL+"/pooh-web/app/getPaymenlist";
+    public static final String CURRENTACCOUNTURL=URL+"/pooh-web/app/betgame/getPaymenlist";
 
     //房间列表接口
     public static final String DOLLLISTURL=URL+"/pooh-web/app/doll/getDollList";
@@ -203,7 +203,7 @@ public class UrlUtils {
     public static final String RANKLISTURL=URL+"/pooh-web/app/rank/rankSelfList";
 
     //物流订单
-    public static final String LOGISTICSORDERURL=URL+"/pooh-web/app/getLogistics";
+    public static final String LOGISTICSORDERURL=URL+"/pooh-web/app/goods/getLogistics";
 
     //分类列表种类
     public static final String GETTOYTYPE = URL + "/pooh-web/app/doll/getAllToyTypeList";

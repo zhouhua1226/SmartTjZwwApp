@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.model.http;
 
+import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -445,8 +446,8 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
     //支付宝支付
-    public void getTradeOrderAlipay(String userId, String s, RequestSubscriber<Result<String>> subscriber) {
-        Observable<Result<String>> o =smartService.getTradeOrderAlipay(userId,s);
+    public void getTradeOrderAlipay(String userId, String s, RequestSubscriber<Result<AlipayBean>> subscriber) {
+        Observable<Result<AlipayBean>> o =smartService.getTradeOrderAlipay(userId,s);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

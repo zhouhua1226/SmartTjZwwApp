@@ -23,7 +23,7 @@
         android:name="com.game.smartremoteapp.base.MyApplication"
         android:allowBackup="true"
         android:largeHeap="true"
-        android:icon="@mipmap/app_sm_icon"
+        android:icon="@mipmap/app_mm_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
@@ -415,6 +415,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <activity android:name=".activity.home.PayActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
 
     </application>
 
