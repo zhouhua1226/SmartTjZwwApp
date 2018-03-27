@@ -31,6 +31,7 @@ public class UrlUtils {
     public static final String TIME = "time";
     public static final String STATE = "state";
     public static final String GUESSID="guessId";
+    public static final String GUESSPRONUM="afterVoting";
 
     public static final String USERID = "userId";
     public static final String WAGER = "wager";
@@ -59,7 +60,7 @@ public class UrlUtils {
     public static final String WXQQ_IMAGEURL="imageUrl";
     public static final String WXQQ_CTYPE="ctype";
     public static final String WXQQ_CHANNEL="channel";
-    public static final String LOGIN_CTYPE="YSDK";
+    public static final String LOGIN_CTYPE="ASDK";
     public static final String LOGIN_CTYPE_ASDK="ASDK";
     public static final String LOGIN_CHANNEL="ANDROID";
     //ysdk支付金额字段
@@ -75,6 +76,26 @@ public class UrlUtils {
     public static final String OSVERSION="osVersion";     //系统版本
     public static final String APPVERSION="appVersion";   //app版本
     public static final String SFID="sfId";                //设备标识
+    //加盟
+    public static final String PROMOTEORDER_PROID="proManageId";
+    public static final String PROMOTEORDER_PAYTYPE="payType";
+    public static final String PROMOTE_CODE="promoteCode";
+    //获取短信验证码以及绑定手机号
+    public static final String PHONE_SMSTYPE="smsType";
+    public static final String PHONE_phoneNumber="phoneNumber";
+    public static final String PHONE_PHONECODE="phoneCode";
+    public static final String PHONE_SMS_TYPE_1000="1000";  //("注册短信码","1000"),
+    public static final String PHONE_SMS_TYPE_2000="2000";  //("绑定手机号","2000"),
+    public static final String PHONE_SMS_TYPE_3000="3000";  //("修改银行卡信息","3000"), //不要传入手机号
+    public static final String PHONE_SMS_TYPE_4000="4000";  //("提现短信码","4000"); //不要传入手机号
+    //银行卡信息绑定
+    public static final String BANK_ADDRESS="bankAddress";
+    public static final String BANK_NAME="bankName";
+    public static final String BANK_BRANCH="bankBranch";
+    public static final String BANK_CARDNO="bankCardNo";
+    public static final String BANK_IDNUMBER="idNumber";
+    //提现
+    public static final String DRAW_ORDERAMT="orderAmt";
 
     public static final String URL = "http://111.231.139.61:18081"; // http://47.100.15.18:8080  //http://111.231.139.61:8080
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
@@ -237,5 +258,42 @@ public class UrlUtils {
 
     //自动登录接口
     public static final String AUTHLOGINURL=URL+"/pooh-web/app/sms/getDoll";
+
+    //查询可推广加盟的权益
+    public static final String GETPROMOMOTEMANAGE=URL+"/pooh-web/app/promomote/getpromomoteManage.do";
+
+    //购买加盟   /pooh-web/app/pay/commitPromoteOrderToGold.do
+    public static final String PROMOTEORDERTOGOLD=URL+"/pooh-web/app/pay/commitPromoteOrderToGold.do";
+
+    //查询用户已购买的推广加盟
+    public static final String GETUSERPROMOTEINF=URL+"/pooh-web/app/promomote/getUserPromoteInf.do";
+
+    //兑换推广码
+    public static final String COMMITUSERPROMOTECODE=URL+"/pooh-web/app/promomote/commitUserPromoteCode.do";
+
+    //用户现金余额查询
+    public static final String GETUSERACCBALCOUNT=URL+"/pooh-web/app/account/getUserAccBalCount.do";
+
+    // 用户推广收益明细
+    public static final String GETUSERPROMOTELIST=URL+"/pooh-web/app/account/getUserPromoteList.do";
+
+    //新查询用户信息接口    /pooh-web/app/common/getAppUserInf.do
+    public static final String GETAPPUSERINFURL=URL+"/pooh-web/app/common/getAppUserInf.do";
+
+    //新获取短信验证码  /pooh-web/app/common/getPhoneCode.do
+    public static final String GETPHONECODEURL=URL+"/pooh-web/app/common/getPhoneCode.do";
+
+    //用户绑定手机号  /pooh-web/app/common/editAppUserPhone.do
+    public static final String EDITAPPUSERPHONE=URL+"/pooh-web/app/common/editAppUserPhone.do";
+
+    //用户银行卡信息绑定  /pooh-web/app/common/regBankInf.do
+    public static final String REGBANKINFURL=URL+"/pooh-web/app/common/regBankInf.do";
+
+    //用户提现申请   /pooh-web/app/account/doWithdrawCash.do
+    public static final String DOWITHDRAWCASHURL=URL+"/pooh-web/app/account/doWithdrawCash.do";
+
+    //查询账户收支流水  /pooh-web/app/account/getUserAccountDetailPage.do
+    public static final String ACCOUNTDETAILURL=URL+"/pooh-web/app/account/getUserAccountDetailPage.do";
+
 
 }

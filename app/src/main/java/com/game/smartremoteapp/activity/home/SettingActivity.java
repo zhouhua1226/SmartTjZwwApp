@@ -100,38 +100,6 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        initSDK();
-        super.onCreate(savedInstanceState);
-    }
-
-    //初始化sdk
-    private void initSDK() {
-        //ysdk必须要初始化
-        EasyYSDKApi.onCreate(this);
-        EasyYSDKApi.handleIntent(this.getIntent());
-        EasyYSDKApi.setUserListener();
-        EasyYSDKApi.setBuglyListener();
-
-        //add hx_ysdk  初始化
-        Bundle initParams = new Bundle();
-        initParams.putString(RobustApi.InitParamsKey.CKEY, "2z8p1Wau1l9="); //测试环境ckey="2z8p1Wau1l9="  正式环境ckey="y3WfBKF1FY4="
-        RobustApi.init(this, initParams);
-
-        //分享初始化
-        FlamigoJApi.getInstance().setConfig(true);
-        FlamigoJApi.getInstance().init(this, FlamigoPlaform.DOMESTIC);
-        SecurityApi.getInstance().installation(this, "sqwoinjzdmhekzpzyvd7eqB6Vr_avatar");
-
-
-    }
-
-    //判断是否登录
-    private boolean isLogin() {
-        return RobustApi.getInstance().isLogin();
-    }
-
     @OnClick({R.id.image_back, R.id.image_kf, R.id.money_rl,
             R.id.record_rl, R.id.invitation_rl, R.id.feedback_rl,
             R.id.gywm_rl, R.id.bt_out, R.id.vibrator_control_layout,
@@ -173,7 +141,6 @@ public class SettingActivity extends BaseActivity {
             case R.id.bt_out:
                 //getLogout(UserUtils.USER_ID);
                 Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
-                loginOut();
                 SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
                 SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
                 SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
@@ -221,16 +188,13 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.setting_share_layout:
                 Log.e(TAG,"分享参数userId="+UserUtils.USER_ID);
-                RobustApi.getInstance().shareWx(this, new ShareInfo(UserUtils.USER_ID));
+                MyToast.getToast(getApplicationContext(),"研发中！").show();
+                //RobustApi.getInstance().shareWx(this, new ShareInfo(UserUtils.USER_ID));
                 break;
 
         }
     }
 
-    //退出登录
-    private void loginOut() {
-        EasyYSDKApi.logout();
-    }
 
     private void setIsVibrator() {
         settings = getSharedPreferences("app_user", 0);
@@ -281,65 +245,6 @@ public class SettingActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(!isLogin()) {
-            EasyYSDKApi.onResume(this);
-        }
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(!isLogin()) {
-            EasyYSDKApi.onPause(this);
-        }
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(!isLogin()) {
-            EasyYSDKApi.onStop(this);
-        }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(!isLogin()) {
-            EasyYSDKApi.onDestroy(this);
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if(!isLogin()) {
-            EasyYSDKApi.onRestart(this);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if(!isLogin()) {
-            EasyYSDKApi.handleIntent(intent);
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(!isLogin()) {
-            EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
 
 }

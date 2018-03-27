@@ -77,10 +77,10 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @BindView(R.id.zww_guess_btn)
     ImageButton zwwGuessBtn;
     Unbinder unbinder1;
-    @BindView(R.id.zww_exshop_tv)
-    TextView zwwExshopTv;
-    @BindView(R.id.zww_earnmoney_tv)
-    TextView zwwEarnmoneyTv;
+    @BindView(R.id.zww_exshop_ibtn)
+    ImageButton zwwExshopIBtn;
+    @BindView(R.id.zww_earnmoney_ibtn)
+    ImageButton zwwEarnmoneyIBtn;
 
 
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
@@ -166,16 +166,16 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         mPullToRefreshView.setOnFooterRefreshListener(this);
     }
 
-    @OnClick({R.id.zww_exshop_tv, R.id.zww_guess_btn,R.id.zww_earnmoney_tv})
+    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn,R.id.zww_earnmoney_ibtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.zww_exshop_tv:
+            case R.id.zww_exshop_ibtn:
                 startActivity(new Intent(getContext(), ExChangeShopActivity.class));
                 break;
             case R.id.zww_guess_btn:
                 jumpRoom(0);
                 break;
-            case R.id.zww_earnmoney_tv:
+            case R.id.zww_earnmoney_ibtn:
                 //MyToast.getToast(getContext(),"功能研发中！").show();
                 startActivity(new Intent(getContext(), JoinEarnActivity.class));
                 break;

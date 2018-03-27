@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,7 +17,10 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.LogUtils;
+import com.game.smartremoteapp.utils.SPUtils;
+import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
 
 import butterknife.BindView;
@@ -102,8 +106,18 @@ public class RegisterActivity extends BaseActivity{
         HttpManager.getInstance().getRegiter(phone,pass,code, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+                if(httpDataInfoResult.getData()==null ||httpDataInfoResult.getData().getAppUser()==null){
+                    MyToast.getToast(getApplicationContext(), "登录失败！").show();
+                    return;
+                }
                 if(httpDataInfoResult.getCode()==0){
+                    YsdkUtils.loginResult = httpDataInfoResult;
+                    UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     MyToast.getToast(getApplicationContext(), "注册成功！").show();
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    startActivity(intent);
                     finish();
                 }else{
                     MyToast.getToast(getApplicationContext(), httpDataInfoResult.getMsg()).show();
@@ -136,7 +150,7 @@ public class RegisterActivity extends BaseActivity{
             @Override
             public void _onSuccess(Result<Void> token) {
                 Log.e( "短信验证码------",token.toString());
-                MyToast.getToast(RegisterActivity.this,"短信验证码一下发").show();
+                MyToast.getToast(RegisterActivity.this,"验证码已发送").show();
             }
             @Override
             public void _onError(Throwable e) {

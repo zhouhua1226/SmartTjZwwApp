@@ -130,9 +130,19 @@ public class Utils {
     }
 
     /**
+     * 身份证正则匹配
+     * @param idcard
+     * @return  符合 regID的返回true, 否则返回 false;
+     */
+    public static boolean checkIDcard(String idcard){
+        String regID="^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$";
+        return match(regID,idcard);
+    }
+
+    /**
      * 验证输入密码条件(字符与数据同时出现)
      *
-     * @param 待验证的字符串
+     * @param str
      * @return 如果是符合格式的字符串,返回 <b>true </b>,否则为 <b>false </b>
      */
     public static boolean isTextPassword(String str) {
@@ -277,7 +287,7 @@ public class Utils {
      * @return  系统版本号
      */
     public static String getSystemVersion() {
-        return "Android "+android.os.Build.VERSION.RELEASE;
+        return "Android"+android.os.Build.VERSION.RELEASE;
     }
 
     /**
@@ -293,7 +303,7 @@ public class Utils {
      * @return  手机品牌和型号
      */
     public static String getDeviceBrand() {
-        return android.os.Build.BRAND+" "+android.os.Build.MODEL;
+        return android.os.Build.BRAND+android.os.Build.MODEL;
     }
 
     public static int getWidthSize(Context ctx) {

@@ -3,6 +3,7 @@ package com.game.smartremoteapp.utils;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.game.smartremoteapp.bean.BankCardBean;
 import com.game.smartremoteapp.bean.RoomBean;
 import com.game.smartremoteapp.bean.SRStoken;
 import com.gatz.netty.AppClient;
@@ -32,6 +33,9 @@ public class UserUtils {
     public static String UserAddress="";
     public static String USER_ID="";
     public static String DOLL_ID="";
+    public static String IsBankInf="";   //是否绑定银行卡  0没绑定  1绑定
+    public static BankCardBean BankBean;   //银行卡信息类
+    public static String UserAmount="";
     public static int UserBetNum;
     public static int id;
     public static SRStoken SRSToken;
