@@ -7,16 +7,18 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
+import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
 import com.game.smartremoteapp.activity.home.ExChangeShopActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
-import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.BannerBean;
@@ -34,16 +36,12 @@ import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.EmptyLayout;
-import com.game.smartremoteapp.view.GlideImageLoader;
 import com.game.smartremoteapp.view.MarqueeView;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PullToRefreshView;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-import com.youth.banner.Transformer;
-import com.youth.banner.listener.OnBannerListener;
+import com.iot.game.pooh.server.entity.json.enums.MoveType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +57,7 @@ import butterknife.Unbinder;
 /**
  * Created by hongxiu on 2017/9/25.
  */
-public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
+public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener,IctrlView {
     private static final String TAG = "ZWWJFragment";
     @BindView(R.id.zww_recyclerview)
     RecyclerView zwwRecyclerview;
@@ -67,8 +65,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     EmptyLayout zwwEmptylayout;
     @BindView(R.id.marqueeview)
     MarqueeView marqueeview;
-    @BindView(R.id.zww_banner)
-    Banner zwwBanner;
     @BindView(R.id.type_tly)
     TabLayout typeTabLayout;
     Unbinder unbinder;
@@ -81,7 +77,10 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     ImageButton zwwExshopIBtn;
     @BindView(R.id.zww_earnmoney_ibtn)
     ImageButton zwwEarnmoneyIBtn;
-
+    @BindView(R.id.sfv_player)
+    SurfaceView mPlayerView;
+    @BindView(R.id.rl_marqueeview)
+    RelativeLayout  mArqueeView;
 
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
@@ -96,6 +95,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private int currentPage = 1;
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
+    private CtrlCompl ctrlCompl;
+    private String url1=null;
 
     @Override
     protected int getLayoutId() {
@@ -107,6 +108,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         initData();
         onClick();
         getUserList();
+        NettyUtils.sendRoomInCmd();
         getBannerList();
         getToyType();
     }
@@ -158,7 +160,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
 
         typeTabLayout.addOnTabSelectedListener(tabSelectedListener);
-
+        mArqueeView.getBackground().setAlpha(120);
     }
 
     private void onClick() {
@@ -281,33 +283,35 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     //banner轮播
     private void initBanner(final List<?> list, final List<BannerBean> bannerList) {
         //设置Banner样式
-        zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-        //设置图片加载器
-        zwwBanner.setImageLoader(new GlideImageLoader());
-        zwwBanner.setImages(list);
-        //设置Banner动画效果
-        zwwBanner.setBannerAnimation(Transformer.DepthPage);
-        //设置轮播时间
-        zwwBanner.setDelayTime(2000);
-        //设置指示器位置(当banner模式中有指示器时)
-        zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
-        //Banner设置方法全部调用完毕时最后调用
-        zwwBanner.start();
-        zwwBanner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
-                if (!bannerList.get(position).getHREF_ST().equals("")) {
-                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
-                    intent.putExtra("newsurl", bannerList.get(position).getHREF_ST().replace("\"", "/"));
-                    intent.putExtra("newstitle", bannerList.get(position).getRUN_NAME());
-                    startActivity(intent);
-                }
-            }
-        });
+//        zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+//        //设置图片加载器
+//        zwwBanner.setImageLoader(new GlideImageLoader());
+//        zwwBanner.setImages(list);
+//        //设置Banner动画效果
+//        zwwBanner.setBannerAnimation(Transformer.DepthPage);
+//        //设置轮播时间
+//        zwwBanner.setDelayTime(2000);
+//        //设置指示器位置(当banner模式中有指示器时)
+//        zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
+//        //Banner设置方法全部调用完毕时最后调用
+//        zwwBanner.start();
+//        zwwBanner.setOnBannerListener(new OnBannerListener() {
+//            @Override
+//            public void OnBannerClick(int position) {
+//                //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
+//                if (!bannerList.get(position).getHREF_ST().equals("")) {
+//                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+//                    intent.putExtra("newsurl", bannerList.get(position).getHREF_ST().replace("\"", "/"));
+//                    intent.putExtra("newstitle", bannerList.get(position).getRUN_NAME());
+//                    startActivity(intent);
+//                }
+//            }
+//        });
     }
 
     private void getBannerList() {
+        NettyUtils.pingRequest(); //判断连接
+        ctrlCompl = new CtrlCompl(this, getActivity());
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
@@ -315,9 +319,13 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     bannerList = loginInfoResult.getData().getRunImage();
                     if (bannerList.size() > 0) {
                         for (int i = 0; i < bannerList.size(); i++) {
-                            list.add(UrlUtils.APPPICTERURL + bannerList.get(i).getIMAGE_URL());
+                            //  list.add(UrlUtils.APPPICTERURL + bannerList.get(i).getIMAGE_URL());
+                            if(bannerList.get(i).getDEVICE_STATE().equals("0")&&bannerList.get(i).getRTMP_URL()!=null){
+                                //   setSessionId(UserUtils.sessionID,false);
+                                initSurface(bannerList.get(i));
+                            }
                         }
-                        initBanner(list, bannerList);
+                        // initBanner(list, bannerList);
                     }
                 }
             }
@@ -328,21 +336,20 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             }
         });
     }
+    private void initSurface(BannerBean mBannerBean) {
 
-    //如果你需要考虑更好的体验，可以这么操作
-    @Override
-    public void onStart() {
-        super.onStart();
-        //开始轮播
-        zwwBanner.startAutoPlay();
+
+        String rtmpUrl = mBannerBean.getRTMP_URL();
+        String serviceName = mBannerBean.getSERVER_NAME();
+        String liveStream = mBannerBean.getLIVESTREAM();
+        url1 = rtmpUrl + serviceName + "/"+liveStream;
+        LogUtils.loge("url1===="+url1);
+        ctrlCompl.startPlayVideo(mPlayerView, url1);
+
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        //结束轮播
-        zwwBanner.stopAutoPlay();
-    }
+
+
 
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
@@ -499,10 +506,92 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder1.unbind();
+    public void getTime(int time) {
+
     }
 
+    @Override
+    public void getTimeFinish() {
+        ctrlCompl.sendCmdCtrl(MoveType.CATCH);
+        ctrlCompl.stopTimeCounter();
 
+    }
+
+    @Override
+    public void getUserInfos(List<String> list, boolean is) {
+
+    }
+
+    @Override
+    public void getRecordErrCode(int code) {
+        LogUtils.loge("录制视频失败::::::" + code, TAG);
+    }
+
+    @Override
+    public void getRecordSuecss() {
+        LogUtils.loge("录制视频完毕......", TAG);
+    }
+
+    @Override
+    public void getRecordAttributetoNet(String time, String fileName) {
+        LogUtils.loge("视频上传的时间::::" + time + "=====" + fileName, TAG);
+
+    }
+
+    @Override
+    public void getPlayerErcErrCode(int code) {
+        LogUtils.loge("直播失败,错误码:::::" + code, TAG);
+
+    }
+
+    @Override
+    public void getPlayerSucess() {
+        LogUtils.loge("直播Sucess:::::", TAG);
+
+    }
+
+    @Override
+    public void getVideoPlayConnect() {
+
+    }
+
+    @Override
+    public void getVideoPlayStart() {
+
+    }
+
+    @Override
+    public void getVideoStop() {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ctrlCompl.stopPlayVideo();
+        ctrlCompl.stopRecordView();
+        ctrlCompl.sendCmdCtrl(MoveType.CATCH);
+        ctrlCompl.stopTimeCounter();
+        ctrlCompl.sendCmdOutRoom();
+        ctrlCompl = null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+      //  ctrlCompl.stopPlayVideo();
+    }
+
+    //如果你需要考虑更好的体验，可以这么操作
+    @Override
+    public void onStart() {
+        super.onStart();
+        //开始轮播
+        //  zwwBanner.startAutoPlay();
+        if(ctrlCompl!=null&&url1!=null){
+            ctrlCompl.startPlayVideo(mPlayerView, url1);
+        }
+        NettyUtils.pingRequest();
+    }
 }
+

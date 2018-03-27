@@ -77,7 +77,9 @@ public class MainActivity extends BaseActivity {
     private int signNumber = 0;
     private int[] signDayNum=new int[7];
     private String isSign="";
-
+    static {
+        System.loadLibrary("SmartPlayer");
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
