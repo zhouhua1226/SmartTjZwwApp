@@ -2,6 +2,7 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.adapter.JoinEarnAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -88,7 +90,14 @@ public class JoinEarnActivity extends BaseActivity {
             public void onItemClick(int position) {
                 PromomoteBean promomoteBean=list.get(position);
                 String proManageId=promomoteBean.getPRO_MANAGE_ID()+"";
-                getPromomoteOrder(UserUtils.USER_ID,proManageId,"P");
+                int userBalance= Integer.parseInt(UserUtils.UserBalance);
+                int payGold= Integer.parseInt(promomoteBean.getPAY_GOLD());
+                if(userBalance >= payGold) {
+                    getPromomoteOrder(UserUtils.USER_ID, proManageId, "P");
+                }else {
+                    MyToast.getToast(getApplicationContext(),"余额不足，请充值！").show();
+                    startActivity(new Intent(JoinEarnActivity.this, WeChatPayActivity.class));
+                }
 
             }
         });

@@ -132,7 +132,12 @@ public class AccountInformationActivity extends BaseActivity {
             MyToast.getToast(getApplicationContext(), "请将信息填写完整！").show();
         } else {
             if(Utils.checkIDcard(idCard)) {
-                getRegBankInf(UserUtils.USER_ID, smsType, UserUtils.UserPhone, smsCode, bankPlace, bankName, bankBranch, bankCardNum, idCard, realName);
+                int i=bankCardNum.length();
+                if(i >15 ) {
+                    getRegBankInf(UserUtils.USER_ID, smsType, UserUtils.UserPhone, smsCode, bankPlace, bankName, bankBranch, bankCardNum, idCard, realName);
+                }else {
+                    MyToast.getToast(getApplicationContext(), "您输入的银行卡号不符合规则！").show();
+                }
             }else {
                 MyToast.getToast(getApplicationContext(), "您输入的身份证不符合规则！").show();
             }
