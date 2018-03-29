@@ -11,12 +11,13 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
 import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
+import com.game.smartremoteapp.activity.ctrl.view.LiveActivity;
 import com.game.smartremoteapp.activity.home.ExChangeShopActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
@@ -81,7 +82,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     SurfaceView mPlayerView;
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
-
+    @BindView(R.id.sfv_player_bar)
+    ProgressBar  playerBar;
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
     private String sessionId;
@@ -274,12 +276,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //getUserList();
-    }
-
     //banner轮播
     private void initBanner(final List<?> list, final List<BannerBean> bannerList) {
         //设置Banner样式
@@ -338,19 +334,21 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
     private void initSurface(BannerBean mBannerBean) {
 
-
         String rtmpUrl = mBannerBean.getRTMP_URL();
         String serviceName = mBannerBean.getSERVER_NAME();
         String liveStream = mBannerBean.getLIVESTREAM();
         url1 = rtmpUrl + serviceName + "/"+liveStream;
         LogUtils.loge("url1===="+url1);
         ctrlCompl.startPlayVideo(mPlayerView, url1);
-
+        mPlayerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  Intent intent=new Intent(getActivity(), LiveActivity.class);
+                  intent.putExtra(Utils.TAG_LIVE_DURL,url1);
+                //  Utils.toActivity(getActivity(),intent);
+            }
+        });
     }
-
-
-
-
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
             return beens;
@@ -362,7 +360,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
         return beens;
     }
-
     private void getToyType() {
         HttpManager.getInstance().getToyType(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -387,14 +384,11 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     }
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }
-
     private void getToysByType(String type, int page) {
         HttpManager.getInstance().getToyListByType(type, page, new RequestSubscriber<Result<RoomListBean>>() {
             @Override
@@ -424,14 +418,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     }
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
 
             }
         });
     }
-
     private TabLayout.OnTabSelectedListener tabSelectedListener
             = new TabLayout.OnTabSelectedListener() {
         @Override
@@ -449,15 +441,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
         }
 
         @Override
         public void onTabReselected(TabLayout.Tab tab) {
-
         }
     };
-
 
     @Override
     public void onFooterRefresh(PullToRefreshView view) {
@@ -541,30 +530,22 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void getPlayerErcErrCode(int code) {
         LogUtils.loge("直播失败,错误码:::::" + code, TAG);
-
     }
-
     @Override
     public void getPlayerSucess() {
+        playerBar.setVisibility(View.GONE);
         LogUtils.loge("直播Sucess:::::", TAG);
-
     }
-
     @Override
     public void getVideoPlayConnect() {
-
     }
-
     @Override
     public void getVideoPlayStart() {
-
     }
 
     @Override
     public void getVideoStop() {
-
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -575,20 +556,17 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         ctrlCompl.sendCmdOutRoom();
         ctrlCompl = null;
     }
-
     @Override
     public void onStop() {
         super.onStop();
-      //  ctrlCompl.stopPlayVideo();
+        ctrlCompl.stopPlayVideo();
     }
-
     //如果你需要考虑更好的体验，可以这么操作
     @Override
-    public void onStart() {
-        super.onStart();
-        //开始轮播
-        //  zwwBanner.startAutoPlay();
+    public void onResume() {
+        super.onResume();
         if(ctrlCompl!=null&&url1!=null){
+            playerBar.setVisibility(View.VISIBLE);
             ctrlCompl.startPlayVideo(mPlayerView, url1);
         }
         NettyUtils.pingRequest();

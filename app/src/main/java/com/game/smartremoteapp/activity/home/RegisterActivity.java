@@ -107,7 +107,7 @@ public class RegisterActivity extends BaseActivity{
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if(httpDataInfoResult.getData()==null ||httpDataInfoResult.getData().getAppUser()==null){
-                    MyToast.getToast(getApplicationContext(), "登录失败！").show();
+                    MyToast.getToast(getApplicationContext(), "注册失败！").show();
                     return;
                 }
                 if(httpDataInfoResult.getCode()==0){

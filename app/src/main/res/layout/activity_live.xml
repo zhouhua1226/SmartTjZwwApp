@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- 加载gif动画 -->
+        <com.game.smartremoteapp.view.GifView
+            android:id="@+id/ctrl_gif_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <!-- 加载失败-->
+            <ImageView
+                android:id="@+id/ctrl_fail_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ctrl_video_load_failed"
+                android:clickable="true"
+                android:visibility="gone" />
+            <!-- 加载成功-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <!-- 头部活动 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <SurfaceView
+                        android:id="@+id/realplay_sv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent" />
+                    <!-- 网管状态 -->
+                    <TextView
+                        android:id="@+id/tv_event_notification"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/control_notify_rechange_bg"
+                        android:layout_below="@+id/player_layout"
+                        android:text="距离下次活动还有  00：02：12"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:layout_margin="@dimen/activity_horizontal_margin"
+                        android:layout_height="30dp" />
+                    <!--战绩-->
+                    <TextView
+                        android:id="@+id/tv_war_record"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:text="战绩"
+                        android:layout_below="@+id/tv_event_notification"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:background="@drawable/control_recond_cricle_bg"
+                        android:layout_height="wrap_content" />
+                    <!-- 弹幕发送按钮-->
+                    <RelativeLayout
+                        android:id="@+id/rl_send_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+                        <ImageButton
+                            android:id="@+id/iv_send_message"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/icon_control_send" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:background="@drawable/update_bg"
+                            android:layout_toLeftOf="@+id/iv_send_message"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:paddingRight="10dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:background="@drawable/icon_control_edit" />
+                            <EditText
+                                android:id="@+id/et_massage"
+                                android:layout_width="match_parent"
+                                android:textSize="13sp"
+                                android:textColor="@color/black"
+                                android:background="@color/white"
+                                android:gravity="center|left"
+                                android:layout_marginLeft="10dp"
+                                android:layout_height="match_parent" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_rolling_view"
+                        android:layout_width="300dp"
+                        android:orientation="vertical"
+                        android:layout_above="@+id/rl_send_message"
+                        android:background="@color/transparent"
+                        android:layout_height="105dp">
+                        <ListView
+                            android:id="@+id/lvchat"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="none"
+                            android:divider="@null"
+                             android:stackFromBottom="true"
+                            android:transcriptMode="alwaysScroll" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
+
