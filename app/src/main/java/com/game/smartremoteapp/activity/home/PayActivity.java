@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
@@ -40,6 +41,11 @@ public class PayActivity extends BaseActivity{
     TextView  card_money;
     @BindView(R.id.tv_order_pay_money)
     TextView  pay_money;
+    @BindView(R.id.tv_account_blance)
+    TextView  accountBlance;
+    @BindView(R.id.cb_balance)
+    CheckBox cbBalance;
+
     private PayCardBean mPayCardBean;
     @Override
     protected int getLayoutId() {
@@ -55,10 +61,20 @@ public class PayActivity extends BaseActivity{
     @Override
     protected void initView() {
         mPayCardBean= (PayCardBean) getIntent().getSerializableExtra("PayCardBean");
-        card_bean.setText("订单名称："+mPayCardBean.getGOLD()+"金币");
-        card_money.setText("订单金额："+mPayCardBean.getAMOUNT()+"元");
-        double payMoney=Double.parseDouble(mPayCardBean.getAMOUNT()) *Double.parseDouble(mPayCardBean.getDISCOUNT());
-        pay_money.setText("0.01元");
+        if(mPayCardBean==null){
+            finish();
+        }
+        card_bean.setText("订单名称：购买"+mPayCardBean.getGOLD()+"金币");
+        card_money.setText("订单金额： ￥"+mPayCardBean.getAMOUNT() );
+        pay_money.setText("￥"+mPayCardBean.getAMOUNT());
+        cbBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyToast.getToast(PayActivity.this,"暂不支持余额支付").show();
+                cbBalance.setChecked(false);
+            }
+        });
+
     }
     @OnClick({R.id.image_back,R.id.image_service,R.id.wechat_pay,R.id.apliy_pay})
     public void onViewClicked(View view){
@@ -70,7 +86,7 @@ public class PayActivity extends BaseActivity{
                 startActivity(new Intent(this,ServiceActivity.class));
                 break;
             case R.id.wechat_pay:
-                MyToast.getToast(PayActivity.this,"正在维护中...").show();
+                MyToast.getToast(PayActivity.this,"暂不支持微信支付").show();
                 break;
             case R.id.apliy_pay:
                 getOrderInfo();
@@ -82,7 +98,7 @@ public class PayActivity extends BaseActivity{
      * 获取支付宝支付信息
      */
     private void  getOrderInfo(){
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,"7", new RequestSubscriber<Result<AlipayBean>>() {
+        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,mPayCardBean.getID()+"", new RequestSubscriber<Result<AlipayBean>>() {
             @Override
             public void _onSuccess(Result<AlipayBean> result) {
                 if(result.getCode()==0){
