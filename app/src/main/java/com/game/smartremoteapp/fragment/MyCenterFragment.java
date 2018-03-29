@@ -34,6 +34,7 @@ import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
@@ -289,6 +290,9 @@ public class MyCenterFragment extends BaseFragment {
         HttpManager.getInstance().getAppUserInf(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
+                if(result.getData().getAppUser()==null){
+                    return;
+                }
                 UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
                 UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
                 UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
@@ -296,7 +300,9 @@ public class MyCenterFragment extends BaseFragment {
                 String name = result.getData().getAppUser().getCNEE_NAME();
                 String phone = result.getData().getAppUser().getCNEE_PHONE();
                 String address = result.getData().getAppUser().getCNEE_ADDRESS();
-                UserUtils.UserAddress = name + " " + phone + " " + address;
+                if(name!=null && phone!=null && address!=null) {
+                    UserUtils.UserAddress = name + " " + phone + " " + address;
+                }
                 UserUtils.IsBankInf = result.getData().getIsBankInf();
                 UserUtils.BankBean = result.getData().getBankCard();
                 if(!UserUtils.IsBankInf.equals("0")){

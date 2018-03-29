@@ -382,7 +382,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - mBackPressed) > 2000) {  //这里3000，表示两次点击的间隔时间
-            Toast.makeText(this, "再次点击退出", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mBackPressed = System.currentTimeMillis();
         } else {
             MyApplication.getInstance().exit();

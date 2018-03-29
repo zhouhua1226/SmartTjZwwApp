@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.base.MyApplication;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomBean;
@@ -295,9 +296,11 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
-            MobclickAgent.onKillProcess(this);
-            finish();
-            System.exit(0);
+//            MobclickAgent.onKillProcess(this);
+//            finish();
+//            System.exit(0);
+            MyApplication.getInstance().exit();
+
         }
     }
 

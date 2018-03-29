@@ -42,8 +42,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:padding="8dp"
-                        android:src="@drawable/app_text_logo" />
+                        android:paddingTop="3dp"
+                        android:paddingBottom="5dp"
+                        android:src="@drawable/app_jj_textlogo" />
 
                     <ImageButton
                         android:id="@+id/zww_exshop_ibtn"

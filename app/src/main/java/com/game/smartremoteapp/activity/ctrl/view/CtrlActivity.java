@@ -608,7 +608,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                     return;
                 }
                 if (Integer.parseInt(UserUtils.UserBalance) >= betMoney) {
-                    if (!zt.equals("")) {
+                    if (!zt.equals("") && !periodsNum.equals("")) {
                         getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId,betPro);
                         coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - betMoney) + " 充值");
                         ctrlButtomLayout.setVisibility(View.VISIBLE);
@@ -618,7 +618,11 @@ public class CtrlActivity extends Activity implements IctrlView {
                         isLottery = true;
                         initBet();
                     } else {
-                        MyToast.getToast(getApplicationContext(), "请下注！").show();
+                        if(zt.equals("")) {
+                            MyToast.getToast(getApplicationContext(), "请下注！").show();
+                        }else if(periodsNum.equals("")){
+                            MyToast.getToast(getApplicationContext(), "期号为空，无法竞猜！").show();
+                        }
                     }
                 } else {
                     MyToast.getToast(getApplicationContext(), "请充值！").show();
@@ -796,6 +800,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         rechargeLl.setVisibility(View.GONE);
         catchLl.setVisibility(View.VISIBLE);
         operationRl.setVisibility(View.VISIBLE);
+        ctrlRoomdetialTv.setVisibility(View.GONE);
         catchLl.setEnabled(true);
         ctrlCompl.startTimeCounter();
     }
@@ -808,6 +813,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         rechargeLl.setVisibility(View.VISIBLE);
         catchLl.setVisibility(View.GONE);
         operationRl.setVisibility(View.GONE);
+        ctrlRoomdetialTv.setVisibility(View.VISIBLE);
         catchLl.setEnabled(true);
     }
 

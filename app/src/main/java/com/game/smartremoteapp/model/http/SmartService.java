@@ -612,5 +612,14 @@ public interface SmartService {
             @Field(UrlUtils.NEXTPAGE) String nextPage
     );
 
+    //忘记密码
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RESETPASSWORDURL)
+    Observable<Result<HttpDataInfo>> getResetPass(
+            @Field(UrlUtils.PHONE) String phone,
+            @Field(UrlUtils.CODE) String code,
+            @Field(UrlUtils.PASSWORD) String password
+    );
 
 }

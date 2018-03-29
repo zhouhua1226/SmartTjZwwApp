@@ -574,6 +574,7 @@
             android:layout_marginLeft="10dp"
             android:drawableRight="@drawable/ctrl_betpronum_up"
             android:layout_below="@+id/ctrl_betpernum_layout"
+            android:visibility="gone"
             />
 
         <RelativeLayout
