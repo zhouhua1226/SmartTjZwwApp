@@ -75,7 +75,7 @@ public class PayActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.image_back, R.id.image_service, R.id.wechat_pay, R.id.apliy_pay})
+    @OnClick({R.id.image_back, R.id.image_service,R.id.rl_pay_alipay})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -84,10 +84,7 @@ public class PayActivity extends BaseActivity {
             case R.id.image_service:
                 startActivity(new Intent(this, ServiceActivity.class));
                 break;
-            case R.id.wechat_pay:
-                MyToast.getToast(PayActivity.this, "暂不支持微信支付").show();
-                break;
-            case R.id.apliy_pay:
+            case R.id.rl_pay_alipay:
                 getOrderInfo();
                 break;
         }
@@ -147,7 +144,6 @@ public class PayActivity extends BaseActivity {
                     if (TextUtils.equals(resultStatus, "9000")) {
                         //  notifyPayResult("支付成功");
                         MyToast.getToast(PayActivity.this, "支付成功").show();
-                        finish();
                     } else if (TextUtils.equals(resultStatus, "8000") || TextUtils.equals(resultStatus, "6004")) {
                         //正在处理中，支付结果未知
                         // notifyPayResult("正在支付中，请与客服联系");
