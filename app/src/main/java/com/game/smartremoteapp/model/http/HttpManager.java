@@ -589,6 +589,14 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
 
+    //找回密码
+    public void getResetPass(String phone, String code, String password, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o =smartService.getResetPass(phone,code,password);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
 
+    }
 
 }

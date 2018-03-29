@@ -295,5 +295,7 @@ public class UrlUtils {
     //查询账户收支流水  /pooh-web/app/account/getUserAccountDetailPage.do
     public static final String ACCOUNTDETAILURL=URL+"/pooh-web/app/account/getUserAccountDetailPage.do";
 
+    //找回密码    /pooh-web/app/sms/resetPassword
+    public static final String RESETPASSWORDURL=URL+"/pooh-web/app/sms/resetPassword";
 
 }

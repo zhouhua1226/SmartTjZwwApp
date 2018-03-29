@@ -41,6 +41,7 @@ public class PayActivity extends BaseActivity{
     @BindView(R.id.tv_order_pay_money)
     TextView  pay_money;
     private PayCardBean mPayCardBean;
+    private String pid="";
     @Override
     protected int getLayoutId() {
         return R.layout.activity_pay;
@@ -54,11 +55,12 @@ public class PayActivity extends BaseActivity{
 
     @Override
     protected void initView() {
+        pid=getIntent().getStringExtra("pid");
         mPayCardBean= (PayCardBean) getIntent().getSerializableExtra("PayCardBean");
         card_bean.setText("订单名称："+mPayCardBean.getGOLD()+"金币");
         card_money.setText("订单金额："+mPayCardBean.getAMOUNT()+"元");
         double payMoney=Double.parseDouble(mPayCardBean.getAMOUNT()) *Double.parseDouble(mPayCardBean.getDISCOUNT());
-        pay_money.setText("0.01元");
+        pay_money.setText(payMoney+"");
     }
     @OnClick({R.id.image_back,R.id.image_service,R.id.wechat_pay,R.id.apliy_pay})
     public void onViewClicked(View view){
@@ -82,7 +84,7 @@ public class PayActivity extends BaseActivity{
      * 获取支付宝支付信息
      */
     private void  getOrderInfo(){
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,"7", new RequestSubscriber<Result<AlipayBean>>() {
+        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID,pid, new RequestSubscriber<Result<AlipayBean>>() {
             @Override
             public void _onSuccess(Result<AlipayBean> result) {
                 if(result.getCode()==0){

@@ -54,7 +54,7 @@ public class LoginCodeActivity extends BaseActivity{
                  login();
                  break;
              case R.id.tv_forget_password:
-
+                startActivity(new Intent(this,FindBackPassActivity.class));
                  break;
              case R.id.tv_register:
                  Utils.toActivity(this,RegisterActivity.class);
