@@ -97,9 +97,9 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private int currentPage = 1;
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
-    private CtrlCompl ctrlCompl;
+    private CtrlCompl ctrlCompl=null;
     private String url1=null;
-
+    public boolean isShowPlay=false;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
@@ -556,20 +556,34 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         ctrlCompl.sendCmdOutRoom();
         ctrlCompl = null;
     }
-    @Override
-    public void onStop() {
-        super.onStop();
-        ctrlCompl.stopPlayVideo();
-    }
+
     //如果你需要考虑更好的体验，可以这么操作
     @Override
     public void onResume() {
         super.onResume();
+        LogUtils.loge("onResume()","ZWWJFragment");
+        getUserList();
+        openPlayVideo();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        closePlayVideo();
+    }
+    public void closePlayVideo(){
         if(ctrlCompl!=null&&url1!=null){
-            playerBar.setVisibility(View.VISIBLE);
-            ctrlCompl.startPlayVideo(mPlayerView, url1);
+            ctrlCompl.stopPlayVideo();
         }
-        NettyUtils.pingRequest();
+    }
+    public void openPlayVideo(){
+         if(isShowPlay){
+             NettyUtils.pingRequest();
+             if(ctrlCompl!=null&&url1!=null){
+                 playerBar.setVisibility(View.VISIBLE);
+                 ctrlCompl.startPlayVideo(mPlayerView, url1);
+             }
+         }
     }
 }
 

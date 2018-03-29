@@ -38,7 +38,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -199,6 +198,7 @@ public class MainActivity extends BaseActivity {
             }else {
                 fragmentTransaction.show(zwwjFragment);
             }
+            zwwjFragment.isShowPlay=true;
             setFocuse();
             ivTabZww.setBackgroundResource(R.drawable.zww_icon);
             //一定要记得提交
@@ -267,14 +267,20 @@ public class MainActivity extends BaseActivity {
             //抓娃娃大厅
             case R.id.layout_tab_zww:
                 //getDeviceStates();
+                zwwjFragment.isShowPlay=true;
+                zwwjFragment.openPlayVideo();
                 showZwwFg();
                 break;
             //排行榜大厅
             case R.id.layout_tab_list:
+                zwwjFragment.isShowPlay=false;
+                zwwjFragment.closePlayVideo();
                 showRankFg();
                 break;
             //我的大厅
             case R.id.layout_tab_my:
+                zwwjFragment.isShowPlay=false;
+                zwwjFragment.closePlayVideo();
                 showMyCenterFg();
                 break;
             default:
@@ -347,6 +353,9 @@ public class MainActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         //stopTimer();
+        if(zwwjFragment!=null){
+            zwwjFragment.closePlayVideo();
+        }
     }
 
     //监控网关区
@@ -578,4 +587,5 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
 }
