@@ -43,18 +43,14 @@ import com.game.smartremoteapp.view.PullToRefreshView;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
 import com.iot.game.pooh.server.entity.json.enums.MoveType;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-
 /**
  * Created by hongxiu on 2017/9/25.
  */
@@ -99,7 +95,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private String currentType = "";  //首页
     private CtrlCompl ctrlCompl=null;
     private String url1=null;
-    public boolean isShowPlay=false;
+    public boolean isPlayTogger=false;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
@@ -142,8 +138,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             }
         });
     }
-
-
     private void initData() {
         dismissEmptyLayout();
         zwwAdapter = new ZWWAdapter(getActivity(), currentRoomBeens);
@@ -345,7 +339,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             public void onClick(View view) {
                   Intent intent=new Intent(getActivity(), LiveActivity.class);
                   intent.putExtra(Utils.TAG_LIVE_DURL,url1);
-                //  Utils.toActivity(getActivity(),intent);
+                 //  Utils.toActivity(getActivity(),intent);
             }
         });
     }
@@ -529,10 +523,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
     @Override
     public void getPlayerErcErrCode(int code) {
+        isPlayTogger=false;
         LogUtils.loge("直播失败,错误码:::::" + code, TAG);
     }
     @Override
     public void getPlayerSucess() {
+        isPlayTogger=true;
         playerBar.setVisibility(View.GONE);
         LogUtils.loge("直播Sucess:::::", TAG);
     }
@@ -551,7 +547,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         super.onDestroyView();
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
-        ctrlCompl.sendCmdCtrl(MoveType.CATCH);
         ctrlCompl.stopTimeCounter();
         ctrlCompl.sendCmdOutRoom();
         ctrlCompl = null;
@@ -565,25 +560,42 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         getUserList();
         openPlayVideo();
     }
-
-    @Override
-    public void onPause() {
+    //fragment关闭执行
+   @Override
+     public void onPause() {
         super.onPause();
-        closePlayVideo();
-    }
+         closePlayVideo();
+     }
     public void closePlayVideo(){
-        if(ctrlCompl!=null&&url1!=null){
-            ctrlCompl.stopPlayVideo();
+        if(isPlayTogger) {
+            if (ctrlCompl != null && url1 != null) {
+                ctrlCompl.stopPlayVideo();
+                isPlayTogger=false;
+            }
         }
     }
     public void openPlayVideo(){
-         if(isShowPlay){
-             NettyUtils.pingRequest();
-             if(ctrlCompl!=null&&url1!=null){
-                 playerBar.setVisibility(View.VISIBLE);
-                 ctrlCompl.startPlayVideo(mPlayerView, url1);
-             }
-         }
+           if(!isPlayTogger){
+               NettyUtils.pingRequest();
+               if(ctrlCompl!=null&&url1!=null){
+                   playerBar.setVisibility(View.VISIBLE);
+                   ctrlCompl.startPlayVideo(mPlayerView, url1);
+               }
+           }
+    }
+    //fragment切换执行
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            closePlayVideo();
+            //相当于Fragment的onPause
+          LogUtils.loge("onHiddenChanged----不可见",TAG);
+        } else {
+            // 相当于Fragment的onResume
+            getUserList();
+            openPlayVideo();
+            LogUtils.loge("onHiddenChanged===可见",TAG);
+        }
     }
 }
 
