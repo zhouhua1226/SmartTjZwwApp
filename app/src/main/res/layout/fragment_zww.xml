@@ -72,9 +72,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/zww_earnmoney_bg"
                         android:background="@color/apptheme_bg"
-                        android:visibility="visible"
-                        />
-
+                        android:visibility="visible"/>
                 </RelativeLayout>
            <RelativeLayout
                android:layout_width="match_parent"
@@ -82,8 +80,12 @@
                <SurfaceView
                    android:id="@+id/sfv_player"
                    android:layout_width="match_parent"
-                   android:background="@color/transparent"
                    android:layout_height="match_parent" />
+               <ProgressBar
+                   android:id="@+id/sfv_player_bar"
+                   android:layout_width="30dp"
+                   android:layout_centerInParent="true"
+                   android:layout_height="30dp" />
                <RelativeLayout
                    android:id="@+id/rl_marqueeview"
                    android:layout_width="match_parent"
