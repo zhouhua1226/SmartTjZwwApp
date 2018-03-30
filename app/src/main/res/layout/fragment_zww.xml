@@ -77,10 +77,12 @@
            <RelativeLayout
                android:layout_width="match_parent"
                android:layout_height="200dp">
-               <SurfaceView
+               <com.game.smartremoteapp.view.MySurfaceVivew
                    android:id="@+id/sfv_player"
                    android:layout_width="match_parent"
-                   android:layout_height="match_parent" />
+                   android:layout_gravity="center"
+                   android:background="@android:color/transparent"
+                   android:layout_height="match_parent"/>
                <ProgressBar
                    android:id="@+id/sfv_player_bar"
                    android:layout_width="30dp"
@@ -94,8 +96,8 @@
                    android:paddingBottom="4dp"
                    android:layout_alignParentBottom="true"
                    android:background="@color/backgroundcolor"
+                   android:visibility="invisible"
                    android:orientation="horizontal">
-
                    <com.game.smartremoteapp.view.MarqueeView
                        android:id="@+id/marqueeview"
                        android:layout_width="match_parent"

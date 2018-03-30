@@ -7,12 +7,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
@@ -38,15 +38,18 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.EmptyLayout;
 import com.game.smartremoteapp.view.MarqueeView;
+import com.game.smartremoteapp.view.MySurfaceVivew;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PullToRefreshView;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
 import com.iot.game.pooh.server.entity.json.enums.MoveType;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,7 +78,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @BindView(R.id.zww_earnmoney_ibtn)
     ImageButton zwwEarnmoneyIBtn;
     @BindView(R.id.sfv_player)
-    SurfaceView mPlayerView;
+    MySurfaceVivew mPlayerView;
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
     @BindView(R.id.sfv_player_bar)
@@ -95,22 +98,21 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private String currentType = "";  //首页
     private CtrlCompl ctrlCompl=null;
     private String url1=null;
-    public boolean isPlayTogger=false;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
     }
-
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
+
         initData();
         onClick();
-        getUserList();
         NettyUtils.sendRoomInCmd();
         getBannerList();
         getToyType();
+        getUserList();
     }
-
     private void getUserList() {
         HttpManager.getInstance().getUserList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -128,10 +130,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     marquee.setImgUrl(UrlUtils.APPPICTERURL + playBackBeanList.get(i).getIMAGE_URL());
                     marquees.add(marquee);
                 }
-                marqueeview.setImage(true);
-                marqueeview.startWithList(marquees);
+                if(marquees.size()>0) {
+                    mArqueeView.setVisibility(View.VISIBLE);
+                    marqueeview.setImage(true);
+                    marqueeview.startWithList(marquees);
+                }
             }
-
             @Override
             public void _onError(Throwable e) {
 
@@ -154,16 +158,14 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         if (onClickReTryListener != null) {
             zwwEmptylayout.setOnClickReTryListener(onClickReTryListener);
         }
-
         typeTabLayout.addOnTabSelectedListener(tabSelectedListener);
         mArqueeView.getBackground().setAlpha(120);
-    }
 
+    }
     private void onClick() {
         mPullToRefreshView.setOnHeaderRefreshListener(this);
         mPullToRefreshView.setOnFooterRefreshListener(this);
     }
-
     @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn,R.id.zww_earnmoney_ibtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -221,7 +223,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         intent.putExtra(Utils.TAG_ROOM_PROB, prob);
         intent.putExtra(Utils.TAG_ROOM_REWARD, reward);
         intent.putExtra(Utils.TAG_ROOM_DOLLURL, dollUrl);
-        startActivity(intent);
+         startActivity(intent);
+
     }
 
     /**
@@ -300,8 +303,9 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     private void getBannerList() {
-        NettyUtils.pingRequest(); //判断连接
+
         ctrlCompl = new CtrlCompl(this, getActivity());
+        NettyUtils.pingRequest(); //判断连接
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
@@ -327,7 +331,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         });
     }
     private void initSurface(BannerBean mBannerBean) {
-
+        mPlayerView.setZOrderMediaOverlay(true);
         String rtmpUrl = mBannerBean.getRTMP_URL();
         String serviceName = mBannerBean.getSERVER_NAME();
         String liveStream = mBannerBean.getLIVESTREAM();
@@ -487,24 +491,18 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
     }
-
     @Override
     public void getTime(int time) {
-
     }
-
     @Override
     public void getTimeFinish() {
         ctrlCompl.sendCmdCtrl(MoveType.CATCH);
         ctrlCompl.stopTimeCounter();
-
     }
-
     @Override
     public void getUserInfos(List<String> list, boolean is) {
 
     }
-
     @Override
     public void getRecordErrCode(int code) {
         LogUtils.loge("录制视频失败::::::" + code, TAG);
@@ -518,17 +516,14 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void getRecordAttributetoNet(String time, String fileName) {
         LogUtils.loge("视频上传的时间::::" + time + "=====" + fileName, TAG);
-
     }
 
     @Override
     public void getPlayerErcErrCode(int code) {
-        isPlayTogger=false;
         LogUtils.loge("直播失败,错误码:::::" + code, TAG);
     }
     @Override
     public void getPlayerSucess() {
-        isPlayTogger=true;
         playerBar.setVisibility(View.GONE);
         LogUtils.loge("直播Sucess:::::", TAG);
     }
@@ -538,9 +533,9 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void getVideoPlayStart() {
     }
-
     @Override
     public void getVideoStop() {
+
     }
     @Override
     public void onDestroyView() {
@@ -556,46 +551,27 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.loge("onResume()","ZWWJFragment");
-        getUserList();
+        LogUtils.loge("onResume=== 可见",TAG);
+         getUserList();
         openPlayVideo();
     }
-    //fragment关闭执行
-   @Override
-     public void onPause() {
-        super.onPause();
-         closePlayVideo();
-     }
-    public void closePlayVideo(){
-        if(isPlayTogger) {
-            if (ctrlCompl != null && url1 != null) {
-                ctrlCompl.stopPlayVideo();
-                isPlayTogger=false;
-            }
-        }
-    }
-    public void openPlayVideo(){
-           if(!isPlayTogger){
-               NettyUtils.pingRequest();
-               if(ctrlCompl!=null&&url1!=null){
-                   playerBar.setVisibility(View.VISIBLE);
-                   ctrlCompl.startPlayVideo(mPlayerView, url1);
-               }
-           }
-    }
-    //fragment切换执行
+
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (hidden) {
-            closePlayVideo();
-            //相当于Fragment的onPause
-          LogUtils.loge("onHiddenChanged----不可见",TAG);
-        } else {
-            // 相当于Fragment的onResume
-            getUserList();
-            openPlayVideo();
-            LogUtils.loge("onHiddenChanged===可见",TAG);
+    public void onPause() {
+        super.onPause();
+        ctrlCompl.stopPlayVideo();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+    public void openPlayVideo() {
+        if(ctrlCompl!=null&&url1!=null){
+            playerBar.setVisibility(View.VISIBLE);
+            ctrlCompl.startPlayVideo(mPlayerView,url1);
         }
     }
+
 }
 
