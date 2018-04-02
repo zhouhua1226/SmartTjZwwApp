@@ -570,7 +570,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         LogUtils.loge("surfaceChanged=== ----",TAG);
         if(ctrlCompl!=null&&url1!=null){
-            ctrlCompl.stopPlayVideo();
+           // ctrlCompl.stopPlayVideo();
             playerBar.setVisibility(View.VISIBLE);
             ctrlCompl.startPlayVideo(mPlayerView,url1);
         }
@@ -579,7 +579,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         LogUtils.loge("surfaceDestroyed=== ----",TAG);
-      //  ctrlCompl.stopPlayVideo();
+       ctrlCompl.stopPlayVideo();
     }
 }
 
