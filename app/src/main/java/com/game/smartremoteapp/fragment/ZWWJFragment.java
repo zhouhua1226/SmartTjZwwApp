@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -57,7 +58,8 @@ import butterknife.Unbinder;
 /**
  * Created by hongxiu on 2017/9/25.
  */
-public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener,IctrlView {
+public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener,
+        PullToRefreshView.OnFooterRefreshListener,IctrlView,SurfaceHolder.Callback {
     private static final String TAG = "ZWWJFragment";
     @BindView(R.id.zww_recyclerview)
     RecyclerView zwwRecyclerview;
@@ -332,12 +334,14 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
     private void initSurface(BannerBean mBannerBean) {
         mPlayerView.setZOrderMediaOverlay(true);
+        mPlayerView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         String rtmpUrl = mBannerBean.getRTMP_URL();
         String serviceName = mBannerBean.getSERVER_NAME();
         String liveStream = mBannerBean.getLIVESTREAM();
         url1 = rtmpUrl + serviceName + "/"+liveStream;
         LogUtils.loge("url1===="+url1);
         ctrlCompl.startPlayVideo(mPlayerView, url1);
+        mPlayerView.getHolder().addCallback(this);
         mPlayerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -346,6 +350,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                  //  Utils.toActivity(getActivity(),intent);
             }
         });
+
+
     }
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
@@ -540,6 +546,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPlayerView.getHolder().removeCallback(this);
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
         ctrlCompl.stopTimeCounter();
@@ -551,27 +558,28 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.loge("onResume=== 可见",TAG);
-         getUserList();
-        openPlayVideo();
+        LogUtils.loge("onResume=== 可见", TAG);
+        getUserList();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        ctrlCompl.stopPlayVideo();
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        LogUtils.loge("surfaceCreated=== ------",TAG);
     }
-
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-    public void openPlayVideo() {
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+        LogUtils.loge("surfaceChanged=== ----",TAG);
         if(ctrlCompl!=null&&url1!=null){
+            ctrlCompl.stopPlayVideo();
             playerBar.setVisibility(View.VISIBLE);
             ctrlCompl.startPlayVideo(mPlayerView,url1);
         }
     }
 
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        LogUtils.loge("surfaceDestroyed=== ----",TAG);
+      //  ctrlCompl.stopPlayVideo();
+    }
 }
 
