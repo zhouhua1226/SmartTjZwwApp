@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
@@ -24,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="娃娃邮寄"
+            tools:text="娃娃邮寄"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -143,6 +145,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/setting_logout_btn_bg"
+            android:visibility="visible"
             />
 
         <Button
@@ -152,10 +155,11 @@
             android:text="确认兑换"
             android:textSize="15sp"
             android:textColor="@color/white"
-            android:layout_toLeftOf="@+id/mycatchrecod_fhsure_image"
             android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/setting_logout_btn_bg"
+            android:visibility="gone"
             />
         <TextView
             android:id="@+id/mycatchrecod_selectnum_tv"

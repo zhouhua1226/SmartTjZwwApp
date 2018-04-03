@@ -211,7 +211,9 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), WeChatPayActivity.class));
                 break;
             case R.id.mycenter_catchrecord_layout:
-                startActivity(new Intent(getContext(), MyCtachRecordActivity.class));
+                Intent intent=new Intent(getContext(),MyCtachRecordActivity.class);
+                intent.putExtra("type","1");
+                startActivity(intent);
                 break;
             case R.id.mycenter_joincode_layout:
                 //加盟码
@@ -235,8 +237,9 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), LnvitationCodeActivity.class));
                 break;
             case R.id.mycenter_exshop_layout:
-                startActivity(new Intent(getContext(), ExChangeShopActivity.class));
-                //startActivity(new Intent(context, MyCtachRecordActivity.class));
+                Intent intent2=new Intent(getContext(),MyCtachRecordActivity.class);
+                intent2.putExtra("type","2");
+                startActivity(intent2);
                 break;
             case R.id.mycenter_agency_tv:
                 //MyToast.getToast(context,"功能开发中！").show();

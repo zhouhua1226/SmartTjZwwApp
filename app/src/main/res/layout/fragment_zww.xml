@@ -43,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:paddingTop="3dp"
-                        android:paddingBottom="5dp"
+                        android:paddingBottom="6dp"
                         android:src="@drawable/app_jj_textlogo" />
 
                     <ImageButton
@@ -73,6 +73,23 @@
                         android:src="@drawable/zww_earnmoney_bg"
                         android:background="@color/apptheme_bg"
                         android:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/zww_news_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="活动"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="15sp"
+                        android:textColor="@color/white"
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone"
+                        />
+
                 </RelativeLayout>
            <RelativeLayout
                android:layout_width="match_parent"

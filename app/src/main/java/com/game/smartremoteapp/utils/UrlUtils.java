@@ -31,7 +31,8 @@ public class UrlUtils {
     public static final String TIME = "time";
     public static final String STATE = "state";
     public static final String GUESSID="guessId";
-    public static final String GUESSPRONUM="afterVoting";
+    public static final String GUESSPRONUM="afterVoting";   //追投期数
+    public static final String GUESSMULTIPLE="multiple";   //竞猜倍数
 
     public static final String USERID = "userId";
     public static final String WAGER = "wager";
@@ -96,6 +97,8 @@ public class UrlUtils {
     public static final String BANK_IDNUMBER="idNumber";
     //提现
     public static final String DRAW_ORDERAMT="orderAmt";
+    //房间游戏记录
+    public static final String ROOMID="roomId";
 
     public static final String URL = "http://111.231.139.61:18081"; // http://47.100.15.18:8080  //http://111.231.139.61:8080
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
@@ -297,5 +300,8 @@ public class UrlUtils {
 
     //找回密码    /pooh-web/app/sms/resetPassword
     public static final String RESETPASSWORDURL=URL+"/pooh-web/app/sms/resetPassword";
+
+    //房间游戏记录  /pooh-web/api/play/getGamelist
+    public static final String ROOMGAMELIST=URL+"/pooh-web/api/play/getGamelist";
 
 }

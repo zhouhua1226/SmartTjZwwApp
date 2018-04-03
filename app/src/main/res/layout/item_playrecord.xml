@@ -10,36 +10,47 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_iv"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            />
+
         <TextView
-            android:id="@+id/title_tv"
+            android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/image_iv"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="10dp"
             android:textSize="14sp"
-            android:textColor="#5b5b5b"
+            android:textColor="@color/black"
             tools:text="可爱熊兑换游戏币"/>
         <TextView
-            android:id="@+id/times_tv"
-            android:layout_below="@+id/title_tv"
+            android:id="@+id/time_tv"
+            android:layout_below="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image_iv"
             android:textSize="12sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
             android:textColor="#848484"
             android:text="2017/10/17 14:12"/>
 
         <TextView
-            android:id="@+id/value_tv"
+            android:id="@+id/result_tv"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="@color/zww_broadcast_text"
+            android:textSize="12sp"
+            android:textColor="#fb7e50"
             android:layout_marginRight="15dp"
-            android:text="+50"/>
+            tools:text="+50"/>
     </RelativeLayout>
 
 

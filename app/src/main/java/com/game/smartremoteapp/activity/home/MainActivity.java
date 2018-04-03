@@ -203,6 +203,10 @@ public class MainActivity extends BaseActivity {
             //一定要记得提交
             fragmentTransaction.commitAllowingStateLoss();
         }
+
+
+
+
     }
 
     private void showRankFg() {
@@ -352,7 +356,7 @@ public class MainActivity extends BaseActivity {
         super.onStop();
         //stopTimer();
         if(zwwjFragment!=null){
-            zwwjFragment.closePlayVideo();
+            //zwwjFragment.closePlayVideo();
         }
     }
 

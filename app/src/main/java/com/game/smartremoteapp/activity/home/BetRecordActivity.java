@@ -70,7 +70,6 @@ public class BetRecordActivity extends BaseActivity {
     }
 
     private void initDate() {
-
         betRecordAdapter = new BetRecordAdapter(this, list);
         betrecodeRecyclerview.setAdapter(betRecordAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

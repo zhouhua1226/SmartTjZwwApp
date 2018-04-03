@@ -183,8 +183,8 @@ public class HttpManager {
 
     //下注
     public void getBets(String userId,int wager,String guessKey,String guessId,
-                        String dollID,int afterVoting,Subscriber<Result<AppUserBean>> subscriber){
-        Observable<Result<AppUserBean>> o= smartService.getBets(userId,wager,guessKey,guessId,dollID,afterVoting);
+                        String dollID,int afterVoting,int multiple,Subscriber<Result<AppUserBean>> subscriber){
+        Observable<Result<AppUserBean>> o= smartService.getBets(userId,wager,guessKey,guessId,dollID,afterVoting,multiple);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -592,6 +592,16 @@ public class HttpManager {
     //找回密码
     public void getResetPass(String phone, String code, String password, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
         Observable<Result<HttpDataInfo>> o =smartService.getResetPass(phone,code,password);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    //房间游戏记录
+    public void getRoomGamelist(String roomId, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o =smartService.getRoomGamelist(roomId);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

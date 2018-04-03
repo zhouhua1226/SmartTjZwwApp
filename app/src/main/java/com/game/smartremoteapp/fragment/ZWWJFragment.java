@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import android.widget.TextView;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
@@ -21,6 +23,7 @@ import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
 import com.game.smartremoteapp.activity.ctrl.view.LiveActivity;
 import com.game.smartremoteapp.activity.home.ExChangeShopActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
+import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.BannerBean;
@@ -55,6 +58,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+
 /**
  * Created by hongxiu on 2017/9/25.
  */
@@ -84,7 +89,9 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
     @BindView(R.id.sfv_player_bar)
-    ProgressBar  playerBar;
+    ProgressBar playerBar;
+    @BindView(R.id.zww_news_tv)
+    TextView zwwNewsTv;
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
     private String sessionId;
@@ -100,14 +107,17 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private String currentType = "";  //首页
     private CtrlCompl ctrlCompl=null;
     private String url1=null;
+    public boolean isPlayTogger=false;
+    private String newsUrl="";
+    private String newsTitle="";
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
     }
+
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
-
         initData();
         onClick();
         NettyUtils.sendRoomInCmd();
@@ -138,6 +148,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     marqueeview.startWithList(marquees);
                 }
             }
+
             @Override
             public void _onError(Throwable e) {
 
@@ -160,19 +171,29 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         if (onClickReTryListener != null) {
             zwwEmptylayout.setOnClickReTryListener(onClickReTryListener);
         }
+
         typeTabLayout.addOnTabSelectedListener(tabSelectedListener);
         mArqueeView.getBackground().setAlpha(120);
-
     }
+
     private void onClick() {
         mPullToRefreshView.setOnHeaderRefreshListener(this);
         mPullToRefreshView.setOnFooterRefreshListener(this);
     }
-    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn,R.id.zww_earnmoney_ibtn})
+
+    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn, R.id.zww_earnmoney_ibtn,R.id.zww_news_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.zww_exshop_ibtn:
-                startActivity(new Intent(getContext(), ExChangeShopActivity.class));
+                //startActivity(new Intent(getContext(), ExChangeShopActivity.class));
+                if (!newsUrl.equals("")) {
+                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+                    intent.putExtra("newsurl", newsUrl.replace("\"", "/"));
+                    intent.putExtra("newstitle", newsTitle);
+                    startActivity(intent);
+                }else {
+                    MyToast.getToast(getContext(),"暂无活动！").show();
+                }
                 break;
             case R.id.zww_guess_btn:
                 jumpRoom(0);
@@ -180,6 +201,16 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             case R.id.zww_earnmoney_ibtn:
                 //MyToast.getToast(getContext(),"功能研发中！").show();
                 startActivity(new Intent(getContext(), JoinEarnActivity.class));
+                break;
+            case R.id.zww_news_tv:
+                if (!newsUrl.equals("")) {
+                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+                    intent.putExtra("newsurl", newsUrl.replace("\"", "/"));
+                    intent.putExtra("newstitle", newsTitle);
+                    startActivity(intent);
+                }else {
+                    MyToast.getToast(getContext(),"暂无活动！").show();
+                }
                 break;
             default:
                 break;
@@ -316,9 +347,15 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     if (bannerList.size() > 0) {
                         for (int i = 0; i < bannerList.size(); i++) {
                             //  list.add(UrlUtils.APPPICTERURL + bannerList.get(i).getIMAGE_URL());
-                            if(bannerList.get(i).getDEVICE_STATE().equals("0")&&bannerList.get(i).getRTMP_URL()!=null){
-                                //   setSessionId(UserUtils.sessionID,false);
-                                initSurface(bannerList.get(i));
+                            String state=bannerList.get(i).getSTATE();
+                            if(state.equals("1")) {
+                                if (bannerList.get(i).getDEVICE_STATE().equals("0") && bannerList.get(i).getRTMP_URL() != null) {
+                                    //   setSessionId(UserUtils.sessionID,false);
+                                    initSurface(bannerList.get(i));
+                                }
+                            }else if (state.equals("0")){
+                                newsUrl=bannerList.get(i).getHREF_ST();
+                                newsTitle=bannerList.get(i).getRUN_NAME();
                             }
                         }
                         // initBanner(list, bannerList);
@@ -353,6 +390,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
 
     }
+
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
             return beens;
@@ -364,6 +402,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
         return beens;
     }
+
     private void getToyType() {
         HttpManager.getInstance().getToyType(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override

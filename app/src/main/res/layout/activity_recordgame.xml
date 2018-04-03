@@ -269,8 +269,6 @@
 
         <Button
             android:id="@+id/shipments_button"
-            android:layout_marginStart="100dp"
-            android:layout_toRightOf="@+id/gamemoney_button"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/text_tv"
@@ -280,6 +278,7 @@
             android:text="申请发货"
             android:textSize="14sp"
             android:textColor="@color/white"
+            android:visibility="gone"
             />
     </RelativeLayout>
 

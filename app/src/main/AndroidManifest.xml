@@ -26,12 +26,18 @@
         android:icon="@mipmap/app_mm_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:resizeableActivity="true"
         android:theme="@style/MyAppTheme">
+        <!-- 提高app支持最大屏幕纵横比 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1">
+        </meta-data>
         <activity
             android:name=".activity.home.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
         <!--
@@ -40,6 +46,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         -->
+
         <!--=============================友盟相关=============================================-->
 
         <meta-data
@@ -56,21 +63,8 @@
             android:value="Channel ID" >
         </meta-data>
 
-
-        <!--<meta-data-->
-            <!--android:name="UMENG_APPKEY"-->
-            <!--android:value="5a547230b27b0a6a19000132" />-->
-        <!--&lt;!&ndash; Umeng 街机抓娃娃(应用宝版)   5a547230b27b0a6a19000132&ndash;&gt;-->
-
-        <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="tencent"></meta-data>-->
-        <!--<meta-data-->
-            <!--android:name="UMENG_MESSAGE_SECRET"-->
-            <!--android:value="d70bf19f71c773f2b72234a0966d12a4">-->
-        <!--</meta-data>-->
-        <!-- 街机抓娃娃(应用宝版) d70bf19f71c773f2b72234a0966d12a4   d318f4fe099226d45d73978c710c1bb4 -->
         <!--=============================友盟相关=============================================-->
+
         <activity android:name=".activity.home.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop"
@@ -464,6 +458,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.ctrl.view.LiveActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <activity android:name=".activity.home.RoomPlayRecordActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

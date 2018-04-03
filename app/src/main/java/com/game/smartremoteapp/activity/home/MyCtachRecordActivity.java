@@ -91,6 +91,7 @@ public class MyCtachRecordActivity extends BaseActivity {
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
     private int gold=0;
+    public static String TYPE;
 
     @Override
     protected int getLayoutId() {
@@ -122,6 +123,18 @@ public class MyCtachRecordActivity extends BaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mycatchrecodRecyclerview.setLayoutManager(linearLayoutManager);
         mycatchrecodRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        TYPE=getIntent().getStringExtra("type");   //1 邮寄   2兑换
+        if(TYPE.equals("1")){
+            recodeTitleTv.setText("娃娃邮寄");
+            mycatchrecodDhsureImage.setVisibility(View.GONE);
+            mycatchrecodFhsureImage.setVisibility(View.VISIBLE);
+        }else {
+            recodeTitleTv.setText("娃娃兑换");
+            mycatchrecodDhsureImage.setVisibility(View.VISIBLE);
+            mycatchrecodFhsureImage.setVisibility(View.GONE);
+            mycatchrecodDialogImage.setVisibility(View.GONE);
+        }
 
     }
 

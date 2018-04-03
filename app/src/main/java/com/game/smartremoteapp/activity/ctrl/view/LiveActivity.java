@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.adapter.MessageAdapter;
-import com.game.smartremoteapp.adapter.MessageLoopAdapter;
 import com.game.smartremoteapp.bean.MessageBean;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -59,7 +58,6 @@ public class LiveActivity extends Activity implements IctrlView {
     private CtrlCompl ctrlCompl;
     private String currentUrl;
     private List<MessageBean> messageBeanList;
-    private MessageLoopAdapter mAdapter;
     private MessageAdapter mAdapters;
 
 

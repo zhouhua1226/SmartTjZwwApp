@@ -123,6 +123,16 @@ public class RecordGameActivty extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+
+        String typ=MyCtachRecordActivity.TYPE;
+        Log.e(TAG,"typ="+typ);
+        if (typ.equals("1")){
+            gamemoneyButton.setVisibility(View.GONE);
+            shipmentsButton.setVisibility(View.VISIBLE);
+        }else {
+            gamemoneyButton.setVisibility(View.VISIBLE);
+            shipmentsButton.setVisibility(View.GONE);
+        }
     }
 
 //    @Override

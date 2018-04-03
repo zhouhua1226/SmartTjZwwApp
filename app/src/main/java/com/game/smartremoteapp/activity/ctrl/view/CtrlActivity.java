@@ -31,6 +31,7 @@ import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.NavigationPageActivity;
+import com.game.smartremoteapp.activity.home.RoomPlayRecordActivity;
 import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.GuessLastBean;
@@ -249,7 +250,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     private int prob;         //抓取概率
     private String reward = "";    //预计奖金
     private String showUserId = "";
-    private int betFlodNum = 1;   //默认投注倍数1
+    private int betFlodNum = 5;   //默认投注倍数
     private List<TextView> betViewList;
     private List<TextView> betFoldList;
     private List<TextView> betProList;    //追投
@@ -607,10 +608,11 @@ public class CtrlActivity extends Activity implements IctrlView {
                     getUserDate(UserUtils.USER_ID);
                     return;
                 }
-                if (Integer.parseInt(UserUtils.UserBalance) >= betMoney) {
+                int totalMoney= betMoney*(betPro+1);
+                if (Integer.parseInt(UserUtils.UserBalance) >= totalMoney) {
                     if (!zt.equals("") && !periodsNum.equals("")) {
-                        getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId,betPro);
-                        coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - betMoney) + " 充值");
+                        getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId,betPro,betFlodNum);
+                        coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + " 充值");
                         ctrlButtomLayout.setVisibility(View.VISIBLE);
                         ctrlBetingLayout.setVisibility(View.GONE);
                         ctrlQuizLayout.setEnabled(false);
@@ -638,7 +640,10 @@ public class CtrlActivity extends Activity implements IctrlView {
                 ctrlCompl.startPlaySwitchUrlVideo(currentUrl);
                 break;
             case R.id.ctrl_guessrecord_tv:
-                startActivity(new Intent(this, BetRecordActivity.class));
+                //startActivity(new Intent(this, BetRecordActivity.class));
+                Intent intent=new Intent(this,RoomPlayRecordActivity.class);
+                intent.putExtra("roomId",dollId);
+                startActivity(intent);
                 break;
             case R.id.ctrl_betnum_zero_tv:
                 zt = "0";
@@ -684,7 +689,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 if (betFlodNum == 10) {
                     ctrlBetTenflodTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetTenflodTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betFlodNum = 1;
+                    betFlodNum = 5;
                 } else {
                     betFlodNum = 10;
                     setBetFoldBg(0);
@@ -695,7 +700,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 if (betFlodNum == 20) {
                     ctrlBetTwentyfoldTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetTwentyfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betFlodNum = 1;
+                    betFlodNum = 5;
                 } else {
                     betFlodNum = 20;
                     setBetFoldBg(1);
@@ -706,7 +711,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 if (betFlodNum == 50) {
                     ctrlBetFiftyfoldTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetFiftyfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betFlodNum = 1;
+                    betFlodNum = 5;
                 } else {
                     betFlodNum = 50;
                     setBetFoldBg(2);
@@ -717,7 +722,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 if (betFlodNum == 100) {
                     ctrlBetHundredfoldTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetHundredfoldTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betFlodNum = 1;
+                    betFlodNum = 5;
                 } else {
                     betFlodNum = 100;
                     setBetFoldBg(3);
@@ -1086,11 +1091,10 @@ public class CtrlActivity extends Activity implements IctrlView {
     //竞猜奖金和金额UI变动
     private void setBetRewardChange(int num) {
         int re = Integer.parseInt(reward) * num;
-        int reward=re*(betPro+1);
-        betMoney = money * num * (betPro+1);
+        betMoney = money * num ;
         int showBetMoney= money*num;
         ctrlBetremarkTv.setText("预计奖金" + re + "金币");
-        ctrlConfirmLayout.setText(showBetMoney + "/次");
+        ctrlConfirmLayout.setText(betMoney + "/次");
     }
 
     //竞猜归零
@@ -1363,8 +1367,8 @@ public class CtrlActivity extends Activity implements IctrlView {
      ***************************************************/
     //下注接口
     private void getBets(String userID, Integer wager, String guessKey, String guessId,
-                         String dollID,int afterVoting) {
-        HttpManager.getInstance().getBets(userID, wager, guessKey, guessId, dollID,afterVoting, new RequestSubscriber<Result<AppUserBean>>() {
+                         String dollID,int afterVoting,int multiple) {
+        HttpManager.getInstance().getBets(userID, wager, guessKey, guessId, dollID,afterVoting,multiple, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> appUserBeanResult) {
                 if (appUserBeanResult.getData().getAppUser() != null) {
@@ -1514,14 +1518,14 @@ public class CtrlActivity extends Activity implements IctrlView {
         // 设置音频流的类型
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        //mediaPlayer.start();
         LogUtils.loge("房间背景音乐播放成功" + mediaPlayer.isPlaying(), TAG);
     }
 
     private void playBtnMusic(int file) {
         btn_mediaPlayer = MediaPlayer.create(this, file);
         btn_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        btn_mediaPlayer.start();
+        //btn_mediaPlayer.start();
     }
 
     private void setCatchResultDialog(boolean result) {

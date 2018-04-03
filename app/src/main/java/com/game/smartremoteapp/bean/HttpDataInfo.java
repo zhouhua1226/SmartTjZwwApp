@@ -39,6 +39,15 @@ public class HttpDataInfo implements Serializable{
     private String isBankInf;
     private BankCardBean bankCard;
     private PagesBean pd;
+    private List<GameListBean> gameList;
+
+    public List<GameListBean> getGameList() {
+        return gameList;
+    }
+
+    public void setGameList(List<GameListBean> gameList) {
+        this.gameList = gameList;
+    }
 
     public List<PromomoteBean> getVarList() {
         return varList;

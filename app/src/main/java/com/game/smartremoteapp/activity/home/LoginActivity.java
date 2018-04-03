@@ -334,50 +334,6 @@ public class LoginActivity extends BaseActivity {
         return user_first;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        EasyYSDKApi.onResume(this);
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        EasyYSDKApi.onPause(this);
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EasyYSDKApi.onStop(this);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EasyYSDKApi.onDestroy(this);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        EasyYSDKApi.onRestart(this);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        EasyYSDKApi.handleIntent(intent);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onBackPressed() {

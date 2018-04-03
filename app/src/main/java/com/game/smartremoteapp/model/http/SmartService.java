@@ -150,7 +150,8 @@ public interface SmartService {
             @Field(UrlUtils.GUESSKEY) String guessKey,
             @Field(UrlUtils.GUESSID) String guessId,
             @Field(UrlUtils.DOLLID) String dollID,
-            @Field(UrlUtils.GUESSPRONUM) int afterVoting
+            @Field(UrlUtils.GUESSPRONUM) int afterVoting,
+            @Field(UrlUtils.GUESSMULTIPLE) int multiple
     );
 
         //跑马灯
@@ -620,6 +621,14 @@ public interface SmartService {
             @Field(UrlUtils.PHONE) String phone,
             @Field(UrlUtils.CODE) String code,
             @Field(UrlUtils.PASSWORD) String password
+    );
+
+    //房间游戏记录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.ROOMGAMELIST)
+    Observable<Result<HttpDataInfo>> getRoomGamelist(
+            @Field(UrlUtils.ROOMID) String roomId
     );
 
 }
