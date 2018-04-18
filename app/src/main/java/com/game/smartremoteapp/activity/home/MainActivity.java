@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.app.DownloadManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.base.MyApplication;
+import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomBean;
@@ -24,13 +26,16 @@ import com.game.smartremoteapp.fragment.RankFragmentTwo;
 import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
+import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.SignInDialog;
 import com.game.smartremoteapp.view.SignSuccessDialog;
+import com.game.smartremoteapp.view.UpdateDialog;
 import com.gatz.netty.AppClient;
 import com.gatz.netty.utils.AppProperties;
 import com.gatz.netty.utils.NettyUtils;
@@ -47,7 +52,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity-";
@@ -77,6 +81,7 @@ public class MainActivity extends BaseActivity {
     private int signNumber = 0;
     private int[] signDayNum=new int[7];
     private String isSign="";
+    private LoadProgressView downloadDialog;
     static {
         System.loadLibrary("SmartPlayer");
     }
@@ -93,6 +98,7 @@ public class MainActivity extends BaseActivity {
         getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
+        checkVersion();
     }
 
     private void initData() {
@@ -103,16 +109,13 @@ public class MainActivity extends BaseActivity {
         editor.commit();
         UserUtils.isUserChanger = false;
         getUserSign(UserUtils.USER_ID,"0"); //签到请求 0 查询签到信息 1签到
-
     }
-
     @Override
     protected void initView() {
         ButterKnife.bind(this);
         fragmentAll = getSupportFragmentManager().findFragmentById(
                 R.id.main_center);
     }
-
     private void initNetty() {
         doServcerConnect();
         NettyUtils.registerAppManager();
@@ -141,6 +144,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         Utils.isExit = true;
+      //  getLogout(UserUtils.USER_ID);
         //stopTimer();
         RxBus.get().unregister(this);
     }
@@ -203,10 +207,6 @@ public class MainActivity extends BaseActivity {
             //一定要记得提交
             fragmentTransaction.commitAllowingStateLoss();
         }
-
-
-
-
     }
 
     private void showRankFg() {
@@ -355,9 +355,6 @@ public class MainActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         //stopTimer();
-        if(zwwjFragment!=null){
-            //zwwjFragment.closePlayVideo();
-        }
     }
 
     //监控网关区
@@ -582,7 +579,6 @@ public class MainActivity extends BaseActivity {
                     }
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
 
@@ -590,4 +586,79 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 获取apk版本信息
+     */
+  private void checkVersion(){
+      HttpManager.getInstance().checkVersion( new RequestSubscriber<Result<AppInfo>>() {
+          @Override
+          public void _onSuccess(Result<AppInfo> appInfoResult) {
+              if(appInfoResult!=null){
+              String version= appInfoResult.getData().getVERSION();
+                  if(!Utils.getAppCodeOrName(MainActivity.this, 1).equals(version)){
+                      updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                  }
+              }
+          }
+          @Override
+          public void _onError(Throwable e) {
+          }
+      });
+
+  }
+    private void  updateApp(final String loadUri){
+        UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
+        updateDialog.setCancelable(false);
+        updateDialog.show();
+        updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
+            @Override
+            public void getResult(boolean result ) {
+                if (result) {// 确定下载
+                    showDialog();
+                    new Thread(new DownLoadRunnable(MainActivity.this,UrlUtils.APPPICTERURL+loadUri)).start();
+                }
+            }
+        });
+    }
+
+    private void showDialog() {
+        if(downloadDialog==null){
+            downloadDialog = new LoadProgressView(this,R.style.easy_dialog_style);
+        }
+        if(!downloadDialog.isShowing()){
+            downloadDialog.show();
+        }
+    }
+    private void canceledDialog() {
+        if(downloadDialog!=null&&downloadDialog.isShowing()){
+            downloadDialog.dismiss();
+        }
+    }
+
+    /**
+     * 下载ui更新通知
+     */
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Utils.TAG_DOWN_LOAD)})
+    public void getDownLoadInfo(Object object) {
+        if(object instanceof DownLoadRunnable.UpdateInfo){
+            DownLoadRunnable.UpdateInfo info= (DownLoadRunnable.UpdateInfo) object;
+            switch (info.getState()){
+                case DownloadManager.STATUS_SUCCESSFUL:
+                    downloadDialog.setProbarPercent(100);
+                    canceledDialog();
+                    //Toast.makeText(MainActivity.this, "下载任务已经完成！", Toast.LENGTH_SHORT).show();
+                    break;
+                case DownloadManager.STATUS_RUNNING:
+                    //int progress = (int) msg.obj;
+                    downloadDialog.setProbarPercent((int) info.getProgress());
+                    break;
+                case DownloadManager.STATUS_FAILED:
+                    canceledDialog();
+                    break;
+                case DownloadManager.STATUS_PENDING:
+                    showDialog();
+                    break;
+            }
+        }
+    }
 }

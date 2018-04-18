@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:orientation="vertical"
-         >
+        android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:orientation="vertical">
 
             <LinearLayout
@@ -100,11 +98,7 @@
                    android:layout_gravity="center"
                    android:background="@android:color/transparent"
                    android:layout_height="match_parent"/>
-               <ProgressBar
-                   android:id="@+id/sfv_player_bar"
-                   android:layout_width="30dp"
-                   android:layout_centerInParent="true"
-                   android:layout_height="30dp" />
+
                <RelativeLayout
                    android:id="@+id/rl_marqueeview"
                    android:layout_width="match_parent"
@@ -147,7 +141,6 @@
                     />
                 <!-- android:layout_height="?attr/actionBarSize"  @drawable/tablayout_select_bg -->
 
-
             </LinearLayout>
 
             <ImageView
@@ -170,7 +163,6 @@
                         android:overScrollMode="never"
                         android:scrollbars="none" />
                 </com.game.smartremoteapp.view.EmptyLayout>
-
         </LinearLayout>
     </ScrollView>
     </com.game.smartremoteapp.view.PullToRefreshView>

@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,33 +12,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.easy.ysdk.EasyYSDKApi;
-import com.easy.ysdk.share.ShareInfo;
-import com.flamigo.jsdk.FlamigoPlaform;
-import com.flamigo.jsdk.api.FlamigoJApi;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.utils.SPUtils;
+import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
+import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.MyToast;
+import com.game.smartremoteapp.view.UpdateDialog;
 import com.gatz.netty.utils.NettyUtils;
-import com.proto.security.SecurityApi;
-import com.robust.sdk.api.RobustApi;
-
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-
-
 /**
  * Created by hongxiu on 2017/9/25.
  */
@@ -80,6 +78,7 @@ public class SettingActivity extends BaseActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
     private Context context = SettingActivity.this;
+    private LoadProgressView downloadDialog;
 
     @Override
     protected int getLayoutId() {
@@ -92,7 +91,7 @@ public class SettingActivity extends BaseActivity {
         setIsVibrator();
         setIsOpenMusic();
         settingUpdateTv.setText("当前版本：" + Utils.getAppCodeOrName(this, 1));
-
+        RxBus.get().register(this);
     }
 
     @Override
@@ -139,15 +138,7 @@ public class SettingActivity extends BaseActivity {
                 startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.bt_out:
-                //getLogout(UserUtils.USER_ID);
-                Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
-                SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
-                NettyUtils.destoryConnect();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                getLogout(UserUtils.USER_ID);
                 break;
             case R.id.vibrator_control_layout:
             case R.id.vibrator_control_imag:
@@ -167,35 +158,66 @@ public class SettingActivity extends BaseActivity {
                 setIsOpenMusic();
                 break;
             case R.id.setting_update_layout:
-                MyToast.getToast(getApplicationContext(), "当前为最新版!").show();
-//                UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
-//                updateDialog.setCancelable(false);
-//                updateDialog.show();
-//                updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
-//                    @Override
-//                    public void getResult(int resultCode) {
-//                        if (1 == resultCode) {// 确定
-//                            MyToast.getToast(getApplicationContext(),"正在下载新版apk!").show();
-//                        }else {
-//
-//                        }
-//                    }
-//                });
-
-                //startActivity(new Intent(this, LoginActivity.class));
-                //Utils.getGuessSuccessDialog(this);
-                // Utils.getCatchResultDialog(this);
+               checkVersion();
                 break;
             case R.id.setting_share_layout:
                 Log.e(TAG,"分享参数userId="+UserUtils.USER_ID);
                 MyToast.getToast(getApplicationContext(),"研发中！").show();
                 //RobustApi.getInstance().shareWx(this, new ShareInfo(UserUtils.USER_ID));
                 break;
-
         }
+    }
+    /**
+     * 获取apk版本信息
+     */
+    private void checkVersion(){
+        HttpManager.getInstance().checkVersion( new RequestSubscriber<Result<AppInfo>>() {
+            @Override
+            public void _onSuccess(Result<AppInfo> appInfoResult) {
+                if(appInfoResult!=null){
+                    String version= appInfoResult.getData().getVERSION();
+                    if(!Utils.getAppCodeOrName(SettingActivity.this, 1).equals(version)){
+                        updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                    }else{
+                       MyToast.getToast(SettingActivity.this,"当前已是最新版本").show();
+                    }
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+
+    }
+    private void  updateApp(final String loadUri){
+        UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
+        updateDialog.setCancelable(false);
+        updateDialog.show();
+        updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
+            @Override
+            public void getResult(boolean result ) {
+                if (result) {// 确定下载
+                    showDialog();
+                    new Thread(new DownLoadRunnable(SettingActivity.this, UrlUtils.APPPICTERURL+loadUri)).start();
+                }
+            }
+        });
     }
 
 
+    private void showDialog() {
+        if(downloadDialog==null){
+            downloadDialog = new LoadProgressView(this,R.style.easy_dialog_style);
+        }
+        if(!downloadDialog.isShowing()){
+            downloadDialog.show();
+        }
+    }
+    private void canceledDialog() {
+        if(downloadDialog!=null&&downloadDialog.isShowing()){
+            downloadDialog.dismiss();
+        }
+    }
     private void setIsVibrator() {
         settings = getSharedPreferences("app_user", 0);
         editor = settings.edit();
@@ -207,7 +229,6 @@ public class SettingActivity extends BaseActivity {
             vibratorControlImag.setSelected(false);
         else
             vibratorControlImag.setSelected(true);
-
     }
 
     private void setBtnText(ImageView btn, boolean isOpen) {
@@ -232,19 +253,57 @@ public class SettingActivity extends BaseActivity {
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 Log.e(TAG, "退出登录结果=" + loginInfoResult.getMsg());
                 if (loginInfoResult.getMsg().equals("success")) {
-                    Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
-                    SPUtils.remove(context, UserUtils.SP_TAG_LOGIN);
-                    UserUtils.UserPhone = "";
+//                    Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
+//                    SPUtils.remove(context, UserUtils.SP_TAG_LOGIN);
+//                    UserUtils.UserPhone = "";
+                   // Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
+                    SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
+                    NettyUtils.destoryConnect();
+                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }
+   /**
+    * 下载ui更新通知
+    */
+   @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Utils.TAG_DOWN_LOAD)})
+   public void getDownLoadInfo(Object object) {
+       if(object instanceof DownLoadRunnable.UpdateInfo){
+           DownLoadRunnable.UpdateInfo info= (DownLoadRunnable.UpdateInfo) object;
+           switch (info.getState()){
+               case DownloadManager.STATUS_SUCCESSFUL:
+                   downloadDialog.setProbarPercent(100);
+                   canceledDialog();
+                  // Toast.makeText(SettingActivity.this, "下载任务已经完成！", Toast.LENGTH_SHORT).show();
+                   break;
 
+               case DownloadManager.STATUS_RUNNING:
+                   //int progress = (int) msg.obj;
+                   downloadDialog.setProbarPercent((int) info.getProgress());
+                   //canceledDialog();
+                   break;
+               case DownloadManager.STATUS_FAILED:
+                   canceledDialog();
+                   break;
+               case DownloadManager.STATUS_PENDING:
+                   showDialog();
+                   break;
+           }
+       }
+   }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.get().unregister(this);
+    }
 }
+

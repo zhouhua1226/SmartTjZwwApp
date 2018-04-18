@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-
 import com.game.smartremoteapp.service.SmartRemoteService;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
-
 import java.util.LinkedList;
 import java.util.List;
-
 /**
  * Created by zhouh on 2017/9/7.
  */
@@ -31,15 +28,13 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(true);//初始化logger
+        LogUtils.logInit(false);//初始化logger
+        registerActivityLifecycleCallbacks(new ActivityLifecycleListener());
     }
-
     private void setCrashHandler() {
 
     }
-
     private void getPushAgent() {
-
         PushAgent mPushAgent = PushAgent.getInstance(this);
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {

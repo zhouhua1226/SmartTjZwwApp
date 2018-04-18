@@ -11,9 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
@@ -21,7 +19,6 @@ import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
 import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
 import com.game.smartremoteapp.activity.ctrl.view.LiveActivity;
-import com.game.smartremoteapp.activity.home.ExChangeShopActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
 import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
@@ -47,7 +44,6 @@ import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PullToRefreshView;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
-import com.iot.game.pooh.server.entity.json.enums.MoveType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,8 +54,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-
 /**
  * Created by hongxiu on 2017/9/25.
  */
@@ -88,8 +82,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     MySurfaceVivew mPlayerView;
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
-    @BindView(R.id.sfv_player_bar)
-    ProgressBar playerBar;
+
     @BindView(R.id.zww_news_tv)
     TextView zwwNewsTv;
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
@@ -107,7 +100,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private String currentType = "";  //首页
     private CtrlCompl ctrlCompl=null;
     private String url1=null;
-    public boolean isPlayTogger=false;
     private String newsUrl="";
     private String newsTitle="";
 
@@ -115,73 +107,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     protected int getLayoutId() {
         return R.layout.fragment_zww;
     }
-
-    @Override
-    protected void afterCreate(Bundle savedInstanceState) {
-        initData();
-        onClick();
-        NettyUtils.sendRoomInCmd();
-        getBannerList();
-        getToyType();
-        getUserList();
-    }
-    private void getUserList() {
-        HttpManager.getInstance().getUserList(new RequestSubscriber<Result<HttpDataInfo>>() {
-            @Override
-            public void _onSuccess(Result<HttpDataInfo> listRankBeanResult) {
-                playBackBeanList = listRankBeanResult.getData().getPlayback();
-                for (int i = 0; i < playBackBeanList.size(); i++) {
-                    Marquee marquee = new Marquee();
-                    String nickname = playBackBeanList.get(i).getNICKNAME();
-                    if (nickname.length() > 10) {
-                        nickname.substring(0, 10);
-                    }
-                    String s = "恭喜" + "<font color='#FF0000'>" + nickname + "</font>"
-                            + "抓中一个" + playBackBeanList.get(i).getDOLL_NAME();
-                    marquee.setTitle(s);
-                    marquee.setImgUrl(UrlUtils.APPPICTERURL + playBackBeanList.get(i).getIMAGE_URL());
-                    marquees.add(marquee);
-                }
-                if(marquees.size()>0) {
-                    mArqueeView.setVisibility(View.VISIBLE);
-                    marqueeview.setImage(true);
-                    marqueeview.startWithList(marquees);
-                }
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-
-            }
-        });
-    }
-    private void initData() {
-        dismissEmptyLayout();
-        zwwAdapter = new ZWWAdapter(getActivity(), currentRoomBeens);
-        zwwAdapter.setmOnItemClickListener(onItemClickListener);
-        zwwRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        if (Utils.getWidthSize(getContext()) < 720) {
-            zwwRecyclerview.addItemDecoration(new SpaceItemDecoration(6));
-        } else {
-            zwwRecyclerview.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.PX_10)));
-        }
-        zwwRecyclerview.setHasFixedSize(true);
-        zwwRecyclerview.setNestedScrollingEnabled(false);
-        zwwRecyclerview.setAdapter(zwwAdapter);
-        if (onClickReTryListener != null) {
-            zwwEmptylayout.setOnClickReTryListener(onClickReTryListener);
-        }
-
-        typeTabLayout.addOnTabSelectedListener(tabSelectedListener);
-        mArqueeView.getBackground().setAlpha(120);
-    }
-
-    private void onClick() {
-        mPullToRefreshView.setOnHeaderRefreshListener(this);
-        mPullToRefreshView.setOnFooterRefreshListener(this);
-    }
-
-    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn, R.id.zww_earnmoney_ibtn,R.id.zww_news_tv})
+    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn,R.id.zww_earnmoney_ibtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.zww_exshop_ibtn:
@@ -216,7 +142,68 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                 break;
         }
     }
+    @Override
+    protected void afterCreate(Bundle savedInstanceState) {
+        initData();
+        onClick();
+        NettyUtils.sendRoomInCmd();
+        getBannerList();
+        getToyType();
+        getUserList();
+    }
+    private void getUserList() {
+        HttpManager.getInstance().getUserList(new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> listRankBeanResult) {
+                playBackBeanList = listRankBeanResult.getData().getPlayback();
+                for (int i = 0; i < playBackBeanList.size(); i++) {
+                    Marquee marquee = new Marquee();
+                    String nickname = playBackBeanList.get(i).getNICKNAME();
+                    if (nickname.length() > 10) {
+                        nickname.substring(0, 10);
+                    }
+                    String s = "恭喜" + "<font color='#FF0000'>" + nickname + "</font>"
+                            + "抓中一个" + playBackBeanList.get(i).getDOLL_NAME();
+                    marquee.setTitle(s);
+                    marquee.setImgUrl(UrlUtils.APPPICTERURL + playBackBeanList.get(i).getIMAGE_URL());
+                    marquees.add(marquee);
+                }
+                if(marquees.size()>0) {
+                    mArqueeView.setVisibility(View.VISIBLE);
+                    marqueeview.setImage(true);
+                    marqueeview.startWithList(marquees);
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
 
+            }
+        });
+    }
+    private void initData() {
+        dismissEmptyLayout();
+        zwwAdapter = new ZWWAdapter(getActivity(), currentRoomBeens);
+        zwwAdapter.setmOnItemClickListener(onItemClickListener);
+        zwwRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        if (Utils.getWidthSize(getContext()) < 720) {
+            zwwRecyclerview.addItemDecoration(new SpaceItemDecoration(6));
+        } else {
+            zwwRecyclerview.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.PX_10)));
+        }
+        zwwRecyclerview.setHasFixedSize(true);
+        zwwRecyclerview.setNestedScrollingEnabled(false);
+        zwwRecyclerview.setAdapter(zwwAdapter);
+        if (onClickReTryListener != null) {
+            zwwEmptylayout.setOnClickReTryListener(onClickReTryListener);
+        }
+        typeTabLayout.addOnTabSelectedListener(tabSelectedListener);
+        mArqueeView.getBackground().setAlpha(120);
+
+    }
+    private void onClick() {
+        mPullToRefreshView.setOnHeaderRefreshListener(this);
+        mPullToRefreshView.setOnFooterRefreshListener(this);
+    }
     public void notifyAdapter(List<RoomBean> rooms, int page) {
         currentRoomBeens = rooms;
         currentSumPage = page;
@@ -256,7 +243,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         intent.putExtra(Utils.TAG_ROOM_PROB, prob);
         intent.putExtra(Utils.TAG_ROOM_REWARD, reward);
         intent.putExtra(Utils.TAG_ROOM_DOLLURL, dollUrl);
-         startActivity(intent);
+        startActivity(intent);
 
     }
 
@@ -390,7 +377,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
 
     }
-
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
             return beens;
@@ -402,7 +388,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
         return beens;
     }
-
     private void getToyType() {
         HttpManager.getInstance().getToyType(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -422,7 +407,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                             } else {
                                 typeTabLayout.setTabMode(TabLayout.MODE_FIXED);
                             }
-
                         }
                     }
                 }
@@ -541,8 +525,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
     @Override
     public void getTimeFinish() {
-        ctrlCompl.sendCmdCtrl(MoveType.CATCH);
-        ctrlCompl.stopTimeCounter();
     }
     @Override
     public void getUserInfos(List<String> list, boolean is) {
@@ -565,11 +547,10 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
     @Override
     public void getPlayerErcErrCode(int code) {
-        LogUtils.loge("直播失败,错误码:::::" + code, TAG);
+       // LogUtils.loge("直播失败,错误码:::::" + code, TAG);
     }
     @Override
     public void getPlayerSucess() {
-        playerBar.setVisibility(View.GONE);
         LogUtils.loge("直播Sucess:::::", TAG);
     }
     @Override
@@ -585,40 +566,37 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPlayerView.getHolder().removeCallback(this);
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
         ctrlCompl.stopTimeCounter();
         ctrlCompl.sendCmdOutRoom();
         ctrlCompl = null;
+        unbinder1.unbind();
     }
 
     //如果你需要考虑更好的体验，可以这么操作
     @Override
     public void onResume() {
         super.onResume();
-        LogUtils.loge("onResume=== 可见", TAG);
         getUserList();
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         LogUtils.loge("surfaceCreated=== ------",TAG);
+        if(ctrlCompl!=null&&url1!=null){
+            ctrlCompl.startPlayVideo(mPlayerView,url1);
+        }
     }
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         LogUtils.loge("surfaceChanged=== ----",TAG);
-        if(ctrlCompl!=null&&url1!=null){
-           // ctrlCompl.stopPlayVideo();
-            playerBar.setVisibility(View.VISIBLE);
-            ctrlCompl.startPlayVideo(mPlayerView,url1);
-        }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        LogUtils.loge("surfaceDestroyed=== ----",TAG);
-       ctrlCompl.stopPlayVideo();
+        ctrlCompl.stopPlayVideo();
     }
+
 }
 
