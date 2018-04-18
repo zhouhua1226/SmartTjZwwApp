@@ -17,6 +17,11 @@ public class BannerBean implements Serializable{
     private String IMAGE_URL;
     private String STATE;
 
+    private String HREF_ST;
+    private String LIVESTREAM;
+    private String RTMP_URL;
+    private String SERVER_NAME;
+    private String DEVICE_STATE;
     public String getSTATE() {
         return STATE;
     }
@@ -57,12 +62,7 @@ public class BannerBean implements Serializable{
         this.DEVICE_STATE = DEVICE_STATE;
     }
 
-    private String HREF_ST;
 
-    private String LIVESTREAM;
-    private String RTMP_URL;
-    private String SERVER_NAME;
-    private String DEVICE_STATE;
     public String getHREF_ST() {
         return HREF_ST;
     }

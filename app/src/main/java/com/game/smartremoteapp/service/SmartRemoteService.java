@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.gatz.netty.global.ConnectResultEvent;
@@ -22,13 +21,10 @@ import com.iot.game.pooh.server.entity.json.app.AppInRoomResponse;
 import com.iot.game.pooh.server.entity.json.app.AppOutRoomResponse;
 import com.iot.game.pooh.server.entity.json.enums.PoohAbnormalStatus;
 
-
 public class SmartRemoteService extends Service {
     private static final String TAG = "SmartRemoteService";
-
     public SmartRemoteService() {
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!HandlerObserver.getInstance().getRequestSubscriberSet()) {
@@ -49,7 +45,6 @@ public class SmartRemoteService extends Service {
             Settings.System.putInt(r, Settings.System.WIFI_SLEEP_POLICY,
                     Settings.System.WIFI_SLEEP_POLICY_NEVER);
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

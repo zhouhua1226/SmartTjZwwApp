@@ -2,6 +2,7 @@ package com.game.smartremoteapp.model.http;
 
 
 import com.game.smartremoteapp.bean.AlipayBean;
+import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -415,15 +416,15 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.LOGINPASSWORD)
-    Observable<Result<HttpDataInfo>> getLoginPassword(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PW) String pass);
+    Observable<Result<HttpDataInfo>> getLoginPassword(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PW) String pass,
+                                                      @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel );
 
     //自动登录
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.AUTHLOGINURL)
-    Observable<Result<HttpDataInfo>> getAuthLogin(
-            @Field(UrlUtils.USERID) String userId
-    );
+    Observable<Result<HttpDataInfo>> getAuthLogin(@Field(UrlUtils.USERID) String userId,   @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel );
+
 
     //查询可推广加盟的接口
     @Headers("Content-Type: application/x-www-form-urlencoded")
@@ -631,4 +632,8 @@ public interface SmartService {
             @Field(UrlUtils.ROOMID) String roomId
     );
 
+    //版本信息
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.CHECKVERSION)
+    Observable<Result<AppInfo>> checkVersion();
 }

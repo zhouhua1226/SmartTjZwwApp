@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.bean.Marquee;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,7 @@ public class MarqueeView extends ViewFlipper {
     private int animDuration = 500;
     private int textSize = 14;
     private boolean isImage = true;
+
 
     public MarqueeView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,13 +75,13 @@ public class MarqueeView extends ViewFlipper {
             }
         });
     }
-
     // 根据公告字符串列表启动轮播
     public void startWithList(List<Marquee> marquees) {
-        setMarquees(marquees);
-        start();
+        if(marquees!=null) {
+            setMarquees(marquees);
+            start();
+        }
     }
-
     // 根据宽度和公告字符串启动轮播
     private void startWithFixedWidth(String notice, int width) {
         int noticeLength = notice.length();
@@ -143,7 +143,9 @@ public class MarqueeView extends ViewFlipper {
         Animation animOut = AnimationUtils.loadAnimation(mContext, R.anim.out_animation);
         if (isSetAnimDuration) animOut.setDuration(animDuration);
         setOutAnimation(animOut);
+
     }
+
 
     // 创建ViewFlipper下的View
     private View createView(int position) {

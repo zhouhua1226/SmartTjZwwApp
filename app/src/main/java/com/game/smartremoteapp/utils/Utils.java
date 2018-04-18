@@ -57,7 +57,7 @@ public class Utils {
     public static final String TAG_DEVICE_ERR = "TAG_DEVICE_ERR";
 
     public static final String TAG_LOTTERY_DRAW = "TAG_LOTTERY_DRAW";
-
+    public static final String TAG_DOWN_LOAD = "TAG_DOWN_LOAD";
     public static final String FREE  = "FREE";
     public static final String BUSY= "USING";
     public static final String OK = "正常";
@@ -634,5 +634,17 @@ public class Utils {
         } catch (Exception e) {
             e.getMessage();
         }
+    }
+    // 两次点击按钮之间的点击间隔不能少于1000毫秒
+    private static final int MIN_CLICK_DELAY_TIME = 800;
+    private  static long lastClickTime;
+    public  static boolean isTimeLimit() {
+        boolean flag = false;
+        long curClickTime = System.currentTimeMillis();
+        if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+            flag = true;
+        }
+        lastClickTime = curClickTime;
+        return flag;
     }
 }

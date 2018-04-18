@@ -57,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
 //        RxBus.get().unregister(this);
 //        this.unregisterReceiver(LotteryReceiver);
+
     }
 
     private void initDialog() {

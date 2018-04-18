@@ -133,7 +133,7 @@ public class UrlUtils {
     //充值卡url
     public static final String PAYCARDTPURL = URL + "/pooh-web/app/pay/getPaycard/";
     //退出登录
-    public static final String LOGOUT=URL+"/pooh-web/app/logout";
+    public static final String LOGOUT=URL+"/pooh-web/app/loginOut.do";
 
     //头像上传http://47.100.15.18:8080/pooh-web/api/updateUser
     public static final String FACEIMAGEURL = URL + "/pooh-web/api/user/updateUser";
@@ -304,4 +304,6 @@ public class UrlUtils {
     //房间游戏记录  /pooh-web/api/play/getGamelist
     public static final String ROOMGAMELIST=URL+"/pooh-web/api/play/getGamelist";
 
+    //版本信息  /pooh-web/app/version/checkVersion
+    public static final String CHECKVERSION=URL+"/pooh-web/app/version/checkVersion";
 }

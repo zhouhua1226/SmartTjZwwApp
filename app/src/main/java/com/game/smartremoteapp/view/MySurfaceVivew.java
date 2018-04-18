@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 /**
  * Created by mi on 2018/3/30.
  */
@@ -40,10 +41,12 @@ public class MySurfaceVivew extends SurfaceView implements SurfaceHolder.Callbac
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // TODO Auto-generated method stub
-        this.drawCanvas(bitmap);
+         this.drawCanvas(bitmap);
     }
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // TODO Auto-generated method stub
     }
+
+
 }

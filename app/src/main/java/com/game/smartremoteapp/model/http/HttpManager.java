@@ -1,6 +1,7 @@
 package com.game.smartremoteapp.model.http;
 
 import com.game.smartremoteapp.bean.AlipayBean;
+import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -75,7 +76,7 @@ public class HttpManager {
     }
     //密码登录
     public void getLoginPassword(String phone, String pass, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
-        Observable<Result<HttpDataInfo>> o =smartService.getLoginPassword(phone,pass);
+        Observable<Result<HttpDataInfo>> o =smartService.getLoginPassword(phone,pass,UrlUtils.LOGIN_CTYPE_ASDK,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -457,7 +458,7 @@ public class HttpManager {
 
     //自动登录
     public void getAuthLogin(String userId,Subscriber<Result<HttpDataInfo>> subscriber){
-        Observable<Result<HttpDataInfo>> o =smartService.getAuthLogin(userId);
+        Observable<Result<HttpDataInfo>> o =smartService.getAuthLogin(userId,UrlUtils.LOGIN_CTYPE_ASDK,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -608,5 +609,12 @@ public class HttpManager {
                 .subscribe(subscriber);
 
     }
-
+    //版本信息
+    public void checkVersion(RequestSubscriber<Result<AppInfo>> subscriber) {
+        Observable<Result<AppInfo>> o =smartService.checkVersion();
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }
