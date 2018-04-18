@@ -154,8 +154,6 @@ public class LnvitationCodeActivity extends BaseActivity {
                 "&手机型号=" + Utils.deviceType +
                 "&系统版本=" + Utils.osVersion);
 
-
-
     }
 
     /**

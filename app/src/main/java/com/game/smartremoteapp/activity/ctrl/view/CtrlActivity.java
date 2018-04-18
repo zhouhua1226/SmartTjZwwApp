@@ -29,7 +29,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
-import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.NavigationPageActivity;
 import com.game.smartremoteapp.activity.home.RoomPlayRecordActivity;
 import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
@@ -257,10 +256,6 @@ public class CtrlActivity extends Activity implements IctrlView {
     private List<Marquee> marquees = new ArrayList<>();
     private Handler handler = new Handler();
     private int betPro=0;   //追投期数   默认不追投
-
-    static {
-        System.loadLibrary("SmartPlayer");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

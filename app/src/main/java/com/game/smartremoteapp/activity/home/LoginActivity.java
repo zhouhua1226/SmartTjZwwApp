@@ -335,6 +335,9 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+
+
+
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - mBackPressed) > 2000) {  //这里3000，表示两次点击的间隔时间

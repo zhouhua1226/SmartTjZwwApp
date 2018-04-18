@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -17,15 +16,12 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * Created by chenw on 2018/3/21.
  */
-
 public class LoginCodeActivity extends BaseActivity{
     @BindView(R.id.et_phone)
     EditText et_phone;
@@ -35,7 +31,6 @@ public class LoginCodeActivity extends BaseActivity{
     protected int getLayoutId() {
         return R.layout.activity_login_code;
     }
-
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         ButterKnife.bind(this);
@@ -86,10 +81,6 @@ public class LoginCodeActivity extends BaseActivity{
         HttpManager.getInstance().getLoginPassword(phone, pass, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if(httpDataInfoResult.getData()==null ||httpDataInfoResult.getData().getAppUser()==null){
-                    MyToast.getToast(getApplicationContext(), "登录失败！").show();
-                    return;
-                }
                 if(httpDataInfoResult.getCode()==0){
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
@@ -108,8 +99,5 @@ public class LoginCodeActivity extends BaseActivity{
                 LogUtils.logi(e.getMessage());
             }
         });
-
     }
-
-
 }

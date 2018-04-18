@@ -106,10 +106,6 @@ public class RegisterActivity extends BaseActivity{
         HttpManager.getInstance().getRegiter(phone,pass,code, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if(httpDataInfoResult.getData()==null ||httpDataInfoResult.getData().getAppUser()==null){
-                    MyToast.getToast(getApplicationContext(), "注册失败！").show();
-                    return;
-                }
                 if(httpDataInfoResult.getCode()==0){
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();

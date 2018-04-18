@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.utils.Utils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * Created by hongxiu on 2017/9/26.
  */

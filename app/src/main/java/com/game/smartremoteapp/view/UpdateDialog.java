@@ -3,28 +3,24 @@ package com.game.smartremoteapp.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.game.smartremoteapp.R;
-
-
 /**
  * Created by yincong on 2017/11/30 19:44
- * 修改人：
+ * 修改人：chen
  * 修改时间：
  * 类描述：
  */
-public class UpdateDialog extends Dialog implements View.OnClickListener{
+public class UpdateDialog extends Dialog implements View.OnClickListener {
 
-    private final static String TAG = "ConfirmDialog";
-
+    private final static String TAG = "UpdateDialog";
     private Context context;
     private TextView tv_title;//提示
-    private TextView dl_tv_content;//内容
-    private Button dl_btn_cancel;//取消
     private Button dl_btn_confirm;//确定
 
     public UpdateDialog(Context context) {
@@ -39,28 +35,20 @@ public class UpdateDialog extends Dialog implements View.OnClickListener{
         super(context, theme);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_dialog);
         findView();
         setListner();
+        setStyle();
     }
-
 
     /**
      * 设置确认按钮的文字
      */
     public void setDialogConfirmText(String confirmText) {
         dl_btn_confirm.setText(confirmText);
-    }
-
-    /**
-     * 设置取消按钮的文字
-     */
-    public void setDialogCancelText(String cancelText) {
-        dl_btn_cancel.setText(cancelText);
     }
 
     /**
@@ -72,20 +60,8 @@ public class UpdateDialog extends Dialog implements View.OnClickListener{
         tv_title.setText(title);
     }
 
-    /**
-     * 设置内容
-     *
-     * @param content
-     */
-    public void setDialogContent(String content) {
-        Log.i(TAG, content);
-        Log.i(TAG, dl_tv_content + "");
-        dl_tv_content.setText(content);
-    }
-
     public void findView() {
         tv_title = (TextView) findViewById(R.id.tv_title);
-        dl_btn_cancel = (Button) findViewById(R.id.update_cancel_btn);
         dl_btn_confirm = (Button) findViewById(R.id.update_sure_btn);
     }
 
@@ -93,8 +69,22 @@ public class UpdateDialog extends Dialog implements View.OnClickListener{
      * 绑定监听
      **/
     private void setListner() {
-        dl_btn_cancel.setOnClickListener(this);
         dl_btn_confirm.setOnClickListener(this);
+    }
+
+    private void setStyle() {
+        //设置对话框不可取消
+        this.setCancelable(false);
+        //设置触摸对话框外面不可取消
+        this.setCanceledOnTouchOutside(false);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindow().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        //获得应用窗口大小
+        WindowManager.LayoutParams layoutParams = this.getWindow().getAttributes();
+        //设置对话框居中显示
+        layoutParams.gravity = Gravity.CENTER;
+        //设置对话框宽度为屏幕的4/5
+        layoutParams.width = (displaymetrics.widthPixels / 5) * 4;
     }
 
     /**
@@ -103,15 +93,9 @@ public class UpdateDialog extends Dialog implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.update_cancel_btn:
-                if (null != this.listener) {
-                    listener.getResult(0);
-                }
-                UpdateDialog.this.dismiss();
-                break;
             case R.id.update_sure_btn:
                 if (null != this.listener) {
-                    listener.getResult(1);
+                    listener.getResult(true);
                 }
                 UpdateDialog.this.dismiss();
                 break;
@@ -128,9 +112,8 @@ public class UpdateDialog extends Dialog implements View.OnClickListener{
         /**
          * 获取结果的方法
          *
-         * @param resultCode 0.取消  1.确定
+         * @param sure false.取消  ture.确定
          */
-        void getResult(int resultCode);
+        void getResult(boolean sure);
     }
-
 }

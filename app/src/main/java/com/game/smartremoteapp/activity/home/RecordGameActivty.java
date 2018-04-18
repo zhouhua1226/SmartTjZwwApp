@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -26,15 +25,12 @@ import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.SureCancelDialog;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * Created by hongxiu on 2017/10/18.
  */
@@ -110,8 +106,6 @@ public class RecordGameActivty extends BaseActivity {
                 .dontAnimate()
                 .transform(new GlideCircleTransform(this))
                 .into(titleImg);
-
-
     }
 
     @Override
@@ -149,7 +143,7 @@ public class RecordGameActivty extends BaseActivity {
                 this.finish();
                 break;
             case R.id.image_service:
-                startActivity(new Intent(RecordGameActivty.this,MyCtachRecordActivity.class));
+                startActivity(new Intent(RecordGameActivty.this,ServiceActivity.class));
                 break;
             case R.id.gamemoney_button:
                 //兑换游戏币
@@ -229,8 +223,6 @@ public class RecordGameActivty extends BaseActivity {
             exchangedTv.setVisibility(View.VISIBLE);
         }
     }
-
-
     /*****
      * 接受发货返回的数据时调用
      * ****/
@@ -249,7 +241,6 @@ public class RecordGameActivty extends BaseActivity {
             getViewChange();
         }
     }
-
     private void getExChangeWWB(String id,String dollId,String number,String userId){
         HttpManager.getInstance().getExChangeWWB(id, dollId, number, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -263,13 +254,9 @@ public class RecordGameActivty extends BaseActivity {
                     MyToast.getToast(getApplicationContext(), "兑换成功!").show();
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }
-
-
 }
