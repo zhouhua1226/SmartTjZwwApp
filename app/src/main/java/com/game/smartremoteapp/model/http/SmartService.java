@@ -80,7 +80,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.USERNAMEURL)
-        Observable<Result<AppUserBean>> getUserName(
+    Observable<Result<AppUserBean>> getUserName(
             @Field(UrlUtils.USERID) String userId,
             @Field(UrlUtils.NICKNANME) String nickName
     );
@@ -155,7 +155,7 @@ public interface SmartService {
             @Field(UrlUtils.GUESSMULTIPLE) int multiple
     );
 
-        //跑马灯
+    //跑马灯
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @GET(UrlUtils.getUserList)
     Observable<Result<HttpDataInfo>> getUserList();
@@ -181,7 +181,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.GETPONDURL)
-    Observable<Result<PondResponseBean>>getPond(
+    Observable<Result<PondResponseBean>> getPond(
             @Field(UrlUtils.PLAYID) String playId,
             @Field(UrlUtils.DOLLID) String dollId
     );
@@ -190,7 +190,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.CONSIGNEEURL)
-    Observable<Result<HttpDataInfo>>getConsignee(
+    Observable<Result<HttpDataInfo>> getConsignee(
             @Field(UrlUtils.CONSIGNEENAME) String name,
             @Field(UrlUtils.CONSIGNEEPHONE) String phone,
             @Field(UrlUtils.CONSIGNEEADDRESS) String address,
@@ -201,7 +201,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.SENDGOODSURL)
-    Observable<Result<HttpDataInfo>>getSendGoods(
+    Observable<Result<HttpDataInfo>> getSendGoods(
             @Field(UrlUtils.SENDGOODSID) String id,
             @Field(UrlUtils.SENDGOODSNUM) String number,
             @Field(UrlUtils.SENDGOODSSHXX) String consignee,
@@ -216,7 +216,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.EXCHANGEURL)
-    Observable<Result<HttpDataInfo>>getExchangeWWB(
+    Observable<Result<HttpDataInfo>> getExchangeWWB(
             @Field(UrlUtils.SENDGOODSID) String id,
             @Field(UrlUtils.DOLLID) String dollId,
             @Field(UrlUtils.SENDGOODSNUM) String number,
@@ -227,7 +227,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.EXCHANGELISTURL)
-    Observable<Result<HttpDataInfo>>getExchangeList(
+    Observable<Result<HttpDataInfo>> getExchangeList(
             @Field(UrlUtils.USERID) String userID
     );
 
@@ -235,7 +235,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.LOGOUT)
-    Observable<Result<HttpDataInfo>>getLogout(
+    Observable<Result<HttpDataInfo>> getLogout(
             @Field(UrlUtils.USERID) String userID
     );
 
@@ -243,7 +243,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.GETUSERDATEURL)
-    Observable<Result<HttpDataInfo>>getUserDate(
+    Observable<Result<HttpDataInfo>> getUserDate(
             @Field(UrlUtils.USERID) String userId
     );
 
@@ -251,7 +251,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.YSDKLOGINURL)
-    Observable<Result<HttpDataInfo>>getYSDKLogin(
+    Observable<Result<HttpDataInfo>> getYSDKLogin(
             @Field(UrlUtils.WXQQ_UID) String uid,
             @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
             @Field(UrlUtils.WXQQ_NICKNAME) String nickName,
@@ -264,7 +264,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.YSDKPAYORDERURL)
-    Observable<Result<HttpDataInfo>>getYSDKPay(
+    Observable<Result<HttpDataInfo>> getYSDKPay(
             @Field(UrlUtils.USERID) String userId,
             @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
             @Field(UrlUtils.WXQQ_AMOUNT) String amount
@@ -274,7 +274,7 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.YSDKAUTHLOGINURL)
-    Observable<Result<HttpDataInfo>>getYSDKAuthLogin(
+    Observable<Result<HttpDataInfo>> getYSDKAuthLogin(
             @Field(UrlUtils.USERID) String userId,
             @Field(UrlUtils.WXQQ_ACCESSTOKEN) String accessToken,
             @Field(UrlUtils.WXQQ_CTYPE) String ctype,
@@ -404,26 +404,30 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.TRADEORDERALIPAY)
-    Observable<Result<AlipayBean>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.PLAYID) String s);
+    Observable<Result<AlipayBean>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId,
+                                                       @Field(UrlUtils.AMOUNT) String s,
+                                                       @Field(UrlUtils.PAYTYPE) String payType,
+                                                       @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+                                                       @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
 
     //手机号注册
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.REGITER)
-    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone,@Field(UrlUtils.PASSWORD) String password, @Field(UrlUtils.SMSCODE)String code);
+    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PASSWORD) String password, @Field(UrlUtils.SMSCODE) String code);
 
     //手机号密码登录
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.LOGINPASSWORD)
     Observable<Result<HttpDataInfo>> getLoginPassword(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PW) String pass,
-                                                      @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel );
+                                                      @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel);
 
     //自动登录
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.AUTHLOGINURL)
-    Observable<Result<HttpDataInfo>> getAuthLogin(@Field(UrlUtils.USERID) String userId,   @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel );
+    Observable<Result<HttpDataInfo>> getAuthLogin(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel);
 
 
     //查询可推广加盟的接口
@@ -636,4 +640,5 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @GET(UrlUtils.CHECKVERSION)
     Observable<Result<AppInfo>> checkVersion();
+
 }

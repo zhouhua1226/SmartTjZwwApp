@@ -55,7 +55,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/zww_exshop_bg"
                         android:background="@color/apptheme_bg"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         />
 
                     <ImageButton
@@ -70,7 +70,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/zww_earnmoney_bg"
                         android:background="@color/apptheme_bg"
-                        android:visibility="visible"/>
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/zww_news_tv"

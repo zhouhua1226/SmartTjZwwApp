@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,21 +18,18 @@ import com.game.smartremoteapp.activity.home.AccountInformationActivity;
 import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
-import com.game.smartremoteapp.activity.home.ExChangeShopActivity;
 import com.game.smartremoteapp.activity.home.GameCurrencyActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
 import com.game.smartremoteapp.activity.home.MyCtachRecordActivity;
 import com.game.smartremoteapp.activity.home.MyJoinCodeActivity;
 import com.game.smartremoteapp.activity.home.MyLogisticsOrderActivity;
-import com.game.smartremoteapp.activity.home.RecordActivity;
+import com.game.smartremoteapp.activity.home.PayNowActivity;
 import com.game.smartremoteapp.activity.home.ServiceActivity;
 import com.game.smartremoteapp.activity.home.SettingActivity;
-import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
-import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
@@ -48,9 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 
 /**
@@ -114,7 +107,7 @@ public class MyCenterFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_center;
+        return R.layout.fragment_my_center;
     }
 
     @Override
@@ -208,7 +201,7 @@ public class MyCenterFragment extends BaseFragment {
                 break;
             case R.id.mycenter_pay_layout:
 //                startActivity(new Intent(getContext(), SelectRechargeTypeActiivty.class));
-                startActivity(new Intent(getContext(), WeChatPayActivity.class));
+                startActivity(new Intent(getContext(), PayNowActivity.class));
                 break;
             case R.id.mycenter_catchrecord_layout:
                 Intent intent=new Intent(getContext(),MyCtachRecordActivity.class);

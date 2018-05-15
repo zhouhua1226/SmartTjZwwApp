@@ -273,16 +273,10 @@ public class MainActivity extends BaseActivity {
                 break;
             //排行榜大厅
             case R.id.layout_tab_list:
-//                if(zwwjFragment.isPlay){
-//                    zwwjFragment.isShowPlay=false;
-//                    zwwjFragment.closePlayVideo();
-//                }
                 showRankFg();
                 break;
             //我的大厅
             case R.id.layout_tab_my:
-//                zwwjFragment.isShowPlay=false;
-//                zwwjFragment.closePlayVideo();
                 showMyCenterFg();
                 break;
             default:
@@ -304,9 +298,6 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
-//            MobclickAgent.onKillProcess(this);
-//            finish();
-//            System.exit(0);
             MyApplication.getInstance().exit();
 
         }

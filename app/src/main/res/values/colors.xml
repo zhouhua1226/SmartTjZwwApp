@@ -42,6 +42,7 @@
     <color name="gray_background">#e8e8e8</color>
     <color name="gray_line">#ebebeb</color>
     <color name="black_light">#555555</color><!-- 85 85 85-->
+    <color name="black_drak">#353535</color> <!-- 53 53 53-->
     <color name="blue_light">#8DBCF6</color><!-- 141 188 246-->
     <color name="yellow">#FECC01</color>
     <color name="brown">#773113</color>

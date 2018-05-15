@@ -14,7 +14,7 @@ public class UrlUtils {
     public static final String CHANNEL = "channel";
 
     public static final String CTYPE = "ctype";
-
+    public static final String AMOUNT = "amount";
     public static final String ID = "id";
     public static final String PHONE = "phone";
     public static final String PASSWORD = "password";
@@ -34,6 +34,7 @@ public class UrlUtils {
     public static final String GUESSPRONUM="afterVoting";   //追投期数
     public static final String GUESSMULTIPLE="multiple";   //竞猜倍数
 
+    public static final String PAYTYPE = "payType";
     public static final String USERID = "userId";
     public static final String WAGER = "wager";
     public static final String GUESSKEY = "guessKey";
@@ -306,4 +307,8 @@ public class UrlUtils {
 
     //版本信息  /pooh-web/app/version/checkVersion
     public static final String CHECKVERSION=URL+"/pooh-web/app/version/checkVersion";
+
+    //微信订单信息  /pooh-web/app/version/checkVersion
+    public static final String ORDERWEIXIN = URL+"/pooh-web/app/pay/getTradeOrderxdpay";
+
 }

@@ -148,23 +148,23 @@
             android:layout_width="match_parent"
             android:background="@color/backgroundcolor"
             android:layout_height="1dp"></View>
-        </LinearLayout>
+
 
         <!-- 支付宝支付 -->
     <RelativeLayout
         android:id="@+id/rl_pay_alipay"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:background="@color/white"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
         <ImageView
             android:id="@+id/iv_alipay_logo"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:background="@drawable/icon_alipay"
              android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -181,5 +181,42 @@
             android:layout_centerVertical="true"
             android:src="@drawable/right_arrow" />
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/backgroundcolor"
+        android:visibility="gone"
+        android:layout_height="1dp"></View>
+    <RelativeLayout
+        android:id="@+id/rl_pay_weixin"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:visibility="gone"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+        <ImageView
+            android:id="@+id/iv_alipay_weixin"
+            android:layout_width="40dp"
+            android:background="@drawable/gc_pay_wx"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_height="40dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/iv_alipay_weixin"
+            android:gravity="center"
+            android:text="微信支付"
+            android:textColor="@color/black_light"
+            android:textSize="14sp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right_arrow" />
+    </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 

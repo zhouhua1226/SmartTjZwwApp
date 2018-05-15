@@ -1,12 +1,14 @@
 package com.game.smartremoteapp.activity.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
@@ -15,7 +17,7 @@ import com.game.smartremoteapp.alipay.PayCallback;
 import com.game.smartremoteapp.alipay.PayResult;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.AlipayBean;
-import com.game.smartremoteapp.bean.PayCardBean;
+import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
@@ -24,32 +26,36 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by chenw on 2018/3/23.
+ * Created by mi on 2018/5/2.
  */
 
-public class PayActivity extends BaseActivity  {
-    @BindView(R.id.tv_order_card_bean)
-    TextView card_bean;
-    @BindView(R.id.tv_order_card_money)
-    TextView card_money;
-    @BindView(R.id.tv_order_pay_money)
-    TextView pay_money;
-    @BindView(R.id.tv_account_blance)
-    TextView accountBlance;
-    @BindView(R.id.cb_balance)
-    CheckBox cbBalance;
+public class PayNowActivity extends BaseActivity {
 
-    private PayCardBean mPayCardBean;
+    @BindView(R.id.ll_rightBtn)
+    RelativeLayout ll_rightBtn;
+    @BindView(R.id.iv_leftBtn)
+    ImageView ivRightBtn;
 
+    @BindView(R.id.et_pay_amount)
+    EditText etAmount;
+    @BindView(R.id.tv_user_blance)
+    TextView userBlance;
+    @BindView(R.id.tv_user_account)
+    TextView userAccount;
+    @BindView(R.id.rb_aliapy_pay)
+    RadioButton rb_aliapy;
+    private  int payType=0;
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_pay;
+        return R.layout.activity_pay_now;
     }
 
     @Override
@@ -61,50 +67,53 @@ public class PayActivity extends BaseActivity  {
 
     @Override
     protected void initView() {
-
-        mPayCardBean = (PayCardBean) getIntent().getSerializableExtra("PayCardBean");
-        if (mPayCardBean == null) {
-            finish();
-        }
-        card_bean.setText("订单名称：购买" + mPayCardBean.getGOLD() + "金币");
-        card_money.setText("订单金额： ￥" + mPayCardBean.getAMOUNT());
-        pay_money.setText("￥" + mPayCardBean.getAMOUNT());
-        cbBalance.setOnClickListener(new View.OnClickListener() {
+        setLeftBtnDefaultOnClickListener();
+        setTitle("充值");
+        ivRightBtn.setVisibility(View.VISIBLE);
+        ivRightBtn.setBackgroundResource(R.drawable.kf1);
+        ll_rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.getToast(PayActivity.this, "暂不支持余额支付").show();
-                cbBalance.setChecked(false);
+                 Utils.toActivity(PayNowActivity.this,ServiceActivity.class);
             }
         });
 
+        userAccount.setText(UserUtils.UserName);
+        userBlance.setText(UserUtils.UserBalance);
+        rb_aliapy.setChecked(true);
     }
 
-    @OnClick({R.id.image_back, R.id.image_service,R.id.rl_pay_alipay,R.id.rl_pay_weixin})
+    @OnClick({ R.id.rl_pay_alipay,R.id.bt_sure_pay })
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.image_back:
-                finish();
-                break;
-            case R.id.image_service:
-                startActivity(new Intent(this, ServiceActivity.class));
-                break;
             case R.id.rl_pay_alipay:
-                getOrderInfo();
+                rb_aliapy.setChecked(!rb_aliapy.isChecked());
                 break;
-            case R.id.rl_pay_weixin:
-                Intent intent=new Intent(this,PayNowActivity.class);
-                intent.putExtra("PayCardBean",mPayCardBean);
-                Utils.toActivity(this,intent);
-              //  getOrderWinxinInfo();
+            case R.id.bt_sure_pay:
+                String amount= etAmount.getText().toString();
+                if(amount.isEmpty()){
+                    MyToast.getToast(PayNowActivity.this,"请输入充值金额").show();
+                    return;
+                }
+                if(Long.parseLong(amount)<1){
+                MyToast.getToast(PayNowActivity.this,"充值金额最少一元").show();
+                return;
+               }
+                if(!rb_aliapy.isChecked()){
+                    MyToast.getToast(PayNowActivity.this,"请选择充值方式").show();
+                    return;
+                }
+                getOrderInfo(amount);
                 break;
         }
     }
 
     /**
      * 获取支付宝支付信息
+     * @param amount
      */
-    private void getOrderInfo() {
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, "0.1", new RequestSubscriber<Result<AlipayBean>>() {
+    private void getOrderInfo(String amount) {
+        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount, new RequestSubscriber<Result<AlipayBean>>() {
             @Override
             public void _onSuccess(Result<AlipayBean> result) {
                 if (result.getCode() == 0) {
@@ -153,14 +162,15 @@ public class PayActivity extends BaseActivity  {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         //  notifyPayResult("支付成功");
-                        MyToast.getToast(PayActivity.this, "支付成功").show();
+                        MyToast.getToast(PayNowActivity.this, "支付成功").show();
+                        getAppUserInf();
                     } else if (TextUtils.equals(resultStatus, "8000") || TextUtils.equals(resultStatus, "6004")) {
                         //正在处理中，支付结果未知
                         // notifyPayResult("正在支付中，请与客服联系");
-                        MyToast.getToast(PayActivity.this, "正在支付中，请与客服联系").show();
+                        MyToast.getToast(PayNowActivity.this, "正在支付中，请与客服联系").show();
                     } else {
                         //   notifyPayResult("支付失败");
-                        MyToast.getToast(PayActivity.this, "支付失败").show();
+                        MyToast.getToast(PayNowActivity.this, "支付失败").show();
                     }
                     break;
                 }
@@ -169,5 +179,26 @@ public class PayActivity extends BaseActivity  {
             }
         }
     };
+    /**
+     * 刷新游戏币
+     */
+    private void getAppUserInf( ) {
+        HttpManager.getInstance().getAppUserInf(UserUtils.USER_ID, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> result) {
+                if(result.getData().getAppUser()==null){
+                    return;
+                }
+                UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
+                userBlance.setText(UserUtils.UserBalance);
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+
+            }
+        });
+    }
 
 }
+
