@@ -58,6 +58,10 @@ public class Utils {
 
     public static final String TAG_LOTTERY_DRAW = "TAG_LOTTERY_DRAW";
     public static final String TAG_DOWN_LOAD = "TAG_DOWN_LOAD";
+
+    public static final String TAG_COIN_RESPONSE = "TAG_COIN_RESPONSE";
+    public static final String TAG_COIN_DEVICE_STATE = "TAG_COIN_DEVICE_STATE";
+
     public static final String FREE  = "FREE";
     public static final String BUSY= "USING";
     public static final String OK = "正常";

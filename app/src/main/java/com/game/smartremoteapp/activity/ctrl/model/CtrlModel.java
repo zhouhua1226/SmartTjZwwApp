@@ -124,7 +124,7 @@ public class CtrlModel implements SmartEventCallback {
 
     @Override
     public void onCallback(int i, long l, long l1, String s, String s1, Object o) {
-        LogUtils.loge("播放回调code::::::" + i + "=====" + isChangerUrl,TAG);
+        //LogUtils.loge("播放回调code::::::" + i + "=====" + isChangerUrl,TAG);
         switch (i) {
             case EVENTID.EVENT_DANIULIVE_ERC_PLAYER_STARTED: //开始直播
                 callBack.getVideoPlayStart();

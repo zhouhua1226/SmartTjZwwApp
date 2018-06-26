@@ -105,10 +105,11 @@ public class UrlUtils {
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
     //http://111.231.139.61:18081(第一抓娃娃腾讯云)                                    第一抓娃娃
     //APP图片拼接url
-    public static final String APPPICTERURL="http://111.231.139.61:8888/";
+    public static final String APPPICTERURL="http://111.231.139.61:18081/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
     //http://111.231.139.61:8888/ (第一抓娃娃腾讯云)
     //壕鑫客服链接
+    public static final String SOCKET_IP="111.231.74.65";
 
     //login-password
     public static final String LOGINPASSWORD = URL + "/pooh-web/app/sms/userPassLogin";

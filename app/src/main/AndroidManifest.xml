@@ -458,11 +458,6 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".activity.ctrl.view.LiveActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <activity android:name=".activity.home.RoomPlayRecordActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -475,7 +470,10 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
+        <activity android:name=".activity.ctrl.view.PushCoinActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
     <supports-screens
