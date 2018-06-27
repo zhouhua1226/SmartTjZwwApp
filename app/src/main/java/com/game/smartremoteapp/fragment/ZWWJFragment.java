@@ -18,6 +18,7 @@ import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
 import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
+import com.game.smartremoteapp.activity.ctrl.view.PushCoinActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
 import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
@@ -279,11 +280,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             LogUtils.loge("房间推流地址1=" + url1);
             LogUtils.loge("房间推流地址2=" + url2);
             if (!TextUtils.isEmpty(url2) && !TextUtils.isEmpty(url1)) {
-//                String type = currentRoomBeens.get(po).getDeviceType();
-//                if (type.equals("2")) {
-//                    //TODO 推币机处理
-//                    return;
-//                }
+                String type = currentRoomBeens.get(po).getDeviceType();
+                if (!TextUtils.isEmpty(type) && type.equals("2")) {
+                    //TODO 推币机处理
+                    enterCoinNext(url1, url2);
+                    return;
+                }
                 enterNext(currentRoomBeens.get(po).getDollName(),
                         url1, url2,
                         room_status,
@@ -296,6 +298,15 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                 LogUtils.loge("当前设备没有配置摄像头!");
             }
         }
+    }
+
+
+    //TODO 正式环境统一处理
+    private void enterCoinNext(String camera1, String camera2) {
+        Intent intent = new Intent(getActivity(), PushCoinActivity.class);
+        intent.putExtra(Utils.TAG_URL_MASTER, camera1);
+        intent.putExtra(Utils.TAG_URL_SECOND, camera2);
+        startActivity(intent);
     }
 
     //banner轮播

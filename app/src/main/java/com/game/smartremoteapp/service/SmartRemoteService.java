@@ -13,6 +13,7 @@ import com.gatz.netty.observer.HandlerObserver;
 import com.gatz.netty.observer.RequestSubscriber;
 import com.gatz.netty.observer.SuberInfo;
 import com.hwangjr.rxbus.RxBus;
+import com.iot.game.pooh.server.entity.json.CoinControlResponse;
 import com.iot.game.pooh.server.entity.json.GetStatusResponse;
 import com.iot.game.pooh.server.entity.json.MoveControlResponse;
 import com.iot.game.pooh.server.entity.json.announce.GatewayPoohStatusMessage;
@@ -112,6 +113,14 @@ public class SmartRemoteService extends Service {
             } else if (tag.equals(ConnectResultEvent.LOTTERY_DRAW_ANNOUNCE)) {
                 LotteryDrawAnnounceMessage message = (LotteryDrawAnnounceMessage) objs[0];
                 RxBus.get().post(Utils.TAG_LOTTERY_DRAW, message);
+            } else if (tag.equals(ConnectResultEvent.PUSH_COIN_RESPONESE)) {
+                CoinControlResponse coinControlResponse = (CoinControlResponse) objs[0];
+                RxBus.get().post(Utils.TAG_COIN_RESPONSE, coinControlResponse);
+            }
+            else if (tag.equals(ConnectResultEvent.PUSH_COIN_BUSY)) {
+                RxBus.get().post(Utils.TAG_COIN_DEVICE_STATE, "cbusy");
+            } else if (tag.equals(ConnectResultEvent.PUSH_COIN_FREE)) {
+                RxBus.get().post(Utils.TAG_COIN_DEVICE_STATE, "cfree");
             }
         }
 
