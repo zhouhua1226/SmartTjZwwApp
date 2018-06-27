@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity {
         getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
-        checkVersion();
+        //checkVersion();
     }
 
     private void initData() {
