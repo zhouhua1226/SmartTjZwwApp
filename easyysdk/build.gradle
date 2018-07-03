@@ -19,8 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-
 }
 
 repositories{
@@ -40,8 +38,6 @@ dependencies {
 
     //辅助工具类
     compile 'com.blankj:utilcode:1.9.3'
-
-
     compile 'com.android.support:appcompat-v7:25.+'
     testCompile 'junit:junit:4.12'
 }

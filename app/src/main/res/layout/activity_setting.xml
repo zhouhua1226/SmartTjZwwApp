@@ -323,11 +323,13 @@
         android:layout_height="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:background="#ededed" />
     <RelativeLayout
         android:id="@+id/setting_share_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="gone"
         android:background="@color/white">
 
         <TextView

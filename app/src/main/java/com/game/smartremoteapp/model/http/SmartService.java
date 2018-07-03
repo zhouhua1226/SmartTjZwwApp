@@ -5,6 +5,7 @@ import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
+import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
@@ -152,8 +153,8 @@ public interface SmartService {
             @Field(UrlUtils.GUESSID) String guessId,
             @Field(UrlUtils.DOLLID) String dollID,
             @Field(UrlUtils.GUESSPRONUM) int afterVoting,
-            @Field(UrlUtils.GUESSMULTIPLE) int multiple
-    );
+            @Field(UrlUtils.GUESSMULTIPLE) int multiple,
+            @Field(UrlUtils.FLAG) String flag);
 
     //跑马灯
     @Headers("Content-Type: application/x-www-form-urlencoded")
@@ -641,4 +642,9 @@ public interface SmartService {
     @GET(UrlUtils.CHECKVERSION)
     Observable<Result<AppInfo>> checkVersion();
 
+    //投币记录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETCOINPUSHERRECONDLIST)
+    Observable<Result<CoinListBean>> getCoinRecord(@Field(UrlUtils.USERID) String userId);
 }

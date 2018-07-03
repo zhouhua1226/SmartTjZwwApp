@@ -85,7 +85,7 @@
                     android:id="@+id/ctrl_guessrecord_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" 游戏记录"
+                    android:text="游戏记录"
                     android:background="@drawable/ctr_money_bg"
                     android:textColor="#fcf005"
                     android:textSize="12sp"
@@ -327,10 +327,7 @@
             android:background="@drawable/ctrl_guess_introduce_imag"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/ctrl_quiz_layout"
-            android:layout_marginRight="3dp"
-            android:visibility="visible"
-
-            />
+            android:layout_marginRight="3dp" />
 
 
         <!--开始按钮-->
@@ -660,7 +657,7 @@
             android:layout_marginLeft="10dp"
 
             />
-        <!-- 当追投显示后  android:paddingTop="10dp"  paddingBottom 去除 -->
+
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/ctrl_betting_number_layout"
@@ -752,7 +749,7 @@
             android:textSize="8sp"
             android:gravity="center"
             />
-        <!-- android:layout_marginTop="10dp" -->
+
         <Button
             android:id="@+id/ctrl_betting_back_button"
             android:layout_width="70dp"
@@ -764,7 +761,7 @@
             android:textColor="@color/white"
             android:background="@drawable/ctrl_guess_cancle_btn"
             />
-        <!-- android:layout_marginTop="10dp" -->
+
         <LinearLayout
             android:id="@+id/ctrl_betsecondnum_layout"
             android:layout_width="wrap_content"

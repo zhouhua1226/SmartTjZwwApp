@@ -4,6 +4,7 @@ import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
+import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
@@ -183,9 +184,9 @@ public class HttpManager {
     }
 
     //下注
-    public void getBets(String userId,int wager,String guessKey,String guessId,
-                        String dollID,int afterVoting,int multiple,Subscriber<Result<AppUserBean>> subscriber){
-        Observable<Result<AppUserBean>> o= smartService.getBets(userId,wager,guessKey,guessId,dollID,afterVoting,multiple);
+    public void getBets(String userId, int wager, String guessKey, String guessId,
+                        String dollID, int afterVoting, int multiple, boolean flag, Subscriber<Result<AppUserBean>> subscriber){
+        Observable<Result<AppUserBean>> o= smartService.getBets(userId,wager,guessKey,guessId,dollID,afterVoting,multiple,flag+"");
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -617,5 +618,12 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-
+    //投币记录
+    public void getCoinRecord(String userId, Subscriber<Result<CoinListBean>> subscriber){
+        Observable<Result<CoinListBean>> o = smartService.getCoinRecord(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

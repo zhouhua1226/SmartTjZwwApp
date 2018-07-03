@@ -25,6 +25,7 @@
     <!--
       <color name="apptheme_bg">#bab9fe</color> 旧版主题色：bab9fe
     -->
+    <color name="coin_bg">#ffd700</color>
     <color name="apptheme_bg">#fed201</color>  <!-- 119 49 19-->
     <color name="betrecordcolor">#e73640</color>
     <color name="betrecordcolor1">#008c1a</color>
