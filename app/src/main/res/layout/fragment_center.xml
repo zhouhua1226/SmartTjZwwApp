@@ -99,8 +99,6 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     tools:text="用户名" />
-
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,9 +158,9 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="兑换中心"
+                    android:visibility="gone"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -520,6 +518,4 @@
                 android:visibility="gone" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-
 </LinearLayout>

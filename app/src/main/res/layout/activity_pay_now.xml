@@ -62,7 +62,7 @@
                 android:id="@+id/tv_user_blance"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/red"
+                android:textColor="@color/brilliant_red"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:text="0"
@@ -182,7 +182,16 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </LinearLayout>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="注：1元人民币对应10游戏币"
+        android:layout_marginTop="@dimen/margin_32"
+        android:layout_marginLeft="@dimen/margin_32"
+        android:textColor="@color/brilliant_red"
+        android:textSize="12sp" />
     <Button
         android:id="@+id/bt_sure_pay"
         android:layout_width="match_parent"
@@ -194,4 +203,6 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_height="45dp"/>
+
+
 </LinearLayout>

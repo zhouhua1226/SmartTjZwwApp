@@ -95,8 +95,8 @@ public class PayNowActivity extends BaseActivity {
                     MyToast.getToast(PayNowActivity.this,"请输入充值金额").show();
                     return;
                 }
-                if(Long.parseLong(amount)<1){
-                MyToast.getToast(PayNowActivity.this,"充值金额最少一元").show();
+                if(Long.parseLong(amount)<10){
+                MyToast.getToast(PayNowActivity.this,"充值金额最少10元").show();
                 return;
                }
                 if(!rb_aliapy.isChecked()){

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.home.NavigationPageActivity;
+import com.game.smartremoteapp.activity.home.PayNowActivity;
 import com.game.smartremoteapp.activity.home.RoomPlayRecordActivity;
 import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.bean.AppUserBean;
@@ -246,7 +247,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     private MediaPlayer btn_mediaPlayer;
     //显示的用户的name
     private String showName = "";
-    private int prob;         //抓取概率
+    private int prob=0;         //抓取概率
     private String reward = "";    //预计奖金
     private String showUserId = "";
     private int betFlodNum = 5;   //默认投注倍数
@@ -311,9 +312,14 @@ public class CtrlActivity extends Activity implements IctrlView {
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
         playUrlSecond = getIntent().getStringExtra(Utils.TAG_URL_SECOND);
         dollName = getIntent().getStringExtra(Utils.TAG_ROOM_NAME);
-        money = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD),0);
+        if(Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD))){
+            money = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD));
+        }
         dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
-        prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB),0);
+        if(Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_ROOM_PROB))){
+            prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB));
+        }
+
         reward = getIntent().getStringExtra(Utils.TAG_ROOM_REWARD);
         //UserUtils.UserBetNum = YsdkUtils.loginResult.getData().getAppUser().getBET_NUM();
         if (!Utils.isEmpty(dollName)) {
@@ -528,7 +534,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case R.id.recharge_button:
             case R.id.coin_tv:
-                startActivity(new Intent(this, WeChatPayActivity.class));
+                startActivity(new Intent(this, PayNowActivity.class));
                 break;
             case R.id.startgame_ll:
                 if (TextUtils.isEmpty(UserUtils.UserBalance)) {

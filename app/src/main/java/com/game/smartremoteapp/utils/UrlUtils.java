@@ -54,7 +54,7 @@ public class UrlUtils {
     public static final String SENDGOODSUSERID="userId";
     public static final String SENDGOODSMODE="mode";
     public static final String SENDGOODSCOSTNUM="costNum";
-
+    public static final String FLAG ="flag" ;
     //微信QQ登录接口
     public static final String WXQQ_UID="uid";
     public static final String WXQQ_ACCESSTOKEN="accessToken";
@@ -101,15 +101,16 @@ public class UrlUtils {
     //房间游戏记录
     public static final String ROOMID="roomId";
 
-    public static final String URL = "http://111.231.139.61:18081"; // http://47.100.15.18:8080  //http://111.231.139.61:8080
+    public static final String URL = "http://111.231.139.61:18081";
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
     //http://111.231.139.61:18081(第一抓娃娃腾讯云)                                    第一抓娃娃
     //APP图片拼接url
-    public static final String APPPICTERURL="http://111.231.139.61:18081/";
+    public static final String APPPICTERURL="http://111.231.139.61:8888/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
     //http://111.231.139.61:8888/ (第一抓娃娃腾讯云)
     //壕鑫客服链接
-    public static final String SOCKET_IP="111.231.74.65";
+    public static final String SOCKET_IP="111.231.74.65";//123.206.120.46(壕鑫正式)
+    // 47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
 
     //login-password
     public static final String LOGINPASSWORD = URL + "/pooh-web/app/sms/userPassLogin";
@@ -312,4 +313,6 @@ public class UrlUtils {
     //微信订单信息  /pooh-web/app/version/checkVersion
     public static final String ORDERWEIXIN = URL+"/pooh-web/app/pay/getTradeOrderxdpay";
 
+    //推币机个人信息投币记录
+    public static final String GETCOINPUSHERRECONDLIST =URL+"/pooh-web/app/coinPusher/getCoinPusherRecondList";
 }

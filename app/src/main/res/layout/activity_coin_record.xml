@@ -28,7 +28,7 @@
 
     </RelativeLayout>
     <LinearLayout
-        android:background="@drawable/mycenter_jj_bg"
+        android:background="@color/apptheme_bg"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">

@@ -17,7 +17,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.adapter.JoinEarnAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -34,7 +33,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by yincong on 2018/3/7 16:15
@@ -96,7 +94,8 @@ public class JoinEarnActivity extends BaseActivity {
                     getPromomoteOrder(UserUtils.USER_ID, proManageId, "P");
                 }else {
                     MyToast.getToast(getApplicationContext(),"余额不足，请充值！").show();
-                    startActivity(new Intent(JoinEarnActivity.this, WeChatPayActivity.class));
+                 //   startActivity(new Intent(JoinEarnActivity.this, WeChatPayActivity.class));
+                    startActivity(new Intent(JoinEarnActivity.this, PayNowActivity.class));
                 }
 
             }

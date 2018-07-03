@@ -13,12 +13,11 @@ public class MyToast {
 	public static Toast getToast(Context context, String msg)
 	{
 		if (toast == null) {
-			toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+			toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 		} else {
 			toast.setText(msg);
 		}
-
 		return toast;
 	}
 }

@@ -107,7 +107,7 @@ public class MyCenterFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_my_center;
+        return R.layout.fragment_center;
     }
 
     @Override

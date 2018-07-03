@@ -98,7 +98,8 @@ public class MainActivity extends BaseActivity {
         getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
-        checkVersion();
+     //   checkVersion();
+
     }
 
     private void initData() {
@@ -299,7 +300,6 @@ public class MainActivity extends BaseActivity {
             mExitTime = System.currentTimeMillis();
         } else {
             MyApplication.getInstance().exit();
-
         }
     }
 
@@ -584,7 +584,7 @@ public class MainActivity extends BaseActivity {
           @Override
           public void _onSuccess(Result<AppInfo> appInfoResult) {
               if(appInfoResult!=null){
-              String version= appInfoResult.getData().getVERSION();
+               String version= appInfoResult.getData().getVERSION();
                   if(!Utils.getAppCodeOrName(MainActivity.this, 1).equals(version)){
                       updateApp(appInfoResult.getData().getDOWNLOAD_URL());
                   }

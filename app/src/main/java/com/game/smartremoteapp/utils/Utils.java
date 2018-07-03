@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static String connectStatus = ConnectResultEvent.CONNECT_FAILURE;
-    private static final boolean D = true;
+    private static final boolean D = false;
     private static final String TAG_DELIMETER = "---";
 
     public static final String TAG_SESSION_INVALID = "TAG_SESSION_INVALID";
@@ -650,5 +650,17 @@ public class Utils {
         }
         lastClickTime = curClickTime;
         return flag;
+    }
+
+    /*
+     * 判断是否为整数
+    * @param str 传入的字符串
+    * @return 是整数返回true,否则返回false
+   */
+    public final static boolean isNumeric(String s) {
+        if (s != null && !"".equals(s.trim()))
+            return s.matches("^[0-9]*$");
+        else
+            return false;
     }
 }

@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -38,12 +37,16 @@ import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.EmptyLayout;
+import com.game.smartremoteapp.view.GlideImageLoader;
 import com.game.smartremoteapp.view.MarqueeView;
-import com.game.smartremoteapp.view.MySurfaceVivew;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PullToRefreshView;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,11 +58,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.R.attr.name;
+
 /**
  * Created by hongxiu on 2017/9/25.
  */
 public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener,
-        PullToRefreshView.OnFooterRefreshListener,IctrlView,SurfaceHolder.Callback {
+        PullToRefreshView.OnFooterRefreshListener,IctrlView {
     private static final String TAG = "ZWWJFragment";
     @BindView(R.id.zww_recyclerview)
     RecyclerView zwwRecyclerview;
@@ -79,11 +84,12 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     ImageButton zwwExshopIBtn;
     @BindView(R.id.zww_earnmoney_ibtn)
     ImageButton zwwEarnmoneyIBtn;
-    @BindView(R.id.sfv_player)
-    MySurfaceVivew mPlayerView;
+//    @BindView(R.id.sfv_player)
+//    MySurfaceVivew mPlayerView;
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
-
+    @BindView(R.id.zww_banner)
+    Banner zwwBanner;
     @BindView(R.id.zww_news_tv)
     TextView zwwNewsTv;
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
@@ -248,6 +254,17 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
     }
 
+
+    //TODO 正式环境统一处理
+    private void enterCoinNext(String dollName,  String camera1, String camera2,String roomId) {
+        Intent intent = new Intent(getActivity(), PushCoinActivity.class);
+        intent.putExtra(Utils.TAG_URL_MASTER, camera1);
+        intent.putExtra(Utils.TAG_URL_SECOND, camera2);
+        intent.putExtra(Utils.TAG_ROOM_NAME, name);
+        intent.putExtra(Utils.TAG_DOLL_Id, roomId);
+        startActivity(intent);
+    }
+
     /**
      * 房间跳转方法
      *
@@ -310,36 +327,36 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     //banner轮播
-    private void initBanner(final List<?> list, final List<BannerBean> bannerList) {
+    private void initBanner(List<String> lists) {
+
         //设置Banner样式
-//        zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-//        //设置图片加载器
-//        zwwBanner.setImageLoader(new GlideImageLoader());
-//        zwwBanner.setImages(list);
-//        //设置Banner动画效果
-//        zwwBanner.setBannerAnimation(Transformer.DepthPage);
-//        //设置轮播时间
-//        zwwBanner.setDelayTime(2000);
-//        //设置指示器位置(当banner模式中有指示器时)
-//        zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
-//        //Banner设置方法全部调用完毕时最后调用
-//        zwwBanner.start();
-//        zwwBanner.setOnBannerListener(new OnBannerListener() {
-//            @Override
-//            public void OnBannerClick(int position) {
-//                //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
+        zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+         //设置图片加载器
+        zwwBanner.setImageLoader(new GlideImageLoader());
+         zwwBanner.setImages(lists);
+        //设置Banner动画效果
+       zwwBanner.setBannerAnimation(Transformer.DepthPage);
+       //设置轮播时间
+        zwwBanner.setDelayTime(2000);
+        //设置指示器位置(当banner模式中有指示器时)
+        zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
+       //Banner设置方法全部调用完毕时最后调用
+       zwwBanner.start();
+        zwwBanner.setOnBannerListener(new OnBannerListener() {
+            @Override
+           public void OnBannerClick(int position) {
+                //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
 //                if (!bannerList.get(position).getHREF_ST().equals("")) {
-//                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+//                   Intent intent = new Intent(getContext(), NewsWebActivity.class);
 //                    intent.putExtra("newsurl", bannerList.get(position).getHREF_ST().replace("\"", "/"));
 //                    intent.putExtra("newstitle", bannerList.get(position).getRUN_NAME());
 //                    startActivity(intent);
-//                }
-//            }
-//        });
+//              }
+           }
+        });
     }
 
     private void getBannerList() {
-
         ctrlCompl = new CtrlCompl(this, getActivity());
         NettyUtils.pingRequest(); //判断连接
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
@@ -349,48 +366,53 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                     bannerList = loginInfoResult.getData().getRunImage();
                     if (bannerList.size() > 0) {
                         for (int i = 0; i < bannerList.size(); i++) {
-                            //  list.add(UrlUtils.APPPICTERURL + bannerList.get(i).getIMAGE_URL());
-                            String state=bannerList.get(i).getSTATE();
-                            if(state.equals("1")) {
-                                if (bannerList.get(i).getDEVICE_STATE().equals("0") && bannerList.get(i).getRTMP_URL() != null) {
-                                    //   setSessionId(UserUtils.sessionID,false);
-                                    initSurface(bannerList.get(i));
-                                }
-                            }else if (state.equals("0")){
-                                newsUrl=bannerList.get(i).getHREF_ST();
-                                newsTitle=bannerList.get(i).getRUN_NAME();
+                            int state = bannerList.get(i).getSTATE();
+                            switch (state){
+                                case 0:
+                                        if(bannerList.get(i).getHREF_ST()==null||bannerList.get(i).getHREF_ST().equals("")) {
+                                             list.add(UrlUtils.APPPICTERURL+bannerList.get(i).getIMAGE_URL());
+                                        }else{
+                                            newsUrl =bannerList.get(i).getHREF_ST() ;
+                                            newsTitle = bannerList.get(i).getRUN_NAME();
+                                        }
+                                    break;
+                                case 1:
+ //                                   if (bannerList.get(i).getDEVICE_STATE().equals("0") && bannerList.get(i).getRTMP_URL() != null) {
+//                                      setSessionId(UserUtils.sessionID,false);
+//                                    initSurface(bannerList.get(i));
+//                                 }
+                                    break;
                             }
                         }
-                        // initBanner(list, bannerList);
+                        initBanner(list);
                     }
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
                 LogUtils.loge(e.getMessage());
             }
         });
     }
-    private void initSurface(BannerBean mBannerBean) {
-        mPlayerView.setZOrderMediaOverlay(true);
-        mPlayerView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        String rtmpUrl = mBannerBean.getRTMP_URL();
-        String serviceName = mBannerBean.getSERVER_NAME();
-        String liveStream = mBannerBean.getLIVESTREAM();
-        url1 = rtmpUrl + serviceName + "/"+liveStream;
-        LogUtils.loge("url1===="+url1);
-        ctrlCompl.startPlayVideo(mPlayerView, url1);
-        mPlayerView.getHolder().addCallback(this);
-        mPlayerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
-    }
+//    private void initSurface(BannerBean mBannerBean) {
+//        mPlayerView.setZOrderMediaOverlay(true);
+//        mPlayerView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+//        String rtmpUrl = mBannerBean.getRTMP_URL();
+//        String serviceName = mBannerBean.getSERVER_NAME();
+//        String liveStream = mBannerBean.getLIVESTREAM();
+//        url1 = rtmpUrl + serviceName + "/"+liveStream;
+//        LogUtils.loge("url1===="+url1);
+//        ctrlCompl.startPlayVideo(mPlayerView, url1);
+//        mPlayerView.getHolder().addCallback(this);
+//        mPlayerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+//
+//
+//    }
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
             return beens;
@@ -595,22 +617,22 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         getUserList();
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        LogUtils.loge("surfaceCreated=== ------",TAG);
-        if(ctrlCompl!=null&&url1!=null){
-            ctrlCompl.startPlayVideo(mPlayerView,url1);
-        }
-    }
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        LogUtils.loge("surfaceChanged=== ----",TAG);
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        ctrlCompl.stopPlayVideo();
-    }
+//    @Override
+//    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+//        LogUtils.loge("surfaceCreated=== ------",TAG);
+//        if(ctrlCompl!=null&&url1!=null){
+//            ctrlCompl.startPlayVideo(mPlayerView,url1);
+//        }
+//    }
+//    @Override
+//    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+//        LogUtils.loge("surfaceChanged=== ----",TAG);
+//    }
+//
+//    @Override
+//    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+//        ctrlCompl.stopPlayVideo();
+//    }
 
 }
 
