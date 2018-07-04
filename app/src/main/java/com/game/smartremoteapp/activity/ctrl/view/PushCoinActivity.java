@@ -42,6 +42,8 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.iot.game.pooh.server.entity.json.CoinControlResponse;
 import com.iot.game.pooh.server.entity.json.app.AppInRoomResponse;
 import com.iot.game.pooh.server.entity.json.app.AppOutRoomResponse;
+import com.iot.game.pooh.server.entity.json.enums.CoinStatusType;
+import com.iot.game.pooh.server.entity.json.enums.ReturnCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class PushCoinActivity extends Activity implements IctrlView{
+public class PushCoinActivity extends Activity implements IctrlView {
     private static final String TAG = "PushCoinActivity";
     @BindView(R.id.player_counter_tv)
     TextView player_counter;//在线人数
@@ -67,10 +69,10 @@ public class PushCoinActivity extends Activity implements IctrlView{
     TextView coin_recharge;//充值
     @BindView(R.id.ctrl_comerecord_tv)
     TextView comerecord;//投币记录
-     @BindView(R.id.ctrl_gif_view)
-     GifView ctrlGifView;
-     @BindView(R.id.ctrl_fail_iv)
-     ImageView ctrlFailIv;
+    @BindView(R.id.ctrl_gif_view)
+    GifView ctrlGifView;
+    @BindView(R.id.ctrl_fail_iv)
+    ImageView ctrlFailIv;
     @BindView(R.id.coin_button1)
     ImageView coinBtn1;
     @BindView(R.id.coin_button5)
@@ -132,8 +134,8 @@ public class PushCoinActivity extends Activity implements IctrlView{
     }
 
     private void initData() {
-       // dollName = getIntent().getStringExtra(Utils.TAG_ROOM_NAME);
-       // dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
+        // dollName = getIntent().getStringExtra(Utils.TAG_ROOM_NAME);
+        // dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
 
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
         playUrlSecond = getIntent().getStringExtra(Utils.TAG_URL_SECOND);
@@ -164,6 +166,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
         }
 
     }
+
     private Handler uiHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -200,6 +203,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
             mediaPlayer = null;
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -225,65 +229,68 @@ public class PushCoinActivity extends Activity implements IctrlView{
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
     }
+
     @OnClick({R.id.coin_button1, R.id.coin_button10, R.id.coin_button5,
             R.id.coin_button20, R.id.coin_button50})
-    public void onViewCoinClicked(View view){
-        if(isStartSend){
-             MyToast.getToast(getApplicationContext(), "正在进行游戏,请稍后").show();
+    public void onViewCoinClicked(View view) {
+        if (isStartSend) {
+            MyToast.getToast(getApplicationContext(), "正在进行游戏,请稍后").show();
             return;
         }
         setCoinNormal();
-        int mcoinNumber=0;
+        int mcoinNumber = 0;
         ImageView imageView = null;
         int drawable = 0;
         switch (view.getId()) {
             case R.id.coin_button1:
-                imageView=coinBtn1;
-                drawable=R.drawable.coin_1_s;
+                imageView = coinBtn1;
+                drawable = R.drawable.coin_1_s;
                 mcoinNumber = 1;
                 break;
             case R.id.coin_button5:
-                imageView=coinBtn5;
-                drawable=R.drawable.coin_5_s;
+                imageView = coinBtn5;
+                drawable = R.drawable.coin_5_s;
                 mcoinNumber = 5;
                 break;
             case R.id.coin_button10:
-                imageView=coinBtn10;
-                drawable=R.drawable.coin_10_s;
+                imageView = coinBtn10;
+                drawable = R.drawable.coin_10_s;
                 mcoinNumber = 10;
                 break;
             case R.id.coin_button20:
-                imageView=coinBtn20;
-                drawable=R.drawable.coin_20_s;
-                mcoinNumber=20;
+                imageView = coinBtn20;
+                drawable = R.drawable.coin_20_s;
+                mcoinNumber = 20;
                 break;
             case R.id.coin_button50:
-                imageView=coinBtn50;
-                drawable=R.drawable.coin_50_s;
+                imageView = coinBtn50;
+                drawable = R.drawable.coin_50_s;
                 mcoinNumber = 50;
                 break;
         }
-        if(judgeMoney(mcoinNumber)){
+        if (judgeMoney(mcoinNumber)) {
             coinPushBtn.setEnabled(true);
             coinPushBtn.setText("投 币");
             coinPushBtn.setTextColor(Color.parseColor("#57515d"));
             imageView.setImageResource(drawable);
-        }else{
+        } else {
             MyToast.getToast(getApplicationContext(), "余额不足，请充值！").show();
         }
     }
-    private boolean judgeMoney(int mCoinNumber){
+
+    private boolean judgeMoney(int mCoinNumber) {
         int totalMoney = mCoinNumber * 10;
-        if (Integer.parseInt(UserUtils.UserBalance) >= totalMoney){
-            coinNumber=mCoinNumber;
+        if (Integer.parseInt(UserUtils.UserBalance) >= totalMoney) {
+            coinNumber = mCoinNumber;
             return true;
         }
-        coinNumber=0;
+        coinNumber = 0;
         return false;
     }
-    @OnClick({ R.id.ctrl_back_imag, R.id.coin_recharge, R.id.ctrl_comerecord_tv,
+
+    @OnClick({R.id.ctrl_back_imag, R.id.coin_recharge, R.id.ctrl_comerecord_tv,
             R.id.ctrl_change_camera_iv, R.id.ctrl_fail_iv})
-    public void onViewClicked(View view){
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ctrl_back_imag:
                 finish();
@@ -313,6 +320,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
         coinBtn20.setImageResource(R.drawable.coin_20_n);
         coinBtn50.setImageResource(R.drawable.coin_50_n);
     }
+
     private void setBtnEnabled(boolean isEnabled) {
         coinBtn1.setEnabled(isEnabled);
         coinBtn5.setEnabled(isEnabled);
@@ -321,27 +329,28 @@ public class PushCoinActivity extends Activity implements IctrlView{
         coinBtn50.setEnabled(isEnabled);
         coinPushBtn.setEnabled(false);
         coinPushBtn.setTextColor(Color.parseColor("#FFFFFF"));
-        if(!isEnabled){
+        if (!isEnabled) {
             playBGMusic();
-        }else{
+        } else {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
         }
     }
+
     @OnClick({R.id.coin_push_btn})
     public void onPushClick(View v) {
         switch (v.getId()) {
             case R.id.coin_push_btn:
-                    if (coinNumber != 0&&isCurrentConnect) {
-                                NettyUtils.sendPushCoinCmd(NettyUtils.USER_PUSH_COIN_START, 0);
-                                coinResponseText.setText(String.valueOf(0));
-                                isStartSend = true;
-                                NettyUtils.sendPushCoinCmd(NettyUtils.USER_PUSH_COIN_PLAY, coinNumber);
-                                coinPushBtn.setText("投币中");
-                                setBtnEnabled(false);
-                                getUserDate(UserUtils.USER_ID);
-                     }
+                if (coinNumber != 0 && isCurrentConnect) {
+                    NettyUtils.sendPushCoinCmd(NettyUtils.USER_PUSH_COIN_START, 0);
+                    coinResponseText.setText(String.valueOf(0));
+                    isStartSend = true;
+                    NettyUtils.sendPushCoinCmd(NettyUtils.USER_PUSH_COIN_PLAY, coinNumber);
+                    coinPushBtn.setText("投币中");
+                    setBtnEnabled(false);
+                    getUserDate(UserUtils.USER_ID);
+                }
                 break;
             default:
                 break;
@@ -355,20 +364,33 @@ public class PushCoinActivity extends Activity implements IctrlView{
     public void getCoinDeviceResponse(Object response) {
         if (response instanceof CoinControlResponse) {
             CoinControlResponse coinControlResponse = (CoinControlResponse) response;
-            Utils.showLogE(TAG, "当投币数::::" + coinControlResponse.getBet());
-            Utils.showLogE(TAG, "当出币数::::" + coinControlResponse.getBingo());
-            if ((coinControlResponse.getBet() != null) && (coinControlResponse.getBingo() != null)) {
-                int bingo = coinControlResponse.getBingo();
-                coinResponseText.setText(String.valueOf(bingo));
-                getUserDate(UserUtils.USER_ID);
+            ReturnCode  code = coinControlResponse.getReturnCode();
+            if (code.toString().equals(ReturnCode.SUCCESS.name())){
+                //TODO 结算
+                Log.e(TAG, "结算中........");
+                if(coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.END.name())) {
+                    if ((coinControlResponse.getBet() != null) && (coinControlResponse.getBingo() != null)) {
+                        int bingo = coinControlResponse.getBingo();
+                        coinResponseText.setText(String.valueOf(bingo));
+                        getUserDate(UserUtils.USER_ID);
+                    }
+                    setCoinNormal();
+                    setBtnEnabled(true);
+                    isStartSend = false;
+                } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
+                    String userId = coinControlResponse.getUserId();
+                    if (userId.equals(UserUtils.USER_ID)) {
+                        //TODO 本人点击play
+                        Log.e(TAG, "本人点击play");
+                    } else {
+                        //TODO 观察到点击play
+                        Log.e(TAG, "观察到其他用户点击play");
+                    }
+                }
             }
-            setCoinNormal();
-            setBtnEnabled(true);
-            isStartSend = false;
-          }else if(response instanceof AppInRoomResponse)//进入房间
-        {
+        } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
-            Utils.showLogE(TAG, "=====进房间" + appInRoomResponse.toString());
+            Log.e(TAG, "=====进房间" + appInRoomResponse.toString());
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
             long seq = appInRoomResponse.getSeq();
@@ -377,7 +399,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
                 //TODO  我本人进来了
                 ctrlCompl.sendGetUserInfos(allUsers, true);
                 //是否能点击开始
-                if(!isStartSend) {//当前玩家正在游戏中
+                if (!isStartSend) {//当前玩家正在游戏中
                     if (free) {
                         setCoinNormal();
                         coinPushBtn.setText("投 币");
@@ -397,7 +419,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
                 userInfos.add(appInRoomResponse.getUserId());
                 getUserInfos(userInfos, is);
             }
-        }else if(response instanceof AppOutRoomResponse)//退出房间
+        } else if (response instanceof AppOutRoomResponse)//退出房间
         {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
             Utils.showLogE(TAG, appOutRoomResponse.toString());
@@ -421,15 +443,16 @@ public class PushCoinActivity extends Activity implements IctrlView{
         Utils.showLogE(TAG, "当前游戏机状态::::" + state);
         if (state.equals("cbusy")) { //游戏中
             coinPushBtn.setText("投币中");
-            isStartSend=true;
+            isStartSend = true;
             setBtnEnabled(false);
         } else if (state.equals("cfree")) {//休闲中
             setCoinNormal();
             coinPushBtn.setText("投 币");
-            isStartSend=false;
+            isStartSend = false;
             setBtnEnabled(true);
         }
     }
+
     @Override
     public void getTime(int time) {
     }
@@ -438,6 +461,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
     public void getTimeFinish() {
         ctrlCompl.stopTimeCounter();
     }
+
     @Override
     public void getRecordErrCode(int code) {
         LogUtils.loge("录制视频失败::::::" + code, TAG);
@@ -479,6 +503,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
     public void getVideoStop() {
 
     }
+
     //监控网关区
     //TODO 网关重连过后 需要前端主动去获取一次网关的状态来最终判断网关是否存在!!!
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
@@ -498,6 +523,14 @@ public class PushCoinActivity extends Activity implements IctrlView{
             isCurrentConnect = true;
         }
     }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(Utils.TAG_GATEWAT_USING)})
+    public void getGatwayStates(String tag) {
+        //TODO 发送命令 网关在使用中
+        Log.e(TAG, "网关在使用中........" + tag);
+    }
+
     //监控单个网关连接区
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_DISCONNECT)})
@@ -520,7 +553,6 @@ public class PushCoinActivity extends Activity implements IctrlView{
     }
 
 
-
     @Override
     public void getUserInfos(List<String> list, boolean is) {
         //当前房屋的人数
@@ -528,7 +560,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
         int counter = userInfos.size();
         Utils.showLogE(TAG, "当前房屋的人数::::" + counter);
         if (counter > 0) {
-            String s = (counter+20) + "人在线";//线人数 默认20个
+            String s = (counter + 20) + "人在线";//线人数 默认20个
             player_counter.setText(s);
             if (counter == 1) {
                 //显示自己
@@ -554,7 +586,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if (httpDataInfoResult.getCode()==0) {
+                if (httpDataInfoResult.getCode() == 0) {
                     UserBean bean = httpDataInfoResult.getData().getAppUser();
                     if ((bean != null) && (!Utils.isEmpty(bean.getIMAGE_URL()))) {
                         String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
@@ -577,6 +609,7 @@ public class PushCoinActivity extends Activity implements IctrlView{
             }
         });
     }
+
     //获取用户信息接口
     private void getUserDate(String userId) {
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {

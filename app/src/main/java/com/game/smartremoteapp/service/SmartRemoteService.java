@@ -64,7 +64,6 @@ public class SmartRemoteService extends Service {
         public void _onSuccess(SuberInfo suberInfo) {
             String tag =  suberInfo.getTag();
             Object[] objs = suberInfo.getObject();
-            Utils.showLogE(TAG, "Tag::::::" + tag);
             if ((tag.equals(ConnectResultEvent.SESSION_INVALID) ||
                     (tag.equals(ConnectResultEvent.CONNECT_SESSION_INVALID)))) {
                 Utils.connectStatus = ConnectResultEvent.CONNECT_FAILURE;
