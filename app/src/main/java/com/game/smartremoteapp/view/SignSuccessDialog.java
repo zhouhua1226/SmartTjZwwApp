@@ -42,7 +42,6 @@ public class SignSuccessDialog extends Dialog implements View.OnClickListener{
         setListner();
     }
 
-
     public void findView() {
         textView= (TextView) findViewById(R.id.sign_success_dialog_tv);
         sure_imag= (ImageView) findViewById(R.id.sign_success_dialog_imag);
