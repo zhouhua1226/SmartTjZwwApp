@@ -99,6 +99,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private List<VideoBackBean> playBackBeanList = new ArrayList<>();
     private List<Marquee> marquees = new ArrayList<>();
     private List<BannerBean> bannerList = new ArrayList<>();
+    private List<BannerBean> nBannerList = new ArrayList<>();
     private List<String> list = new ArrayList<>();
     //分类参数
     private int currentSumPage = 1;
@@ -327,7 +328,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     //banner轮播
-    private void initBanner(List<String> lists) {
+    private void initBanner(List<String> lists, final List<BannerBean> nBannerList) {
 
         //设置Banner样式
         zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
@@ -341,17 +342,17 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         //设置指示器位置(当banner模式中有指示器时)
         zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
        //Banner设置方法全部调用完毕时最后调用
-       zwwBanner.start();
+        zwwBanner.start();
         zwwBanner.setOnBannerListener(new OnBannerListener() {
             @Override
            public void OnBannerClick(int position) {
                 //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
-//                if (!bannerList.get(position).getHREF_ST().equals("")) {
-//                   Intent intent = new Intent(getContext(), NewsWebActivity.class);
-//                    intent.putExtra("newsurl", bannerList.get(position).getHREF_ST().replace("\"", "/"));
-//                    intent.putExtra("newstitle", bannerList.get(position).getRUN_NAME());
-//                    startActivity(intent);
-//              }
+                if (!bannerList.get(position).getHREF_ST().equals("")) {
+                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+                    intent.putExtra("newsurl",   nBannerList.get(position).getHREF_ST().replace("\"", "/"));
+                    intent.putExtra("newstitle", nBannerList.get(position).getRUN_NAME());
+                    startActivity(intent);
+              }
            }
         });
     }
@@ -369,8 +370,9 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                             int state = bannerList.get(i).getSTATE();
                             switch (state){
                                 case 0:
-                                        if(bannerList.get(i).getHREF_ST()==null||bannerList.get(i).getHREF_ST().equals("")) {
+                                        if(bannerList.get(i).getIMAGE_URL()!=null&&!bannerList.get(i).getIMAGE_URL().equals("")) {
                                              list.add(UrlUtils.APPPICTERURL+bannerList.get(i).getIMAGE_URL());
+                                             nBannerList.add(bannerList.get(i));
                                         }else{
                                             newsUrl =bannerList.get(i).getHREF_ST() ;
                                             newsTitle = bannerList.get(i).getRUN_NAME();
@@ -384,7 +386,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
                                     break;
                             }
                         }
-                        initBanner(list);
+                        initBanner(list,nBannerList);
                     }
                 }
             }

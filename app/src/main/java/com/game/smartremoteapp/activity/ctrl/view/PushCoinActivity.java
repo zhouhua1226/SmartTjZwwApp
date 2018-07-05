@@ -378,13 +378,18 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     setBtnEnabled(true);
                     isStartSend = false;
                 } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
+                    Log.e(TAG, "游戏开始中........");
                     String userId = coinControlResponse.getUserId();
-                    if (userId.equals(UserUtils.USER_ID)) {
+                    if (!userId.equals(UserUtils.USER_ID)) {
+                        //TODO 观察到点击play
+                      //  Log.e(TAG, "观察到其他用户点击play");
+                        coinPushBtn.setText("投币中");
+                        isStartSend = true;
+                        setBtnEnabled(false);
+
+                    } else {
                         //TODO 本人点击play
                         Log.e(TAG, "本人点击play");
-                    } else {
-                        //TODO 观察到点击play
-                        Log.e(TAG, "观察到其他用户点击play");
                     }
                 }
             }
@@ -442,9 +447,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
     public void getCoinDeviceState(String state) {
         Utils.showLogE(TAG, "当前游戏机状态::::" + state);
         if (state.equals("cbusy")) { //游戏中
-            coinPushBtn.setText("投币中");
-            isStartSend = true;
-            setBtnEnabled(false);
+
         } else if (state.equals("cfree")) {//休闲中
             setCoinNormal();
             coinPushBtn.setText("投 币");
