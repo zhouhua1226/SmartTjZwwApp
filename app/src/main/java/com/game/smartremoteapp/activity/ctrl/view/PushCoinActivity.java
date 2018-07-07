@@ -322,11 +322,11 @@ public class PushCoinActivity extends Activity implements IctrlView {
     }
 
     private void setBtnEnabled(boolean isEnabled) {
-        coinBtn1.setEnabled(isEnabled);
-        coinBtn5.setEnabled(isEnabled);
-        coinBtn10.setEnabled(isEnabled);
-        coinBtn20.setEnabled(isEnabled);
-        coinBtn50.setEnabled(isEnabled);
+//        coinBtn1.setEnabled(isEnabled);
+//        coinBtn5.setEnabled(isEnabled);
+//        coinBtn10.setEnabled(isEnabled);
+//        coinBtn20.setEnabled(isEnabled);
+//        coinBtn50.setEnabled(isEnabled);
         coinPushBtn.setEnabled(false);
         coinPushBtn.setTextColor(Color.parseColor("#FFFFFF"));
         if (!isEnabled) {
@@ -399,22 +399,19 @@ public class PushCoinActivity extends Activity implements IctrlView {
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
             long seq = appInRoomResponse.getSeq();
-
             if ((seq != -2) && (!Utils.isEmpty(allUsers))) {
                 //TODO  我本人进来了
                 ctrlCompl.sendGetUserInfos(allUsers, true);
                 //是否能点击开始
-                if (!isStartSend) {//当前玩家正在游戏中
-                    if (free) {
-                        setCoinNormal();
-                        coinPushBtn.setText("投 币");
-                        isStartSend = false;
-                        setBtnEnabled(true);
-                    } else {
-                        coinPushBtn.setText("投币中");
-                        isStartSend = true;
-                        setBtnEnabled(false);
-                    }
+                if (free) {
+                    setCoinNormal();
+                    coinPushBtn.setText("投 币");
+                    isStartSend = false;
+                    setBtnEnabled(true);
+                } else {
+                    coinPushBtn.setText("投币中");
+                    isStartSend = true;
+                    setBtnEnabled(false);
                 }
             } else {
                 boolean is = false;
@@ -424,8 +421,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 userInfos.add(appInRoomResponse.getUserId());
                 getUserInfos(userInfos, is);
             }
-        } else if (response instanceof AppOutRoomResponse)//退出房间
-        {
+        } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
             Utils.showLogE(TAG, appOutRoomResponse.toString());
             long seq = appOutRoomResponse.getSeq();
