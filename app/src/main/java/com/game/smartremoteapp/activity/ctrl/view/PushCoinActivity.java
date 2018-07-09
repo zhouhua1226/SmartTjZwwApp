@@ -365,11 +365,12 @@ public class PushCoinActivity extends Activity implements IctrlView {
         if (response instanceof CoinControlResponse) {
             CoinControlResponse coinControlResponse = (CoinControlResponse) response;
             ReturnCode  code = coinControlResponse.getReturnCode();
+            String userId = coinControlResponse.getUserId();
             if (code.toString().equals(ReturnCode.SUCCESS.name())){
                 //TODO 结算
-                Log.e(TAG, "结算中........");
                 if(coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.END.name())) {
-                    if ((coinControlResponse.getBet() != null) && (coinControlResponse.getBingo() != null)) {
+                    Log.e(TAG, "玩家结算中........");
+                    if ((userId.equals(UserUtils.USER_ID))&&(coinControlResponse.getBet() != null) && (coinControlResponse.getBingo() != null)) {
                         int bingo = coinControlResponse.getBingo();
                         coinResponseText.setText(String.valueOf(bingo));
                         getUserDate(UserUtils.USER_ID);
@@ -379,7 +380,6 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     isStartSend = false;
                 } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
                     Log.e(TAG, "游戏开始中........");
-                    String userId = coinControlResponse.getUserId();
                     if (!userId.equals(UserUtils.USER_ID)) {
                         //TODO 观察到点击play
                       //  Log.e(TAG, "观察到其他用户点击play");
@@ -433,7 +433,6 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     getUserInfos(userInfos, false);
                 }
             }
-
         }
     }
 
