@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
-import com.game.smartremoteapp.activity.home.NavigationPageActivity;
+import com.game.smartremoteapp.activity.home.GuessPageActivity;
 import com.game.smartremoteapp.activity.home.PayNowActivity;
 import com.game.smartremoteapp.activity.home.RoomPlayRecordActivity;
 import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
@@ -279,7 +279,6 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (Utils.getIsOpenMusic(getApplicationContext())) {
             playBGMusic();   //播放房间背景音乐
         }
-        LogUtils.loge("afterCreate", TAG);
         initView();
         initData();
         coinTv.setText("  " + UserUtils.UserBalance + " 充值");
@@ -291,7 +290,6 @@ public class CtrlActivity extends Activity implements IctrlView {
     protected void initView() {
         ButterKnife.bind(this);
         RxBus.get().register(this);
-        LogUtils.loge("=====" + UserUtils.UserPhone, TAG);
         NettyUtils.sendRoomInCmd();
         ctrlGifView.setVisibility(View.VISIBLE);
         ctrlGifView.setEnabled(false);
@@ -579,7 +577,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case R.id.ctrl_instruction_image:
                 //说明
-                startActivity(new Intent(this, NavigationPageActivity.class));
+                startActivity(new Intent(this, GuessPageActivity.class));
 //                quizInstrictionDialog = new QuizInstrictionDialog(this, R.style.easy_dialog_style);
 //                quizInstrictionDialog.show();
 //                quizInstrictionDialog.setTitle("竞猜游戏说明");
@@ -1424,18 +1422,18 @@ public class CtrlActivity extends Activity implements IctrlView {
                         Glide.with(getApplicationContext()).load(showImage)
                                 .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                     } else {
-                        Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                        Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                                 .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                     }
                 } else {
-                    Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                    Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                             .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
-                Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                         .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
             }
         });

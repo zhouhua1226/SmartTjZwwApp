@@ -14,9 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
-import com.game.smartremoteapp.activity.ctrl.view.IctrlView;
 import com.game.smartremoteapp.activity.ctrl.view.PushCoinActivity;
 import com.game.smartremoteapp.activity.home.JoinEarnActivity;
 import com.game.smartremoteapp.activity.home.NewsWebActivity;
@@ -64,7 +62,7 @@ import static android.R.attr.name;
  * Created by hongxiu on 2017/9/25.
  */
 public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHeaderRefreshListener,
-        PullToRefreshView.OnFooterRefreshListener,IctrlView {
+        PullToRefreshView.OnFooterRefreshListener  {
     private static final String TAG = "ZWWJFragment";
     @BindView(R.id.zww_recyclerview)
     RecyclerView zwwRecyclerview;
@@ -106,7 +104,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private int currentPage = 1;
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
-    private CtrlCompl ctrlCompl=null;
+    //private CtrlCompl ctrlCompl=null;
     private String url1=null;
     private String newsUrl="";
     private String newsTitle="";
@@ -358,7 +356,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     private void getBannerList() {
-        ctrlCompl = new CtrlCompl(this, getActivity());
+       // ctrlCompl = new CtrlCompl(this, getActivity());
         NettyUtils.pingRequest(); //判断连接
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -558,57 +556,15 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
     }
-    @Override
-    public void getTime(int time) {
-    }
-    @Override
-    public void getTimeFinish() {
-    }
-    @Override
-    public void getUserInfos(List<String> list, boolean is) {
 
-    }
-    @Override
-    public void getRecordErrCode(int code) {
-        LogUtils.loge("录制视频失败::::::" + code, TAG);
-    }
-
-    @Override
-    public void getRecordSuecss() {
-        LogUtils.loge("录制视频完毕......", TAG);
-    }
-
-    @Override
-    public void getRecordAttributetoNet(String time, String fileName) {
-        LogUtils.loge("视频上传的时间::::" + time + "=====" + fileName, TAG);
-    }
-
-    @Override
-    public void getPlayerErcErrCode(int code) {
-       // LogUtils.loge("直播失败,错误码:::::" + code, TAG);
-    }
-    @Override
-    public void getPlayerSucess() {
-        LogUtils.loge("直播Sucess:::::", TAG);
-    }
-    @Override
-    public void getVideoPlayConnect() {
-    }
-    @Override
-    public void getVideoPlayStart() {
-    }
-    @Override
-    public void getVideoStop() {
-
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ctrlCompl.stopPlayVideo();
-        ctrlCompl.stopRecordView();
-        ctrlCompl.stopTimeCounter();
-        ctrlCompl.sendCmdOutRoom();
-        ctrlCompl = null;
+//        ctrlCompl.stopPlayVideo();
+//        ctrlCompl.stopRecordView();
+//        ctrlCompl.stopTimeCounter();
+//        ctrlCompl.sendCmdOutRoom();
+//        ctrlCompl = null;
         unbinder1.unbind();
     }
 

@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.utils.Utils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
+
 /**
  * Created by hongxiu on 2017/9/26.
  */
@@ -48,7 +53,6 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.bind(this);
-
     }
 
     @Override
@@ -62,7 +66,8 @@ public class AboutUsActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
-                this.finish();
+              this.finish();
+
                 break;
 //            case R.id.submit_bt:
 //                Toast.makeText(this, "我明白是什么功能", Toast.LENGTH_SHORT).show();

@@ -72,25 +72,25 @@ public class MyApplication extends MultiDexApplication {
     }
 
 
-    public void finishProcess() {
-        System.exit(0);
-    }
-
-    public void exit() {
-        if (activities != null) {
-            Activity activity;
-            for (int i = 0; i < activities.size(); i++) {
-                activity = activities.get(i);
-                if (activity != null) {
-                    if (!activity.isFinishing()) {
-                        activity.finish();
-                    }
-                    activity = null;
-                }
-                activities.remove(i);
-                i--;
-            }
-        }
-    }
+//    public void finishProcess() {
+//        System.exit(0);
+//    }
+//
+//    public void exit() {
+//        if (activities != null) {
+//            Activity activity;
+//            for (int i = 0; i < activities.size(); i++) {
+//                activity = activities.get(i);
+//                if (activity != null) {
+//                    if (!activity.isFinishing()) {
+//                        activity.finish();
+//                    }
+//                    activity = null;
+//                }
+//                activities.remove(i);
+//                i--;
+//            }
+//        }
+//    }
 
 }

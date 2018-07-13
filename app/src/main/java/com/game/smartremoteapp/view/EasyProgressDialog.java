@@ -20,12 +20,10 @@ import com.game.smartremoteapp.R;
  * 
  */
 public class EasyProgressDialog extends Dialog {
+
 	private Context mContext;
-
 	private String mMessage;
-
 	private int mLayoutId;
-
 	private TextView message;
 
 	public EasyProgressDialog(Context context, int style, int layout) {

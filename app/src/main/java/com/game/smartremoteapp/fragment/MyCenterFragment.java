@@ -140,7 +140,7 @@ public class MyCenterFragment extends BaseFragment {
             userNumber.setText("累积抓中" + UserUtils.UserCatchNum + "次");
             Glide.with(getContext())
                     .load(UserUtils.UserImage)
-                    .error(R.drawable.ctrl_default_user_bg)
+                    .error(R.mipmap.app_mm_icon)
                     .dontAnimate()
                     .transform(new GlideCircleTransform(getContext()))
                     .into(userImage);

@@ -16,6 +16,7 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.ChannelUtils;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
@@ -99,11 +100,12 @@ public class RegisterActivity extends BaseActivity{
             MyToast.getToast(this,"请输入短信验证码").show();
             return;
         }
-        regiterTask(phone,pass,code);
+        regiterTask(phone,pass,code,
+                ChannelUtils.getChannelNum());//渠道
     }
 
-    private void regiterTask(String phone, String pass, String code) {
-        HttpManager.getInstance().getRegiter(phone,pass,code, new RequestSubscriber<Result<HttpDataInfo>>() {
+    private void regiterTask(  String phone, String pass, String code,String channelNum) {
+        HttpManager.getInstance().getRegiter(phone,pass,code,channelNum, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if(httpDataInfoResult.getCode()==0){

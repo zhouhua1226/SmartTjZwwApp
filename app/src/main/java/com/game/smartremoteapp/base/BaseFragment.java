@@ -1,7 +1,6 @@
 package com.game.smartremoteapp.base;
 
 
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,13 +19,6 @@ public abstract class BaseFragment extends Fragment {
     protected View rootView;
     protected Unbinder unbinder;
     protected FragmentManager mfragmentManager;
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
-    }
 
     @Nullable
     @Override

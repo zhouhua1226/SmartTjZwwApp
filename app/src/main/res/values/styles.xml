@@ -11,7 +11,7 @@
     </style>
 
     <style name="jjLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/app_open_jj_bg</item>
+        <item name="android:windowBackground">@drawable/app_yd_naviage</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>

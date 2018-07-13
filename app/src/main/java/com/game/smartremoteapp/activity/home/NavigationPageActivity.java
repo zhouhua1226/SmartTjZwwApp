@@ -33,7 +33,8 @@ public class NavigationPageActivity extends BaseActivity {
     @BindView(R.id.lijitiyan_tv)
     TextView lijitiyanTv;
     private PagerAdapter pagerAdapter;
-    int draw[] = {R.drawable.app_yd_guess1, R.drawable.app_yd_guess2, R.drawable.app_yd_guess3};
+    int draw[] = {R.drawable.app_yd_naviage};
+         //   R.drawable.app_yd_guess2, R.drawable.app_yd_guess3};
     private String TAG = "NavigationActivity--";
     //记录当前选中位置
     int CURRENTINDEX = 0;
@@ -114,7 +115,7 @@ public class NavigationPageActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 Log.e(TAG, "viewpager位置Selected=" + position);
-                if(position==2){
+                if(position==0){
                     lijitiyanTv.setVisibility(View.VISIBLE);
                 }else {
                     lijitiyanTv.setVisibility(View.GONE);

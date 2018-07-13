@@ -3,6 +3,7 @@ package com.game.smartremoteapp.activity.ctrl.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Movie;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.home.CoinRecordActivity;
 import com.game.smartremoteapp.activity.home.PayNowActivity;
+import com.game.smartremoteapp.bean.CoinPusher;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.UserBean;
@@ -32,6 +34,7 @@ import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
+import com.game.smartremoteapp.view.PushCoinView;
 import com.gatz.netty.global.AppGlobal;
 import com.gatz.netty.global.ConnectResultEvent;
 import com.gatz.netty.utils.NettyUtils;
@@ -89,6 +92,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
     TextView coinResponseText;
     @BindView(R.id.coin_play_video_sv)
     SurfaceView mPlaySv;
+    @BindView(R.id.coin_gif_view)
+    GifView coinGif;
+    @BindView(R.id.push_day_coin)
+    PushCoinView push_day_coin;
     private boolean isStartSend = false;
     private boolean isCurrentConnect = true;
     private String currentUrl;
@@ -118,6 +125,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
         ctrlGifView.setVisibility(View.VISIBLE);
         ctrlGifView.setEnabled(false);
         ctrlGifView.setMovieResource(R.raw.ctrl_video_loading);
+        coinGif.setVisibility(View.GONE);
+        coinGif.setEnabled(false);
+
+
         ctrlFailIv.setVisibility(View.GONE);
         if (Utils.connectStatus.equals(ConnectResultEvent.CONNECT_FAILURE)) {
             ctrl_status.setImageResource(R.drawable.point_red);
@@ -130,7 +141,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
         player_name.setText(UserUtils.NickName + "...");
         NettyUtils.pingRequest(); //判断连接
         getUserDate(UserUtils.USER_ID);
-
+        getUserSumCoin(UserUtils.USER_ID);
     }
 
     private void initData() {
@@ -154,7 +165,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
         }
         ctrlGifView.setVisibility(View.VISIBLE);
         ctrlCompl.startPlayVideo(mPlaySv, currentUrl);
-        NettyUtils.pingRequest();
+        NettyUtils.sendRoomInCmd();
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -207,7 +218,11 @@ public class PushCoinActivity extends Activity implements IctrlView {
     @Override
     protected void onStop() {
         super.onStop();
+        ctrlCompl.stopRecordView();
         ctrlCompl.stopPlayVideo();
+        ctrlCompl.stopRecordView();
+        ctrlCompl.stopTimeCounter();
+        ctrlCompl.sendCmdOutRoom();
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -296,6 +311,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 finish();
                 break;
             case R.id.ctrl_comerecord_tv://投币记录
+
                 startActivity(new Intent(this, CoinRecordActivity.class));
                 break;
             case R.id.coin_recharge://充值
@@ -337,7 +353,23 @@ public class PushCoinActivity extends Activity implements IctrlView {
             }
         }
     }
+   private void  pushCoinAnimat(){
+       Movie  mMovie = Movie.decodeStream(getResources().openRawResource(
+               R.raw.coin_out_gif));
+       coinGif.setMovie(mMovie);
+       int dur=mMovie.duration();
+       coinGif.setVisibility(View.VISIBLE);
+       //gif动画播放一次
+       coinGif.setPaused(false);
+       coinGif.postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               coinGif.setPaused(true);
+               coinGif.setVisibility(View.GONE);
+           }
+       },dur);
 
+   }
     @OnClick({R.id.coin_push_btn})
     public void onPushClick(View v) {
         switch (v.getId()) {
@@ -349,7 +381,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     NettyUtils.sendPushCoinCmd(NettyUtils.USER_PUSH_COIN_PLAY, coinNumber);
                     coinPushBtn.setText("投币中");
                     setBtnEnabled(false);
-                    getUserDate(UserUtils.USER_ID);
+                    //刷新用户游戏币
+                    int totalMoney = coinNumber * 10;
+                    UserUtils.UserBalance=(Integer.parseInt(UserUtils.UserBalance)-totalMoney)+"";
+                    coin_recharge.setText("  " + UserUtils.UserBalance + " 充值");
                 }
                 break;
             default:
@@ -364,25 +399,32 @@ public class PushCoinActivity extends Activity implements IctrlView {
     public void getCoinDeviceResponse(Object response) {
         if (response instanceof CoinControlResponse) {
             CoinControlResponse coinControlResponse = (CoinControlResponse) response;
-            ReturnCode  code = coinControlResponse.getReturnCode();
-            if (code.toString().equals(ReturnCode.SUCCESS.name())){
+            ReturnCode code = coinControlResponse.getReturnCode();
+            if (code.toString().equals(ReturnCode.SUCCESS.name())) {
                 //TODO 结算
                 Log.e(TAG, "结算中........");
-                if(coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.END.name())) {
+                if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.END.name())) {
                     if ((coinControlResponse.getBet() != null) && (coinControlResponse.getBingo() != null)) {
                         int bingo = coinControlResponse.getBingo();
                         coinResponseText.setText(String.valueOf(bingo));
-                        getUserDate(UserUtils.USER_ID);
+                        String userId = coinControlResponse.getUserId();
+                        if (userId.equals(UserUtils.USER_ID)&&bingo>0) {
+                            pushCoinAnimat();
+                            getUserDate(UserUtils.USER_ID);
+                            getUserSumCoin(UserUtils.USER_ID);
+                        }
                     }
                     setCoinNormal();
-                    setBtnEnabled(true);
+                    coinPushBtn.setText("投 币");
                     isStartSend = false;
+                    setBtnEnabled(true);
                 } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
-                    Log.e(TAG, "游戏开始中........");
+                    Log.e(TAG, "游戏开始中........"+coinControlResponse.toString());
+
                     String userId = coinControlResponse.getUserId();
                     if (!userId.equals(UserUtils.USER_ID)) {
                         //TODO 观察到点击play
-                      //  Log.e(TAG, "观察到其他用户点击play");
+                        //  Log.e(TAG, "观察到其他用户点击play");
                         coinPushBtn.setText("投币中");
                         isStartSend = true;
                         setBtnEnabled(false);
@@ -403,19 +445,18 @@ public class PushCoinActivity extends Activity implements IctrlView {
             if ((seq != -2) && (!Utils.isEmpty(allUsers))) {
                 //TODO  我本人进来了
                 ctrlCompl.sendGetUserInfos(allUsers, true);
-                //是否能点击开始
-                if (!isStartSend) {//当前玩家正在游戏中
-                    if (free) {
-                        setCoinNormal();
-                        coinPushBtn.setText("投 币");
-                        isStartSend = false;
-                        setBtnEnabled(true);
-                    } else {
-                        coinPushBtn.setText("投币中");
-                        isStartSend = true;
-                        setBtnEnabled(false);
-                    }
+                //是否玩家正在游戏中
+                if (free) {
+                    setCoinNormal();
+                    coinPushBtn.setText("投 币");
+                    isStartSend = false;
+                    setBtnEnabled(true);
+                } else {
+                    coinPushBtn.setText("投币中");
+                    isStartSend = true;
+                    setBtnEnabled(false);
                 }
+
             } else {
                 boolean is = false;
                 if (userInfos.size() == 1) {
@@ -440,6 +481,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
 
         }
     }
+
 
     //设备状态
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
@@ -555,7 +597,6 @@ public class PushCoinActivity extends Activity implements IctrlView {
         }
     }
 
-
     @Override
     public void getUserInfos(List<String> list, boolean is) {
         //当前房屋的人数
@@ -596,18 +637,18 @@ public class PushCoinActivity extends Activity implements IctrlView {
                         Glide.with(getApplicationContext()).load(showImage)
                                 .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
                     } else {
-                        Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                        Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                                 .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
                     }
                 } else {
-                    Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                    Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                             .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
-                Glide.with(getApplicationContext()).load(R.drawable.ctrl_default_user_bg)
+                Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                         .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
             }
         });
@@ -641,5 +682,22 @@ public class PushCoinActivity extends Activity implements IctrlView {
         });
     }
 
+    //获取用户信息接口
+    private void getUserSumCoin(String userId) {
+        HttpManager.getInstance().getUserSumCoin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                if (loginInfoResult.getMsg().equals("success")) {
+                    CoinPusher mCoinPusher = loginInfoResult.getData().getCoinPusher();
+                    if (mCoinPusher != null) {
+                       push_day_coin.setProgress(mCoinPusher.getSum());
+                    }
+                }
+            }
 
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
 }

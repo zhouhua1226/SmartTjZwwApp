@@ -2,7 +2,6 @@ package com.game.smartremoteapp.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -298,7 +297,7 @@ public class PullToRefreshView extends LinearLayout {
 			if(  diff >= longPressTime){ 	
 			    return true; 
 			} 
-			System.out.println("pppppppppp--------"+diff);
+		//	System.out.println("pppppppppp--------"+diff);
 		return false; 
 
 	    }
@@ -315,7 +314,7 @@ public class PullToRefreshView extends LinearLayout {
 			mLastMotionX = x;
 			break;
 		case MotionEvent.ACTION_MOVE:
-			System.out.println("[[[[[[[[[[[[[[==========");
+			//System.out.println("[[[[[[[[[[[[[[==========");
 			// deltaY > 0 是向下运动,< 0是向上运动
 			int deltaY = y - mLastMotionY;
 			int deltaX = x - mLastMotionX;
@@ -325,7 +324,7 @@ public class PullToRefreshView extends LinearLayout {
 			
 			Boolean mIsLongPressed = isLongPressed(curDate1 , curDate2,200);
 			if (isRefreshViewScroll(deltaY) && !mIsLongPressed) {
-				System.out.println("===========不是长按");
+		//		System.out.println("===========不是长按");
 				return true;
 			}
 
@@ -410,10 +409,10 @@ public class PullToRefreshView extends LinearLayout {
 				System.out.println("当前时间"+curTime);
 				if(!"".equals(preRefreshTime)){//上一次刷新时间
 					mHeaderUpdateTextView.setText("更新于："+preRefreshTime);
-					Log.e("mHeaderUpdateTextView",preRefreshTime+"");
+				///	Log.e("mHeaderUpdateTextView",preRefreshTime+"");
 				}else{
 					mHeaderUpdateTextView.setText("更新于："+curTime);
-					Log.e("preRefreshTime<<<<<<<",curTime+"");
+				//	Log.e("preRefreshTime<<<<<<<",curTime+"");
 				}
 				View child = mAdapterView.getChildAt(0);
 				if (child == null) {
@@ -440,13 +439,13 @@ public class PullToRefreshView extends LinearLayout {
 			// 子scroll view滑动到最顶端
 			View child = mScrollView.getChildAt(0);
 			if (deltaY > 0 && mScrollView.getScrollY() == 0) {
-				System.out.println("++++++++++down++++++++++pulltorefresh========");
+			//	System.out.println("++++++++++down++++++++++pulltorefresh========");
 				mPullState = PULL_DOWN_STATE;
 				return true;
 			} else if (deltaY < 0
 					&& child.getMeasuredHeight() <= getHeight()
 							+ mScrollView.getScrollY()) {
-				System.out.println("+++++++++up+++++++++++pulltorefresh========");
+			//	System.out.println("+++++++++up+++++++++++pulltorefresh========");
 				mPullState = PULL_UP_STATE;
 				return true;
 			}
@@ -597,7 +596,7 @@ public class PullToRefreshView extends LinearLayout {
 		preRefreshTime=sdf.format(new Date());
 		//preRefreshTime=getCurrentTime(new Date());
 		mHeaderUpdateTextView.setText("更新于: "+preRefreshTime);
-		Log.e("preRefreshTime<<<<<11",preRefreshTime+"");
+	//	Log.e("preRefreshTime<<<<<11",preRefreshTime+"");
 		mHeaderState = PULL_TO_REFRESH;
 	}
 

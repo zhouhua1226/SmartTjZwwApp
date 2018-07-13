@@ -84,8 +84,8 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
     //手机号注册
-    public void getRegiter(String phone, String pass, String code, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
-        Observable<Result<HttpDataInfo>> o =smartService.getRegiter(phone,pass,code);
+    public void getRegiter( String phone, String pass, String code,String channelNum, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o =smartService.getRegiter(phone,pass,code,channelNum);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -625,5 +625,15 @@ public class HttpManager {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+    //投币记录
+    public void getUserSumCoin(String userId, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.getUserSumCoin(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+
     }
 }

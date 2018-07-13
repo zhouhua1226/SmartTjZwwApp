@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.base;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.umeng.message.PushAgent;
 public abstract class BaseActivity extends AppCompatActivity {
     private static GuessingSuccessDialog guessingSuccessDialog;
     private static final String TAG = "BaseActivity---";
+    private boolean isConfigChange=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         afterCreate(savedInstanceState);
         MyApplication.getInstance().activities.add(this);
         PushAgent.getInstance(this).onAppStart();
-
+        AppManager.getAppManager().addActivity(this);
 //        RxBus.get().register(this);
 //        //initDialog();
 //        IntentFilter intentFilter = new IntentFilter();
@@ -52,14 +54,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void initView();
 
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        isConfigChange = true;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (!isConfigChange) {
+            AppManager.getAppManager().finishActivity(this);
+        }
 //        RxBus.get().unregister(this);
 //        this.unregisterReceiver(LotteryReceiver);
-
     }
-
     private void initDialog() {
         if (guessingSuccessDialog == null) {
             guessingSuccessDialog = new GuessingSuccessDialog(this, R.style.easy_dialog_style);

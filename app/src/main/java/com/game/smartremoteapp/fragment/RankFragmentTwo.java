@@ -227,7 +227,7 @@ public class RankFragmentTwo extends BaseFragment {
         rankFirstNumTv.setText(getShowRankNum(firstBean));
         Glide.with(getContext())
                 .load(UrlUtils.APPPICTERURL + firstBean.getIMAGE_URL())
-                .error(R.drawable.ctrl_default_user_bg)
+                .error(R.mipmap.app_mm_icon)
                 .dontAnimate()
                 .centerCrop()
                 .transform(new GlideCircleTransform(getContext()))
@@ -241,7 +241,7 @@ public class RankFragmentTwo extends BaseFragment {
         rankSecondNumTv.setText(getShowRankNum(secondBean));
         Glide.with(getContext())
                 .load(UrlUtils.APPPICTERURL + secondBean.getIMAGE_URL())
-                .error(R.drawable.ctrl_default_user_bg)
+                .error(R.mipmap.app_mm_icon)
                 .dontAnimate()
                 .centerCrop()
                 .transform(new GlideCircleTransform(getContext()))
@@ -255,7 +255,7 @@ public class RankFragmentTwo extends BaseFragment {
         rankThirdNumTv.setText(getShowRankNum(thirdBean));
         Glide.with(getContext())
                 .load(UrlUtils.APPPICTERURL + thirdBean.getIMAGE_URL())
-                .error(R.drawable.ctrl_default_user_bg)
+                .error(R.mipmap.app_mm_icon)
                 .dontAnimate()
                 .centerCrop()
                 .transform(new GlideCircleTransform(getContext()))
@@ -273,7 +273,7 @@ public class RankFragmentTwo extends BaseFragment {
             rankitemOrdinalnum.setText("第" + myNum + "名");
             Glide.with(getContext())
                     .load(UrlUtils.APPPICTERURL + myBean.getIMAGE_URL())
-                    .error(R.drawable.ctrl_default_user_bg)
+                    .error(R.mipmap.app_mm_icon)
                     .dontAnimate()
                     .transform(new GlideCircleTransform(getContext()))
                     .into(rankUserImag);

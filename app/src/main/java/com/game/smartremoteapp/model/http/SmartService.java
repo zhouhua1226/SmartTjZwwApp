@@ -415,7 +415,10 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.REGITER)
-    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone, @Field(UrlUtils.PASSWORD) String password, @Field(UrlUtils.SMSCODE) String code);
+    Observable<Result<HttpDataInfo>> getRegiter(@Field(UrlUtils.PHONE) String phone,
+                                                @Field(UrlUtils.PASSWORD) String password,
+                                                @Field(UrlUtils.SMSCODE) String code,
+                                                @Field(UrlUtils.CHANNELNUM) String channelNum);
 
     //手机号密码登录
     @Headers("Content-Type: application/x-www-form-urlencoded")
@@ -647,4 +650,10 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.GETCOINPUSHERRECONDLIST)
     Observable<Result<CoinListBean>> getCoinRecord(@Field(UrlUtils.USERID) String userId);
+
+    //用户当天记出币总数
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETCOINSUM)
+    Observable<Result<HttpDataInfo>> getUserSumCoin(@Field(UrlUtils.USERID)String userId);
 }

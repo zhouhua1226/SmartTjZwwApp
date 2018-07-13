@@ -40,6 +40,15 @@ public class HttpDataInfo implements Serializable{
     private BankCardBean bankCard;
     private PagesBean pd;
     private List<GameListBean> gameList;
+    private CoinPusher coinPusher;
+
+    public CoinPusher getCoinPusher() {
+        return coinPusher;
+    }
+
+    public void setCoinPusher(CoinPusher coinPusher) {
+        this.coinPusher = coinPusher;
+    }
 
     public List<GameListBean> getGameList() {
         return gameList;

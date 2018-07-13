@@ -46,8 +46,9 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_gravity="center_vertical"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ctrl_default_user_bg" />
+                    android:src="@mipmap/app_mm_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,7 +104,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
-                            android:src="@drawable/ctrl_default_user_bg" />
+                            android:src="@mipmap/app_mm_icon" />
 
                         <ImageView
                             android:id="@+id/ctrl_status_iv"
@@ -128,7 +129,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="8dp"
                     android:paddingTop="5dp"
-                    android:text="  111 充值"
+                    android:text="  0 充值"
                     android:textColor="#fcf005"
                     android:textSize="12sp" />
 
@@ -160,6 +161,7 @@
                 android:layout_height="wrap_content" />
 
             <RelativeLayout
+                android:id="@+id/rl_push_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/line"
@@ -191,89 +193,120 @@
 
                     <ImageView
                         android:id="@+id/coin_button1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_1_n" />
 
                     <ImageView
                         android:id="@+id/coin_button5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_5_n" />
 
                     <ImageView
                         android:id="@+id/coin_button10"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_10_n" />
 
                     <ImageView
                         android:id="@+id/coin_button20"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_20_n" />
 
                     <ImageView
                         android:id="@+id/coin_button50"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_50_n" />
                 </LinearLayout>
 
             </RelativeLayout>
-
+            <com.game.smartremoteapp.view.PushCoinView
+                android:id="@+id/push_day_coin"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"/>
             <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="75dp"
+                android:layout_marginBottom="80dp"
                 android:background="@android:color/white" />
             <TextView
-                android:id="@+id/tv_explan"
+                android:id="@+id/tv_explan2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="12dp"
+                android:text="累计50硬币,加送50硬币"
+                android:textColor="@color/brilliant_red"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/tv_explan1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="3dp"
+                android:layout_above="@+id/tv_explan2"
                 android:text=" 注：1硬币对应10游戏币 "
                 android:textColor="@color/brilliant_red"
-                android:textSize="12sp" />
-            <TextView
-                android:id="@+id/coin_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/tv_explan"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:text="掉落金币数量:"
-                android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="11sp" />
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:orientation="horizontal"
+               android:layout_above="@+id/tv_explan1"
+               android:layout_centerHorizontal="true"
+               android:layout_marginBottom="10dp"
+               android:gravity="center"
+               android:layout_height="wrap_content">
+               <TextView
+                   android:id="@+id/coin_text"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerHorizontal="true"
+                   android:text="掉落硬币数量:"
+                   android:textColor="@android:color/white"
+                   android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/coin_response_text"
+               <TextView
+                   android:id="@+id/coin_response_text"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginStart="12dp"
+                   android:text="0"
+                   android:textColor="@color/coin_bg"
+                   android:textSize="15sp" />
+
+           </LinearLayout>
+
+            <com.game.smartremoteapp.view.GifView
+                android:id="@+id/coin_gif_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/coin_text"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/coin_text"
-                android:text="0"
-                android:textColor="@color/coin_bg"
-                android:textSize="15sp" />
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:clickable="false"
+                android:visibility="gone" />
 
         </RelativeLayout>
     </FrameLayout>

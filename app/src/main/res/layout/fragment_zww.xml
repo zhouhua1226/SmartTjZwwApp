@@ -7,7 +7,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="42dp"
         android:background="@color/apptheme_bg">
         <ImageView
             android:id="@+id/nextPage_iv"
@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:src="@drawable/app_jj_textlogo" />
 
         <ImageButton

@@ -7,13 +7,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.easy.ysdk.EasyYSDKApi;
 import com.easy.ysdk.pay.PayReviewer;
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.base.AppManager;
 import com.game.smartremoteapp.base.BaseActivity;
-import com.game.smartremoteapp.base.MyApplication;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -53,7 +52,6 @@ public class LoginActivity extends BaseActivity {
     GifView loginLoadingGv;
 
     private String TAG = "LoginActivity--";
-    private long mBackPressed;
     private String antuToken;
     private String uid;
 
@@ -88,19 +86,22 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initWelcome() {
-        if(isFirstInto()){
-            startActivity(new Intent(this,NavigationPageActivity.class));
-        }
+//        if(isFirstInto()){
+//            startActivity(new Intent(this,NavigationPageActivity.class));
+//        }
         if ((boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
             setContentView(R.layout.activity_welcome);//闪屏
-                //用户已经注册
-                uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
-                if (Utils.isEmpty(uid)) {
-                    return;
-                }
-                if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    getAuthLogin(uid);
-                }
+            //用户已经注册
+            uid = (String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+            if (Utils.isEmpty(uid)) {
+                return;
+            }
+            if (Utils.isNetworkAvailable(getApplicationContext())) {
+                getAuthLogin(uid);
+            }else{
+                MyToast.getToast(getApplicationContext(), "请查看你的网络！").show();
+                initCreatView();
+            }
         } else {
             initCreatView();
         }
@@ -336,15 +337,9 @@ public class LoginActivity extends BaseActivity {
 
 
 
-
-
     @Override
     public void onBackPressed() {
-        if ((System.currentTimeMillis() - mBackPressed) > 2000) {  //这里3000，表示两次点击的间隔时间
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            mBackPressed = System.currentTimeMillis();
-        } else {
-            MyApplication.getInstance().exit();
-        }
+        super.onBackPressed();
+        AppManager.getAppManager().finishAllActivity();
     }
 }
