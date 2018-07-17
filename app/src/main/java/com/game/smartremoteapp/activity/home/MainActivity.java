@@ -33,6 +33,7 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.LoadProgressView;
+import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.SignInDialog;
 import com.game.smartremoteapp.view.SignSuccessDialog;
 import com.game.smartremoteapp.view.UpdateDialog;
@@ -82,6 +83,7 @@ public class MainActivity extends BaseActivity {
     private int[] signDayNum=new int[7];
     private String isSign="";
     private LoadProgressView downloadDialog;
+    private SignInDialog signInDialog;
     static {
         System.loadLibrary("SmartPlayer");
     }
@@ -110,6 +112,7 @@ public class MainActivity extends BaseActivity {
         editor.commit();
         UserUtils.isUserChanger = false;
         getUserSign(UserUtils.USER_ID,"0"); //签到请求 0 查询签到信息 1签到
+        //setSignInDialog(signDayNum);
     }
     @Override
     protected void initView() {
@@ -509,7 +512,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setSignInDialog(int[] num){
-        final SignInDialog signInDialog=new SignInDialog(this,R.style.easy_dialog_style);
+        signInDialog=new SignInDialog(this,R.style.easy_dialog_style);
         signInDialog.setCancelable(true);
         signInDialog.show();
         signInDialog.setBackGroundColor(num);
@@ -558,15 +561,29 @@ public class MainActivity extends BaseActivity {
                                 signDayNum[i] = 0;
                             }
                         }
-                        if(isSign.equals("0")) {
-                            setSignInDialog(signDayNum);
+                        if(signNumber<7) {
+                            if (isSign.equals("0")) {
+                                setSignInDialog(signDayNum);
+                            }
                         }
                     }else {
                         //签到处理
                         String signgold=loginInfoResult.getData().getSign().getSIGNGOLD();
-                        LogUtils.logi("签到赠送金币"+signgold);
+                        LogUtils.logi("签到赠送金币"+signgold+"="+loginInfoResult.toString());
                         getSignSuccessDialog(signgold);
+                        signNumber+=1;
+                        for (int i = 0; i < 7; i++) {
+                            if (i < signNumber) {
+                                signDayNum[i] = 1;
+                            } else {
+                                signDayNum[i] = 0;
+                            }
+                        }
+                        signInDialog.setBackGroundColor(signDayNum);
+                        signInDialog.isSignedView(true);
                     }
+                }else {
+                    MyToast.getToast(getApplicationContext(),loginInfoResult.getMsg()).show();
                 }
             }
             @Override

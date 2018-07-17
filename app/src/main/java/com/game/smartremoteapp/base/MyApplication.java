@@ -8,6 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.game.smartremoteapp.service.SmartRemoteService;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 
@@ -29,7 +30,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-       // LogUtils.logInit(true);//初始化logger
+        LogUtils.logInit(true);//初始化logger
         registerActivityLifecycleCallbacks(new ActivityLifecycleListener());
     }
     private void setCrashHandler() {
