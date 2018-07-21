@@ -93,6 +93,8 @@ public class Utils {
     public static final long GET_STATUS_DELAY_TIME = 3*60*1000;
     public static final long GET_STATUS_PRE_TIME = 2*60*1000;
 
+    public static final int OTHER_PLAYER_DELAY_TIME = 6*1000;
+
     public static void showLogE(String TAG, String msg) {
         if (D) {
             android.util.Log.e(TAG, TAG + TAG_DELIMETER + msg);
