@@ -353,23 +353,25 @@ public class PushCoinActivity extends Activity implements IctrlView {
             }
         }
     }
-   private void  pushCoinAnimat(){
-       Movie  mMovie = Movie.decodeStream(getResources().openRawResource(
-               R.raw.coin_out_gif));
-       coinGif.setMovie(mMovie);
-       int dur=mMovie.duration();
-       coinGif.setVisibility(View.VISIBLE);
-       //gif动画播放一次
-       coinGif.setPaused(false);
-       coinGif.postDelayed(new Runnable() {
-           @Override
-           public void run() {
-               coinGif.setPaused(true);
-               coinGif.setVisibility(View.GONE);
-           }
-       },dur);
 
-   }
+    private void pushCoinAnimat() {
+        Movie mMovie = Movie.decodeStream(getResources().openRawResource(
+                R.raw.coin_out_gif));
+        coinGif.setMovie(mMovie);
+        int dur = mMovie.duration();
+        coinGif.setVisibility(View.VISIBLE);
+        //gif动画播放一次
+        coinGif.setPaused(false);
+        coinGif.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                coinGif.setPaused(true);
+                coinGif.setVisibility(View.GONE);
+            }
+        }, dur);
+
+    }
+
     @OnClick({R.id.coin_push_btn})
     public void onPushClick(View v) {
         switch (v.getId()) {
@@ -383,7 +385,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     setBtnEnabled(false);
                     //刷新用户游戏币
                     int totalMoney = coinNumber * 10;
-                    UserUtils.UserBalance=(Integer.parseInt(UserUtils.UserBalance)-totalMoney)+"";
+                    UserUtils.UserBalance = (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + "";
                     coin_recharge.setText("  " + UserUtils.UserBalance + " 充值");
                 }
                 break;
@@ -408,18 +410,39 @@ public class PushCoinActivity extends Activity implements IctrlView {
                         int bingo = coinControlResponse.getBingo();
                         coinResponseText.setText(String.valueOf(bingo));
                         String userId = coinControlResponse.getUserId();
-                        if (userId.equals(UserUtils.USER_ID)&&bingo>0) {
-                            pushCoinAnimat();
-                            getUserDate(UserUtils.USER_ID);
-                            getUserSumCoin(UserUtils.USER_ID);
+                        isStartSend = false;
+                        if (userId.equals(UserUtils.USER_ID)) {
+                            if (bingo > 0) {
+                                pushCoinAnimat();
+                                getUserDate(UserUtils.USER_ID);
+                                getUserSumCoin(UserUtils.USER_ID);
+                            }
+                            Log.e(TAG, "结算完毕,玩家立刻变亮........");
+                            //玩家变亮
+                            setCoinNormal();
+                            coinPushBtn.setText("投 币");
+                            setBtnEnabled(true);
+                        } else {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.e(TAG, "结算完毕,观看者6s后立刻变亮........");
+                                    if (!isStartSend) {
+                                        setCoinNormal();
+                                        coinPushBtn.setText("投 币");
+                                        isStartSend = false;
+                                        setBtnEnabled(true);
+                                    } else {
+                                        Log.e(TAG, "结算完毕,但是玩家再次使用了......");
+                                    }
+
+                                }
+                            }, Utils.OTHER_PLAYER_DELAY_TIME);
                         }
                     }
-                    setCoinNormal();
-                    coinPushBtn.setText("投 币");
-                    isStartSend = false;
-                    setBtnEnabled(true);
+
                 } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
-                    Log.e(TAG, "游戏开始中........"+coinControlResponse.toString());
+                    Log.e(TAG, "游戏开始中........" + coinControlResponse.toString());
 
                     String userId = coinControlResponse.getUserId();
                     if (!userId.equals(UserUtils.USER_ID)) {
@@ -491,10 +514,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
         if (state.equals("cbusy")) { //游戏中
 
         } else if (state.equals("cfree")) {//休闲中
-            setCoinNormal();
-            coinPushBtn.setText("投 币");
-            isStartSend = false;
-            setBtnEnabled(true);
+//            setCoinNormal();
+//            coinPushBtn.setText("投 币");
+//            isStartSend = false;
+//            setBtnEnabled(true);
         }
     }
 
@@ -690,7 +713,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 if (loginInfoResult.getMsg().equals("success")) {
                     CoinPusher mCoinPusher = loginInfoResult.getData().getCoinPusher();
                     if (mCoinPusher != null) {
-                       push_day_coin.setProgress(mCoinPusher.getSum());
+                        push_day_coin.setProgress(mCoinPusher.getSum());
                     }
                 }
             }
