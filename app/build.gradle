@@ -121,4 +121,5 @@ dependencies {
     compile files('libs/socket_api_release_v1.0.3.jar')
     compile 'com.orhanobut:logger:2.1.1'
     compile files('libs/ipaynow_base_v2.1.5_api1.0.0.jar')
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
 }
