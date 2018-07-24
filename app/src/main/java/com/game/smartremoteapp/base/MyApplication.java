@@ -8,8 +8,13 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.game.smartremoteapp.service.SmartRemoteService;
+import com.game.smartremoteapp.utils.LogUtils;
+import com.game.smartremoteapp.utils.UrlUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +31,14 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         myApplication = this;
+
+        //初始化组件化基础库, 统计SDK/推送SDK/分享SDK都必须调用此初始化接口
+        UMShareAPI.get(this);
+        Config.DEBUG = true;
         startCoreService();
         getPushAgent();
         setCrashHandler();
-       // LogUtils.logInit(true);//初始化logger
+        LogUtils.logInit(true);//初始化logger
         registerActivityLifecycleCallbacks(new ActivityLifecycleListener());
     }
     private void setCrashHandler() {
@@ -71,26 +80,11 @@ public class MyApplication extends MultiDexApplication {
         return myApplication;
     }
 
+    //各个平台的配置，建议放在全局Application或者程序入口
+    {
+        PlatformConfig.setWeixin(UrlUtils.APP_WEIXIN_ID, UrlUtils.APP_WEIXIN_KEY);
+        PlatformConfig.setQQZone(UrlUtils.APP_QQ_ID, UrlUtils.APP_QQ_KEY);
 
-//    public void finishProcess() {
-//        System.exit(0);
-//    }
-//
-//    public void exit() {
-//        if (activities != null) {
-//            Activity activity;
-//            for (int i = 0; i < activities.size(); i++) {
-//                activity = activities.get(i);
-//                if (activity != null) {
-//                    if (!activity.isFinishing()) {
-//                        activity.finish();
-//                    }
-//                    activity = null;
-//                }
-//                activities.remove(i);
-//                i--;
-//            }
-//        }
-//    }
+    }
 
 }

@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +25,7 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.CatchDollResultDialog;
 import com.game.smartremoteapp.view.MyToast;
 
 import java.util.ArrayList;
@@ -93,11 +93,37 @@ public class JoinEarnActivity extends BaseActivity {
                 if(userBalance >= payGold) {
                     getPromomoteOrder(UserUtils.USER_ID, proManageId, "P");
                 }else {
-                    MyToast.getToast(getApplicationContext(),"余额不足，请充值！").show();
-                 //   startActivity(new Intent(JoinEarnActivity.this, WeChatPayActivity.class));
-                    startActivity(new Intent(JoinEarnActivity.this, PayNowActivity.class));
+                    setCatchResultDialog(0);
                 }
+            }
+        });
+    }
 
+    private void setCatchResultDialog(final int index ) {
+        final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
+        catchDollResultDialog.setCancelable(false);
+        catchDollResultDialog.show();
+        switch (index) {
+            case 0:
+                catchDollResultDialog.setTitle("余额不足！");
+                catchDollResultDialog.setContent("请充值。");
+                catchDollResultDialog.setFail("取消充值");
+                catchDollResultDialog.setSuccess("前往充值");
+                catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
+                break;
+        }
+        catchDollResultDialog.setDialogResultListener(new CatchDollResultDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                if(resultCode>0) {
+                    switch (index) {
+                        case 0:
+                            Utils.toActivity(JoinEarnActivity.this, RechargeActivity.class);
+                            break;
+
+                    }
+                }
+                catchDollResultDialog.dismiss();
             }
         });
     }

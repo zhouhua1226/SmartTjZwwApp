@@ -364,6 +364,7 @@ public class RankFragmentTwo extends BaseFragment {
         HttpManager.getInstance().getRankDollList(userId, new RequestSubscriber<Result<ListRankBean>>() {
             @Override
             public void _onSuccess(Result<ListRankBean> result) {
+
                 if(result.getMsg().equals(Utils.HTTP_OK)){
                     dealData(result);
                 }

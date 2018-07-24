@@ -1,9 +1,9 @@
 package com.game.smartremoteapp.view;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Vibrator;
 
+import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.Utils;
 
 
@@ -18,8 +18,7 @@ public class VibratorView {
     private static Vibrator vibrator;
 
     public static void init(Context context){
-        SharedPreferences settings = context.getSharedPreferences("app_user", 0);
-        Utils.isVibrator = settings.getBoolean("isVibrator", true);
+        Utils.isVibrator = SPUtils.getBoolean(context,"isVibrator", true);
     }
 
     public static synchronized Vibrator getVibrator(Context context)

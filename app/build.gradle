@@ -19,7 +19,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
         versionCode 2
-        versionName "1.0.2"
+        versionName "1.0.4"
         multiDexEnabled true
         signingConfig signingConfigs.release
     }
@@ -113,8 +113,6 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile files('libs/smartavengine.jar')
     compile project(':polygonimageview')
-    compile(name: 'YSDK_Android_1.3.6_841', ext: 'aar')
-    compile project(':easyysdk')
     compile 'com.youth.banner:banner:1.4.9'
     //最新版本
     compile files('libs/umeng-analytics-v6.1.0.jar')

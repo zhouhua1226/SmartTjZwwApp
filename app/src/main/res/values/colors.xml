@@ -47,12 +47,15 @@
     <color name="black_drak">#353535</color> <!-- 53 53 53-->
     <color name="blue_light">#8DBCF6</color><!-- 141 188 246-->
     <color name="yellow">#FECC01</color>
+    <color name="yellow_drak">#Fed900</color>
     <color name="brown">#773113</color>
     <color name="gray_dark">#929292</color><!-- 146 146 146-->
     <color name="blue_drak">#304F69</color><!-- 48 79 105-->
     <color name="red_drak">#DD5341</color><!-- 221 83 65-->
     <color name="gray119">#777777</color><!-- 119 119 119-->
     <color name="common_gary_bg">#ededed</color>
-
-
+    <!-- 红色文本颜色 -->
+    <color name="common_red_text_color">#ff6464</color>
+    <color name="recharge_red_color">#fc2f2f</color>
+    <color name="recharge_blue_color">#72c6ff</color>
 </resources>

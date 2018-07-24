@@ -207,7 +207,7 @@ public class LnvitationCodeActivity extends BaseActivity {
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if (httpDataInfoResult.getMsg().equals("success")){
                     MyToast.getToast(getApplicationContext(),"兑换成功!").show();
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISEXCHANGE, true);
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISEXCHANGE, true);
                     invitationcodeSubmitLayout.setVisibility(View.GONE);
                     invitationcodeTitleTv.setText("已输入过邀请码");
                 }else {

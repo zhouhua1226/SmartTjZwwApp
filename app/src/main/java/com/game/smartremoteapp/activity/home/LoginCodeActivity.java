@@ -2,8 +2,10 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -15,18 +17,32 @@ import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
+import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.MyToast;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.game.smartremoteapp.utils.UserUtils.SP_TAG_PHONE;
+
 /**
- * Created by chenw on 2018/3/21.
+ * Created by chen on 2018/3/21.
  */
 public class LoginCodeActivity extends BaseActivity{
+    private static final String TAG ="LoginCodeActivity---" ;
     @BindView(R.id.et_phone)
     EditText et_phone;
     @BindView(R.id.et_password)
     EditText et_password;
+    @BindView(R.id.login_loading_gv)
+    GifView loginLoadingGv;
+    private UMShareAPI mUMShareAPI;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_login_code;
@@ -41,8 +57,31 @@ public class LoginCodeActivity extends BaseActivity{
     protected void initView() {
         setLeftBtnDefaultOnClickListener();
         setTitle("登录");
+        String phone= SPUtils.getString(getApplicationContext(), UserUtils.SP_TAG_PHONE,null);
+        if(phone!=null){
+            et_phone.setText(phone);
+            et_password.requestFocus();
+        }
+        loginLoadingGv.setEnabled(false);
+        loginLoadingGv.setMovieResource(R.raw.login_loadinggif);
+        mUMShareAPI= UMShareAPI.get(this);
     }
-    @OnClick({R.id.bt_sure_login,R.id.tv_forget_password,R.id.tv_register})
+    /**
+     * 是否展示预加载
+     * @param isVisible
+     */
+    private void setGifView(boolean isVisible){
+        if(loginLoadingGv==null){
+            return;
+        }
+        if(isVisible){
+            loginLoadingGv.setVisibility(View.VISIBLE);
+        }else {
+            loginLoadingGv.setVisibility(View.GONE);
+        }
+    }
+    @OnClick({R.id.bt_sure_login,R.id.tv_forget_password,R.id.tv_register,
+            R.id.login_qq_iv,R.id.login_wx_iv})
     public void onViewClicked(View v){
          switch (v.getId()){
              case R.id.bt_sure_login:
@@ -53,6 +92,12 @@ public class LoginCodeActivity extends BaseActivity{
                  break;
              case R.id.tv_register:
                  Utils.toActivity(this,RegisterActivity.class);
+                 break;
+             case R.id.login_qq_iv:
+                 mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, authListener);//QQ授权
+                 break;
+             case R.id.login_wx_iv:
+                 mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN, authListener);//微信授权
                  break;
          }
     }
@@ -77,18 +122,19 @@ public class LoginCodeActivity extends BaseActivity{
         loginTask(phone,pass);
     }
 
-    private void loginTask(String phone, String pass) {
+    private void loginTask(final String phone, String pass) {
         HttpManager.getInstance().getLoginPassword(phone, pass, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if(httpDataInfoResult.getCode()==0){
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
+                    SPUtils.putString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE, httpDataInfoResult.getData().getAppUser().getFIRST_CHARGE());
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
+                    SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
+                    SPUtils.putString(getApplicationContext(), SP_TAG_PHONE, phone);
                     MyToast.getToast(getApplicationContext(), "登录成功！").show();
-                    Intent intent = new Intent(LoginCodeActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    Utils.toActivity(LoginCodeActivity.this, MainActivity.class);
                     finish();
                 }else{
                     MyToast.getToast(getApplicationContext(), httpDataInfoResult.getMsg()).show();
@@ -99,5 +145,41 @@ public class LoginCodeActivity extends BaseActivity{
                 LogUtils.logi(e.getMessage());
             }
         });
+    }
+
+    UMAuthListener authListener = new UMAuthListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            LogUtils.loge(platform.toString()+"--data=="+data.toString());
+            Log.e(TAG,platform.toString()+"--data=="+data.toString());
+            mUMShareAPI.getPlatformInfo(LoginCodeActivity.this, platform, this);//获取信息
+
+        }
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            //Toast.makeText(mContext, "失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            // Toast.makeText(mContext, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mUMShareAPI.onActivityResult(requestCode, resultCode, data);
+    }
+    private void  tokenLogin(final  String accessToken ) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUMShareAPI.release();
     }
 }

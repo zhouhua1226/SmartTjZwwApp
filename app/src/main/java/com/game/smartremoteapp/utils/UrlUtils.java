@@ -11,6 +11,12 @@ public class UrlUtils {
     public static final String APPKEY = "appKey";
     public static final String APPSECRET = "appSecret";
 
+    public static final  String APP_WEIXIN_ID ="wx23d0856f453d5dd3" ;
+    public static final  String APP_WEIXIN_KEY ="d3f03de007c2faf1fa690378e10cc7f7" ;
+
+    public static final  String APP_QQ_ID ="1106675519" ;
+    public static final  String APP_QQ_KEY ="lc3yvvSbTbCI3G5j" ;
+
     public static final String CHANNEL = "channel";
 
     public static final String CTYPE = "ctype";
@@ -41,6 +47,7 @@ public class UrlUtils {
     public static final String PLAYBACK = "playBackId";
     public static final String DOLLID = "dollId";
     public static final String PLAYID = "pid";
+    public static final String CARD_TYPE ="cardtype" ;
     //设置收货人信息接口字段
     public static final String CONSIGNEENAME="name";
     public static final String CONSIGNEEPHONE="phone";
@@ -101,6 +108,8 @@ public class UrlUtils {
     public static final String DRAW_ORDERAMT="orderAmt";
     //房间游戏记录
     public static final String ROOMID="roomId";
+    public static final String REGGOLD = "regGold";
+    public static final String PAYOUTTYPE = "payOutType";
 
     public static final String URL = "http://111.231.139.61:18081";
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
@@ -319,4 +328,7 @@ public class UrlUtils {
 
     //用户当天记出币总数
     public static final String GETCOINSUM =URL+"/pooh-web/app/coinPusher/getCoinSum" ;
+
+
+
 }

@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.home.CoinRecordActivity;
-import com.game.smartremoteapp.activity.home.PayNowActivity;
+import com.game.smartremoteapp.activity.home.RechargeActivity;
 import com.game.smartremoteapp.bean.CoinPusher;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
@@ -31,6 +31,7 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.CatchDollResultDialog;
 import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
@@ -289,7 +290,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
             coinPushBtn.setTextColor(Color.parseColor("#57515d"));
             imageView.setImageResource(drawable);
         } else {
-            MyToast.getToast(getApplicationContext(), "余额不足，请充值！").show();
+            setCatchResultDialog(0);
         }
     }
 
@@ -311,11 +312,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 finish();
                 break;
             case R.id.ctrl_comerecord_tv://投币记录
-
                 startActivity(new Intent(this, CoinRecordActivity.class));
                 break;
             case R.id.coin_recharge://充值
-                startActivity(new Intent(this, PayNowActivity.class));
+                startActivity(new Intent(this, RechargeActivity.class));
                 break;
             case R.id.ctrl_change_camera_iv:
                 currentUrl = currentUrl.equals(playUrlMain) ? playUrlSecond : playUrlMain;
@@ -353,25 +353,23 @@ public class PushCoinActivity extends Activity implements IctrlView {
             }
         }
     }
+   private void  pushCoinAnimat(){
+       Movie  mMovie = Movie.decodeStream(getResources().openRawResource(
+               R.raw.coin_out_gif));
+       coinGif.setMovie(mMovie);
+       int dur=mMovie.duration();
+       coinGif.setVisibility(View.VISIBLE);
+       //gif动画播放一次
+       coinGif.setPaused(false);
+       coinGif.postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               coinGif.setPaused(true);
+               coinGif.setVisibility(View.GONE);
+           }
+       },dur);
 
-    private void pushCoinAnimat() {
-        Movie mMovie = Movie.decodeStream(getResources().openRawResource(
-                R.raw.coin_out_gif));
-        coinGif.setMovie(mMovie);
-        int dur = mMovie.duration();
-        coinGif.setVisibility(View.VISIBLE);
-        //gif动画播放一次
-        coinGif.setPaused(false);
-        coinGif.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                coinGif.setPaused(true);
-                coinGif.setVisibility(View.GONE);
-            }
-        }, dur);
-
-    }
-
+   }
     @OnClick({R.id.coin_push_btn})
     public void onPushClick(View v) {
         switch (v.getId()) {
@@ -385,7 +383,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     setBtnEnabled(false);
                     //刷新用户游戏币
                     int totalMoney = coinNumber * 10;
-                    UserUtils.UserBalance = (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + "";
+                    UserUtils.UserBalance=(Integer.parseInt(UserUtils.UserBalance)-totalMoney)+"";
                     coin_recharge.setText("  " + UserUtils.UserBalance + " 充值");
                 }
                 break;
@@ -440,9 +438,8 @@ public class PushCoinActivity extends Activity implements IctrlView {
                             }, Utils.OTHER_PLAYER_DELAY_TIME);
                         }
                     }
-
                 } else if (coinControlResponse.getCoinStatusType().name().equals(CoinStatusType.PLAY.name())) {
-                    Log.e(TAG, "游戏开始中........" + coinControlResponse.toString());
+                    Log.e(TAG, "游戏开始中........"+coinControlResponse.toString());
 
                     String userId = coinControlResponse.getUserId();
                     if (!userId.equals(UserUtils.USER_ID)) {
@@ -514,10 +511,10 @@ public class PushCoinActivity extends Activity implements IctrlView {
         if (state.equals("cbusy")) { //游戏中
 
         } else if (state.equals("cfree")) {//休闲中
-//            setCoinNormal();
-//            coinPushBtn.setText("投 币");
-//            isStartSend = false;
-//            setBtnEnabled(true);
+            setCoinNormal();
+            coinPushBtn.setText("投 币");
+            isStartSend = false;
+            setBtnEnabled(true);
         }
     }
 
@@ -713,13 +710,42 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 if (loginInfoResult.getMsg().equals("success")) {
                     CoinPusher mCoinPusher = loginInfoResult.getData().getCoinPusher();
                     if (mCoinPusher != null) {
-                        push_day_coin.setProgress(mCoinPusher.getSum());
+                       push_day_coin.setProgress(mCoinPusher.getSum());
                     }
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
+            }
+        });
+    }
+
+    private void setCatchResultDialog(final int index  ) {
+        final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
+        catchDollResultDialog.setCancelable(false);
+        catchDollResultDialog.show();
+        switch (index) {
+            case 0:
+                catchDollResultDialog.setTitle("余额不足！");
+                catchDollResultDialog.setContent("请充值。");
+                catchDollResultDialog.setFail("取消充值");
+                catchDollResultDialog.setSuccess("前往充值");
+                catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
+                break;
+        }
+        catchDollResultDialog.setDialogResultListener(new CatchDollResultDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                if(resultCode>0) {
+                    switch (index) {
+                        case 0:
+                            Utils.toActivity(PushCoinActivity.this, RechargeActivity.class);
+                            break;
+
+                    }
+                }
+                catchDollResultDialog.dismiss();
             }
         });
     }

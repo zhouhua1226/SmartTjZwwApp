@@ -2,63 +2,157 @@ package com.game.smartremoteapp.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
- * Created by zhouh on 2017/9/19.
+ * Created by chen on 2018/6/18.
  */
 public class SPUtils {
-    public static String FILLNAME = "spconfig";
 
-    /**
-     * 存入某个key对应的value值
-     *
-     * @param context
-     * @param key
-     * @param value
-     */
-    public static void put(Context context, String key, Object value) {
-        SharedPreferences sp = context.getSharedPreferences(FILLNAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        if (value instanceof String) {
-            edit.putString(key, (String) value);
-        } else if (value instanceof Integer) {
-            edit.putInt(key, (Integer) value);
-        } else if (value instanceof Boolean) {
-            edit.putBoolean(key, (Boolean) value);
-        } else if (value instanceof Float) {
-            edit.putFloat(key, (Float) value);
-        } else if (value instanceof Long) {
-            edit.putLong(key, (Long) value);
+    public static UUID uuid;
+    public static final String PREFS_DEVICE_ID = "device_id";//设备号id
+
+
+    public static void init(Context context) {
+        synchronized (SPUtils.class) {
+            if (uuid == null) {
+                final SharedPreferences prefs = SPUtils.getSharedPreferences(context);
+                final String id = prefs.getString(PREFS_DEVICE_ID, null);
+                if (id != null) {
+
+                    uuid = UUID.fromString(id);
+                } else {
+                    final String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    // Use the Android ID unless it's broken, in which case
+                    // fallback on deviceId,
+                    // unless it's not available, then fallback on a random
+                    // number which we store
+                    // to a prefs file
+                    try {
+                        if (!"9774d56d682e549c".equals(androidId)) {
+                            uuid = UUID.nameUUIDFromBytes(androidId.getBytes("utf8"));
+                        } else {
+                            final String deviceId = ((TelephonyManager) context
+                                    .getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+                            uuid = deviceId != null ? UUID.nameUUIDFromBytes(deviceId.getBytes("utf8")) : UUID
+                                    .randomUUID();
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    prefs.edit().putString(PREFS_DEVICE_ID, uuid.toString()).commit();
+                }
+            }
         }
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(edit);
     }
 
     /**
-     * 得到某个key对应的值
-     *
+     * 获取设备号
      * @param context
-     * @param key
-     * @param defValue
      * @return
      */
-    public static Object get(Context context, String key, Object defValue) {
-        SharedPreferences sp = context.getSharedPreferences(FILLNAME, Context.MODE_PRIVATE);
-        if (defValue instanceof String) {
-            return sp.getString(key, (String) defValue);
-        } else if (defValue instanceof Integer) {
-            return sp.getInt(key, (Integer) defValue);
-        } else if (defValue instanceof Boolean) {
-            return sp.getBoolean(key, (Boolean) defValue);
-        } else if (defValue instanceof Float) {
-            return sp.getFloat(key, (Float) defValue);
-        } else if (defValue instanceof Long) {
-            return sp.getLong(key, (Long) defValue);
+    public static UUID getDeviceUuid(Context context) {
+        if (uuid == null) {
+            init(context);
         }
-        return null;
+        return uuid;
     }
+
+
+    private static SharedPreferences getSharedPreferences( Context context) {
+        return android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    /**
+     * 存获取SharedPreferences Int 类型
+     * @param context
+     * @return
+     */
+    public static int getInt( Context context,  String key,  int defaultValue) {
+        return SPUtils.getSharedPreferences(context).getInt(key, defaultValue);
+    }
+    public static boolean putInt( Context context,  String key,  int pValue) {
+        final SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.putInt(key, pValue);
+        return editor.commit();
+    }
+    /**
+     * 存获取SharedPreferences Long 类型
+     * @param context
+     * @return
+     */
+
+    public static Long getLong( Context context,  String key,  Long defaultValue) {
+        if (SPUtils.getSharedPreferences(context).contains(key)) {
+            return SPUtils.getSharedPreferences(context).getLong(key, defaultValue);
+        } else {
+            return null;
+        }
+    }
+    public static boolean putLong( Context context,  String key,  long pValue) {
+        final SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.putLong(key, pValue);
+        return editor.commit();
+    }
+    /**
+     * 存获取SharedPreferences Boolean 类型
+     * @param context
+     * @return
+     */
+    public static boolean getBoolean( Context context,  String key,  boolean defaultValue) {
+        return SPUtils.getSharedPreferences(context).getBoolean(key, defaultValue);
+    }
+
+    public static boolean putBoolean( Context context,  String key,  boolean pValue) {
+        final SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.putBoolean(key, pValue);
+        return editor.commit();
+    }
+    /**
+     * 存获取SharedPreferences String 类型
+     * @param context
+     * @return
+     */
+    public static String getString( Context context,  String key,  String defaultValue) {
+        return SPUtils.getSharedPreferences(context).getString(key, defaultValue);
+    }
+    public static boolean putString( Context context,  String key,  String pValue) {
+        final SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.putString(key, pValue);
+        return editor.commit();
+    }
+
+    /**
+     * 存获取SharedPreferences String 类型
+     * @param context
+     * @return
+     */
+    public static float getFloat(  Context context,   String key,  float defaultValue) {
+        return SPUtils.getSharedPreferences(context).getFloat(key, defaultValue);
+    }
+    public static boolean putFloat(  Context context,   String key,   float pValue) {
+        final SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.putFloat(key, pValue);
+        return editor.commit();
+    }
+
+    /**
+     *  SharedPreferences remove 数据
+     * @param context
+     * @return
+     */
+
+    public static boolean remove(  Context context, final String key) {
+        SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.remove(key);
+        return editor.commit();
+    }
+
 
     /**
      * 返回所有数据
@@ -67,22 +161,9 @@ public class SPUtils {
      * @return
      */
     public static Map<String, ?> getAll(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(FILLNAME, Context.MODE_PRIVATE);
-        return sp.getAll();
+        return   SPUtils.getSharedPreferences(context).getAll();
     }
 
-    /**
-     * 移除某个key值已经对应的值
-     *
-     * @param context
-     * @param key
-     */
-    public static void remove(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILLNAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        edit.remove(key);
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(edit);
-    }
 
     /**
      * 清除所有内容
@@ -90,10 +171,9 @@ public class SPUtils {
      * @param context
      */
     public static void clear(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(FILLNAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        edit.clear();
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(edit);
+        SharedPreferences.Editor editor = SPUtils.getSharedPreferences(context).edit();
+        editor.clear();
+        editor.commit();
     }
 
 }

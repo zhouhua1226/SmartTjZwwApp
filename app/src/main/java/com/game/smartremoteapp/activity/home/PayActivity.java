@@ -14,17 +14,13 @@ import com.game.smartremoteapp.alipay.AlipayRequest;
 import com.game.smartremoteapp.alipay.PayCallback;
 import com.game.smartremoteapp.alipay.PayResult;
 import com.game.smartremoteapp.base.BaseActivity;
-import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.PayCardBean;
-import com.game.smartremoteapp.bean.Result;
-import com.game.smartremoteapp.model.http.HttpManager;
-import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.EZUtils;
-import com.game.smartremoteapp.utils.LogUtils;
-import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -89,7 +85,7 @@ public class PayActivity extends BaseActivity  {
                 startActivity(new Intent(this, ServiceActivity.class));
                 break;
             case R.id.rl_pay_alipay:
-                getOrderInfo();
+               // getOrderInfo();
                 break;
             case R.id.rl_pay_weixin:
                 Intent intent=new Intent(this,PayNowActivity.class);
@@ -103,21 +99,21 @@ public class PayActivity extends BaseActivity  {
     /**
      * 获取支付宝支付信息
      */
-    private void getOrderInfo() {
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, "0.1", new RequestSubscriber<Result<AlipayBean>>() {
-            @Override
-            public void _onSuccess(Result<AlipayBean> result) {
-                if (result.getCode() == 0) {
-                    startApliyPay(result.getData().getAlipay()); //调用支付宝支付接口
-                }
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
-            }
-        });
-    }
+//    private void getOrderInfo() {
+//        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount, UserUtils.USER_ID, "0.1", new RequestSubscriber<Result<AlipayBean>>() {
+//            @Override
+//            public void _onSuccess(Result<AlipayBean> result) {
+//                if (result.getCode() == 0) {
+//                    startApliyPay(result.getData().getAlipay()); //调用支付宝支付接口
+//                }
+//            }
+//
+//            @Override
+//            public void _onError(Throwable e) {
+//                LogUtils.logi(e.getMessage());
+//            }
+//        });
+//    }
 
     /**
      * 调取支付支付界面

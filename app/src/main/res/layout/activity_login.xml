@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_mm_bg"
     xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/login_mm_bg"
-        android:orientation="vertical">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -17,89 +13,18 @@
                 android:id="@+id/login_logotext_imag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/app_jj_textlarger_logo"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
                 android:visibility="gone"
                 />
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/direction_widght"
-                android:paddingRight="@dimen/direction_widght"
-                android:gravity="center_vertical"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-              <View
-                  android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:background="@color/select_pop_gv_bg"
-                  android:layout_height="1dp"></View>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="推荐使用社交账号登录"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:textColor="@color/main_gray"
-                   />
-                <View
-                    android:layout_width="0dp"
-                    android:background="@color/select_pop_gv_bg"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_height="1dp"></View>
-            </LinearLayout>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:id="@+id/login_qq_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:background="@drawable/login_jj_qqbg" />
-                <TextView
-                    android:id="@+id/login_wx_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:background="@drawable/login_jj_wxbg" />
-            </LinearLayout>
             <TextView
                 android:id="@+id/tv_login_password"
                 android:layout_width="match_parent"
                 android:textColor="@color/black"
-                tools:text="使用手机号登录/注册"
                 android:textSize="@dimen/text_font_size_28"
                 android:gravity="center"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
-    </LinearLayout>
 
-    <com.game.smartremoteapp.view.GifView
-        android:id="@+id/login_loading_gv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:visibility="gone" />
-</RelativeLayout>

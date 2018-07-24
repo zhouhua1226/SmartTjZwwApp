@@ -3,7 +3,6 @@ package com.game.smartremoteapp.activity.home;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.AppInfo;
@@ -27,12 +28,18 @@ import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.MyToast;
+import com.game.smartremoteapp.view.ShareDialog;
 import com.game.smartremoteapp.view.UpdateDialog;
 import com.gatz.netty.utils.NettyUtils;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,8 +82,7 @@ public class SettingActivity extends BaseActivity {
     RelativeLayout roommusicControlLayout;
 
     private String TAG = "SettingActivity";
-    private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
+
     private Context context = SettingActivity.this;
     private LoadProgressView downloadDialog;
 
@@ -143,30 +149,28 @@ public class SettingActivity extends BaseActivity {
             case R.id.vibrator_control_layout:
             case R.id.vibrator_control_imag:
                 Utils.isVibrator = !Utils.isVibrator;
-                editor.putBoolean("isVibrator", Utils.isVibrator);
-                editor.commit();
+                SPUtils.putBoolean(getApplicationContext(),"isVibrator", Utils.isVibrator);
                 setBtnText(vibratorControlImag, Utils.isVibrator);
                 break;
             case R.id.roommusic_control_layout:
             case R.id.roommusic_control_imag:
-                boolean isMusic=(boolean)SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+                boolean isMusic= SPUtils.getBoolean(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
                 if(isMusic){
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, false);
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, false);
                 }else {
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
                 }
                 setIsOpenMusic();
                 break;
             case R.id.setting_update_layout:
-               checkVersion();
+              // checkVersion();
                 break;
             case R.id.setting_share_layout:
-                Log.e(TAG,"分享参数userId="+UserUtils.USER_ID);
-                MyToast.getToast(getApplicationContext(),"研发中！").show();
-                //RobustApi.getInstance().shareWx(this, new ShareInfo(UserUtils.USER_ID));
+                shareApp();
                 break;
         }
     }
+
     /**
      * 获取apk版本信息
      */
@@ -219,12 +223,8 @@ public class SettingActivity extends BaseActivity {
         }
     }
     private void setIsVibrator() {
-        settings = getSharedPreferences("app_user", 0);
-        editor = settings.edit();
-        if (settings.contains("isVibrator")) {
-            Utils.isVibrator = settings.getBoolean("isVibrator", true);
-        }
 
+            Utils.isVibrator = SPUtils.getBoolean(getApplicationContext(),"isVibrator", true);
         if (!Utils.isVibrator)
             vibratorControlImag.setSelected(false);
         else
@@ -239,7 +239,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void setIsOpenMusic(){
-        boolean isOpen=(boolean)SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
+        boolean isOpen= SPUtils.getBoolean(getApplicationContext(), UserUtils.SP_TAG_ISOPENMUSIC, true);
         if(isOpen){
             roommusicControlImag.setSelected(true);
         }else {
@@ -257,12 +257,12 @@ public class SettingActivity extends BaseActivity {
 //                    SPUtils.remove(context, UserUtils.SP_TAG_LOGIN);
 //                    UserUtils.UserPhone = "";
                    // Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
-                    SPUtils.put(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
+                    SPUtils.putString(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
+                    SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
                     NettyUtils.destoryConnect();
-                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+                    startActivity(new Intent(SettingActivity.this, WelcomeActivity.class));
                     finish();
                 }
             }
@@ -305,5 +305,42 @@ public class SettingActivity extends BaseActivity {
         super.onDestroy();
         RxBus.get().unregister(this);
     }
+
+
+
+    //分享
+    private void shareApp() {
+        new ShareDialog(this, new ShareDialog.OnShareIndexOnClicker() {
+            @Override
+            public void ShareIndexOnClicker(int index, final UMWeb web, final SHARE_MEDIA shareMedia) {
+                new ShareAction(SettingActivity.this)
+                        .withMedia(web)
+                        .setPlatform(shareMedia)
+                        .setCallback(shareListener).share();
+
+            }
+        });
+    }
+
+
+    private UMShareListener shareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(getApplicationContext(),"分享成功",Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(getApplicationContext(),"分享失败"+t.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(getApplicationContext(),"分享取消",Toast.LENGTH_SHORT).show();
+        }
+    };
+
 }
 

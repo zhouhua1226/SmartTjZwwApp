@@ -4,10 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.game.smartremoteapp.R;
-
 
 /**
  * Created by yincong on 2018/1/5 15:45
@@ -15,10 +14,18 @@ import com.game.smartremoteapp.R;
  * 修改时间：
  * 类描述：签到弹窗
  */
+
 public class SignInDialog extends Dialog implements View.OnClickListener{
 
-    private ImageView imageView1,imageView2,imageView3,imageView4
-            ,imageView5,imageView6,imageView7,imageView_sure;
+    private ImageView imageView1,imageView2,imageView3,imageView4,
+            imageView5,imageView6,imageView7,imageView_sure,
+            signin_day1_dot_iv,signin_day2_dot_iv,signin_day3_dot_iv,
+            signin_day4_dot_iv, signin_day5_dot_iv,signin_day6_dot_iv,
+            signin_day7_dot_iv;
+    private ImageButton signin_day1_ibtn,signin_day2_ibtn,signin_day3_ibtn,
+            signin_day4_ibtn,signin_day5_ibtn,signin_day6_ibtn,
+            signin_day7_ibtn,cancle_ibtn,sure_ibtn;
+
 
     public SignInDialog(Context context) {
         super(context);
@@ -47,80 +54,95 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
      */
     public void setBackGroundColor(int[] num) {
         if(num[0]==0){
-            imageView1.setEnabled(true);
-            imageView1.setImageResource(R.drawable.sign_dialog_ten_unselect);
+            signin_day1_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day1_ibtn.setBackgroundResource(R.drawable.tm_sign_coin5);
         }else {
-            imageView1.setEnabled(false);
-            imageView1.setImageResource(R.drawable.sign_dialog_ten_select);
+            signin_day1_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day1_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[1]==0){
-            imageView2.setEnabled(true);
-            imageView2.setImageResource(R.drawable.sign_dialog_ten_unselect);
+            signin_day2_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day2_ibtn.setBackgroundResource(R.drawable.tm_sign_coin5);
         }else {
-            imageView2.setEnabled(false);
-            imageView2.setImageResource(R.drawable.sign_dialog_ten_select);
+            signin_day2_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day2_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[2]==0){
-            imageView3.setEnabled(true);
-            imageView3.setImageResource(R.drawable.sign_dialog_twenty_unselect);
+            signin_day3_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day3_ibtn.setBackgroundResource(R.drawable.tm_sign_coin15);
         }else {
-            imageView3.setEnabled(false);
-            imageView3.setImageResource(R.drawable.sign_dialog_twenty_select);
+            signin_day3_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day3_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[3]==0){
-            imageView4.setEnabled(true);
-            imageView4.setImageResource(R.drawable.sign_dialog_ten_unselect);
+            signin_day4_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day4_ibtn.setBackgroundResource(R.drawable.tm_sign_coin10);
         }else {
-            imageView4.setEnabled(false);
-            imageView4.setImageResource(R.drawable.sign_dialog_ten_select);
+            signin_day4_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day4_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[4]==0){
-            imageView5.setEnabled(true);
-            imageView5.setImageResource(R.drawable.sign_dialog_ten_unselect);
+            signin_day5_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day5_ibtn.setBackgroundResource(R.drawable.tm_sign_coin10);
         }else {
-            imageView5.setEnabled(false);
-            imageView5.setImageResource(R.drawable.sign_dialog_ten_select);
+            signin_day5_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day5_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[5]==0){
-            imageView6.setEnabled(true);
-            imageView6.setImageResource(R.drawable.sign_dialog_ten_unselect);
+            signin_day6_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day6_ibtn.setBackgroundResource(R.drawable.tm_sign_coin10);
         }else {
-            imageView6.setEnabled(false);
-            imageView6.setImageResource(R.drawable.sign_dialog_ten_select);
+            signin_day6_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day6_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned1);
         }
         if(num[6]==0){
-            imageView7.setEnabled(true);
-            imageView7.setImageResource(R.drawable.sign_dialog_fourty_unselect);
+            signin_day7_dot_iv.setImageResource(R.drawable.tm_sign_green_dot);
+            signin_day7_ibtn.setBackgroundResource(R.drawable.tm_sign_coin30);
         }else {
-            imageView7.setEnabled(false);
-            imageView7.setImageResource(R.drawable.sign_dialog_fourty_select);
+            signin_day7_dot_iv.setImageResource(R.drawable.tm_sign_yellow_dot);
+            signin_day7_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned2);
         }
     }
 
 
     public void findView() {
-        imageView1 = (ImageView) findViewById(R.id.sign_dialog_oneday_imag);
-        imageView2 = (ImageView) findViewById(R.id.sign_dialog_twoday_imag);
-        imageView3 = (ImageView) findViewById(R.id.sign_dialog_threeday_imag);
-        imageView4 = (ImageView) findViewById(R.id.sign_dialog_fourday_imag);
-        imageView5 = (ImageView) findViewById(R.id.sign_dialog_fiveday_imag);
-        imageView6 = (ImageView) findViewById(R.id.sign_dialog_sexday_imag);
-        imageView7 = (ImageView) findViewById(R.id.sign_dialog_sevenday_imag);
-        imageView_sure= (ImageView) findViewById(R.id.sign_dialog_sure_imag);
+        sure_ibtn= (ImageButton) findViewById(R.id.signin_sure_ibtn);
+        cancle_ibtn= (ImageButton) findViewById(R.id.signin_cancle_ibtn);
+        signin_day1_dot_iv= (ImageView) findViewById(R.id.signin_day1_dot_iv);
+        signin_day1_ibtn= (ImageButton) findViewById(R.id.signin_day1_ibtn);
+        signin_day2_dot_iv= (ImageView) findViewById(R.id.signin_day2_dot_iv);
+        signin_day2_ibtn= (ImageButton) findViewById(R.id.signin_day2_ibtn);
+        signin_day3_dot_iv= (ImageView) findViewById(R.id.signin_day3_dot_iv);
+        signin_day3_ibtn= (ImageButton) findViewById(R.id.signin_day3_ibtn);
+        signin_day4_dot_iv= (ImageView) findViewById(R.id.signin_day4_dot_iv);
+        signin_day4_ibtn= (ImageButton) findViewById(R.id.signin_day4_ibtn);
+        signin_day5_dot_iv= (ImageView) findViewById(R.id.signin_day5_dot_iv);
+        signin_day5_ibtn= (ImageButton) findViewById(R.id.signin_day5_ibtn);
+        signin_day6_dot_iv= (ImageView) findViewById(R.id.signin_day6_dot_iv);
+        signin_day6_ibtn= (ImageButton) findViewById(R.id.signin_day6_ibtn);
+        signin_day7_dot_iv= (ImageView) findViewById(R.id.signin_day7_dot_iv);
+        signin_day7_ibtn= (ImageButton) findViewById(R.id.signin_day7_ibtn);
+    }
+
+    /**
+     * 当前是否签到，从而更改签到按钮UI
+     * @param isSign
+     */
+    public void isSignedView(boolean isSign){
+        sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
+//        if(isSign){
+//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned3);
+//        }else {
+//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
+//        }
     }
 
     /**
      * 绑定监听
      **/
     private void setListner() {
-//        imageView1.setOnClickListener(this);
-//        imageView2.setOnClickListener(this);
-//        imageView3.setOnClickListener(this);
-//        imageView4.setOnClickListener(this);
-//        imageView5.setOnClickListener(this);
-//        imageView6.setOnClickListener(this);
-//        imageView7.setOnClickListener(this);
-        imageView_sure.setOnClickListener(this);
+        cancle_ibtn.setOnClickListener(this);
+        sure_ibtn.setOnClickListener(this);
     }
 
     /**
@@ -129,53 +151,14 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_dialog_sure_imag:
+            case R.id.signin_sure_ibtn:
                 if (null != this.listener) {
                     listener.getResult(0);
                 }
+                //SignInDialog.this.dismiss();
+                break;
+            case R.id.signin_cancle_ibtn:
                 SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_oneday_imag:
-                if (null != this.listener) {
-                    listener.getResult(1);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_twoday_imag:
-                if (null != this.listener) {
-                    listener.getResult(2);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_threeday_imag:
-                if (null != this.listener) {
-                    listener.getResult(3);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_fourday_imag:
-                if (null != this.listener) {
-                    listener.getResult(4);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_fiveday_imag:
-                if (null != this.listener) {
-                    listener.getResult(5);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_sexday_imag:
-                if (null != this.listener) {
-                    listener.getResult(6);
-                }
-                //SignInDialog.this.dismiss();
-                break;
-            case R.id.sign_dialog_sevenday_imag:
-                if (null != this.listener) {
-                    listener.getResult(7);
-                }
-                //SignInDialog.this.dismiss();
                 break;
             default:
                 break;

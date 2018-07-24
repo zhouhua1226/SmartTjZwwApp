@@ -19,7 +19,7 @@ public class ActivityLifecycleListener implements Application.ActivityLifecycleC
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         refCount++;
-        LogUtils.loge("ActivityLifecycleCallbacks-------onActivityCreated" );
+
     }
     @Override
     public void onActivityStarted(Activity activity) {
@@ -43,17 +43,16 @@ public class ActivityLifecycleListener implements Application.ActivityLifecycleC
     }
     @Override
     public void onActivityDestroyed(Activity activity) {
-        LogUtils.loge("ActivityLifecycleCallbacks-------onActivityDestroyed" );
         refCount--;
-        if (refCount == 0) {
-            exit();
-        }
+//        if (refCount == 0) {
+//            exit();
+//        }
     }
 
     private void exit( ) {
         LogUtils.loge("App退出了");
-        if(UserUtils.USER_ID!=null){
-            getLogout(UserUtils.USER_ID);
+         if(UserUtils.USER_ID!=null){
+           getLogout(UserUtils.USER_ID);
         }
     }
     private void getLogout(String userId) {
