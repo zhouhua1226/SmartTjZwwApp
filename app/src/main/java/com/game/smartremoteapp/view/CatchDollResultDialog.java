@@ -66,6 +66,14 @@ public class CatchDollResultDialog extends Dialog implements View.OnClickListene
         content.setText(contents);
     }
 
+    public void setFail(String titles){
+        fail_tv.setText(titles);
+    }
+
+    public void setSuccess(String contents){
+        success_tv.setText(contents);
+    }
+
     public void setBackground(int picter){
         bg_layout.setBackgroundResource(picter);
     }
@@ -88,14 +96,18 @@ public class CatchDollResultDialog extends Dialog implements View.OnClickListene
                 if (null != this.listener) {
                     listener.getResult(0);
                 }
-                animation.stop();
+                if(animation!=null&&animation.isRunning()){
+                    animation.stop();
+                }
                 CatchDollResultDialog.this.dismiss();
                 break;
             case R.id.catchdialog_success_tv:
                 if (null != this.listener) {
                     listener.getResult(1);
                 }
-                animation.stop();
+                if(animation!=null&&animation.isRunning()){
+                    animation.stop();
+                }
                 CatchDollResultDialog.this.dismiss();
                 break;
         }

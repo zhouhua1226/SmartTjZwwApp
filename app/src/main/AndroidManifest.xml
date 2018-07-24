@@ -65,10 +65,7 @@
         </meta-data>
 
         <!--=============================友盟相关=============================================-->
-
-        <activity android:name=".activity.home.LoginActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:launchMode="singleTop"
+        <activity android:name=".activity.home.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/jjLoginTheme">
             <intent-filter>
@@ -76,7 +73,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <activity
             android:name=".activity.ctrl.view.CtrlActivity"
@@ -199,53 +195,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
-        <!-- ###############    微信回调类    #############  -->
-        <!-- ###############    微信回调类    #############  -->
 
 
-
-
-        <!--米大师支付接入需要-->
-
-        <!-- TODO GAME SDK Midas接入配置 设置屏幕兼容声明 END -->
-
-        <!-- TODO SDK接入 QQ接入配置 START -->
         <activity
-            android:name="com.tencent.tauth.AuthActivity"
+            android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent1106514672" />
-                <!--tencent游戏的手Q appid-->
+                <data android:scheme="tencent1106675519" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- TODO SDK接入 QQ接入配置 END -->
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-
-        <!-- TODO SDK接入 微信接入配置 START -->
         <!-- 注意：此处应改为 游戏包名.wxapi.WXEntryActivity -->
-        <!--<activity-->
-            <!--android:name="com.tencent.tmgp.jjzww.wxapi.WXEntryActivity"-->
-            <!--android:excludeFromRecents="true"-->
-            <!--android:exported="true"-->
-            <!--android:label="WXEntryActivity"-->
-            <!--android:launchMode="singleTop"-->
-            <!--android:taskAffinity="com.tencent.tmgp.jjzww.diff">-->
-            <!--<intent-filter>        &lt;!&ndash; 注意：此处应改为 游戏包名.diff &ndash;&gt;-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--&lt;!&ndash; 注意：此处应改为 游戏的微信appid &ndash;&gt;-->
-                <!--<data android:scheme="wxe7e60e79f7e7a25e" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
         <activity android:name="com.game.smartremoteapp.wxapi.WXEntryActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
@@ -261,76 +229,6 @@
 
         </activity>
 
-
-        <!-- TODO SDK接入 微信接入配置 END -->
-
-        <!-- TODO GAME SDK接入YSDK实名制接入配置 START -->
-        <activity
-            android:name="com.tencent.ysdk.module.realName.impl.RegisterRealNameActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="sensor"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
-        <!-- TODO GAME SDK接入YSDK实名制接入配置 END -->
-
-
-        <!--米大师支付接入配置组件——Start-->
-        <!-- TODO GAME SDK Midas接入配置 START -->
-        <activity
-            android:name="com.tencent.midas.proxyactivity.APMidasPayProxyActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name="com.tencent.midas.wx.APMidasWXPayActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="true" />
-
-        <activity
-            android:name="com.tencent.midas.qq.APMidasQQWalletActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="qwallet100703379"/>
-                <!-- TODO GAME 这里为米大师的默认配置，游戏不要修改 -->
-            </intent-filter>
-        </activity>
-        <activity android:name="com.tencent.midas.jsbridge.APWebJSBridgeActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <!-- TODO GAME SDK Midas接入配置 END -->
-        <!--米大师支付接入配置组件——End-->
-
-        <receiver android:name="com.flamigo.jsdk.FlamigoReceiver"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <!--配置hx_ysdk组件——Start-->
-        <activity android:name="com.robust.sdk.ui.CommonActivity"
-            android:configChanges="orientation|keyboardHidden|navigation" />
-
-        <meta-data
-            android:name="MANIFEST_META_CHID"
-            android:value="tencent" />
-
-        <meta-data
-            android:name="MANIFEST_META_CID"
-            android:value="d701017f820d4c94aee7d3bd3ca96edb" />
-        <!-- 正式环境cid= 6f456783a0fe44e28771c08ab63a52f7-->
-        <!-- 测试环境cid= d701017f820d4c94aee7d3bd3ca96edb-->
-        <!--配置hx_ysdk组件——End-->
 
         <activity
             android:name=".activity.home.ServiceActivity"
@@ -383,13 +281,7 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <!-- 支付宝 -->
-        <!--<activity android:name="com.game.smartremoteapp.activity.home.AlipayActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden"-->
-            <!--android:launchMode="standard"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
-        <!--&lt;!&ndash; alipay sdk begin &ndash;&gt;-->
+
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
@@ -479,6 +371,18 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".activity.home.GuessPageActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.home.RechargeActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.home.AccountWalletActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.home.CardDetailActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

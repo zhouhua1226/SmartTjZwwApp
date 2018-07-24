@@ -32,7 +32,54 @@ public class UserBean implements Serializable {
     private String CNEE_ADDRESS;
     private String GUESSID;
     private String RANK;
+    private String DOLL_ID;
+    private String DOLLTOTAL;
     private int BET_NUM;
+    private String FIRST_CHARGE ;
+    private String WEEKS_CARD ;
+    private String MONTH_CARD ;
+    private String MONTH_CARD_TAG ;
+    private String WEEKS_CARD_TAG ;
+
+    public String getFIRST_CHARGE() {
+        return FIRST_CHARGE;
+    }
+
+    public void setFIRST_CHARGE(String FIRST_CHARGE) {
+        this.FIRST_CHARGE = FIRST_CHARGE;
+    }
+
+    public String getWEEKS_CARD() {
+        return WEEKS_CARD;
+    }
+
+    public void setWEEKS_CARD(String WEEKS_CARD) {
+        this.WEEKS_CARD = WEEKS_CARD;
+    }
+
+    public String getMONTH_CARD() {
+        return MONTH_CARD;
+    }
+
+    public void setMONTH_CARD(String MONTH_CARD) {
+        this.MONTH_CARD = MONTH_CARD;
+    }
+
+    public String getMONTH_CARD_TAG() {
+        return MONTH_CARD_TAG;
+    }
+
+    public void setMONTH_CARD_TAG(String MONTH_CARD_TAG) {
+        this.MONTH_CARD_TAG = MONTH_CARD_TAG;
+    }
+
+    public String getWEEKS_CARD_TAG() {
+        return WEEKS_CARD_TAG;
+    }
+
+    public void setWEEKS_CARD_TAG(String WEEKS_CARD_TAG) {
+        this.WEEKS_CARD_TAG = WEEKS_CARD_TAG;
+    }
 
     public int getBET_NUM() {
         return BET_NUM;
@@ -99,7 +146,7 @@ public class UserBean implements Serializable {
         this.DOLL_ID = DOLL_ID;
     }
 
-    private String DOLL_ID;
+
 
     public String getDOLLTOTAL() {
         return DOLLTOTAL;
@@ -108,10 +155,6 @@ public class UserBean implements Serializable {
     public void setDOLLTOTAL(String DOLLTOTAL) {
         this.DOLLTOTAL = DOLLTOTAL;
     }
-
-    private String DOLLTOTAL;
-
-
 
 
     public String getBALANCE() {

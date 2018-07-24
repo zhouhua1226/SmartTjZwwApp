@@ -111,8 +111,9 @@ public class RegisterActivity extends BaseActivity{
                 if(httpDataInfoResult.getCode()==0){
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
-                    SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
+                    SPUtils.putString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE, "0");
+                    SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
+                    SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     MyToast.getToast(getApplicationContext(), "注册成功！").show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);

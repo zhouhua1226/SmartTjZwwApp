@@ -3,6 +3,8 @@
  * All rights, including trade secret rights, reserved.
  */
 package com.game.smartremoteapp.utils;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -33,6 +35,7 @@ import java.util.regex.Pattern;
  * Created by zhouh on 2017/3/03.
  */
 public class Utils {
+
 
     public static String connectStatus = ConnectResultEvent.CONNECT_FAILURE;
     private static final boolean D = false;
@@ -92,9 +95,7 @@ public class Utils {
     public static final int CATCH_TIME_OUT = 20;
     public static final long GET_STATUS_DELAY_TIME = 3*60*1000;
     public static final long GET_STATUS_PRE_TIME = 2*60*1000;
-
-    public static final int OTHER_PLAYER_DELAY_TIME = 6*1000;
-
+    public static final long OTHER_PLAYER_DELAY_TIME =6*1000 ;
     public static void showLogE(String TAG, String msg) {
         if (D) {
             android.util.Log.e(TAG, TAG + TAG_DELIMETER + msg);
@@ -414,7 +415,7 @@ public class Utils {
 
     //房间背景音乐控制方法
     public static boolean getIsOpenMusic(Context context){
-        return (boolean)SPUtils.get(context, UserUtils.SP_TAG_ISOPENMUSIC, true);
+        return  SPUtils.getBoolean(context, UserUtils.SP_TAG_ISOPENMUSIC, true);
     }
 
     /**
@@ -636,7 +637,7 @@ public class Utils {
     public static void toActivity(Context ctx, Intent intent) {
         try {
             ctx.startActivity(intent);
-            //     ((Activity) ctx).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+           ((Activity) ctx).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         } catch (Exception e) {
             e.getMessage();
         }

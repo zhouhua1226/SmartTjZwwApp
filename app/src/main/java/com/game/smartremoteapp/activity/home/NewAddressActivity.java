@@ -83,7 +83,7 @@ public class NewAddressActivity extends BaseActivity {
     }
 
     private void initAddress(){
-        provinceCity=(String) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_PROVINCECITY, "");
+        provinceCity=  SPUtils.getString(getApplicationContext(), UserUtils.SP_TAG_PROVINCECITY, "");
         if(!UserUtils.UserAddress.equals("")){
            String[] sh=UserUtils.UserAddress.split(" ");
             int lenght=sh.length;
@@ -159,7 +159,7 @@ public class NewAddressActivity extends BaseActivity {
                 String phone=loginInfoResult.getData().getAppUser().getCNEE_PHONE();
                 String backaddress=loginInfoResult.getData().getAppUser().getCNEE_ADDRESS();
                 UserUtils.UserAddress=name+" "+phone+" "+backaddress;
-                SPUtils.put(getApplicationContext(), UserUtils.SP_TAG_PROVINCECITY, provinceCity);
+                SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_PROVINCECITY, provinceCity);
                 MyToast.getToast(getApplicationContext(), "保存成功！").show();
                 finish();
             }

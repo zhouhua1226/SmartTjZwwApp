@@ -251,23 +251,14 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="80dp"
                 android:background="@android:color/white" />
-            <TextView
-                android:id="@+id/tv_explan2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                android:text="累计50硬币,加送50硬币"
-                android:textColor="@color/brilliant_red"
-                android:textSize="11sp" />
+
             <TextView
                 android:id="@+id/tv_explan1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="3dp"
-                android:layout_above="@+id/tv_explan2"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
                 android:text=" 注：1硬币对应10游戏币 "
                 android:textColor="@color/brilliant_red"
                 android:textSize="11sp" />
@@ -276,7 +267,7 @@
                android:orientation="horizontal"
                android:layout_above="@+id/tv_explan1"
                android:layout_centerHorizontal="true"
-               android:layout_marginBottom="10dp"
+               android:layout_marginBottom="15dp"
                android:gravity="center"
                android:layout_height="wrap_content">
                <TextView

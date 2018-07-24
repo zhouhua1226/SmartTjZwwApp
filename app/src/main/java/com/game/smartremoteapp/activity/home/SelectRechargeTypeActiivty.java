@@ -2,15 +2,11 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.easy.ysdk.EasyYSDKApi;
-import com.easy.ysdk.pay.NotifyListener;
-import com.easy.ysdk.pay.PayReviewer;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -21,7 +17,6 @@ import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.FillingCurrencyDialog;
-import com.robust.sdk.api.RobustApi;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +59,7 @@ public class SelectRechargeTypeActiivty extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        EasyYSDKApi.onResume(this);
+     //   EasyYSDKApi.onResume(this);
         getUserDate(UserUtils.USER_ID);
 
     }
@@ -90,26 +85,26 @@ public class SelectRechargeTypeActiivty extends BaseActivity {
     //初始化sdk
     private void initSDK() {
         //ysdk必须要初始化
-        EasyYSDKApi.onCreate(this);
-        EasyYSDKApi.handleIntent(this.getIntent());
-        EasyYSDKApi.setUserListener();
-        EasyYSDKApi.setBuglyListener();
-
-        //add hx_ysdk  初始化
-        Bundle initParams = new Bundle();
-        initParams.putString(RobustApi.InitParamsKey.CKEY, "rcWhucD6efT="); //"L0VRoX/sAWg="
-        RobustApi.init(this, initParams);
-
-        //YSDK支付通知失败监听回调
-        EasyYSDKApi.setNotifyListener(new NotifyListener() {
-            @Override
-            public void onResult(int code, String msg) {
-
-                Log.e(TAG,"支付通知失败原因="+msg);
-            }
-        });
-
-        PayReviewer.reviewer();   //通知失败进行重发
+//        EasyYSDKApi.onCreate(this);
+//        EasyYSDKApi.handleIntent(this.getIntent());
+//        EasyYSDKApi.setUserListener();
+//        EasyYSDKApi.setBuglyListener();
+//
+//        //add hx_ysdk  初始化
+//        Bundle initParams = new Bundle();
+//        initParams.putString(RobustApi.InitParamsKey.CKEY, "rcWhucD6efT="); //"L0VRoX/sAWg="
+//        RobustApi.init(this, initParams);
+//
+//        //YSDK支付通知失败监听回调
+//        EasyYSDKApi.setNotifyListener(new NotifyListener() {
+//            @Override
+//            public void onResult(int code, String msg) {
+//
+//                Log.e(TAG,"支付通知失败原因="+msg);
+//            }
+//        });
+//
+//        PayReviewer.reviewer();   //通知失败进行重发
     }
 
     @OnClick({R.id.image_back, R.id.image_service, R.id.layout_wechat})
@@ -184,37 +179,37 @@ public class SelectRechargeTypeActiivty extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        EasyYSDKApi.onPause(this);
+       // EasyYSDKApi.onPause(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        EasyYSDKApi.onStop(this);
+     //   EasyYSDKApi.onStop(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EasyYSDKApi.onDestroy(this);
+     //   EasyYSDKApi.onDestroy(this);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        EasyYSDKApi.onRestart(this);
+       // EasyYSDKApi.onRestart(this);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        EasyYSDKApi.handleIntent(intent);
+       // EasyYSDKApi.handleIntent(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
+      //  EasyYSDKApi.onActivityResult(requestCode, resultCode, data);
     }
 
 

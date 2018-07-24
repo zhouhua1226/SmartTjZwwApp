@@ -1,7 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
 import android.app.DownloadManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +27,7 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.utils.LogUtils;
+import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -76,8 +76,7 @@ public class MainActivity extends BaseActivity {
     private Fragment fragmentAll;
     private long mExitTime;
     private List<RoomBean> roomList=new ArrayList<>();
-    private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
+
     private Result<HttpDataInfo> loginInfoResult;
     private int signNumber = 0;
     private int[] signDayNum=new int[7];
@@ -87,6 +86,7 @@ public class MainActivity extends BaseActivity {
     static {
         System.loadLibrary("SmartPlayer");
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -100,16 +100,14 @@ public class MainActivity extends BaseActivity {
         getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
-     //   checkVersion();
+       //  checkVersion();
 
     }
 
     private void initData() {
-        settings = getSharedPreferences("app_user", 0);// 获取SharedPreference对象
-        editor = settings.edit();// 获取编辑对象。
-        editor.putBoolean("isVibrator",true);
-        editor.putBoolean("isOpenMusic",true);
-        editor.commit();
+
+        SPUtils.putBoolean(getApplicationContext(),"isVibrator",true);
+        SPUtils.putBoolean(getApplicationContext(),"isOpenMusic",true);
         UserUtils.isUserChanger = false;
         getUserSign(UserUtils.USER_ID,"0"); //签到请求 0 查询签到信息 1签到
         //setSignInDialog(signDayNum);
@@ -303,6 +301,7 @@ public class MainActivity extends BaseActivity {
             mExitTime = System.currentTimeMillis();
         } else {
             AppManager.getAppManager().finishAllActivity();
+            super.onBackPressed();
         }
     }
 
@@ -538,7 +537,9 @@ public class MainActivity extends BaseActivity {
         signSuccessDialog.setDialogResultListener(new SignSuccessDialog.DialogResultListener() {
             @Override
             public void getResult(int resultCode) {
-
+                      if(resultCode==0&&signInDialog!=null){
+                          signInDialog.dismiss();
+                      }
             }
         });
     }

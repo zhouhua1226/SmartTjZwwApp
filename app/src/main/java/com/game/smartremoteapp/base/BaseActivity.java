@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStatusBarColor();
+        setStatusBarColor(R.color.apptheme_bg);
         setContentView(getLayoutId());
         afterCreate(savedInstanceState);
         MyApplication.getInstance().activities.add(this);
@@ -135,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     //设置状态栏
-    private  void setStatusBarColor(){
+    public   void setStatusBarColor(int color){
         Window window =getWindow();
         //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -143,7 +143,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         //设置状态栏颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(getResources().getColor(R.color.apptheme_bg));
+            window.setStatusBarColor(getResources().getColor(color));
             //Utils.showLogE(TAG,"类名="+getClass().getSimpleName());
         }
     }

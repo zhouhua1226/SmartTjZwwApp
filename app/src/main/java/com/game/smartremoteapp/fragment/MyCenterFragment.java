@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.home.AccountDetailActivity;
 import com.game.smartremoteapp.activity.home.AccountInformationActivity;
+import com.game.smartremoteapp.activity.home.AccountWalletActivity;
 import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
@@ -24,7 +25,7 @@ import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
 import com.game.smartremoteapp.activity.home.MyCtachRecordActivity;
 import com.game.smartremoteapp.activity.home.MyJoinCodeActivity;
 import com.game.smartremoteapp.activity.home.MyLogisticsOrderActivity;
-import com.game.smartremoteapp.activity.home.PayNowActivity;
+import com.game.smartremoteapp.activity.home.RechargeActivity;
 import com.game.smartremoteapp.activity.home.ServiceActivity;
 import com.game.smartremoteapp.activity.home.SettingActivity;
 import com.game.smartremoteapp.base.BaseFragment;
@@ -44,6 +45,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.game.smartremoteapp.R.id.mycenter_mymoney_tv;
 
 
 /**
@@ -85,8 +88,8 @@ public class MyCenterFragment extends BaseFragment {
     TextView mycenterExcenterTv;
     @BindView(R.id.mycenter_withdraw_layout)
     RelativeLayout mycenterWithdrawLayout;
-    @BindView(R.id.mycenter_mymoney_tv)
-    TextView mycenterMymoneyTv;
+     @BindView(mycenter_mymoney_tv)
+   TextView mycenterMymoneyTv;
     @BindView(R.id.mycenter_currencyrecord_tv)
     TextView mycenterCurrencyrecordTv;
     @BindView(R.id.mycenter_logisticsorder_tv)
@@ -184,7 +187,7 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
             R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv, R.id.image_back,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
-            R.id.mycenter_mymoney_tv})
+            mycenter_mymoney_tv,R.id.mycenter_qianbao})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -201,7 +204,7 @@ public class MyCenterFragment extends BaseFragment {
                 break;
             case R.id.mycenter_pay_layout:
 //                startActivity(new Intent(getContext(), SelectRechargeTypeActiivty.class));
-                startActivity(new Intent(getContext(), PayNowActivity.class));
+                startActivity(new Intent(getContext(), RechargeActivity.class));
                 break;
             case R.id.mycenter_catchrecord_layout:
                 Intent intent=new Intent(getContext(),MyCtachRecordActivity.class);
@@ -253,8 +256,11 @@ public class MyCenterFragment extends BaseFragment {
             case R.id.mycenter_accinfo_layout:
                 startActivity(new Intent(getContext(),AccountInformationActivity.class));
                 break;
-            case R.id.mycenter_mymoney_tv:
+            case mycenter_mymoney_tv:
                 startActivity(new Intent(getContext(),AccountDetailActivity.class));
+                break;
+            case  R.id.mycenter_qianbao:
+                Utils.toActivity(getContext(),AccountWalletActivity.class);
                 break;
             default:
                 break;
@@ -292,6 +298,7 @@ public class MyCenterFragment extends BaseFragment {
                 UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
                 UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
                 UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+
                 UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
                 String name = result.getData().getAppUser().getCNEE_NAME();
                 String phone = result.getData().getAppUser().getCNEE_PHONE();

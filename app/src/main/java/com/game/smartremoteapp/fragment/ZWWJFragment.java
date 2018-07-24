@@ -334,7 +334,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         zwwBanner.setImageLoader(new GlideImageLoader());
          zwwBanner.setImages(lists);
         //设置Banner动画效果
-       zwwBanner.setBannerAnimation(Transformer.DepthPage);
+        zwwBanner.setBannerAnimation(Transformer.DepthPage);
        //设置轮播时间
         zwwBanner.setDelayTime(2000);
         //设置指示器位置(当banner模式中有指示器时)

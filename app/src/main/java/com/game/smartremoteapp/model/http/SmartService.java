@@ -406,7 +406,9 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.TRADEORDERALIPAY)
     Observable<Result<AlipayBean>> getTradeOrderAlipay(@Field(UrlUtils.USERID) String userId,
-                                                       @Field(UrlUtils.AMOUNT) String s,
+                                                       @Field(UrlUtils.AMOUNT) String amount,
+                                                       @Field(UrlUtils.REGGOLD) String regGold,
+                                                       @Field(UrlUtils.PAYOUTTYPE) String payOutType,
                                                        @Field(UrlUtils.PAYTYPE) String payType,
                                                        @Field(UrlUtils.WXQQ_CTYPE) String ctype,
                                                        @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
@@ -655,5 +657,5 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.GETCOINSUM)
-    Observable<Result<HttpDataInfo>> getUserSumCoin(@Field(UrlUtils.USERID)String userId);
+    Observable<Result<HttpDataInfo>> getUserSumCoin(@Field(UrlUtils.USERID) String userId);
 }

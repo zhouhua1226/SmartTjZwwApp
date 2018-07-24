@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import com.game.smartremoteapp.R;
-
 
 /**
  * Created by yincong on 2018/1/5 15:45
@@ -16,6 +14,7 @@ import com.game.smartremoteapp.R;
  * 修改时间：
  * 类描述：签到弹窗
  */
+
 public class SignInDialog extends Dialog implements View.OnClickListener{
 
     private ImageView imageView1,imageView2,imageView3,imageView4,
@@ -24,8 +23,8 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
             signin_day4_dot_iv, signin_day5_dot_iv,signin_day6_dot_iv,
             signin_day7_dot_iv;
     private ImageButton signin_day1_ibtn,signin_day2_ibtn,signin_day3_ibtn,
-                         signin_day4_ibtn,signin_day5_ibtn,signin_day6_ibtn,
-                         signin_day7_ibtn,cancle_ibtn,sure_ibtn;
+            signin_day4_ibtn,signin_day5_ibtn,signin_day6_ibtn,
+            signin_day7_ibtn,cancle_ibtn,sure_ibtn;
 
 
     public SignInDialog(Context context) {
@@ -130,11 +129,12 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
      * @param isSign
      */
     public void isSignedView(boolean isSign){
-        if(isSign){
-            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned3);
-        }else {
-            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
-        }
+        sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
+//        if(isSign){
+//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned3);
+//        }else {
+//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
+//        }
     }
 
     /**

@@ -448,8 +448,9 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
     //支付宝支付
-    public void getTradeOrderAlipay(String userId, String amount, RequestSubscriber<Result<AlipayBean>> subscriber) {
-        Observable<Result<AlipayBean>> o =smartService.getTradeOrderAlipay(userId,amount,"R",UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+    public void getTradeOrderAlipay( String userId, String amount,String reGold, String payOutType, RequestSubscriber<Result<AlipayBean>> subscriber) {
+        Observable<Result<AlipayBean>> o =smartService.getTradeOrderAlipay(userId,amount,reGold,payOutType,"R",
+                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

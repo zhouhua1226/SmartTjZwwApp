@@ -30,14 +30,14 @@ public class CoinRecordAdapter extends RecyclerView.Adapter<CoinRecordAdapter.My
     }
 
     @Override
-    public CoinRecordAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=mInflater.inflate(R.layout.coinrecord_item,parent,false);
-        CoinRecordAdapter.MyViewHolder myViewHolder=new CoinRecordAdapter.MyViewHolder(view);
+        MyViewHolder myViewHolder=new MyViewHolder(view);
         return myViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(CoinRecordAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         CoinListBean.CoinBean bean=mDatas.get(position);
         holder.periodsNum_tv.setText(bean.getId());
         holder.cost_gold_tv.setText("-"+bean.getCostGold());
