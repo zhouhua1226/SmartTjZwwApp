@@ -19,7 +19,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
         versionCode 2
-        versionName "1.0.4"
+        versionName "1.0.5"
         multiDexEnabled true
         signingConfig signingConfigs.release
     }
@@ -120,4 +120,6 @@ dependencies {
     compile 'com.orhanobut:logger:2.1.1'
     compile files('libs/ipaynow_base_v2.1.5_api1.0.0.jar')
     compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile project(':timedialog')
 }
