@@ -78,8 +78,6 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
 
     @Override
     public void takeSuccess(String imagePath) {
-        String string= UserUtils.UserPhone;
-        String str = android.util.Base64.encodeToString(string.getBytes(), android.util.Base64.DEFAULT);
         Bitmap bitmap= BitmapUtils.compressImageFromFile(imagePath);
         base64= Base64.encode(BitmapUtils.compressBmpFromBmp(bitmap));
         getFaceImage(UserUtils.USER_ID,base64);
@@ -90,9 +88,14 @@ public class TakePhotoActivity extends com.jph.takephoto.app.TakePhotoActivity i
         HttpManager.getInstance().getFaceImage(userId, faceImage, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> result) {
-                UserUtils.UserImage= UrlUtils.USERFACEIMAGEURL+result.getData().getAppUser().getIMAGE_URL();
-                MyToast.getToast(getApplicationContext(),"修改成功！").show();
-                finish();
+                if(result.getCode()==0) {
+                    UserUtils.UserImage= UrlUtils.USERFACEIMAGEURL+result.getData().getAppUser().getIMAGE_URL();
+                    MyToast.getToast(getApplicationContext(),"修改成功！").show();
+                    finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(),"修改失败!").show();
+                }
+
             }
 
             @Override

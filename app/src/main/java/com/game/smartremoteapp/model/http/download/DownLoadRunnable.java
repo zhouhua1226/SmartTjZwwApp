@@ -17,7 +17,7 @@ public class DownLoadRunnable implements Runnable {
     private String url;
     private Context mContext;
     private File mFile;
-
+    private  String title="汤姆抓娃娃.apk";
     public DownLoadRunnable(Context context, String url ) {
         this.mContext = context;
         this.url = url;
@@ -100,14 +100,16 @@ public class DownLoadRunnable implements Runnable {
             return null;
         }
         //存储位置为Android/data/包名/file/Download文件夹
-        mFile = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/ZJJApp.apk");
+        String files= mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        Utils.deleteAll(files);
+        //存储位置为Android/data/包名/file/Download文件夹
+        mFile = new File(files + "/"+title);
          if (mFile.isFile() && mFile.exists()) {
              mFile.delete(); //如果存在删除
         }
         DownloadManager.Request  request=new DownloadManager.Request(Uri.parse(url));
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);// 隐藏notification
        //  request.setAllowedNetworkTypes(request.NETWORK_WIFI);//设置下载网络环境为wifi
-        //  request.setDestinationInExternalFilesDir(mContext, Environment.DIRECTORY_DOWNLOADS,"ZJJApp.apk");
         request.setDestinationUri(Uri.fromFile(mFile));
         return  request;
     }
@@ -123,9 +125,11 @@ public class DownLoadRunnable implements Runnable {
         mContext.startActivity(installintent);
    }
 
+
+
  public class UpdateInfo {
      private int state;
-     private int progress;
+     private int progress=0;
      public int getState() {
          return state;
      }

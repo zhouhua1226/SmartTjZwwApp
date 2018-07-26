@@ -34,6 +34,7 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -147,6 +148,7 @@ public class MyCenterFragment extends BaseFragment {
                     .dontAnimate()
                     .transform(new GlideCircleTransform(getContext()))
                     .into(userImage);
+
         } else {
             userName.setText("请登录");
             videoList.clear();
@@ -166,7 +168,7 @@ public class MyCenterFragment extends BaseFragment {
                 String phone = result.getData().getAppUser().getCNEE_PHONE();
                 String address = result.getData().getAppUser().getCNEE_ADDRESS();
                 UserUtils.UserAddress = name + " " + phone + " " + address;
-                Log.e(TAG, "个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
+                LogUtils.loge("个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
                         + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
                         + " 昵称=" + result.getData().getAppUser().getNICKNAME()
                         + " 头像=" + UserUtils.UserImage
@@ -203,7 +205,6 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), InformationActivity.class));
                 break;
             case R.id.mycenter_pay_layout:
-//                startActivity(new Intent(getContext(), SelectRechargeTypeActiivty.class));
                 startActivity(new Intent(getContext(), RechargeActivity.class));
                 break;
             case R.id.mycenter_catchrecord_layout:
@@ -310,8 +311,14 @@ public class MyCenterFragment extends BaseFragment {
                 UserUtils.BankBean = result.getData().getBankCard();
                 if(!UserUtils.IsBankInf.equals("0")){
                     UserUtils.UserPhone=result.getData().getBankCard().getBANK_PHONE();
+                }else{
+                    if(result.getData().getAppUser().getBDPHONE().equals("")&&result.getData().getAppUser().getBDPHONE()!=null){
+                        UserUtils.UserPhone=result.getData().getAppUser().getPHONE();
+                    }else{
+                        UserUtils.UserPhone=result.getData().getAppUser().getBDPHONE();
+                    }
                 }
-                Log.e(TAG, "个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
+                LogUtils.loge( "个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
                         + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
                         + " 昵称=" + result.getData().getAppUser().getNICKNAME()
                         + " 头像=" + UserUtils.UserImage

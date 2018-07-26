@@ -49,7 +49,7 @@ public class ChangNicknameAvtivity extends BaseActivity {
         } else {
             nicknameEt.setText("暂无昵称");
         }
-
+        nicknameEt.setSelection(nicknameEt.getText().length());
     }
 
     @Override
@@ -85,10 +85,14 @@ public class ChangNicknameAvtivity extends BaseActivity {
         HttpManager.getInstance().getUserName(userId, nickName, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> result) {
-                UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
-                MyToast.getToast(ChangNicknameAvtivity.this, "修改成功！").show();
-                nicknameEt.setText("");
-                finish();
+                if(result.getCode()==0) {
+                    UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+                    MyToast.getToast(ChangNicknameAvtivity.this, "修改成功！").show();
+                    nicknameEt.setText("");
+                    finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(),result.getMsg()).show();
+                }
             }
 
             @Override

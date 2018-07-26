@@ -115,17 +115,16 @@ public class NewAddressActivity extends BaseActivity {
                 if(Utils.isEmpty(name)||Utils.isEmpty(phone)||Utils.isEmpty(provinceCity)||Utils.isEmpty(detailaddress)){
                     MyToast.getToast(this, "请将信息填写完整！").show();
                 }else {
+                    if (!Utils.checkPhoneREX(phone)) {
+                        MyToast.getToast(this, "手机号格式有误").show();
+                        return;
+                    }
                     if(detailaddress.contains(provinceCity)){
                         MyToast.getToast(this, "详细地址请勿重复填写省市地区！").show();
                         return;
                     }
-                    if(Utils.isSpecialChar(name)||Utils.isSpecialChar(phone) ||Utils.isSpecialChar(provinceCity)||Utils.isSpecialChar(detailaddress)){
-                        MyToast.getToast(this, "请勿输入特殊字符！").show();
-                    }else {
                         information=name+"  "+phone+"  "+totaladdress;
                         getConsignee(name,phone,totaladdress,UserUtils.USER_ID);
-                    }
-
                 }
                 break;
             case R.id.newaddress_dq_tv:

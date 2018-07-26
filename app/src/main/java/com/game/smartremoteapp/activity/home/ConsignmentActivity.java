@@ -157,10 +157,6 @@ public class ConsignmentActivity extends BaseActivity {
                     information = UserUtils.UserAddress.replace(" ", ",");
                 }
                 String remark = remarkEt.getText().toString();
-                if(Utils.isSpecialChar(remark)){
-                    MyToast.getToast(this, "您输入了特殊字符！").show();
-                    return;
-                }
                 final int length = list.size();
                 if (length > 1) {
                     for (int i = 0; i < length; i++) {

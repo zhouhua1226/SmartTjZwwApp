@@ -12,7 +12,6 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -31,15 +30,13 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         myApplication = this;
-
         //初始化组件化基础库, 统计SDK/推送SDK/分享SDK都必须调用此初始化接口
         UMShareAPI.get(this);
-        Config.DEBUG = true;
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(true);//初始化logger
-        registerActivityLifecycleCallbacks(new ActivityLifecycleListener());
+        LogUtils.logInit(false);//初始化logger
+
     }
     private void setCrashHandler() {
 
@@ -86,5 +83,20 @@ public class MyApplication extends MultiDexApplication {
         PlatformConfig.setQQZone(UrlUtils.APP_QQ_ID, UrlUtils.APP_QQ_KEY);
 
     }
-
+    public void exit() {
+        if (activities != null) {
+            Activity activity;
+            for (int i = 0; i < activities.size(); i++) {
+                activity = activities.get(i);
+                if (activity != null) {
+                    if (!activity.isFinishing()) {
+                        activity.finish();
+                    }
+                    activity = null;
+                }
+                activities.remove(i);
+                i--;
+            }
+        }
+    }
 }

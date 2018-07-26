@@ -26,7 +26,7 @@ public class UserUtils {
     public static final String SP_FIRET_CHARGE = "SP_FIRET_CHARGE";
 
     public static String sessionID = "";
-    public static String NickName = "";
+     public static String NickName = "";
     public static String UserPhone="";    //用户手机号
     public static String UserName="";    //用户名
     public static String UserImage="";    //用户头像

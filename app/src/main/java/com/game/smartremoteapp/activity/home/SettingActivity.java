@@ -21,17 +21,18 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
+import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.VersionUtils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.ShareDialog;
 import com.game.smartremoteapp.view.UpdateDialog;
 import com.gatz.netty.utils.NettyUtils;
-import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
@@ -43,6 +44,7 @@ import com.umeng.socialize.media.UMWeb;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by hongxiu on 2017/9/25.
  */
@@ -86,6 +88,10 @@ public class SettingActivity extends BaseActivity {
     private Context context = SettingActivity.this;
     private LoadProgressView downloadDialog;
 
+    private DownloadManagerUtil downloadManagerUtil;
+
+    long downloadId = 0;
+   private String mVersion;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_setting;
@@ -96,8 +102,8 @@ public class SettingActivity extends BaseActivity {
         initView();
         setIsVibrator();
         setIsOpenMusic();
-        settingUpdateTv.setText("当前版本：" + Utils.getAppCodeOrName(this, 1));
-        RxBus.get().register(this);
+        mVersion=Utils.getAppCodeOrName(this, 1);
+        settingUpdateTv.setText("当前版本：" +mVersion);
     }
 
     @Override
@@ -163,7 +169,7 @@ public class SettingActivity extends BaseActivity {
                 setIsOpenMusic();
                 break;
             case R.id.setting_update_layout:
-              // checkVersion();
+                checkVersion();
                 break;
             case R.id.setting_share_layout:
                 shareApp();
@@ -178,12 +184,12 @@ public class SettingActivity extends BaseActivity {
         HttpManager.getInstance().checkVersion( new RequestSubscriber<Result<AppInfo>>() {
             @Override
             public void _onSuccess(Result<AppInfo> appInfoResult) {
-                if(appInfoResult!=null){
-                    String version= appInfoResult.getData().getVERSION();
-                    if(!Utils.getAppCodeOrName(SettingActivity.this, 1).equals(version)){
+                if(appInfoResult!=null) {
+                    String version = appInfoResult.getData().getVERSION();
+                    if (VersionUtils.validateVersion(mVersion, version)) {
                         updateApp(appInfoResult.getData().getDOWNLOAD_URL());
-                    }else{
-                       MyToast.getToast(SettingActivity.this,"当前已是最新版本").show();
+                    } else {
+                        MyToast.getToast(SettingActivity.this, "当前已是最新版本").show();
                     }
                 }
             }
@@ -194,18 +200,23 @@ public class SettingActivity extends BaseActivity {
 
     }
     private void  updateApp(final String loadUri){
+
         UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
         updateDialog.setCancelable(false);
         updateDialog.show();
         updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
-            @Override
+         @Override
             public void getResult(boolean result ) {
-                if (result) {// 确定下载
-                    showDialog();
-                    new Thread(new DownLoadRunnable(SettingActivity.this, UrlUtils.APPPICTERURL+loadUri)).start();
-                }
-            }
-        });
+               if (result) {// 确定下载
+                    downloadManagerUtil=new DownloadManagerUtil(SettingActivity.this);
+                     if (downloadId != 0) {
+                       downloadManagerUtil.clearCurrentTask(downloadId);
+                     }
+                   downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+
+               }
+           }
+       });
     }
 
 
@@ -253,15 +264,12 @@ public class SettingActivity extends BaseActivity {
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 Log.e(TAG, "退出登录结果=" + loginInfoResult.getMsg());
                 if (loginInfoResult.getMsg().equals("success")) {
-//                    Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
-//                    SPUtils.remove(context, UserUtils.SP_TAG_LOGIN);
-//                    UserUtils.UserPhone = "";
-                   // Toast.makeText(context, "退出登录", Toast.LENGTH_SHORT).show();
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
                     SPUtils.putString(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
                     NettyUtils.destoryConnect();
+                    MainActivity.mMainActivity.finish();
                     startActivity(new Intent(SettingActivity.this, WelcomeActivity.class));
                     finish();
                 }
@@ -278,35 +286,26 @@ public class SettingActivity extends BaseActivity {
    public void getDownLoadInfo(Object object) {
        if(object instanceof DownLoadRunnable.UpdateInfo){
            DownLoadRunnable.UpdateInfo info= (DownLoadRunnable.UpdateInfo) object;
-           switch (info.getState()){
-               case DownloadManager.STATUS_SUCCESSFUL:
-                   downloadDialog.setProbarPercent(100);
-                   canceledDialog();
-                  // Toast.makeText(SettingActivity.this, "下载任务已经完成！", Toast.LENGTH_SHORT).show();
-                   break;
-
-               case DownloadManager.STATUS_RUNNING:
-                   //int progress = (int) msg.obj;
-                   downloadDialog.setProbarPercent((int) info.getProgress());
-                   //canceledDialog();
-                   break;
-               case DownloadManager.STATUS_FAILED:
-                   canceledDialog();
-                   break;
-               case DownloadManager.STATUS_PENDING:
-                   showDialog();
-                   break;
+           if (info != null&&downloadDialog!=null) {
+               switch (info.getState()) {
+                   case DownloadManager.STATUS_SUCCESSFUL:
+                       downloadDialog.setProbarPercent(100);
+                       canceledDialog();
+                       //Toast.makeText(MainActivity.this, "下载任务已经完成！", Toast.LENGTH_SHORT).show();
+                       break;
+                   case DownloadManager.STATUS_RUNNING:
+                       downloadDialog.setProbarPercent(info.getProgress());
+                       break;
+                   case DownloadManager.STATUS_FAILED:
+                       canceledDialog();
+                       break;
+                   case DownloadManager.STATUS_PENDING:
+                       showDialog();
+                       break;
+               }
            }
        }
    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        RxBus.get().unregister(this);
-    }
-
-
 
     //分享
     private void shareApp() {

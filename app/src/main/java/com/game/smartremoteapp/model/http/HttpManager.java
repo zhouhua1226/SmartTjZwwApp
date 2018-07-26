@@ -637,4 +637,13 @@ public class HttpManager {
 
 
     }
+   //第三方登录
+    public void wxRegister(String uid, String name, String gender, String profile_image_url, String regChannel,
+                           String channelNum, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.wxRegister(uid,name,gender,profile_image_url,regChannel,channelNum);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

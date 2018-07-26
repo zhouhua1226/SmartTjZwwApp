@@ -73,6 +73,11 @@ public class UrlUtils {
     public static final String LOGIN_CTYPE_ASDK="ASDK";
     public static final String LOGIN_CHANNEL="ANDROID";
     public static final String CHANNELNUM = "channelNum";
+    public static final String UID ="uid" ;
+    public static final String NAME ="name" ;
+    public static final String GENDER ="gender" ;
+    public static final String ICONURL ="iconurl" ;
+    public static final String REGCHANNEL ="regChannel" ;
     //ysdk支付金额字段
     public static final String WXQQ_AMOUNT="amount";
     //签到接口
@@ -112,8 +117,8 @@ public class UrlUtils {
     public static final String PAYOUTTYPE = "payOutType";
 
     public static final String URL = "http://111.231.139.61:18081";
-    //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)   街机抓娃娃
-    //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)                                    汤姆抓娃娃
+    //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)
+    //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)
     //APP图片拼接url
     public static final String APPPICTERURL="http://111.231.139.61:8888/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
@@ -329,6 +334,7 @@ public class UrlUtils {
     //用户当天记出币总数
     public static final String GETCOINSUM =URL+"/pooh-web/app/coinPusher/getCoinSum" ;
 
-
+    //第三方登录
+    public static final String WXREGISTER = URL+"/pooh-web/app/sms/wxRegister";
 
 }

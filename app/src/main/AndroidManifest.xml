@@ -38,15 +38,8 @@
             android:name=".activity.home.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:launchMode="standard"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
-        <!--
-        <activity
-            android:name="com.videogo.main.EzvizWebViewActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        -->
 
         <!--=============================友盟相关=============================================-->
 
@@ -66,6 +59,7 @@
 
         <!--=============================友盟相关=============================================-->
         <activity android:name=".activity.home.WelcomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/jjLoginTheme">
             <intent-filter>
@@ -134,17 +128,18 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/activitystyle" />
-        <activity
-            android:name=".activity.wechat.WeChatPayActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <service
             android:name=".service.SmartRemoteService"
             android:enabled="true"
             android:exported="false" />
+
+        <receiver android:name=".service.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".activity.home.RecordGameActivty"
@@ -177,12 +172,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             />
 
-        <activity android:name=".activity.home.SelectRechargeTypeActiivty"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
         <activity android:name=".activity.home.VideoPlayBackActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
@@ -194,8 +183,6 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
-
 
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
@@ -213,7 +200,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <!-- 注意：此处应改为 游戏包名.wxapi.WXEntryActivity -->
         <activity android:name="com.game.smartremoteapp.wxapi.WXEntryActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
@@ -303,12 +289,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
-        <activity android:name=".activity.home.PayActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
         <activity android:name=".activity.home.AccountInformationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
@@ -364,6 +344,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".activity.ctrl.view.PushCoinActivity"
             android:screenOrientation="portrait"
+            android:resizeableActivity ="true"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".activity.home.CoinRecordActivity"
@@ -386,6 +367,7 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
     </application>
 
     <supports-screens
