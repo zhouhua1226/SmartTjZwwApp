@@ -38,7 +38,7 @@
             android:name=".activity.home.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:launchMode="singleTask">
         </activity>
 
         <!--=============================友盟相关=============================================-->
@@ -78,50 +78,50 @@
             android:name=".activity.home.InformationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.SettingActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.GameCurrencyActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.RecordActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.FeedBackActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.LnvitationCodeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.AboutUsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.ChangNicknameAvtivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.TakePhotoActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -145,26 +145,26 @@
             android:name=".activity.home.RecordGameActivty"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.RecordGameTwoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.ConsignmentActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.home.NewAddressActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait" />
+
         <activity android:name=".activity.home.CtrlTextActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
@@ -175,14 +175,12 @@
         <activity android:name=".activity.home.VideoPlayBackActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.BetRecordActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
@@ -220,53 +218,43 @@
             android:name=".activity.home.ServiceActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.home.MyCtachRecordActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.home.NewsWebActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.MyLogisticsOrderActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            />
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.ExChangeShopActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.JoinEarnActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
+
         <activity android:name=".activity.home.LoginCodeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
+
         <activity android:name=".activity.home.RegisterActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -286,87 +274,78 @@
         <activity android:name=".activity.home.NavigationPageActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.home.AccountInformationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.AgencyActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.DrawMoneyActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.MyJoinCodeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.SettingMobileActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.AccountDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.home.FindBackPassActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.RoomPlayRecordActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.home.PayNowActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.ctrl.view.PushCoinActivity"
             android:screenOrientation="portrait"
             android:resizeableActivity ="true"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity android:name=".activity.home.CoinRecordActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name=".activity.home.GuessPageActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name=".activity.home.RechargeActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name=".activity.home.AccountWalletActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:configChanges="orientation|keyboardHidden" />
+
         <activity android:name=".activity.home.CardDetailActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:configChanges="orientation|keyboardHidden" />
 
     </application>
 

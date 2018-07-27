@@ -13,10 +13,12 @@
     <string name="service_qq">2563582976</string>
     <string name="company_name">上海炎亿网络科技有限公司</string>
     <string name="company_web">http://www.111wawa.com</string>
+    <string name="load_web">https://fir.im/tomzhua</string>
     <string name="cancel">取消</string>
-    <string name="mouth_car_nocity">注:周卡,分三十天返还,每天返还33游戏币</string>
+    <string name="mouth_car_nocity">注:月卡,分三十天返还,每天返还33游戏币</string>
     <string name="week_car_nocity">注:周卡,分七天返还,每天返还20游戏币</string>
-    <string name="app_description">汤姆抓娃娃是一款真实远程在线抓娃娃、推币机娱乐软件，随时随地玩不停</string>
+    <string name="app_description">汤姆抓娃娃是一款真实远程在线抓娃娃、推币机娱乐软件j，免费体验现役开启，
+        每天免费赠金币，抓到娃娃即归您，随时随地玩不停。</string>
     <string name="buy">购买</string>
     <string name="week_take_effect">周卡生效中可以购买</string>
     <string name="mouth_take_effect">月卡生效中可以购买</string>

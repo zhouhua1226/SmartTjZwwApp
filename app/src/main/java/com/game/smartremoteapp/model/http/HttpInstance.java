@@ -1,5 +1,7 @@
 package com.game.smartremoteapp.model.http;
 
+import android.util.Log;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -23,7 +25,7 @@ public class HttpInstance {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-               // Log.e("http===",message);
+                 Log.e("http===",message);
             }
         });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

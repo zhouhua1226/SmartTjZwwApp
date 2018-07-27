@@ -97,8 +97,6 @@ dependencies {
         exclude group: 'com.jakewharton.timber', module: 'timber'
     }
     compile 'com.android.support:design:25.3.1'
-    //    compile 'com.jph.takephoto:takephoto_library:4.0.3'
-    compile 'com.jph.takephoto:takephoto_library:2.0.4'
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'io.netty:netty-all:4.0.36.Final'
