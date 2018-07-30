@@ -11,10 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.base.AppManager;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.base.MyApplication;
 import com.game.smartremoteapp.bean.AppInfo;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
@@ -26,11 +25,13 @@ import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
+import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.utils.VersionUtils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.MyToast;
@@ -44,12 +45,10 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -83,6 +82,9 @@ public class MainActivity extends BaseActivity {
     private String isSign="";
     private LoadProgressView downloadDialog;
     private SignInDialog signInDialog;
+    private DownloadManagerUtil downloadManagerUtil;
+    private long downloadId=0;
+    public static  MainActivity mMainActivity;
     static {
         System.loadLibrary("SmartPlayer");
     }
@@ -95,12 +97,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
+        mMainActivity=this;
         showZwwFg();
         initNetty();
         getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
-       //  checkVersion();
+        checkVersion();
 
     }
 
@@ -160,7 +163,7 @@ public class MainActivity extends BaseActivity {
                 UserUtils.sessionID=loginInfoResult.getData().getSessionID();
                 UserUtils.SRSToken=loginInfoResult.getData().getSRStoken();
                 //用户手机号
-                UserUtils.UserPhone = loginInfoResult.getData().getAppUser().getPHONE();
+                UserUtils.UserPhone = loginInfoResult.getData().getAppUser().getBDPHONE();
                 //用户名  11/22 13：25
                 UserUtils.UserName = loginInfoResult.getData().getAppUser().getUSERNAME();
                 UserUtils.NickName = loginInfoResult.getData().getAppUser().getNICKNAME();
@@ -300,8 +303,7 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
-            AppManager.getAppManager().finishAllActivity();
-            super.onBackPressed();
+            MyApplication.getInstance().exit();
         }
     }
 
@@ -369,80 +371,6 @@ public class MainActivity extends BaseActivity {
             LogUtils.loge( "TAG_GATEWAT_USING");
         }
     }
-
-//    //监控全部设备状态区
-//    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
-//            @Tag(Utils.TAG_GET_DEVICE_STATUS)})
-//    public void getDeviceStates(Object response) {
-//        if (response instanceof GetStatusResponse) {
-//            GetStatusResponse getStatusResponse = (GetStatusResponse) response;
-//            Utils.showLogE(TAG, "getStatusResponse=====" + getStatusResponse.getStatus());
-//            if (Utils.isEmpty(getStatusResponse.getStatus())) {
-//                return;
-//            }
-//            if ((getStatusResponse.getSeq() != -2)) {
-//                if (Utils.isEmpty(getStatusResponse.getStatus())) {
-//                    return;
-//                }
-//                String[] devices = getStatusResponse.getStatus().split(";");
-//                for (int i = 0; i < devices.length; i++) {
-//                    String[] status = devices[i].split("-");
-//                    String address = status[0];
-//                    String poohType = status[1];
-//                    String stats = status[2];
-//                    for (int j = 0; j < roomList.size(); j++) {
-//                        RoomBean bean = roomList.get(j);
-//                        if (bean.getDollId().equals(address)) {
-//                            if (!poohType.equals(Utils.OK)) {
-//                                //设备异常了
-//                                bean.setDollState("0");
-//                            } else {
-//                                bean = UserUtils.dealWithRoomStatus(bean, stats);
-//                            }
-//                            roomList.set(j, bean);
-//                        }
-//                    }
-//                }
-//                if(zwwjFragment != null) {
-//                    //TODO 按照规则重新排序
-//                    Collections.sort(roomList, new Comparator<RoomBean>() {
-//                        @Override
-//                        public int compare(RoomBean t1, RoomBean t2) {
-//                            return t2.getDollState().compareTo(t1.getDollState());
-//                        }
-//                    });
-//                    Utils.showLogE(TAG, "getDeviceStates and notifyAdapter roomList.");
-//                    zwwjFragment.notifyAdapter(roomList);
-//                }
-//            }
-//        }
-//    }
-//
-//    private void startTimer() {
-//        if (timer == null) {
-//            timer = new Timer();
-//            timerTask = new timeTask();
-//            timer.schedule(timerTask, Utils.GET_STATUS_DELAY_TIME, Utils.GET_STATUS_PRE_TIME);
-//        }
-//    }
-//
-//    private void stopTimer() {
-//        if (timer != null) {
-//            timer.cancel();
-//            timer = null;
-//            timerTask.cancel();
-//            timerTask = null;
-//        }
-//    }
-//
-//    //定时器区
-//    class timeTask extends TimerTask {
-//
-//        @Override
-//        public void run() {
-//            NettyUtils.sendGetDeviceStatesCmd();
-//        }
-//    }
 
     /** ####################### 网络请求区 #########################  **/
 
@@ -602,12 +530,12 @@ public class MainActivity extends BaseActivity {
           @Override
           public void _onSuccess(Result<AppInfo> appInfoResult) {
               if(appInfoResult!=null){
-               String version= appInfoResult.getData().getVERSION();
-                  if(!Utils.getAppCodeOrName(MainActivity.this, 1).equals(version)){
-                      updateApp(appInfoResult.getData().getDOWNLOAD_URL());
-                  }
+                  String version= appInfoResult.getData().getVERSION();
+                   if(VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1),version)){
+                         updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                      }
+                     }
               }
-          }
           @Override
           public void _onError(Throwable e) {
           }
@@ -622,8 +550,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void getResult(boolean result ) {
                 if (result) {// 确定下载
-                    showDialog();
-                    new Thread(new DownLoadRunnable(MainActivity.this,UrlUtils.APPPICTERURL+loadUri)).start();
+                     downloadManagerUtil=new DownloadManagerUtil(MainActivity.this);
+                    if (downloadId != 0) {
+                       downloadManagerUtil.clearCurrentTask(downloadId);
+                    }
+                     downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
                 }
             }
         });
@@ -648,24 +579,24 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Utils.TAG_DOWN_LOAD)})
     public void getDownLoadInfo(Object object) {
-        if(object instanceof DownLoadRunnable.UpdateInfo){
-            DownLoadRunnable.UpdateInfo info= (DownLoadRunnable.UpdateInfo) object;
-            switch (info.getState()){
-                case DownloadManager.STATUS_SUCCESSFUL:
-                    downloadDialog.setProbarPercent(100);
-                    canceledDialog();
-                    //Toast.makeText(MainActivity.this, "下载任务已经完成！", Toast.LENGTH_SHORT).show();
-                    break;
-                case DownloadManager.STATUS_RUNNING:
-                    //int progress = (int) msg.obj;
-                    downloadDialog.setProbarPercent((int) info.getProgress());
-                    break;
-                case DownloadManager.STATUS_FAILED:
-                    canceledDialog();
-                    break;
-                case DownloadManager.STATUS_PENDING:
-                    showDialog();
-                    break;
+        if(object instanceof DownLoadRunnable.UpdateInfo) {
+            DownLoadRunnable.UpdateInfo info = (DownLoadRunnable.UpdateInfo) object;
+            if (info != null && downloadDialog != null) {
+                switch (info.getState()) {
+                    case DownloadManager.STATUS_SUCCESSFUL:
+                        downloadDialog.setProbarPercent(100);
+                        canceledDialog();
+                        break;
+                    case DownloadManager.STATUS_RUNNING:
+                        downloadDialog.setProbarPercent((int) info.getProgress());
+                        break;
+                    case DownloadManager.STATUS_FAILED:
+                        canceledDialog();
+                        break;
+                    case DownloadManager.STATUS_PENDING:
+                        showDialog();
+                        break;
+                }
             }
         }
     }

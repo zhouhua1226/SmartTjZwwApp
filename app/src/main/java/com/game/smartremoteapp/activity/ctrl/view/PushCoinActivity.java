@@ -138,7 +138,9 @@ public class PushCoinActivity extends Activity implements IctrlView {
             ctrl_status.setImageResource(R.drawable.point_green);
         }
         Glide.with(this).load(UserUtils.UserImage).asBitmap().
+                error(R.mipmap.app_mm_icon).
                 transform(new GlideCircleTransform(this)).into(player_iv);
+
         player_name.setText(UserUtils.NickName + "...");
         NettyUtils.pingRequest(); //判断连接
         getUserDate(UserUtils.USER_ID);
@@ -658,11 +660,14 @@ public class PushCoinActivity extends Activity implements IctrlView {
                                 .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
                     } else {
                         Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
-                                .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
+                                .asBitmap().
+                                transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
                     }
                 } else {
                     Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
-                            .asBitmap().transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
+                            .asBitmap().
+                            transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
+
                 }
             }
 

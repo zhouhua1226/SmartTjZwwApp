@@ -32,7 +32,6 @@ import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
 import com.game.smartremoteapp.activity.home.GuessPageActivity;
 import com.game.smartremoteapp.activity.home.RechargeActivity;
 import com.game.smartremoteapp.activity.home.RoomPlayRecordActivity;
-import com.game.smartremoteapp.activity.wechat.WeChatPayActivity;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.GuessLastBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -118,7 +117,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     TextView playerCounterIv;
     @BindView(R.id.player2_iv)
     ImageView playerSecondIv;
-    @BindView(R.id.main_player_iv)
+     @BindView(R.id.main_player_iv)
     ImageView playerMainIv;
     @BindView(R.id.player_name_tv)
     TextView playerNameTv;
@@ -132,7 +131,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     ImageView ctrlChangeCameraIv;
 
     private static final String TAG = "CtrlActivity---";
-    @BindView(R.id.iv_quiz_layout)
+   @BindView(R.id.iv_quiz_layout)
     ImageView ctrlQuizLayout;
     @BindView(R.id.ctrl_instruction_image)
     ImageView ctrlInstructionImage; //竞猜介绍
@@ -266,6 +265,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         UMGameAgent.setDebugMode(true);   //设置输出运行时日志
         UMGameAgent.init(this);
         Glide.with(this).load(UserUtils.UserImage).asBitmap().
+                error(R.mipmap.app_mm_icon).
                 transform(new GlideCircleTransform(this)).into(playerMainIv);
     }
 
@@ -817,42 +817,6 @@ public class CtrlActivity extends Activity implements IctrlView {
         catchLl.setEnabled(true);
     }
 
-    private void getMoney() {
-        fillingCurrencyDialog = new FillingCurrencyDialog(this, R.style.easy_dialog_style);
-        fillingCurrencyDialog.show();
-        fillingCurrencyDialog.setDialogClickListener(myDialogClick);
-    }
-
-    private FillingCurrencyDialog.MyDialogClick myDialogClick =
-            new FillingCurrencyDialog.MyDialogClick() {
-                @Override
-                public void getMoney10(String money) {
-                    Intent intent = new Intent(CtrlActivity.this, WeChatPayActivity.class);
-                    intent.putExtra("money", money);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void getMoney20(String money) {
-                    Intent intent = new Intent(CtrlActivity.this, WeChatPayActivity.class);
-                    intent.putExtra("money", money);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void getMoney50(String money) {
-                    Intent intent = new Intent(CtrlActivity.this, WeChatPayActivity.class);
-                    intent.putExtra("money", money);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void getMoney100(String money) {
-                    Intent intent = new Intent(CtrlActivity.this, WeChatPayActivity.class);
-                    intent.putExtra("money", money);
-                    startActivity(intent);
-                }
-            };
 
     //摇杆操作
     @OnTouch({R.id.front_image, R.id.back_image, R.id.left_image, R.id.right_image, R.id.catch_ll})
@@ -1211,9 +1175,9 @@ public class CtrlActivity extends Activity implements IctrlView {
                     startgame_text.setText("正在排队");
                  //   startgameTextImag.setImageResource(R.drawable.ctrl_begin_loading);
                 }
-                ctrlQuizLayout.setVisibility(View.VISIBLE);
+             //   ctrlQuizLayout.setVisibility(View.VISIBLE);
                 //moneyImage.setImageResource(R.drawable.ctrl_bet_button);
-                ctrlQuizLayout.setEnabled(true);
+              //  ctrlQuizLayout.setEnabled(true);
             } else {
                 boolean is = false;
                 if (userInfos.size() == 1) {
@@ -1422,11 +1386,12 @@ public class CtrlActivity extends Activity implements IctrlView {
                                 .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                     } else {
                         Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
-                                .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                                .asBitmap().
+                                transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                     }
                 } else {
-                    Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
-                            .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
+                    Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon).asBitmap().
+                            transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                 }
             }
 

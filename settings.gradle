@@ -1,1 +1,1 @@
-include ':app', ':PushSDK', ':polygonimageview', ':easyysdk'
+include ':app', ':PushSDK', ':polygonimageview', ':timedialog'

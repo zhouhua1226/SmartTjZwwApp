@@ -151,10 +151,12 @@ public class SettingMobileActivity extends BaseActivity {
         HttpManager.getInstance().getEditUserPhone(userId, phoneNumber, phoneCode, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
-                if(result.getMsg().equals(Utils.HTTP_OK)){
+                if(result.getCode()==0){
                     MyToast.getToast(getApplicationContext(),"绑定成功！").show();
                     UserUtils.UserPhone=phone;
                     finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(),result.getMsg()).show();
                 }
             }
 

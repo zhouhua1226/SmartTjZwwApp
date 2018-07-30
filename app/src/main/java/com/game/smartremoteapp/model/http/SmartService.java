@@ -658,4 +658,12 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.GETCOINSUM)
     Observable<Result<HttpDataInfo>> getUserSumCoin(@Field(UrlUtils.USERID) String userId);
+
+    //第三方登录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.WXREGISTER)
+    Observable<Result<HttpDataInfo>> wxRegister(@Field(UrlUtils.UID) String uid, @Field(UrlUtils.NAME) String name,
+                                                @Field(UrlUtils.GENDER) String gender,@Field(UrlUtils.ICONURL) String profile_image_url,
+                                                @Field(UrlUtils.REGCHANNEL) String regChannel, @Field(UrlUtils.CHANNELNUM) String channelNum);
 }

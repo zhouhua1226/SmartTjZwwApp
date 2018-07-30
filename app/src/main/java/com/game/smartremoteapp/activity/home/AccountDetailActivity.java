@@ -57,7 +57,6 @@ public class AccountDetailActivity extends BaseActivity {
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
         setOnClick();
-        //String userId="d7836bdf88df450bb7ce595430a542ae";
         getUserAccountDetailPage(UserUtils.USER_ID, nextpage);
     }
 

@@ -69,7 +69,6 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
      */
     private ImageView[] mImageViews = null;
     private String h1;
-    private boolean mIsUserTouched = false;
     private PagerAdapter pagerAdapter;
     private CardView mCardView1;
     private CardView mCardView2;
@@ -146,7 +145,6 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
                         mImageViews[i].setBackgroundResource(R.drawable.banner_show_defauit_bg);
                     }
                 }
-              //  cardIndex=position;
                 notifyView(position);
             }
 

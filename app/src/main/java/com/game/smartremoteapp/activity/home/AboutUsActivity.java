@@ -39,7 +39,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
-        tvAboutPhoneName.setText("【"+getResources().getString(R.string.app_name)+"】客服热线: "+getResources().getString(R.string.service_phone));
+        tvAboutPhoneName.setText("【"+getResources().getString(R.string.app_name)+"】客服QQ: "+getResources().getString(R.string.service_qq));
         try {
             tvAboutVersion.setText("当前版本:"+ Utils.getAppCodeOrName(getApplicationContext(),1));
         } catch (Exception e) {
@@ -67,7 +67,6 @@ public class AboutUsActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.image_back:
               this.finish();
-
                 break;
 //            case R.id.submit_bt:
 //                Toast.makeText(this, "我明白是什么功能", Toast.LENGTH_SHORT).show();

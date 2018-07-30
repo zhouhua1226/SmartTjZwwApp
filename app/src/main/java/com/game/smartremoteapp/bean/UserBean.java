@@ -10,7 +10,7 @@ public class UserBean implements Serializable {
     private String START_TIME;
     private String RIGHTS;
     private String IP;
-    private String PHONE;
+     private String PHONE;
     private String SFID;
     private String USER_ID;
     private String LAST_LOGIN;
@@ -40,6 +40,40 @@ public class UserBean implements Serializable {
     private String MONTH_CARD ;
     private String MONTH_CARD_TAG ;
     private String WEEKS_CARD_TAG ;
+    private String GENDER ;
+    private String OPEN_TYPE ;
+    private String  BDPHONE;
+
+    public String getPHONE() {
+        return PHONE;
+    }
+
+    public void setPHONE(String PHONE) {
+        this.PHONE = PHONE;
+    }
+
+    public String getBDPHONE() {
+        return BDPHONE;
+    }
+    public void setBDPHONE(String BDPHONE) {
+        this.BDPHONE = BDPHONE;
+    }
+
+    public String getGENDER() {
+        return GENDER;
+    }
+
+    public void setGENDER(String GENDER) {
+        this.GENDER = GENDER;
+    }
+
+    public String getOPEN_TYPE() {
+        return OPEN_TYPE;
+    }
+
+    public void setOPEN_TYPE(String OPEN_TYPE) {
+        this.OPEN_TYPE = OPEN_TYPE;
+    }
 
     public String getFIRST_CHARGE() {
         return FIRST_CHARGE;
@@ -201,9 +235,7 @@ public class UserBean implements Serializable {
         this.PASSWORD = PASSWORD;
     }
 
-    public void setPHONE(String PHONE) {
-        this.PHONE = PHONE;
-    }
+
 
     public void setRIGHTS(String RIGHTS) {
         this.RIGHTS = RIGHTS;
@@ -273,9 +305,6 @@ public class UserBean implements Serializable {
         return PASSWORD;
     }
 
-    public String getPHONE() {
-        return PHONE;
-    }
 
     public String getRIGHTS() {
         return RIGHTS;

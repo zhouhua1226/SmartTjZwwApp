@@ -6,8 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.base.AppManager;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.base.MyApplication;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -86,13 +86,17 @@ public class WelcomeActivity extends BaseActivity{
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_login_password:
-                Utils.toActivity(this, LoginCodeActivity.class);
+               Utils.toActivity(this, LoginCodeActivity.class);
                 break;
             default:
                 break;
         }
     }
-
+    /**
+     *
+     * 自动登录
+     * @param userId
+     */
     private void getAuthLogin(String userId) {
         HttpManager.getInstance().getAuthLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -109,6 +113,7 @@ public class WelcomeActivity extends BaseActivity{
                     UserUtils.USER_ID = loginInfoResult.getData().getAppUser().getUSER_ID();
                     UserUtils.isUserChanger = true;
                     Utils.toActivity(WelcomeActivity.this, MainActivity.class);
+                    finish();
                 } else {
                     initCreatView();
                 }
@@ -132,7 +137,6 @@ public class WelcomeActivity extends BaseActivity{
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        AppManager.getAppManager().finishAllActivity();
+            MyApplication.getInstance().exit();
     }
 }

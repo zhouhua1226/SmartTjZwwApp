@@ -297,18 +297,8 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/setting_update_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            tools:text="当前版本为：1.0.1"
-            android:layout_marginLeft="90dp"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            />
-
         <ImageView
+            android:id="@+id/iv_version"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
@@ -316,6 +306,17 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:src="@drawable/back1" />
+
+        <TextView
+            android:id="@+id/setting_update_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/iv_version"
+            tools:text="当前版本为：1.0.1"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            />
     </RelativeLayout>
 
     <View

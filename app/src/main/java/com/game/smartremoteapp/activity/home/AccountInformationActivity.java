@@ -3,7 +3,6 @@ package com.game.smartremoteapp.activity.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,8 +32,8 @@ import butterknife.OnClick;
 public class AccountInformationActivity extends BaseActivity {
     @BindView(R.id.image_back)
     ImageButton imageBack;
-    @BindView(R.id.accountinfo_phone_tv)
-    TextView accountinfoPhoneTv;
+     @BindView(R.id.accountinfo_phone_tv)
+     TextView accountinfoPhoneTv;
     @BindView(R.id.accountinfo_nickname_tv)
     TextView accountinfoNicknameTv;
     @BindView(R.id.accountinfo_username_et)
@@ -267,7 +266,7 @@ public class AccountInformationActivity extends BaseActivity {
                 "2、真实姓名须同银行卡户名一致，身份证号码须同银行卡户主身份一直。\n" +
                 "3、请放心填写真实的个人资料，我们会对你的身份信息进行严格保密。\n" +
                 "4、以上资料仅用于提款到银行卡，请真实填写否则无法完成提款。\n" +
-                "5、如需修改账户信息，请先获取验证码，如遇其他问题请联系【接机抓娃娃】客服，客服电话:18621355947。");
+                "5、如需修改账户信息，请先获取验证码，如遇其他问题请联系【汤姆抓娃娃】客服，客服QQ:2563582976。");
     }
 
 }

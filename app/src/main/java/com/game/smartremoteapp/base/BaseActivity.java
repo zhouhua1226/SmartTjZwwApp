@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         afterCreate(savedInstanceState);
         MyApplication.getInstance().activities.add(this);
         PushAgent.getInstance(this).onAppStart();
-        AppManager.getAppManager().addActivity(this);
+
 //        RxBus.get().register(this);
 //        //initDialog();
 //        IntentFilter intentFilter = new IntentFilter();
@@ -64,9 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!isConfigChange) {
-            AppManager.getAppManager().finishActivity(this);
-        }
+
 //        RxBus.get().unregister(this);
 //        this.unregisterReceiver(LotteryReceiver);
     }
@@ -76,35 +74,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-//    private BroadcastReceiver LotteryReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String roomId = intent.getStringExtra(UserUtils.LOTTERY_ROOMID);
-//            String pId = intent.getStringExtra(UserUtils.LOTTERY_PERIODSNUM);
-//            Utils.showLogE(TAG, "房间号:" + roomId + "第" + pId + "期开奖了.......");
-//            //showLotteryDialog();
-//        }
-//    };
-//
-//    private void showLotteryDialog() {
-//        initDialog();
-//        guessingSuccessDialog.setCancelable(true);
-//        guessingSuccessDialog.show();
-//        guessingSuccessDialog.setDialogResultListener(new GuessingSuccessDialog.DialogResultListener() {
-//            @Override
-//            public void getResult(int resultCode) {
-//                if(resultCode==0){
-//                    guessingSuccessDialog.dismiss();
-//                }
-//            }
-//        });
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                guessingSuccessDialog.dismiss();
-//            }
-//        },3000);
-//    }
 
     @Override
     protected void onResume() {

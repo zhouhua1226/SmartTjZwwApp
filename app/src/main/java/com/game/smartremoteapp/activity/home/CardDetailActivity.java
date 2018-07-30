@@ -116,7 +116,7 @@ public class CardDetailActivity extends BaseActivity {
     private void initMouthView() {
         card_bg.setBackgroundResource(R.drawable.icon_mouth_detail);
         card_time.setText(getResources().getString(R.string.mouth_take_effect));
-        String s1 = "购买周卡后一共可获得" + "<font color='#FF0000'>" + "1980" + "</font>"+"游戏币,可立即获得"+ "<font color='#FF0000'>" + "980" + "</font>"+"游戏币";
+        String s1 = "购买月卡后一共可获得" + "<font color='#FF0000'>" + "1980" + "</font>"+"游戏币,可立即获得"+ "<font color='#FF0000'>" + "980" + "</font>"+"游戏币";
         String s2 = "有效期内每天赠送" + "<font color='#FF0000'>" + "33" + "</font>"+"游戏币"
                 + "\n30天内共赠送"+ "<font color='#FF0000'>" + "990" + "</font>"+"游戏币";
         String s3 = "重复购买月卡，奖励不会叠加，而是会延顺到下一个周期";

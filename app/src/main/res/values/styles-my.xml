@@ -21,7 +21,7 @@
         <item name="android:windowExitAnimation">@anim/push_button_out</item>
     </style>
 
-    <style name="activitystyle" parent="android:Theme.Dialog">
+    <style name="activitystyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/tanchu</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

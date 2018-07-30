@@ -246,6 +246,21 @@ public class Utils {
         if (file.isFile()) {file.delete();}
         return file.exists();
     }
+    //删除指定文件夹下所有文件
+    public static void deleteAll(String path) {
+        File filePar = new File(path);
+        if (filePar.exists()) {
+            File files[] = filePar.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    files[i].delete();
+                } else if (files[i].isDirectory()) {
+                    deleteAll(files[i].getAbsolutePath());
+                    files[i].delete();
+                }
+            }
+        }
+    }
 
     /**
      * 时间拆分

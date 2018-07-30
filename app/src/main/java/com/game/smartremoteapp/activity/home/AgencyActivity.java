@@ -53,7 +53,6 @@ public class AgencyActivity extends BaseActivity {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
-        String userId="d7836bdf88df450bb7ce595430a542ae";
         getUserPromoteList(UserUtils.USER_ID);
     }
 
