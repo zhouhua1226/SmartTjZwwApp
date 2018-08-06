@@ -106,6 +106,7 @@ public class CtrlModel implements SmartEventCallback {
         smartPlayer.SmartPlayerSetFastStartup(playerHandle, 1);
         smartPlayer.SmartPlayerSetLowLatencyMode(playerHandle, 1);
         smartPlayer.SmartPlayerSetBuffer(playerHandle, 0);
+        smartPlayer.SmartPlayerSetMute(playerHandle, 1);
         int iPlaybackRet = smartPlayer.SmartPlayerStartPlayback(playerHandle, url);
         LogUtils.loge("当前播放url:::::::" + iPlaybackRet + "===========" + url,TAG);
         if (iPlaybackRet != 0) {
