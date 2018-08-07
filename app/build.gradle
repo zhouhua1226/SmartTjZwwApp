@@ -19,7 +19,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
         versionCode 2
-        versionName "1.0.6"
+        versionName "1.0.7"
         multiDexEnabled true
         signingConfig signingConfigs.release
     }

@@ -1,5 +1,7 @@
 package com.game.smartremoteapp.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +12,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.utils.PermissionsUtils;
+
+import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
+
 /**
  * Created by yincong on 2017/11/30 19:44
  * 修改人：chen
@@ -19,7 +25,7 @@ import com.game.smartremoteapp.R;
 public class UpdateDialog extends Dialog implements View.OnClickListener {
 
     private final static String TAG = "UpdateDialog";
-    private Context context;
+    private Context mtx;
     private TextView tv_title;//提示
     private Button dl_btn_confirm;//确定
 
@@ -33,6 +39,7 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
 
     public UpdateDialog(Context context, int theme) {
         super(context, theme);
+        mtx=context;
     }
 
     @Override
@@ -94,11 +101,23 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.update_sure_btn:
-                if (null != this.listener) {
-                    listener.getResult(true);
-                }
-                UpdateDialog.this.dismiss();
+                PermissionsUtils.checkPermissions((Activity) mtx, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSIOM_EXTERNAL_STORAGE, new PermissionsUtils.PermissionsResultListener() {
+                            @Override
+                            public void onSuccessful() {
+                                if (null !=listener) {
+                                    listener.getResult(true);
+                                }
+                                UpdateDialog.this.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
                 break;
+
         }
     }
 

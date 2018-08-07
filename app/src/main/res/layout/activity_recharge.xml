@@ -39,8 +39,9 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <ScrollView
+    <com.game.smartremoteapp.view.ElasticScrollView
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -171,5 +172,5 @@
                 android:overScrollMode="never"
                 android:scrollbars="none" />
         </LinearLayout>
-    </ScrollView>
+    </com.game.smartremoteapp.view.ElasticScrollView>
 </LinearLayout>

@@ -1,16 +1,16 @@
 package com.game.smartremoteapp.activity.home;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.base.MyApplication;
@@ -24,7 +24,6 @@ import com.game.smartremoteapp.fragment.RankFragmentTwo;
 import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
@@ -33,7 +32,6 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.VersionUtils;
 import com.game.smartremoteapp.utils.YsdkUtils;
-import com.game.smartremoteapp.view.LoadProgressView;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.SignInDialog;
 import com.game.smartremoteapp.view.SignSuccessDialog;
@@ -45,97 +43,92 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
     private static final String TAG = "MainActivity-";
-
+    @BindView(R.id.tab_radiogroup)
+    RadioGroup mMainTabRadioGroup;
+    @BindView(R.id.tab_home_bg)
+    RadioButton tab_home;
+    @BindView(R.id.tab_rank)
+    RadioButton tab_rank;
+    @BindView(R.id.tab_mine)
+    RadioButton tab_mine;
+    @BindView(R.id.fl_home_zww)
+    FrameLayout fl_home_zww;
     @BindView(R.id.iv_tab_zww)
-    ImageView ivTabZww;//娃娃机图标
-    @BindView(R.id.layout_tab_zww)
-    RelativeLayout layoutTabZww;//娃娃机图标布局
-    @BindView(R.id.iv_tab_list)
-    ImageView ivTabList;//排行榜图标
-    @BindView(R.id.layout_tab_list)
-    LinearLayout layoutTabList;//排行旁图标布局
-    @BindView(R.id.iv_tab_my)
-    ImageView ivTabMy;//我的图标
-    @BindView(R.id.layout_tab_my)
-    LinearLayout layoutTabMy;//我的图标布局
+    ImageView tab_zww;
 
-    private MyCenterFragment myCenterFragment;//个人中心
-    private RankFragmentTwo rankFragment;//排行榜
     private ZWWJFragment zwwjFragment;//抓娃娃
-    private Fragment fragmentAll;
+    private RankFragmentTwo rankFragment;//排行榜
+    private MyCenterFragment myCenterFragment;//我的
     private long mExitTime;
-    private List<RoomBean> roomList=new ArrayList<>();
-
+    private List<RoomBean> roomList = new ArrayList<>();
     private Result<HttpDataInfo> loginInfoResult;
     private int signNumber = 0;
-    private int[] signDayNum=new int[7];
-    private String isSign="";
-    private LoadProgressView downloadDialog;
+    private int[] signDayNum = new int[7];
+    private String isSign = "";
     private SignInDialog signInDialog;
     private DownloadManagerUtil downloadManagerUtil;
-    private long downloadId=0;
-    public static  MainActivity mMainActivity;
-    static {
-        System.loadLibrary("SmartPlayer");
-    }
+    private long downloadId = 0;
+    public static MainActivity mMainActivity;
+    private int lastIndex = 1;
+    private FragmentTransaction transaction;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
 
+    static {
+        System.loadLibrary("SmartPlayer");
+    }
+
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
+         setTranslucentStatus();
         initView();
-        mMainActivity=this;
-        showZwwFg();
+        mMainActivity = this;
+        initFragment();
+        getDollList();          //获取房间列表
         initNetty();
-        getDollList();                  //获取房间列表
         RxBus.get().register(this);
         initData();
         checkVersion();
 
     }
 
-    private void initData() {
-
-        SPUtils.putBoolean(getApplicationContext(),"isVibrator",true);
-        SPUtils.putBoolean(getApplicationContext(),"isOpenMusic",true);
-        UserUtils.isUserChanger = false;
-        getUserSign(UserUtils.USER_ID,"0"); //签到请求 0 查询签到信息 1签到
-    }
     @Override
     protected void initView() {
         ButterKnife.bind(this);
-        fragmentAll = getSupportFragmentManager().findFragmentById(
-                R.id.main_center);
     }
+
+    private void initData() {
+        SPUtils.putBoolean(getApplicationContext(), "isVibrator", true);
+        SPUtils.putBoolean(getApplicationContext(), "isOpenMusic", true);
+        UserUtils.isUserChanger = false;
+        getUserSign(UserUtils.USER_ID, "0"); //签到请求 0 查询签到信息 1签到
+    }
+
     private void initNetty() {
         doServcerConnect();
         NettyUtils.registerAppManager();
     }
 
     private void initDoConnect() {
-        if ((YsdkUtils.loginResult != null) && (zwwjFragment != null)){
+        if ((YsdkUtils.loginResult != null) && (zwwjFragment != null)) {
             UserUtils.NickName = YsdkUtils.loginResult.getData().getAppUser().getNICKNAME();
             UserUtils.USER_ID = YsdkUtils.loginResult.getData().getAppUser().getUSER_ID();
             zwwjFragment.setSessionId(YsdkUtils.loginResult.getData().getSessionID(), false);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -148,19 +141,17 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         Utils.isExit = true;
-      //  getLogout(UserUtils.USER_ID);
-        //stopTimer();
         RxBus.get().unregister(this);
     }
 
-    private void getLoginBackDate(){
-        loginInfoResult=YsdkUtils.loginResult;
-        if(loginInfoResult!=null&&!loginInfoResult.equals("")){
+    private void getLoginBackDate() {
+        loginInfoResult = YsdkUtils.loginResult;
+        if (loginInfoResult != null && !loginInfoResult.equals("")) {
             if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                 LogUtils.logi("logIn::::" + loginInfoResult.getMsg());
                 Utils.token = loginInfoResult.getData().getAccessToken();
-                UserUtils.sessionID=loginInfoResult.getData().getSessionID();
-                UserUtils.SRSToken=loginInfoResult.getData().getSRStoken();
+                UserUtils.sessionID = loginInfoResult.getData().getSessionID();
+                UserUtils.SRSToken = loginInfoResult.getData().getSRStoken();
                 //用户手机号
                 UserUtils.UserPhone = loginInfoResult.getData().getAppUser().getBDPHONE();
                 //用户名  11/22 13：25
@@ -177,118 +168,15 @@ public class MainActivity extends BaseActivity {
                         loginInfoResult.getData().getAppUser().getCNEE_PHONE() + " " +
                         loginInfoResult.getData().getAppUser().getCNEE_ADDRESS();
             }
-        }else {
+        } else {
             if (zwwjFragment != null) {
                 zwwjFragment.showError();
             }
         }
     }
 
-    /**
-     * 设置未选中状态
-     */
-    private void setFocuse() {
-        ivTabZww.setBackgroundResource(R.drawable.zww_unicon_jj);
-        ivTabList.setBackgroundResource(R.drawable.rank_unicon_jj);
-        ivTabMy.setBackgroundResource(R.drawable.mycenter_unicon_jj);
-    }
-
-    private void showZwwFg() {
-        if (!(fragmentAll instanceof ZWWJFragment)) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                    .beginTransaction();
-            //如果所有的fragment都不为空的话，把所有的fragment都进行隐藏。最开始进入应用程序，fragment为空时，此方法不执行
-            hideFragment(fragmentTransaction);
-            //如果这个fragment为空的话，就创建一个fragment，并且把它加到ft中去.如果不为空，就把它直接给显示出来
-            if(zwwjFragment == null){
-                zwwjFragment = new ZWWJFragment();
-                fragmentTransaction.add(R.id.main_center, zwwjFragment);
-            }else {
-                fragmentTransaction.show(zwwjFragment);
-            }
-            setFocuse();
-            ivTabZww.setBackgroundResource(R.drawable.zww_icon);
-            //一定要记得提交
-            fragmentTransaction.commitAllowingStateLoss();
-        }
-    }
-
-    private void showRankFg() {
-        if (!(fragmentAll instanceof RankFragmentTwo)) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                    .beginTransaction();
-            //如果所有的fragment都不为空的话，把所有的fragment都进行隐藏。最开始进入应用程序，fragment为空时，此方法不执行
-            hideFragment(fragmentTransaction);
-            //如果这个fragment为空的话，就创建一个fragment，并且把它加到ft中去.如果不为空，就把它直接给显示出来
-            if(rankFragment==null) {
-                rankFragment = new RankFragmentTwo();
-                fragmentTransaction.add(R.id.main_center, rankFragment);
-            }else {
-                fragmentTransaction.show(rankFragment);
-            }
-            setFocuse();
-            ivTabList.setBackgroundResource(R.drawable.rank_icon);
-            //一定要记得提交
-            fragmentTransaction.commitAllowingStateLoss();
-        }
-
-    }
-
-    private void showMyCenterFg() {
-        if (!(fragmentAll instanceof MyCenterFragment)) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-                    .beginTransaction();
-            //如果所有的fragment都不为空的话，把所有的fragment都进行隐藏。最开始进入应用程序，fragment为空时，此方法不执行
-            hideFragment(fragmentTransaction);
-            //如果这个fragment为空的话，就创建一个fragment，并且把它加到ft中去.如果不为空，就把它直接给显示出来
-            if(myCenterFragment == null){
-                myCenterFragment = new MyCenterFragment();
-                fragmentTransaction.add(R.id.main_center,myCenterFragment);
-            }else {
-                fragmentTransaction.show(myCenterFragment);
-            }
-            setFocuse();
-            ivTabMy.setBackgroundResource(R.drawable.mycenter_icon);
-            //一定要记得提交
-            fragmentTransaction.commitAllowingStateLoss();
-        }
-
-    }
-
-    //隐藏fragment
-    public void hideFragment(FragmentTransaction fragmentTransaction){
-        if(zwwjFragment != null){
-            fragmentTransaction.hide(zwwjFragment);
-        }
-        if(rankFragment != null){
-            fragmentTransaction.hide(rankFragment);
-        }
-        if(myCenterFragment != null){
-            fragmentTransaction.hide(myCenterFragment);
-        }
-    }
-
-    @OnClick({R.id.layout_tab_zww, R.id.layout_tab_list, R.id.layout_tab_my})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            //抓娃娃大厅
-            case R.id.layout_tab_zww:
-                showZwwFg();
-                break;
-            //排行榜大厅
-            case R.id.layout_tab_list:
-                showRankFg();
-                break;
-            //我的大厅
-            case R.id.layout_tab_my:
-                showMyCenterFg();
-                break;
-            default:
-                break;
-        }
-    }
-
     //重写返回键
+//重写返回键
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             exit();
@@ -303,6 +191,7 @@ public class MainActivity extends BaseActivity {
             mExitTime = System.currentTimeMillis();
         } else {
             MyApplication.getInstance().exit();
+
         }
     }
 
@@ -321,33 +210,23 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
-//    private void getDeviceStates() {
-//        UserUtils.doGetDollStatus();
-//    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(UserUtils.isUserChanger) { //账号切换
+        if (UserUtils.isUserChanger) { //账号切换
             UserUtils.isUserChanger = false;
-            if((YsdkUtils.loginResult.getData() != null) && (zwwjFragment != null)) {
+            if ((YsdkUtils.loginResult.getData() != null) && (zwwjFragment != null)) {
                 UserUtils.NickName = YsdkUtils.loginResult.getData().getAppUser().getNICKNAME();
                 UserUtils.USER_ID = YsdkUtils.loginResult.getData().getAppUser().getUSER_ID();
-                if(YsdkUtils.loginResult.getData().getSessionID() != null)
+                if (YsdkUtils.loginResult.getData().getSessionID() != null)
                     zwwjFragment.setSessionId(YsdkUtils.loginResult.getData().getSessionID(), false);
             }
-            getUserSign(UserUtils.USER_ID,"0"); //签到请求 0 查询签到信息 1签到
+            getUserSign(UserUtils.USER_ID, "0"); //签到请求 0 查询签到信息 1签到
         } else {
-            //startTimer();
-            //getDeviceStates();
+
             NettyUtils.pingRequest();
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //stopTimer();
     }
 
     //监控网关区
@@ -363,23 +242,25 @@ public class MainActivity extends BaseActivity {
             LogUtils.loge("TAG_CONNECT_SUCESS");
             //getDeviceStates();
         } else if (state.equals(Utils.TAG_SESSION_INVALID)) {
-            LogUtils.loge( "TAG_SESSION_INVALID");
+            LogUtils.loge("TAG_SESSION_INVALID");
             //TODO 重连后重新连接 QQ/WEIXIN 模式检测
-            getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+            getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
         } else if (state.equals(Utils.TAG_GATEWAT_USING)) {
-            LogUtils.loge( "TAG_GATEWAT_USING");
+            LogUtils.loge("TAG_GATEWAT_USING");
         }
     }
 
-    /** ####################### 网络请求区 #########################  **/
+    /**
+     * ####################### 网络请求区 #########################
+     **/
 
     //自动登录
-    private void getAuthLogin(String userId, String accessToken,String ctype,String channel){
+    private void getAuthLogin(String userId, String accessToken, String ctype, String channel) {
         HttpManager.getInstance().getAuthLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 Log.e(TAG, "断开重连 重新获取相关参数" + loginInfoResult.getMsg());
-                if(loginInfoResult.getMsg().equals("success")) {
+                if (loginInfoResult.getMsg().equals("success")) {
                     if ((zwwjFragment != null) && (loginInfoResult.getData() != null)) {
                         zwwjFragment.setSessionId(loginInfoResult.getData().getSessionID(), true);
                     }
@@ -394,7 +275,7 @@ public class MainActivity extends BaseActivity {
     }
 
     //房间列表
-    private void getDollList(){
+    private void getDollList() {
         HttpManager.getInstance().getDollList(new RequestSubscriber<Result<RoomListBean>>() {
             @Override
             public void _onSuccess(Result<RoomListBean> roomListBean) {
@@ -431,23 +312,23 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void _onError(Throwable e) {
-                if(zwwjFragment != null)
+                if (zwwjFragment != null)
                     zwwjFragment.showError();
             }
         });
     }
 
-    private void setSignInDialog(int[] num){
-        signInDialog=new SignInDialog(this,R.style.easy_dialog_style);
+    private void setSignInDialog(int[] num) {
+        signInDialog = new SignInDialog(this, R.style.easy_dialog_style);
         signInDialog.setCancelable(true);
         signInDialog.show();
         signInDialog.setBackGroundColor(num);
         signInDialog.setDialogResultListener(new SignInDialog.DialogResultListener() {
             @Override
             public void getResult(int resultCode) {
-                switch (resultCode){
+                switch (resultCode) {
                     case 0:
-                        getUserSign(UserUtils.USER_ID,"1");
+                        getUserSign(UserUtils.USER_ID, "1");
                         break;
                     default:
                         break;
@@ -456,32 +337,32 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void getSignSuccessDialog(String gold){
-        SignSuccessDialog signSuccessDialog=new SignSuccessDialog(this,R.style.easy_dialog_style);
+    private void getSignSuccessDialog(String gold) {
+        SignSuccessDialog signSuccessDialog = new SignSuccessDialog(this, R.style.easy_dialog_style);
         signSuccessDialog.setCancelable(true);
         signSuccessDialog.show();
         signSuccessDialog.setTextView(gold);
         signSuccessDialog.setDialogResultListener(new SignSuccessDialog.DialogResultListener() {
             @Override
             public void getResult(int resultCode) {
-                      if(resultCode==0&&signInDialog!=null){
-                          signInDialog.dismiss();
-                      }
+                if (resultCode == 0 && signInDialog != null) {
+                    signInDialog.dismiss();
+                }
             }
         });
     }
 
     //签到请求
-    private void getUserSign(String userId, final String signType){
-        HttpManager.getInstance().getUserSign(userId,signType, new RequestSubscriber<Result<HttpDataInfo>>() {
+    private void getUserSign(String userId, final String signType) {
+        HttpManager.getInstance().getUserSign(userId, signType, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                if(loginInfoResult.getMsg().equals("success")){
-                    if(signType.equals("0")) {
+                if (loginInfoResult.getMsg().equals("success")) {
+                    if (signType.equals("0")) {
                         //查询处理
-                        isSign=loginInfoResult.getData().getSign().getSIGN_TAG();
+                        isSign = loginInfoResult.getData().getSign().getSIGN_TAG();
                         signNumber = Integer.parseInt(loginInfoResult.getData().getSign().getCSDATE());
-                        LogUtils.logi("签到天数="+signNumber);
+                        LogUtils.logi("签到天数=" + signNumber);
                         for (int i = 0; i < 7; i++) {
                             if (i < signNumber) {
                                 signDayNum[i] = 1;
@@ -489,17 +370,17 @@ public class MainActivity extends BaseActivity {
                                 signDayNum[i] = 0;
                             }
                         }
-                        if(signNumber<7) {
+                        if (signNumber < 7) {
                             if (isSign.equals("0")) {
                                 setSignInDialog(signDayNum);
                             }
                         }
-                    }else {
+                    } else {
                         //签到处理
-                        String signgold=loginInfoResult.getData().getSign().getSIGNGOLD();
-                        LogUtils.logi("签到赠送金币"+signgold);
+                        String signgold = loginInfoResult.getData().getSign().getSIGNGOLD();
+                        LogUtils.logi("签到赠送金币" + signgold);
                         getSignSuccessDialog(signgold);
-                        signNumber+=1;
+                        signNumber += 1;
                         for (int i = 0; i < 7; i++) {
                             if (i < signNumber) {
                                 signDayNum[i] = 1;
@@ -510,10 +391,11 @@ public class MainActivity extends BaseActivity {
                         signInDialog.setBackGroundColor(signDayNum);
                         signInDialog.isSignedView(true);
                     }
-                }else {
-                    MyToast.getToast(getApplicationContext(),loginInfoResult.getMsg()).show();
+                } else {
+                    MyToast.getToast(getApplicationContext(), loginInfoResult.getMsg()).show();
                 }
             }
+
             @Override
             public void _onError(Throwable e) {
 
@@ -524,79 +406,124 @@ public class MainActivity extends BaseActivity {
     /**
      * 获取apk版本信息
      */
-  private void checkVersion(){
-      HttpManager.getInstance().checkVersion( new RequestSubscriber<Result<AppInfo>>() {
-          @Override
-          public void _onSuccess(Result<AppInfo> appInfoResult) {
-              if(appInfoResult!=null){
-                  String version= appInfoResult.getData().getVERSION();
-                   if(VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1),version)){
-                         updateApp(appInfoResult.getData().getDOWNLOAD_URL());
-                      }
-                     }
-              }
-          @Override
-          public void _onError(Throwable e) {
-          }
-      });
+    private void checkVersion() {
+        HttpManager.getInstance().checkVersion(new RequestSubscriber<Result<AppInfo>>() {
+            @Override
+            public void _onSuccess(Result<AppInfo> appInfoResult) {
+                if (appInfoResult != null) {
+                    String version = appInfoResult.getData().getVERSION();
+                   if (VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1), version)) {
+                        updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                    }
+                }
+            }
 
-  }
-    private void  updateApp(final String loadUri){
-        UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+
+    }
+
+    private void updateApp(final String loadUri) {
+        UpdateDialog updateDialog = new UpdateDialog(this, R.style.easy_dialog_style);
         updateDialog.setCancelable(false);
         updateDialog.show();
         updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
             @Override
-            public void getResult(boolean result ) {
+            public void getResult(boolean result) {
                 if (result) {// 确定下载
-                     downloadManagerUtil=new DownloadManagerUtil(MainActivity.this);
+                    downloadManagerUtil = new DownloadManagerUtil(getApplicationContext());
                     if (downloadId != 0) {
-                       downloadManagerUtil.clearCurrentTask(downloadId);
+                        downloadManagerUtil.clearCurrentTask(downloadId);
                     }
-                     downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+                    downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL + loadUri);
                 }
             }
         });
     }
 
-    private void showDialog() {
-        if(downloadDialog==null){
-            downloadDialog = new LoadProgressView(this,R.style.easy_dialog_style);
-        }
-        if(!downloadDialog.isShowing()){
-            downloadDialog.show();
-        }
+    private void initFragment() {
+         Utils.setDrawableSize(this,tab_rank);
+         Utils.setDrawableSize(this,tab_mine);
+         fl_home_zww.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!tab_home.isChecked()) {
+                    tab_home.setChecked(true);
+                }
+             }
+        });
+         mMainTabRadioGroup.setOnCheckedChangeListener(this);
+         selectFragment(lastIndex);
     }
-    private void canceledDialog() {
-        if(downloadDialog!=null&&downloadDialog.isShowing()){
-            downloadDialog.dismiss();
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        int current = 0;
+        switch (checkedId) {
+            case R.id.tab_rank:
+                current = 0;
+                break;
+            case R.id.tab_home_bg:
+                current = 1;
+                break;
+            case R.id.tab_mine:
+                current = 2;
+                break;
+        }
+        if (lastIndex != current) {
+            selectFragment(current);
+            if (current == 1) {
+                tab_zww.setBackgroundResource(R.drawable.zww_icon);
+            } else {
+                tab_zww.setBackgroundResource(R.drawable.zww_unicon_jj);
+            }
         }
     }
 
-    /**
-     * 下载ui更新通知
-     */
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Utils.TAG_DOWN_LOAD)})
-    public void getDownLoadInfo(Object object) {
-        if(object instanceof DownLoadRunnable.UpdateInfo) {
-            DownLoadRunnable.UpdateInfo info = (DownLoadRunnable.UpdateInfo) object;
-            if (info != null && downloadDialog != null) {
-                switch (info.getState()) {
-                    case DownloadManager.STATUS_SUCCESSFUL:
-                        downloadDialog.setProbarPercent(100);
-                        canceledDialog();
-                        break;
-                    case DownloadManager.STATUS_RUNNING:
-                        downloadDialog.setProbarPercent((int) info.getProgress());
-                        break;
-                    case DownloadManager.STATUS_FAILED:
-                        canceledDialog();
-                        break;
-                    case DownloadManager.STATUS_PENDING:
-                        showDialog();
-                        break;
+    private void selectFragment(int index) {
+        transaction = getSupportFragmentManager().beginTransaction();
+        hideFragment(transaction);
+        switch (index) {
+            case 0:
+                if (rankFragment == null) {
+                    rankFragment = new RankFragmentTwo();
+                    transaction.add(R.id.show_fragment, rankFragment);
+                } else {
+                    transaction.show(rankFragment);
                 }
-            }
+                break;
+            case 1:
+                if (zwwjFragment == null) {
+                    zwwjFragment = new ZWWJFragment();
+                    transaction.add(R.id.show_fragment, zwwjFragment);
+                } else {
+                    transaction.show(zwwjFragment);
+                }
+                break;
+            case 2:
+                if (myCenterFragment == null) {
+                    myCenterFragment = new MyCenterFragment();
+                    transaction.add(R.id.show_fragment, myCenterFragment);
+                } else {
+                    transaction.show(myCenterFragment);
+                }
+                break;
+        }
+        transaction.commitAllowingStateLoss();
+        lastIndex = index;
+    }
+
+    //隐藏fragment
+    public void hideFragment(FragmentTransaction fragmentTransaction) {
+        if (zwwjFragment != null) {
+            fragmentTransaction.hide(zwwjFragment);
+        }
+        if (rankFragment != null) {
+            fragmentTransaction.hide(rankFragment);
+        }
+        if (myCenterFragment != null) {
+            fragmentTransaction.hide(myCenterFragment);
         }
     }
 }

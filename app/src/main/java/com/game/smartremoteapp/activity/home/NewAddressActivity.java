@@ -128,7 +128,9 @@ public class NewAddressActivity extends BaseActivity {
                 }
                 break;
             case R.id.newaddress_dq_tv:
-                  mAddressDialog.show(getSupportFragmentManager(),"all");
+                if(!mAddressDialog.isAdded()){
+                    mAddressDialog.show(getSupportFragmentManager(),"all");
+                }
                 break;
             default:
                 break;

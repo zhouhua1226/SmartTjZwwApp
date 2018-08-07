@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,14 +91,24 @@ public class AddressDialog extends DialogFragment implements View.OnClickListene
         }
     }
 
-
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            //在每个add事务前增加一个remove事务，防止连续的add
+            manager.beginTransaction().remove(this).commit();
+            super.show(manager, tag);
+        } catch (Exception e) {
+            //同一实例使用不同的tag会异常,这里捕获一下
+            e.printStackTrace();
+        }
+    }
 
     /*
-    * @desc This method is called when onClick method is invoked by sure button. A Calendar instance is created and
-    *       initialized.
-    * @param none
-    * @return none
-    */
+        * @desc This method is called when onClick method is invoked by sure button. A Calendar instance is created and
+        *       initialized.
+        * @param none
+        * @return none
+        */
     void sureClicked() {
 
         if (mPickerConfig.mAddressBack != null) {

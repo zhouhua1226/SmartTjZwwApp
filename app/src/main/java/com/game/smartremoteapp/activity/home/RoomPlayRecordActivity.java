@@ -10,10 +10,7 @@ import android.widget.TextView;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.fragment.BetRecordFragment;
-import com.game.smartremoteapp.fragment.MyCenterFragment;
 import com.game.smartremoteapp.fragment.PlayRecordFragment;
-import com.game.smartremoteapp.fragment.RankFragmentTwo;
-import com.game.smartremoteapp.fragment.ZWWJFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +35,7 @@ public class RoomPlayRecordActivity extends BaseActivity {
     private BetRecordFragment betRecordFragment;//竞猜记录
     private PlayRecordFragment playRecordFragment;//游戏记录
     private Fragment fragmentAll;
-
+    private String roomId;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_roomplayrecord;
@@ -47,7 +44,9 @@ public class RoomPlayRecordActivity extends BaseActivity {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
-        showBetFg();  //默认展示竞猜
+
+        roomId=getIntent().getStringExtra("roomId");
+        showPlayFg();  //默认展示游戏
     }
 
     @Override
@@ -72,8 +71,7 @@ public class RoomPlayRecordActivity extends BaseActivity {
                 break;
             case R.id.ranktwo_catchtitle_tv:
                 showPlayFg();
-                String roomId=getIntent().getStringExtra("roomId");
-                playRecordFragment.setRoomId(roomId);
+
                 break;
             case R.id.ranktwo_guesstitle_tv:
                 showBetFg();
@@ -127,6 +125,7 @@ public class RoomPlayRecordActivity extends BaseActivity {
             hideFragment(fragmentTransaction);
             if(playRecordFragment==null) {
                 playRecordFragment = new PlayRecordFragment();
+                playRecordFragment.setRoomId(roomId);
                 fragmentTransaction.add(R.id.main_center, playRecordFragment);
             }else {
                 fragmentTransaction.show(playRecordFragment);

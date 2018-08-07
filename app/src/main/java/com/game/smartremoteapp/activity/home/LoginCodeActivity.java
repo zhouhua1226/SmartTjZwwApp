@@ -198,6 +198,11 @@ public class LoginCodeActivity extends BaseActivity {
              }
              @Override
              public void onComplete(SHARE_MEDIA platform, int i, Map<String, String> map) {
+                 if(map==null){
+                     MyToast.getToast(getApplicationContext(),"登录失败！").show();
+                     setGifView(false);
+                     return;
+                 }
                  String uid = null;
                  String regChannel = null;
                  if(platform.equals(SHARE_MEDIA.WEIXIN)){

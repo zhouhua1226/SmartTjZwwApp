@@ -1,7 +1,6 @@
 package com.game.smartremoteapp.base;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
@@ -36,7 +35,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(false);//初始化logger
+        LogUtils.logInit(true);//初始化logger
 
     }
     private void setCrashHandler() {
@@ -91,15 +90,14 @@ public class MyApplication extends MultiDexApplication {
                 activity = activities.get(i);
                 if (activity != null) {
                     if (!activity.isFinishing()) {
-                        activity.finishAffinity();
+                        activity.finish();
                     }
                     activity = null;
                 }
                 activities.remove(i);
                 i--;
             }
-            ActivityManager activityMgr = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.restartPackage(this.getPackageName());
+
         }
     }
 }

@@ -21,8 +21,8 @@ public class DownloadReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
          Log.d("BroadcastReceiver", intent.getAction());
         if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
-            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-            installApk(context, id);
+          long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+           installApk(context, id);
         } else if (intent.getAction().equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
             // DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             //获取所有下载任务Ids组
@@ -46,11 +46,15 @@ public class DownloadReceiver extends BroadcastReceiver {
      */
     public void installApk(Context context, long downloadApkId) {
         Intent install = new Intent(Intent.ACTION_VIEW);
-        Uri downloadFileUri;
-        File file = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + "/"+title);
+        File file= null;
+        try {
+            file =  context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + "/"+title);
+         } catch (NullPointerException e) {
+            file=new File(Environment.getExternalStorageDirectory(), "/temp/"+title);
+        }
         if (file != null) {
             String path = file.getAbsolutePath();
-            downloadFileUri = Uri.parse("file://" + path);
+             Uri    downloadFileUri = Uri.parse("file://" + path);
             install.setDataAndType(downloadFileUri, "application/vnd.android.package-archive");
             install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(install);

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,11 @@ import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.adapter.ListRankAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
-import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -112,23 +109,8 @@ public class RankFragmentTwo extends BaseFragment {
     protected void afterCreate(Bundle savedInstanceState) {
         initData();
         getRankDollList(UserUtils.USER_ID);
-        //initlist();
-        //OnClick();
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            Log.e("rank_onHidden", "userId=" + UserUtils.USER_ID);
-            //initlist();
-            if(isShowType==1) {
-                getRankDollList(UserUtils.USER_ID);
-            }else {
-                getRankBetList(UserUtils.USER_ID);
-            }
-        }
-    }
 
     private void initData() {
         setShowChangeView(isShowType);
@@ -139,82 +121,13 @@ public class RankFragmentTwo extends BaseFragment {
         ranktwoRecyclerbiew.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void initlist() {
-        HttpManager.getInstance().getListRank(new RequestSubscriber<Result<ListRankBean>>() {
-            @Override
-            public void _onSuccess(Result<ListRankBean> listRankBeanResult) {
-                list = listRankBeanResult.getData().getList();
-                LogUtils.logi(list.size() + "");
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getUSER_ID().equals(UserUtils.USER_ID)) {
-                        isOutTen = false;
-                    }
-                }
-
-                int length = list.size();
-                if (length >= 1)
-                    firstBean = list.get(0);
-                if (length >= 2)
-                    secondBean = list.get(1);
-                if (length >= 3)
-                    thirdBean = list.get(2);
-                rankList.clear();
-                if (length > 10) {
-                    for (int i = 3; i < 10; i++) {
-                        rankList.add(list.get(i));
-                    }
-                } else if (length > 3 && length <= 10) {
-                    for (int i = 3; i < length; i++) {
-                        rankList.add(list.get(i));
-                    }
-                } else {
-                    rankList = list;
-                }
-
-                listRankAdapter.notify(rankList,isShowType);
-                if (isOutTen) {
-                    getNumRankList(UserUtils.USER_ID);   //如果当前用户在前十以外，则查询当前用户排名
-                } else {
-                    setViewDate(myNum);
-                }
-
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-
-                LogUtils.loge(e.getMessage());
-            }
-        });
-
-    }
-
-    private void getNumRankList(String userId) {
-        HttpManager.getInstance().getNumRankList(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
-            @Override
-            public void _onSuccess(Result<HttpDataInfo> result) {
-                if (result.getMsg().equals("success")) {
-                    myBean = result.getData().getAppUser();
-                    myNum = myBean.getRANK();
-                    Log.e(TAG, "我的排名=" + myNum);
-                    setViewDate(myNum);
-                }
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-
-            }
-        });
-    }
 
     public void OnClick() {
         listRankAdapter.setOnItemClickListener(new ListRankAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-//                MyToast.getToast(getContext(),"我要查看"+position).show();
-            }
 
+            }
         });
     }
 

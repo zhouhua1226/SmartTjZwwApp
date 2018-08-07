@@ -19,19 +19,22 @@ public abstract class BaseFragment extends Fragment {
     protected View rootView;
     protected Unbinder unbinder;
     protected FragmentManager mfragmentManager;
-
+    private LayoutInflater mInflater;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(rootView!=null){
-            ViewGroup parent =(ViewGroup)rootView.getParent();
-            parent.removeView(rootView);
-        }else {
+        if (rootView == null) {
+            mInflater = inflater;
             rootView = inflater.inflate(getLayoutId(), container, false);
+        } else {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+            }
         }
+
         return rootView;
     }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

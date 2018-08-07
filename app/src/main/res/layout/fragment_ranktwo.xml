@@ -4,21 +4,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/select_pop_gv_bg"
-    >
+    android:background="@color/backcolor">
 
     <LinearLayout
         android:id="@+id/topLy"
         android:background="@color/apptheme_bg"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:orientation="vertical"
-        >
+        android:layout_height="235dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="33dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             >
@@ -346,13 +344,6 @@
             android:textColor="@color/gray"
             android:layout_toRightOf="@+id/rank_userImag"
             />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="7dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/select_pop_gv_bg"/>
-
     </RelativeLayout>
 
 
@@ -360,6 +351,7 @@
         android:id="@+id/ranktwo_recyclerbiew"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
         android:overScrollMode="never"
         android:scrollbars="none"
         android:background="@color/white"/>

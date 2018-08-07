@@ -88,12 +88,14 @@ public class JoinEarnActivity extends BaseActivity {
             public void onItemClick(int position) {
                 PromomoteBean promomoteBean=list.get(position);
                 String proManageId=promomoteBean.getPRO_MANAGE_ID()+"";
-                int userBalance= Integer.parseInt(UserUtils.UserBalance);
-                int payGold= Integer.parseInt(promomoteBean.getPAY_GOLD());
-                if(userBalance >= payGold) {
-                    getPromomoteOrder(UserUtils.USER_ID, proManageId, "P");
-                }else {
-                    setCatchResultDialog(0);
+                if(Utils.isNumeric(UserUtils.UserBalance)) {
+                    int userBalance = Integer.parseInt(UserUtils.UserBalance);
+                    int payGold = Integer.parseInt(promomoteBean.getPAY_GOLD());
+                    if (userBalance >= payGold) {
+                        getPromomoteOrder(UserUtils.USER_ID, proManageId, "P");
+                    } else {
+                        setCatchResultDialog(0);
+                    }
                 }
             }
         });
@@ -227,7 +229,6 @@ public class JoinEarnActivity extends BaseActivity {
                     if(promomoteBean!=null){
                         String joinCode=promomoteBean.getPRO_ID()+"";
                         if(!Utils.isEmpty(joinCode)) {
-                            MyToast.getToast(getApplicationContext(), "加盟成功！").show();
                             showJoinDialog(joinCode);
                         }
 

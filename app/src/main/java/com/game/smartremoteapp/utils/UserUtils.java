@@ -38,7 +38,10 @@ public class UserUtils {
     public static String IsBankInf="";   //是否绑定银行卡  0没绑定  1绑定
     public static BankCardBean BankBean;   //银行卡信息类
     public static String UserAmount="";
+    public static String UserWeekDay="";
+    public static String UserMouthDay="";
     public static int UserBetNum;
+
     public static int id;
     public static SRStoken SRSToken;
     public static boolean isUserChanger = false;  //是否切换

@@ -75,7 +75,6 @@
             android:layout_marginLeft="15dp"
             android:textColor="#848484"
             android:text="2017/10/17 14:12"/>
-
     </RelativeLayout>
 
     <ImageView
@@ -84,7 +83,6 @@
         android:background="#ededed"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>
-
     <RelativeLayout
         android:id="@+id/consignment_rl"
         android:layout_width="match_parent"
@@ -99,9 +97,7 @@
             android:textColor="#353535"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="50dp"
-            />
-
+            android:layout_marginRight="50dp" />
         <ImageButton
             android:layout_alignParentRight="true"
             android:layout_width="45dp"
@@ -111,8 +107,6 @@
             android:scaleType="centerInside"
             android:src="@drawable/back1"
             android:visibility="visible" />
-
-
 
     </RelativeLayout>
 

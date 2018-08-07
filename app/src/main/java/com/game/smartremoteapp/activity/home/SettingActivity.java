@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
+import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
@@ -44,6 +46,8 @@ import com.umeng.socialize.media.UMWeb;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
 
 /**
  * Created by hongxiu on 2017/9/25.
@@ -87,11 +91,9 @@ public class SettingActivity extends BaseActivity {
 
     private Context context = SettingActivity.this;
     private LoadProgressView downloadDialog;
-
     private DownloadManagerUtil downloadManagerUtil;
-
     long downloadId = 0;
-   private String mVersion;
+    private String mVersion;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_setting;
@@ -172,7 +174,16 @@ public class SettingActivity extends BaseActivity {
                 checkVersion();
                 break;
             case R.id.setting_share_layout:
-                shareApp();
+                PermissionsUtils.checkPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSIOM_EXTERNAL_STORAGE, new PermissionsUtils.PermissionsResultListener() {
+                            @Override
+                            public void onSuccessful() {
+                                shareApp();
+                            }
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
                 break;
         }
     }
@@ -208,7 +219,7 @@ public class SettingActivity extends BaseActivity {
          @Override
             public void getResult(boolean result ) {
                if (result) {// 确定下载
-                    downloadManagerUtil=new DownloadManagerUtil(SettingActivity.this);
+                    downloadManagerUtil=new DownloadManagerUtil(getApplicationContext());
                      if (downloadId != 0) {
                        downloadManagerUtil.clearCurrentTask(downloadId);
                      }
@@ -270,7 +281,7 @@ public class SettingActivity extends BaseActivity {
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
                     NettyUtils.destoryConnect();
                     MainActivity.mMainActivity.finish();
-                    startActivity(new Intent(SettingActivity.this, WelcomeActivity.class));
+                    startActivity(new Intent(SettingActivity.this, SplashActivity.class));
                     finish();
                 }
             }

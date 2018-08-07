@@ -5,57 +5,41 @@
     android:layout_height="match_parent"
     android:background="#eceaea"
     android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/apptheme_bg"
+        android:layout_height="25dp"></View>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="45dp"
         android:background="@color/apptheme_bg">
-        <ImageView
-            android:id="@+id/nextPage_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:src="@drawable/app_jj_textlogo" />
-
         <ImageButton
             android:id="@+id/zww_exshop_ibtn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@color/apptheme_bg"
-            android:src="@drawable/zww_exshop_bg"
-            android:text="" />
-
-        <ImageButton
-            android:id="@+id/zww_earnmoney_ibtn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@color/apptheme_bg"
-            android:src="@drawable/zww_earnmoney_bg"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/zww_news_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="活动"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:visibility="gone" />
+            android:layout_marginRight="15dp"
+            android:background="@color/apptheme_bg"
+            android:src="@drawable/icon_share" />
+        <ImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/app_titie_home" />
+        <ImageButton
+            android:id="@+id/zww_earnmoney_ibtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"
+            android:background="@color/apptheme_bg"
+            android:src="@drawable/zww_earnmoney_bg" />
     </RelativeLayout>
+
     <com.game.smartremoteapp.view.PullToRefreshView
         android:id="@+id/mPullToRefreshView"
         android:layout_width="match_parent"
@@ -64,6 +48,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
+            android:scrollbars="none"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -98,7 +83,6 @@
                             android:paddingBottom="2dp"
                             android:paddingTop="2dp"
                             android:visibility="invisible">
-
                             <com.game.smartremoteapp.view.MarqueeView
                                 android:id="@+id/marqueeview"
                                 android:layout_width="match_parent"
@@ -106,15 +90,6 @@
                                 app:mvAnimDuration="500"
                                 app:mvInterval="2000"
                                 app:mvTextSize="13sp" />
-
-                            <ImageButton
-                                android:id="@+id/zww_guess_btn"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="8dp"
-                                android:background="@drawable/zww_guess_imag"
-                                android:visibility="gone" />
                         </RelativeLayout>
                     </RelativeLayout>
 
@@ -128,7 +103,6 @@
                         app:tabSelectedTextColor="@color/common_red_text_color"
                         app:tabTextAppearance="@style/MyTableyoutTextAppearance"
                         app:tabTextColor="@color/black" />
-                    <!-- android:layout_height="?attr/actionBarSize"  @drawable/tablayout_select_bg -->
 
                 </LinearLayout>
 
@@ -136,7 +110,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#dcdcdc" />
-
                 <com.game.smartremoteapp.view.EmptyLayout
                     android:id="@+id/zww_emptylayout"
                     android:layout_width="match_parent"

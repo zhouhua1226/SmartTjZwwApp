@@ -75,6 +75,7 @@ public class CardDetailActivity extends BaseActivity {
     protected void initView() {
         ButterKnife.bind(this);
         type=getIntent().getIntExtra(UrlUtils.CARD_TYPE,0);
+        getPayCardList();
         radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -88,7 +89,7 @@ public class CardDetailActivity extends BaseActivity {
                 }
     }
           });
-        getPayCardList();
+
         if(type>1){
             radio_mouth.setChecked(true);
             initMouthView();
@@ -136,10 +137,12 @@ public class CardDetailActivity extends BaseActivity {
                 this.finish();
                 break;
             case R.id.iv_card_buy:
-                if(type>1){
-                    getOrderInfo(mMouth.getAMOUNT(),mMouth.getRECHARE(),payOutType);
-                }else{
-                    getOrderInfo(mWeek.getAMOUNT(),mWeek.getRECHARE(),payOutType);
+                if(mWeek!=null&&mMouth!=null) {
+                    if (type > 1) {
+                        getOrderInfo(mMouth.getAMOUNT(), mMouth.getRECHARE(), payOutType);
+                     } else {
+                        getOrderInfo(mWeek.getAMOUNT(), mWeek.getRECHARE(), payOutType);
+                     }
                 }
                 break;
         }
@@ -205,7 +208,7 @@ public class CardDetailActivity extends BaseActivity {
     private void initData() {
         if(type>1){
             if(mMouth!=null){
-                card_money.setText(mWeek.getAMOUNT());
+                card_money.setText(mMouth.getAMOUNT());
             }
         }else{
             if(mWeek!=null){

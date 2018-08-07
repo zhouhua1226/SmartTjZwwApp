@@ -4,17 +4,18 @@
  */
 package com.game.smartremoteapp.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.RadioButton;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.bean.ConsigneeBean;
@@ -195,7 +196,14 @@ public class Utils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
-
+    //dp转px
+    public static void setDrawableSize(Context context, RadioButton radioButton) {
+            int size =  dip2px(context,25f);
+            int space =  dip2px(context,10f);
+            Drawable drawable = radioButton.getCompoundDrawables()[1];
+            drawable.setBounds(0, space, size, size + space);
+            radioButton.setCompoundDrawables(null, drawable, null, null);
+    }
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
      *
@@ -652,7 +660,7 @@ public class Utils {
     public static void toActivity(Context ctx, Intent intent) {
         try {
             ctx.startActivity(intent);
-           ((Activity) ctx).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+         //  ((Activity) ctx).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         } catch (Exception e) {
             e.getMessage();
         }

@@ -141,7 +141,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                 error(R.mipmap.app_mm_icon).
                 transform(new GlideCircleTransform(this)).into(player_iv);
 
-        player_name.setText(UserUtils.NickName + "...");
+        player_name.setText(UserUtils.NickName + "···");
         NettyUtils.pingRequest(); //判断连接
         getUserDate(UserUtils.USER_ID);
         getUserSumCoin(UserUtils.USER_ID);
@@ -241,11 +241,15 @@ public class PushCoinActivity extends Activity implements IctrlView {
     }
 
     private void playBGMusic() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.coin_down);
-        // 设置音频流的类型
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+          if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+               return;
+           }
+            mediaPlayer = MediaPlayer.create(this, R.raw.coin_down);
+            // 设置音频流的类型
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+
     }
 
     @OnClick({R.id.coin_button1, R.id.coin_button10, R.id.coin_button5,
@@ -411,7 +415,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                         coinResponseText.setText(String.valueOf(bingo));
                         String userId = coinControlResponse.getUserId();
                         isStartSend = false;
-                        if (userId.equals(UserUtils.USER_ID)) {
+                        if (userId!=null&&userId.equals(UserUtils.USER_ID)) {
                             if (bingo > 0) {
                                 pushCoinAnimat();
                                 getUserDate(UserUtils.USER_ID);
@@ -694,9 +698,6 @@ public class PushCoinActivity extends Activity implements IctrlView {
                             UserUtils.UserBalance = balance;
                             coin_recharge.setText("  " + UserUtils.UserBalance + " 充值");
                         }
-//                        String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
-//                        Glide.with(getApplicationContext()).load(showImage)
-//                                .asBitmap().transform(new GlideCircleTransform(CtrlActivity.this)).into(playerSecondIv);
                     }
                 }
             }

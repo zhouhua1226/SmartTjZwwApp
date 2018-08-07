@@ -1,6 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,13 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -22,6 +20,7 @@ import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.Base64;
 import com.game.smartremoteapp.utils.BitmapUtils;
 import com.game.smartremoteapp.utils.LogUtils;
+import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -32,75 +31,61 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_CAMERA;
+import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
 
 
 /**
  * Created by hongxiu on 2017/9/26.
  */
-public class TakePhotoActivity extends Activity implements View.OnClickListener {
+public class TakePhotoActivity extends BaseActivity  {
     private static final String TAG = "TakePhotoActivity-";
     public static final int GALLERY_REQUEST_CODE = 2;    // 相册选图标记
     public static final int CAMERA_REQUEST_CODE = 3;    // 相机拍照标记
     public static final int GALLERY_PICTURE_CUT =4 ;// 图片裁剪
+
     private TextView shootTv;
     private TextView photoTv;
     private TextView cancelTv;
     private File file;
     private String base64;
     private Uri outputUri;
-     @Override
-     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_picture);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-         shootTv = (TextView) findViewById(R.id.shoot_tv);
-        photoTv = (TextView) findViewById(R.id.photo_tv);
-        cancelTv = (TextView) findViewById(R.id.cancel_tv);
-        shootTv.setOnClickListener(this);
-         photoTv.setOnClickListener(this);
-         cancelTv.setOnClickListener(this);
-
-         String files= this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        Utils.deleteAll(files);//清空
-       file = new File(files + "/"+System.currentTimeMillis() + ".jpg");
-        if (file.isFile() && file.exists()) {
-             file.delete(); //如果存在删除
-       }
-    }
-
-//    @Override
-//    protected int getLayoutId() {
-//        return R.layout.dialog_picture;
-//    }
-//
-//    @Override
-//    protected void afterCreate(Bundle savedInstanceState) {
-//
-//        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//
-//        shootTv = (TextView) findViewById(R.id.shoot_tv);
-//        photoTv = (TextView) findViewById(R.id.photo_tv);
-//        cancelTv = (TextView) findViewById(R.id.cancel_tv);
-//        shootTv.setOnClickListener(this);
-//        photoTv.setOnClickListener(this);
-//        cancelTv.setOnClickListener(this);
-//
-//        String files= this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-//        Utils.deleteAll(files);//清空
-//        file = new File(files + "/"+System.currentTimeMillis() + ".jpg");
-//        if (file.isFile() && file.exists()) {
-//            file.delete(); //如果存在删除
-//        }
-//    }
-//
-//    @Override
-//    protected void initView() {
-//
-//    }
 
     @Override
-    public void onClick(View v) {
+    protected int getLayoutId() {
+        return R.layout.dialog_picture;
+    }
+
+    @Override
+    protected void afterCreate(Bundle savedInstanceState) {
+        initView();
+        initFile();
+    }
+
+    private void initFile() {
+        String files= null;
+        try {
+            files = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        } catch (NullPointerException e) {
+            files= Environment.getExternalStorageDirectory()+"/temp/";
+        }
+        Utils.deleteAll(files);//清空
+        file = new File(files + "/"+System.currentTimeMillis() + ".jpg");
+        if (file.isFile() && file.exists()) {
+            file.delete(); //如果存在删除
+        }
+    }
+
+    @Override
+    protected void initView() {
+        ButterKnife.bind(this);
+    }
+
+    @OnClick({R.id.shoot_tv, R.id.photo_tv, R.id.cancel_tv})
+    public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.shoot_tv:
                 takePhone();
@@ -144,17 +129,40 @@ public class TakePhotoActivity extends Activity implements View.OnClickListener 
      *
      */
     private void takePhone() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        startActivityForResult(intent,  CAMERA_REQUEST_CODE);
+        PermissionsUtils.checkPermissions(this, new String[]{Manifest.permission.CAMERA},
+                PERMISSIOM_CAMERA, new PermissionsUtils.PermissionsResultListener() {
+                    @Override
+                    public void onSuccessful() {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                        startActivityForResult(intent,  CAMERA_REQUEST_CODE);
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+
     }
     /**
      *
      */
     private void selectPicture() {
-        Intent intent = new Intent("android.intent.action.GET_CONTENT");
-        intent.setType("image/*");
-        startActivityForResult(intent, GALLERY_REQUEST_CODE); // 打开相册
+        PermissionsUtils.checkPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PERMISSIOM_EXTERNAL_STORAGE, new PermissionsUtils.PermissionsResultListener() {
+                    @Override
+                    public void onSuccessful() {
+                        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+                        intent.setType("image/*");
+                        startActivityForResult(intent, GALLERY_REQUEST_CODE); // 打开相册
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
     }
 
     @Override
@@ -179,7 +187,6 @@ public class TakePhotoActivity extends Activity implements View.OnClickListener 
     }
 
     private void updateusrimg(String path) {
-        Log.i("com.jianguo.aoaocar",path);
         Bitmap bitmap= BitmapUtils.compressImageFromFile(path);
         base64= Base64.encode(BitmapUtils.compressBmpFromBmp(bitmap));
         getFaceImage(UserUtils.USER_ID,base64);
@@ -219,6 +226,12 @@ public class TakePhotoActivity extends Activity implements View.OnClickListener 
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//输出图片格式
         intent.putExtra("noFaceDetection", true);//取消人脸识别
         startActivityForResult(intent,  GALLERY_PICTURE_CUT);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtils.onRequestPermissionsResult(requestCode, permissions,  grantResults);
     }
 }
 

@@ -2,8 +2,10 @@ package com.game.smartremoteapp.base;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.view.GuessingSuccessDialog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
@@ -34,18 +37,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         afterCreate(savedInstanceState);
         MyApplication.getInstance().activities.add(this);
         PushAgent.getInstance(this).onAppStart();
-
+        setPermissionsReadFile();
 //        RxBus.get().register(this);
 //        //initDialog();
 //        IntentFilter intentFilter = new IntentFilter();
 //        intentFilter.addAction(UserUtils.ACTION_LOTTERY);
 //        this.registerReceiver(LotteryReceiver, intentFilter);
         //友盟统计
-        MobclickAgent.setDebugMode(true);
-        MobclickAgent.openActivityDurationTrack(false);
-        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_GAME);  //游戏场景
-        UMGameAgent.setDebugMode(true);//设置输出运行时日志
-        UMGameAgent.init( this );
+         MobclickAgent.setDebugMode(true);
+         MobclickAgent.openActivityDurationTrack(false);
+         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType. E_UM_GAME);  //游戏场景
+         UMGameAgent.setDebugMode(true);//设置输出运行时日志
+         UMGameAgent.init( this );
     }
 
     protected abstract int getLayoutId();
@@ -64,7 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        MyApplication.getInstance().activities.remove(this);
 //        RxBus.get().unregister(this);
 //        this.unregisterReceiver(LotteryReceiver);
     }
@@ -103,6 +106,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         return res;
     }
 
+    /**
+     *  Android7.0+ 权限文件读取时
+     */
+    private void   setPermissionsReadFile(){
+        if (Build.VERSION.SDK_INT >=24) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
+    }
+
     //设置状态栏
     public   void setStatusBarColor(int color){
         Window window =getWindow();
@@ -113,7 +127,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         //设置状态栏颜色
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(getResources().getColor(color));
-            //Utils.showLogE(TAG,"类名="+getClass().getSimpleName());
+        }
+    }
+    //设置全屏，显示状态栏
+    public void setTranslucentStatus() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                   WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //显示状态栏
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+
         }
     }
     /**
@@ -156,5 +184,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             view.setVisibility(View.INVISIBLE);
         }
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtils.onRequestPermissionsResult(requestCode, permissions,  grantResults);
+    }
 }
