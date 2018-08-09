@@ -24,7 +24,11 @@ public class DownloadManagerUtil {
 
     public long download(String url) {
         //存储位置为Android/data/包名/file/Download文件夹
-        String files= mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        String files= null;try {
+             files = mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+          } catch (NullPointerException e) {
+            files= Environment.getExternalStorageDirectory()+"/temp/";
+         }
         Utils.deleteAll(files);
         //存储位置为Android/data/包名/file/Download文件夹
 

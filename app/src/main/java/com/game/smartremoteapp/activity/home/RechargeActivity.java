@@ -129,12 +129,17 @@ public class RechargeActivity extends BaseActivity {
                 Utils.toActivity(this, GameCurrencyActivity.class);
                 break;
             case R.id.ll_mouth_car:
-                payOutType="mc";
-                getOrderInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                if(mMouth!=null){
+                    payOutType="mc";
+                    getOrderInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                }
+
                 break;
             case R.id.ll_week_car:
-                payOutType="wc";
-                getOrderInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
+                if(mWeek!=null){
+                    payOutType="wc";
+                    getOrderInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
+                }
                 break;
         }
     }

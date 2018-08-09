@@ -2,11 +2,9 @@ package com.game.smartremoteapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +20,8 @@ import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
 import com.game.smartremoteapp.activity.home.GameCurrencyActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
+import com.game.smartremoteapp.activity.home.LoginCodeActivity;
+import com.game.smartremoteapp.activity.home.MainActivity;
 import com.game.smartremoteapp.activity.home.MyCtachRecordActivity;
 import com.game.smartremoteapp.activity.home.MyJoinCodeActivity;
 import com.game.smartremoteapp.activity.home.MyLogisticsOrderActivity;
@@ -48,27 +48,22 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.game.smartremoteapp.R.id.mycenter_mymoney_tv;
-
+import static com.game.smartremoteapp.utils.UserUtils.UserAmount;
 
 /**
  * Created by hongxiu on 2017/9/25.
  */
 public class MyCenterFragment extends BaseFragment {
 
-    @BindView(R.id.image_kefu)
-    ImageButton imageKefu;
-    @BindView(R.id.image_setting)
-    ImageButton imageSetting;
     @BindView(R.id.user_image)
     ImageView userImage;
     @BindView(R.id.user_name)
     TextView userName;
     @BindView(R.id.user_number)
     TextView userNumber;
-    @BindView(R.id.user_filling)
-    TextView userFilling;
-    @BindView(R.id.mycenter_recyclerview)
-    RecyclerView mycenterRecyclerview;
+    @BindView(R.id.mycenter_golds_tv)
+    TextView mycenter_golds;
+
     @BindView(R.id.mycenter_none_tv)
     TextView mycenterNoneTv;
     @BindView(R.id.mycenter_pay_layout)
@@ -89,8 +84,8 @@ public class MyCenterFragment extends BaseFragment {
     TextView mycenterExcenterTv;
     @BindView(R.id.mycenter_withdraw_layout)
     RelativeLayout mycenterWithdrawLayout;
-     @BindView(mycenter_mymoney_tv)
-   TextView mycenterMymoneyTv;
+     @BindView(R.id.mycenter_mymoney_tv)
+    TextView mycenterMymoneyTv;
     @BindView(R.id.mycenter_currencyrecord_tv)
     TextView mycenterCurrencyrecordTv;
     @BindView(R.id.mycenter_logisticsorder_tv)
@@ -101,8 +96,6 @@ public class MyCenterFragment extends BaseFragment {
     RelativeLayout mycenterJoincodeLayout;
     @BindView(R.id.mycenter_lnvitationcode_layout)
     RelativeLayout mycenterLnvitationcodeLayout;
-    @BindView(R.id.image_back)
-    ImageButton imageBack;
     @BindView(R.id.mycenter_accinfo_layout)
     RelativeLayout mycenterAccinfoLayout;
 
@@ -139,7 +132,7 @@ public class MyCenterFragment extends BaseFragment {
             } else {
                 userName.setText("暂无昵称");
             }
-            mycenterMycurrencyTv.setText(Html.fromHtml("游戏币   " + "<font color='#ff9700'>" + UserUtils.UserBalance + "</font>"));
+            mycenter_golds.setText("游戏币:" + UserUtils.UserBalance );
             //mycenterMymoneyTv.setText(Html.fromHtml("余额   "+"<font color='#ff9700'>0</font>"));
             userNumber.setText("累积抓中" + UserUtils.UserCatchNum + "次");
             Glide.with(getContext())
@@ -187,14 +180,11 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_joincode_layout, R.id.mycenter_currencyrecord_tv,
             R.id.mycenter_guessrecord_tv, R.id.mycenter_logisticsorder_tv,
             R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
-            R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv, R.id.image_back,
+            R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
-            mycenter_mymoney_tv,R.id.mycenter_qianbao})
+            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao })
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.image_back:
-
-                break;
             case R.id.mycenter_kefu_layout:
                 startActivity(new Intent(getContext(), ServiceActivity.class));
                 break;
@@ -224,10 +214,10 @@ public class MyCenterFragment extends BaseFragment {
                 //MyToast.getToast(getContext(),"金币记录").show();
                 startActivity(new Intent(getContext(), GameCurrencyActivity.class));
                 break;
-            case R.id.mycenter_guessrecord_tv:
+            case R.id.mycenter_guessrecord_tv://竞猜记录
                 startActivity(new Intent(getContext(), BetRecordActivity.class));
                 break;
-            case R.id.mycenter_logisticsorder_tv:
+            case R.id.mycenter_logisticsorder_tv://物流订单查询类
                 startActivity(new Intent(getContext(), MyLogisticsOrderActivity.class));
                 break;
             case R.id.mycenter_lnvitationcode_layout:
@@ -263,6 +253,7 @@ public class MyCenterFragment extends BaseFragment {
             case  R.id.mycenter_qianbao:
                 Utils.toActivity(getContext(),AccountWalletActivity.class);
                 break;
+
             default:
                 break;
         }
@@ -274,7 +265,7 @@ public class MyCenterFragment extends BaseFragment {
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     String amount = httpDataInfoResult.getData().getAccBal();
-                    UserUtils.UserAmount=amount;
+                    UserAmount=amount;
                     mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
                 }
             }
@@ -288,6 +279,8 @@ public class MyCenterFragment extends BaseFragment {
 
     private void getAppUserInf(String userId) {
         if (Utils.isEmpty(userId)) {
+            Utils.toActivity(getActivity(), LoginCodeActivity.class);
+            MainActivity.mMainActivity.finish();
             return;
         }
         HttpManager.getInstance().getAppUserInf(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
@@ -299,6 +292,8 @@ public class MyCenterFragment extends BaseFragment {
                 UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
                 UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
                 UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+                UserUtils.UserWeekDay=result.getData().getAppUser().getWEEKS_CARD();
+                UserUtils.UserMouthDay=result.getData().getAppUser().getMONTH_CARD();
 
                 UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
                 String name = result.getData().getAppUser().getCNEE_NAME();

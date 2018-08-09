@@ -87,7 +87,7 @@ public class NewsWebActivity extends BaseActivity {
     private void loadUrl(){
         String path=getIntent().getStringExtra("newsurl");
         Log.e(TAG,"图片新闻url="+path);
-        webView.loadUrl(path);
+        webView.loadUrl(path.replace("\"", "/"));
         webView.reload();
     }
 

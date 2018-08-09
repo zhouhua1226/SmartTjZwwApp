@@ -23,7 +23,6 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
-import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.CardView;
 
 import java.util.ArrayList;
@@ -54,12 +53,10 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
     TextView tv_blance;
 
     private List<View> viewList=new ArrayList<>() ;
-  //   private int cardIndex=0;
     private int type=0;
     private int weekDay=0;
     private int mouthDay=0;
-    private String reGold;
-    private String payOutType;
+
     /**
      * 图片轮播指示个图
      */
@@ -82,16 +79,14 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
     protected void afterCreate(Bundle savedInstanceState) {
         setStatusBarColor(R.color.backcolor);
         initView();
-
-        if(Utils.isNumeric(YsdkUtils.loginResult.getData().getAppUser().getWEEKS_CARD())){
-            weekDay=Integer.parseInt(YsdkUtils.loginResult.getData().getAppUser().getWEEKS_CARD());
-        }
-        if(Utils.isNumeric(YsdkUtils.loginResult.getData().getAppUser().getMONTH_CARD())){
-            mouthDay=Integer.parseInt(YsdkUtils.loginResult.getData().getAppUser().getMONTH_CARD());
-        }
-
+            if (Utils.isNumeric( UserUtils.UserWeekDay)) {
+                weekDay = Integer.parseInt(UserUtils.UserWeekDay);
+            }
+            if (Utils.isNumeric(UserUtils.UserMouthDay)) {
+                mouthDay = Integer.parseInt(UserUtils.UserMouthDay);
+            }
         initViewPager();
-        getUserAccBalCount();
+      //  getUserAccBalCount();
 
     }
 
@@ -261,30 +256,22 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
     }
 
     private void initCardView(UserBean mUserBean) {
-
-           if(viewList.size()>0){
-             for (int i=0;i<viewList.size();i++){
-                    viewList.remove(i);
+              viewList.clear();
+              if(Utils.isNumeric(mUserBean.getWEEKS_CARD())){
+                     weekDay=Integer.parseInt(mUserBean.getWEEKS_CARD());
                }
-           }
-            viewList.clear();
-            pagerAdapter.notifyDataSetChanged();
-            if(Utils.isNumeric(mUserBean.getWEEKS_CARD())){
-                   weekDay=Integer.parseInt(mUserBean.getWEEKS_CARD());
-             }
             if(Utils.isNumeric(mUserBean.getMONTH_CARD())){
-              mouthDay=Integer.parseInt(mUserBean.getMONTH_CARD());
+                  mouthDay=Integer.parseInt(mUserBean.getMONTH_CARD());
              }
-
              mCardView1=new CardView(this, 1, R.drawable.icon_week_card, weekDay, true,this);
              mCardView2=new CardView(this, 2, R.drawable.icon_mouth_card, mouthDay, true, this);
              mCardView3= new CardView(this,0,R.drawable.iocn_notbuy_card,0,false,this);
-             if(weekDay>0){
+               if(weekDay>0){
                  viewList.add(mCardView1);
-              }
-              if(mouthDay>0) {
+               }
+               if(mouthDay>0) {
                   viewList.add(mCardView2);
-              }
+               }
 
                if(viewList.size()<1){
                    viewList.add(mCardView3);
@@ -294,7 +281,7 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
                    card_option.setText("查看");
                    card_option.setBackgroundResource(R.drawable.bg_radio_wallet_normal);
                 }
-                mViewPager.setAdapter(pagerAdapter);
+                 mViewPager.setAdapter(pagerAdapter);
                  pagerAdapter.notifyDataSetChanged();
                  setImageResources(viewList);
                  notifyView(0);

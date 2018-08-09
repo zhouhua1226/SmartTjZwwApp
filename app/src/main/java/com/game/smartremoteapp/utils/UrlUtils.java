@@ -127,6 +127,8 @@ public class UrlUtils {
     public static final String SOCKET_IP="111.231.74.65";//123.206.120.46(壕鑫正式)
     // 47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
 
+    //
+    public static final String ADVERTYURL="http://111.231.139.61:18081/jc51/index.html";
     //login-password
     public static final String LOGINPASSWORD = URL + "/pooh-web/app/sms/userPassLogin";
     // regiter--phone password code

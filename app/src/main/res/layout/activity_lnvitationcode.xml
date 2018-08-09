@@ -44,13 +44,14 @@
     <RelativeLayout
         android:id="@+id/invitationcode_submit_layout"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_height="wrap_content"
         >
 
         <EditText
             android:id="@+id/code_et"
             android:layout_width="150dp"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:background="@drawable/invitationcode_et_bg"
             android:gravity="center_vertical"
             android:hint="请输入邀请码"
@@ -66,14 +67,14 @@
         <Button
             android:id="@+id/submit_bt"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/code_et"
             android:layout_centerVertical="true"
             android:background="@drawable/setting_logout_btn_bg"
             android:text="提交"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textColor="@color/brown"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

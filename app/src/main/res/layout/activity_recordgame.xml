@@ -263,7 +263,7 @@
             android:layout_height="30dp"
             android:background="@drawable/setting_logout_btn_bg"
             android:text="兑换游戏币"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@color/white"
             />
 
@@ -276,7 +276,7 @@
             android:layout_height="30dp"
             android:background="@drawable/setting_logout_btn_bg"
             android:text="申请发货"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@color/white"
             android:visibility="gone"
             />

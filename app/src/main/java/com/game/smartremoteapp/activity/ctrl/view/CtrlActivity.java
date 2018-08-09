@@ -81,7 +81,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-import static com.game.smartremoteapp.R.id.ctrl_room_detail;
 
 /**
  * Created by zhouh on 2017/9/8. SomeCommits
@@ -197,8 +196,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     TextView ctrlBetFiftyfoldTv;
     @BindView(R.id.ctrl_bet_hundredfold_tv)
     TextView ctrlBetHundredfoldTv;
-    @BindView(ctrl_room_detail)
-    ImageView ctrlRoomdetialTv; //房间详情
+
     @BindView(R.id.ctrl_nowtime_tv)
     TextView ctrlNowtimeTv;
     @BindView(R.id.ctrl_betpernum_tv)
@@ -329,7 +327,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         } else {
             ctrlBetremarkTv.setText("预计奖金0金币");
         }
-        playerNameTv.setText(UserUtils.NickName + "...");
+        playerNameTv.setText(UserUtils.NickName + "···");
         setStartMode(getIntent().getBooleanExtra(Utils.TAG_ROOM_STATUS, true));
         currentUrl = playUrlMain;
         ctrlCompl.startPlayVideo(mRealPlaySv, currentUrl);
@@ -520,7 +518,7 @@ public class CtrlActivity extends Activity implements IctrlView {
             R.id.ctrl_betnum_three_tv, R.id.ctrl_betnum_four_tv, R.id.ctrl_betnum_five_tv,
             R.id.ctrl_betnum_six_tv, R.id.ctrl_betnum_seven_tv, R.id.ctrl_betnum_eight_tv,
             R.id.ctrl_betnum_nine_tv, R.id.ctrl_bet_tenflod_tv, R.id.ctrl_bet_twentyfold_tv,
-            R.id.ctrl_bet_fiftyfold_tv, R.id.ctrl_bet_hundredfold_tv, ctrl_room_detail,
+            R.id.ctrl_bet_fiftyfold_tv, R.id.ctrl_bet_hundredfold_tv, R.id.ctrl_room_detail,
             R.id.ctrl_betpernum_tv,R.id.ctrl_bet_onepro_tv,R.id.ctrl_bet_fivepro_tv,
             R.id.ctrl_bet_tenpro_tv,R.id.ctrl_bet_twentypro_tv})
     public void onViewClicked(View view) {
@@ -726,7 +724,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 }
                 setBetRewardChange(betFlodNum);
                 break;
-            case ctrl_room_detail:
+            case R.id.ctrl_room_detail:
                 String url = getIntent().getStringExtra(Utils.TAG_ROOM_DOLLURL);
                 showDetailDialog(url);
                 break;

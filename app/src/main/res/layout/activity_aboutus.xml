@@ -29,26 +29,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-
     </RelativeLayout>
-
-    <!--<ImageView-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:src="@drawable/gb"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginTop="20dp"/>-->
-    <!--<Button-->
-        <!--android:id="@+id/submit_bt"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:background="@drawable/login_bt"-->
-        <!--android:text="联系我们"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="18sp" />-->
 
 
     <TextView

@@ -6,12 +6,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
@@ -39,8 +37,13 @@ import com.game.smartremoteapp.view.GlideImageLoader;
 import com.game.smartremoteapp.view.MarqueeView;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PullToRefreshView;
+import com.game.smartremoteapp.view.ShareDialog;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.gatz.netty.utils.NettyUtils;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -52,11 +55,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static android.R.attr.name;
 
 /**
  * Created by hongxiu on 2017/9/25.
@@ -75,36 +76,29 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     Unbinder unbinder;
     @BindView(R.id.mPullToRefreshView)
     PullToRefreshView mPullToRefreshView;
-    @BindView(R.id.zww_guess_btn)
-    ImageButton zwwGuessBtn;
-    Unbinder unbinder1;
+
     @BindView(R.id.zww_exshop_ibtn)
     ImageButton zwwExshopIBtn;
     @BindView(R.id.zww_earnmoney_ibtn)
     ImageButton zwwEarnmoneyIBtn;
-//    @BindView(R.id.sfv_player)
-//    MySurfaceVivew mPlayerView;
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
     @BindView(R.id.zww_banner)
     Banner zwwBanner;
-    @BindView(R.id.zww_news_tv)
-    TextView zwwNewsTv;
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
     private String sessionId;
     private EmptyLayout.OnClickReTryListener onClickReTryListener;
     private List<VideoBackBean> playBackBeanList = new ArrayList<>();
     private List<Marquee> marquees = new ArrayList<>();
-    private List<BannerBean> bannerList = new ArrayList<>();
-    private List<BannerBean> nBannerList = new ArrayList<>();
-    private List<String> list = new ArrayList<>();
+    private List<BannerBean> bannerList = new ArrayList<>();//轮播图接口返回BannerBean
+    private List<BannerBean> nBannerList = new ArrayList<>();//轮播图BannerBean
+    private List<String> list = new ArrayList<>();//轮播图url
     //分类参数
     private int currentSumPage = 1;
     private int currentPage = 1;
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
-    //private CtrlCompl ctrlCompl=null;
     private String url1=null;
     private String newsUrl="";
     private String newsTitle="";
@@ -113,50 +107,34 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     protected int getLayoutId() {
         return R.layout.fragment_zww;
     }
-    @OnClick({R.id.zww_exshop_ibtn, R.id.zww_guess_btn,R.id.zww_earnmoney_ibtn})
+    @OnClick({R.id.zww_exshop_ibtn,R.id.zww_earnmoney_ibtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.zww_exshop_ibtn:
-                //startActivity(new Intent(getContext(), ExChangeShopActivity.class));
-                if (!newsUrl.equals("")) {
-                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
-                    intent.putExtra("newsurl", newsUrl.replace("\"", "/"));
-                    intent.putExtra("newstitle", newsTitle);
-                    startActivity(intent);
-                }else {
-                    MyToast.getToast(getContext(),"暂无活动！").show();
-                }
-                break;
-            case R.id.zww_guess_btn:
-                jumpRoom(0);
+                shareApp();
+//                if (!newsUrl.equals("")) {
+//                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
+//                    intent.putExtra("newsurl", newsUrl);
+//                    intent.putExtra("newstitle", newsTitle);
+//                    startActivity(intent);
+//                }else {
+//                    MyToast.getToast(getContext(),"暂无活动！").show();
+//                }
                 break;
             case R.id.zww_earnmoney_ibtn:
-                //MyToast.getToast(getContext(),"功能研发中！").show();
                 startActivity(new Intent(getContext(), JoinEarnActivity.class));
-                break;
-            case R.id.zww_news_tv:
-                if (!newsUrl.equals("")) {
-                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
-                    intent.putExtra("newsurl", newsUrl.replace("\"", "/"));
-                    intent.putExtra("newstitle", newsTitle);
-                    startActivity(intent);
-                }else {
-                    MyToast.getToast(getContext(),"暂无活动！").show();
-                }
-                break;
-            default:
                 break;
         }
     }
+
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initData();
         onClick();
-        NettyUtils.sendRoomInCmd();
         getBannerList();
         getToyType();
-        getUserList();
     }
+
     private void getUserList() {
         HttpManager.getInstance().getUserList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -217,11 +195,15 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     public void showError() {
-        zwwEmptylayout.showEmpty();
+        if(zwwEmptylayout!=null) {
+            zwwEmptylayout.showEmpty();
+        }
     }
 
     public void dismissEmptyLayout() {
-        zwwEmptylayout.dismiss();
+        if(zwwEmptylayout!=null) {
+            zwwEmptylayout.dismiss();
+        }
     }
 
     public void setSessionId(String id, boolean isReconnect) {
@@ -251,17 +233,6 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         intent.putExtra(Utils.TAG_ROOM_DOLLURL, dollUrl);
         startActivity(intent);
 
-    }
-
-
-    //TODO 正式环境统一处理
-    private void enterCoinNext(String dollName,  String camera1, String camera2,String roomId) {
-        Intent intent = new Intent(getActivity(), PushCoinActivity.class);
-        intent.putExtra(Utils.TAG_URL_MASTER, camera1);
-        intent.putExtra(Utils.TAG_URL_SECOND, camera2);
-        intent.putExtra(Utils.TAG_ROOM_NAME, name);
-        intent.putExtra(Utils.TAG_DOLL_Id, roomId);
-        startActivity(intent);
     }
 
     /**
@@ -329,14 +300,14 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     private void initBanner(List<String> lists, final List<BannerBean> nBannerList) {
 
         //设置Banner样式
-        zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+         zwwBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
          //设置图片加载器
         zwwBanner.setImageLoader(new GlideImageLoader());
          zwwBanner.setImages(lists);
         //设置Banner动画效果
         zwwBanner.setBannerAnimation(Transformer.DepthPage);
        //设置轮播时间
-        zwwBanner.setDelayTime(2000);
+        zwwBanner.setDelayTime(3000);
         //设置指示器位置(当banner模式中有指示器时)
         zwwBanner.setIndicatorGravity(BannerConfig.CENTER);
        //Banner设置方法全部调用完毕时最后调用
@@ -344,11 +315,11 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         zwwBanner.setOnBannerListener(new OnBannerListener() {
             @Override
            public void OnBannerClick(int position) {
-                //MyToast.getToast(getContext(), "您点击了第" + (position + 1) + "张图片").show();
-                if (!bannerList.get(position).getHREF_ST().equals("")) {
+                BannerBean  mBannerBean=  nBannerList.get(position);
+                if (!mBannerBean.getHREF_ST().equals("")) {
                     Intent intent = new Intent(getContext(), NewsWebActivity.class);
-                    intent.putExtra("newsurl",   nBannerList.get(position).getHREF_ST().replace("\"", "/"));
-                    intent.putExtra("newstitle", nBannerList.get(position).getRUN_NAME());
+                    intent.putExtra("newsurl",  mBannerBean.getHREF_ST());
+                    intent.putExtra("newstitle", mBannerBean.getRUN_NAME());
                     startActivity(intent);
               }
            }
@@ -356,8 +327,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     }
 
     private void getBannerList() {
-       // ctrlCompl = new CtrlCompl(this, getActivity());
-        NettyUtils.pingRequest(); //判断连接
+
         HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
@@ -394,25 +364,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             }
         });
     }
-//    private void initSurface(BannerBean mBannerBean) {
-//        mPlayerView.setZOrderMediaOverlay(true);
-//        mPlayerView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-//        String rtmpUrl = mBannerBean.getRTMP_URL();
-//        String serviceName = mBannerBean.getSERVER_NAME();
-//        String liveStream = mBannerBean.getLIVESTREAM();
-//        url1 = rtmpUrl + serviceName + "/"+liveStream;
-//        LogUtils.loge("url1===="+url1);
-//        ctrlCompl.startPlayVideo(mPlayerView, url1);
-//        mPlayerView.getHolder().addCallback(this);
-//        mPlayerView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//
-//
-//    }
+
     private List<RoomBean> dealWithRoomStats(List<RoomBean> beens) {
         if (beens.size() == 0) {
             return beens;
@@ -548,49 +500,44 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }, 1500);
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder1 = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        ctrlCompl.stopPlayVideo();
-//        ctrlCompl.stopRecordView();
-//        ctrlCompl.stopTimeCounter();
-//        ctrlCompl.sendCmdOutRoom();
-//        ctrlCompl = null;
-        unbinder1.unbind();
-    }
-
     //如果你需要考虑更好的体验，可以这么操作
     @Override
     public void onResume() {
         super.onResume();
         getUserList();
     }
+    //分享
+    private void shareApp() {
+        new ShareDialog(getContext(), new ShareDialog.OnShareIndexOnClicker() {
+            @Override
+            public void ShareIndexOnClicker(int index, final UMWeb web, final SHARE_MEDIA shareMedia) {
+                new ShareAction(getActivity())
+                        .withMedia(web)
+                        .setPlatform(shareMedia)
+                        .setCallback(shareListener).share();
 
-//    @Override
-//    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-//        LogUtils.loge("surfaceCreated=== ------",TAG);
-//        if(ctrlCompl!=null&&url1!=null){
-//            ctrlCompl.startPlayVideo(mPlayerView,url1);
-//        }
-//    }
-//    @Override
-//    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-//        LogUtils.loge("surfaceChanged=== ----",TAG);
-//    }
-//
-//    @Override
-//    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-//        ctrlCompl.stopPlayVideo();
-//    }
+            }
+        });
+    }
 
+
+    private UMShareListener shareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(getContext(),"分享成功",Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(getContext(),"分享失败"+t.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(getContext(),"分享取消",Toast.LENGTH_SHORT).show();
+        }
+    };
 }
 

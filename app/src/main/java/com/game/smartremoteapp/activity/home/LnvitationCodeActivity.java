@@ -144,8 +144,8 @@ public class LnvitationCodeActivity extends BaseActivity {
             invitationcodeTitleTv.setText("输入邀请码");
         }
         invitationcodeRuleTv.setText("1.每邀请一位好友，用户可获得"+inviteAmount+"金币，好友可获得"+exchangeAmount+"金币\r\n"
-                + "2.邀请奖励上限为"+inviteTotalNum+"名\r\n"
-                + "3.用户无法兑换自己的邀请码");
+                + "\n2.邀请奖励上限为"+inviteTotalNum+"名\r\n"
+                + "\n3.用户无法兑换自己的邀请码");
         invitationcodeHasnumTv.setText(Html.fromHtml("已邀请<font color='#ff9700'>" + codeNum
                 + "</font>" + "人获得<font color='#ff9700'>" + currencyNum + "</font>金币"));
 

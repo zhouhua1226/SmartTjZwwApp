@@ -2,14 +2,12 @@ package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Html;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -83,7 +81,9 @@ public class DrawMoneyActivity extends BaseActivity {
     private void initDate(){
         InputFilter[] filters={ new CashierInputFilter() };
         drawmoneyNumEt.setFilters(filters);
-
+         if(UserUtils.BankBean==null){
+             finish();
+         }
         drawmoneyBankTv.setText(UserUtils.BankBean.getBANK_NAME());
         drawmoneyBankplaceTv.setText(UserUtils.BankBean.getBANK_ADDRESS());
         drawmoneyBankcardnumTv.setText(UserUtils.BankBean.getBANK_CARD_NO());
