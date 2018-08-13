@@ -19,6 +19,7 @@ import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
 import com.game.smartremoteapp.activity.home.GameCurrencyActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
+import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
 import com.game.smartremoteapp.activity.home.LoginCodeActivity;
 import com.game.smartremoteapp.activity.home.MainActivity;
@@ -182,7 +183,8 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
             R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
-            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao })
+            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,
+            R.id.mycenter_integral})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mycenter_kefu_layout:
@@ -237,7 +239,7 @@ public class MyCenterFragment extends BaseFragment {
                 //startActivity(new Intent(getContext(), ExChangeCenterActivity.class));
                 break;
             case R.id.mycenter_withdraw_layout:
-                if(UserUtils.IsBankInf.equals("0")){
+                if(UserUtils.IsBankInf.equals("0")||UserUtils.BankBean==null){
                     MyToast.getToast(getContext(), "请先完善账户信息！").show();
                     startActivity(new Intent(getContext(),AccountInformationActivity.class));
                 }else {
@@ -253,7 +255,9 @@ public class MyCenterFragment extends BaseFragment {
             case  R.id.mycenter_qianbao:
                 Utils.toActivity(getContext(),AccountWalletActivity.class);
                 break;
-
+            case  R.id.mycenter_integral:
+                Utils.toActivity(getContext(),IntegralActivity.class);
+                break;
             default:
                 break;
         }

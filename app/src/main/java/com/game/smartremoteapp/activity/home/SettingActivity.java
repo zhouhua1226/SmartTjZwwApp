@@ -39,6 +39,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMWeb;
@@ -171,7 +172,9 @@ public class SettingActivity extends BaseActivity {
                 setIsOpenMusic();
                 break;
             case R.id.setting_update_layout:
-                checkVersion();
+
+               checkVersion();  //汤姆抓娃娃
+              //  MyToast.getToast(SettingActivity.this, "当前已是最新版本").show();//蘑菇抓娃娃
                 break;
             case R.id.setting_share_layout:
                 PermissionsUtils.checkPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -223,8 +226,9 @@ public class SettingActivity extends BaseActivity {
                      if (downloadId != 0) {
                        downloadManagerUtil.clearCurrentTask(downloadId);
                      }
-                   downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
-
+                   if(downloadManagerUtil.isDownloadManagerAvailable( )){
+                       downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+                   }
                }
            }
        });
@@ -280,8 +284,10 @@ public class SettingActivity extends BaseActivity {
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false);
                     NettyUtils.destoryConnect();
-                    MainActivity.mMainActivity.finish();
+                    MainActivity.mMainActivity.finish();//汤姆抓娃娃
                     startActivity(new Intent(SettingActivity.this, SplashActivity.class));
+                   // HomeActivity.mMainActivity.finish();////蘑菇抓娃娃
+                   // startActivity(new Intent(SettingActivity.this, Splash1Activity.class));
                     finish();
                 }
             }
@@ -317,7 +323,11 @@ public class SettingActivity extends BaseActivity {
            }
        }
    }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
     //分享
     private void shareApp() {
         new ShareDialog(this, new ShareDialog.OnShareIndexOnClicker() {
@@ -340,7 +350,8 @@ public class SettingActivity extends BaseActivity {
         }
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(getApplicationContext(),"分享成功",Toast.LENGTH_SHORT).show();
+
+            shareGame();
         }
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
@@ -352,5 +363,18 @@ public class SettingActivity extends BaseActivity {
         }
     };
 
+    private void shareGame(){
+        HttpManager.getInstance().shareGame(UserUtils.USER_ID ,new RequestSubscriber<Result<Void>>() {
+            @Override
+            public void _onSuccess(Result<Void> loginInfoResult) {
+                if(loginInfoResult.getCode()==0){
+                    Toast.makeText(getApplicationContext(),"分享成功",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+<resources>
     <string name="app_name">汤姆抓娃娃</string>
     <string name="video_loading_text">正在加载!</string>
     <string name="money_temp">%d次</string>
@@ -10,8 +10,8 @@
     <string name="room_default_name">抓娃娃</string>
     <string name="none_record">暂无抓取成功记录！</string>
     <string name="service_phone">18621355940</string>
-    <string name="service_qq">2563582976</string>
     <string name="customer_service_qq">客服QQ:2563582976</string>
+    <string name="service_qq">2563582976</string>
     <string name="company_name">上海炎亿网络科技有限公司</string>
     <string name="company_web">http://www.111wawa.com</string>
     <string name="load_web">https://fir.im/tomzhua</string>
@@ -25,5 +25,12 @@
     <string name="mouth_take_effect">月卡生效中可以购买</string>
     <string name="umeng_socialize_female">女</string>
     <string name="umeng_socialize_male">男</string>
-
+    <string name="protocol">同意用户协议与隐私条款</string>
+    <!-- 刷新 -->
+    <!--<string name="pull_to_refresh_pull_label">下拉刷新</string>-->
+    <!--<string name="pull_to_refresh_release_label">松开后刷新</string>-->
+    <!--<string name="pull_to_refresh_refreshing_label">刷新中...</string>-->
+    <!--<string name="pull_to_refresh_footer_release_label">松开后加载</string>-->
+    <!--<string name="pull_to_refresh_footer_pull_label">上拉加载更多</string>-->
+    <!--<string name="pull_to_refresh_footer_refreshing_label">加载中…</string>-->
 </resources>

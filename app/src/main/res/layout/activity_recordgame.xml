@@ -285,8 +285,10 @@
     <RelativeLayout
         android:id="@+id/send_layout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:visibility="gone"
         >
 
@@ -302,7 +304,6 @@
             android:textSize="14sp"
             android:textColor="#5b5b5b"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/text_image"
             android:id="@+id/sendname_tv"
             android:layout_width="wrap_content"
@@ -333,9 +334,7 @@
             android:layout_height="wrap_content"
             tools:text="备注:魏黎是最帅的"/>
 
-
         <TextView
-            android:layout_marginTop="10dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:id="@+id/sendphoto_tv"
@@ -344,8 +343,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="15335756655"/>
-
-
     </RelativeLayout>
 
     <TextView
@@ -357,9 +354,7 @@
         android:textSize="15sp"
         android:background="@color/white"
         android:textColor="@color/gray"
-        android:visibility="gone"
-        />
-
+        android:visibility="gone" />
 
     <TextView
         android:textColor="#848484"
@@ -384,6 +379,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="*邮寄范围仅支持中国大陆地区"/>
-
 
 </LinearLayout>

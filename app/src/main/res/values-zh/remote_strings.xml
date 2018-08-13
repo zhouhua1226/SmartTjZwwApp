@@ -25,7 +25,7 @@
     <string name="mouth_take_effect">月卡生效中可以购买</string>
     <string name="umeng_socialize_female">女</string>
     <string name="umeng_socialize_male">男</string>
-
+    <string name="protocol">同意用户协议与隐私条款</string>
     <!-- 刷新 -->
     <!--<string name="pull_to_refresh_pull_label">下拉刷新</string>-->
     <!--<string name="pull_to_refresh_release_label">松开后刷新</string>-->

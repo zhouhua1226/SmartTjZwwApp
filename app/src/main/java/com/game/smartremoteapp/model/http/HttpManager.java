@@ -646,4 +646,21 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+    // 分享
+    public void shareGame(String userId, RequestSubscriber<Result<Void>> subscriber) {
+        Observable<Result<Void>> o = smartService.shareGame(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    // 积分商城
+    public void getPointsMallUrl(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.getPointsMallUrl(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

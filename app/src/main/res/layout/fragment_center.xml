@@ -297,7 +297,44 @@
                 android:textColor="#f26d35"
                 android:textSize="15sp" />
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/mycenter_integral"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="1dp"
+            android:visibility="gone"
+            android:background="@color/white">
+            <ImageView
+                android:id="@+id/iv_mycenter_integral"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/my_integral_bg" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toRightOf="@+id/iv_mycenter_integral"
+                android:gravity="center"
+                android:text=" 积分商城"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <ImageView
+
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/right_arrow" />
+
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/mycenter_catchrecord_layout"
             android:layout_width="match_parent"

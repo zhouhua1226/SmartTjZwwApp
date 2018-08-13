@@ -15,29 +15,28 @@
         android:background="@color/apptheme_bg">
         <ImageButton
             android:id="@+id/zww_exshop_ibtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:background="@color/apptheme_bg"
             android:src="@drawable/icon_share" />
         <ImageView
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/app_titie_home" />
         <ImageButton
-            android:id="@+id/zww_earnmoney_ibtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/zww_integral_ibtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:visibility="gone"
             android:background="@color/apptheme_bg"
-            android:src="@drawable/zww_earnmoney_bg" />
+            android:src="@drawable/zww_integral_bg" />
     </RelativeLayout>
 
     <com.game.smartremoteapp.view.PullToRefreshView

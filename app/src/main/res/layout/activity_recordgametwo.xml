@@ -188,8 +188,6 @@
             android:textColor="@color/pink"
             android:textSize="14sp"/>
 
-
-
     </RelativeLayout>
     <ImageView
         android:layout_width="match_parent"
@@ -200,7 +198,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:background="@color/white">
 
         <ImageView
@@ -246,7 +246,6 @@
                 android:layout_height="wrap_content"
                 android:text="备注:魏黎是最帅的"/>
 
-
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_alignParentRight="true"
@@ -258,9 +257,6 @@
                 android:layout_height="wrap_content"
                 android:text="15335756655"/>
 
-
     </RelativeLayout>
-
-
 
 </LinearLayout>

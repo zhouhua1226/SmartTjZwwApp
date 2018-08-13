@@ -121,4 +121,5 @@ dependencies {
     compile files('libs/ipaynow_base_v2.1.5_api1.0.0.jar')
     compile files('libs/SocialSDK_QQ_Simplify.jar')
     compile project(':timedialog')
+    compile 'com.android.support:cardview-v7:25.3.1'
 }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.game.smartremoteapp">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +21,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
+
+    <!--
+    android:icon="@mipmap/icon_app_numshroom"  蘑菇抓娃娃
+    android:icon="@mipmap/app_mm_icon"  汤姆抓娃娃
+    -->
     <application
         android:name="com.game.smartremoteapp.base.MyApplication"
         android:allowBackup="true"
@@ -63,7 +69,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:theme="@style/jjLoginTheme">
+            android:theme="@style/TomLoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -354,6 +360,37 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/BlackBarAppTheme" />
+
+
+        <activity android:name=".activity.home.IntegralActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden" />
+       <!--  蘑菇抓娃娃 -->
+        <activity
+            android:name=".activity.mushroom.HomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/mainTheme">
+        </activity>
+        <activity
+            android:name=".activity.mushroom.Splash1Activity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/mainTheme">
+            </activity>
+            <activity
+                android:name=".activity.mushroom.LoginActivity"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/mainTheme">
+            </activity>
+            <activity
+                android:name=".activity.mushroom.RegisterOneActivity"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/mainTheme">
+            </activity>
 
     </application>
 

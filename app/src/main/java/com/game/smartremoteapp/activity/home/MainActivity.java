@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -43,6 +44,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,7 +96,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
-         setTranslucentStatus();
+        setTranslucentStatus();
         initView();
         mMainActivity = this;
         initFragment();
@@ -412,7 +414,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             public void _onSuccess(Result<AppInfo> appInfoResult) {
                 if (appInfoResult != null) {
                     String version = appInfoResult.getData().getVERSION();
-                   if (VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1), version)) {
+                    if (VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1), version)) {
                         updateApp(appInfoResult.getData().getDOWNLOAD_URL());
                     }
                 }
@@ -437,26 +439,29 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     if (downloadId != 0) {
                         downloadManagerUtil.clearCurrentTask(downloadId);
                     }
-                    downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL + loadUri);
+                    if(downloadManagerUtil.isDownloadManagerAvailable( )){
+                        downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+                    }
                 }
             }
         });
     }
 
     private void initFragment() {
-         Utils.setDrawableSize(this,tab_rank);
-         Utils.setDrawableSize(this,tab_mine);
-         fl_home_zww.setOnClickListener(new View.OnClickListener() {
+        Utils.setDrawableSize(this, tab_rank);
+        Utils.setDrawableSize(this, tab_mine);
+        fl_home_zww.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!tab_home.isChecked()) {
                     tab_home.setChecked(true);
                 }
-             }
+            }
         });
-         mMainTabRadioGroup.setOnCheckedChangeListener(this);
-         selectFragment(lastIndex);
+        mMainTabRadioGroup.setOnCheckedChangeListener(this);
+        selectFragment(lastIndex);
     }
+
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         int current = 0;
@@ -526,4 +531,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             fragmentTransaction.hide(myCenterFragment);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+
 }
