@@ -20,6 +20,7 @@ import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
 import com.game.smartremoteapp.activity.home.GameCurrencyActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
+import com.game.smartremoteapp.activity.home.IntegralTaskActivity;
 import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
 import com.game.smartremoteapp.activity.home.LoginCodeActivity;
 import com.game.smartremoteapp.activity.home.MainActivity;
@@ -99,6 +100,8 @@ public class MyCenterFragment extends BaseFragment {
     RelativeLayout mycenterLnvitationcodeLayout;
     @BindView(R.id.mycenter_accinfo_layout)
     RelativeLayout mycenterAccinfoLayout;
+
+
 
     private String TAG = "MyCenterActivity";
     private List<VideoBackBean> videoList = new ArrayList<>();
@@ -184,7 +187,7 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
             R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,
-            R.id.mycenter_integral})
+            R.id.mycenter_integral,R.id.ll_integral_task})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mycenter_kefu_layout:
@@ -257,6 +260,10 @@ public class MyCenterFragment extends BaseFragment {
                 break;
             case  R.id.mycenter_integral:
                 Utils.toActivity(getContext(),IntegralActivity.class);
+                break;
+            case R.id.ll_integral_task:
+                Utils.toActivity(getContext(),IntegralTaskActivity.class);
+
                 break;
             default:
                 break;

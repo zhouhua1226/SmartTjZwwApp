@@ -75,9 +75,9 @@ public class ListRankAdapter extends RecyclerView.Adapter<ListRankAdapter.ListRa
                 .transform(new GlideCircleTransform(mContext))
                 .into(holder.rank_userImag);
         if(mtype==1){
-            holder.rank_number.setText(bean.getDOLLTOTAL());
+            holder.rank_number.setText(bean.getTODAY_POOH()+"");
         }else{
-            holder.rank_number.setText(bean.getBET_NUM()+"");
+            holder.rank_number.setText(bean.getTODAY_GUESS()+"");
         }
 
         if (bean.getNICKNAME().equals("")) {

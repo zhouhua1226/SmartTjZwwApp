@@ -108,7 +108,7 @@ public class RankFragmentTwo extends BaseFragment {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initData();
-        getRankDollList(UserUtils.USER_ID);
+        getRankDollTodayList(UserUtils.USER_ID);
     }
 
 
@@ -198,9 +198,9 @@ public class RankFragmentTwo extends BaseFragment {
 
     private String getShowRankNum(UserBean userBean){
         if(isShowType==1){
-            return userBean.getDOLLTOTAL();
+            return userBean.getTODAY_POOH()+"";
         }else {
-            return userBean.getBET_NUM()+"";
+            return userBean.getTODAY_GUESS()+"";
         }
     }
 
@@ -227,7 +227,7 @@ public class RankFragmentTwo extends BaseFragment {
                 }
                 isShowType=1;
                 setShowChangeView(isShowType);
-                getRankDollList(UserUtils.USER_ID);
+                getRankDollTodayList(UserUtils.USER_ID);
                 break;
             case R.id.ranktwo_guesstitle_tv:
                 if(isShowType==2){
@@ -235,7 +235,7 @@ public class RankFragmentTwo extends BaseFragment {
                 }
                 isShowType=2;
                 setShowChangeView(isShowType);
-                getRankBetList(UserUtils.USER_ID);
+                getRankBetTodayList(UserUtils.USER_ID);
                 break;
             default:
                 break;
@@ -257,8 +257,8 @@ public class RankFragmentTwo extends BaseFragment {
         }
     }
 
-    private void getRankBetList(String userId){
-        HttpManager.getInstance().getRankBetList(userId, new RequestSubscriber<Result<ListRankBean>>() {
+    private void getRankBetTodayList(String userId){
+        HttpManager.getInstance().getRankBetTodayList(userId, new RequestSubscriber<Result<ListRankBean>>() {
             @Override
             public void _onSuccess(Result<ListRankBean> result) {
                 if(result.getMsg().equals(Utils.HTTP_OK)){
@@ -273,8 +273,8 @@ public class RankFragmentTwo extends BaseFragment {
         });
     }
 
-    private void getRankDollList(String userId){
-        HttpManager.getInstance().getRankDollList(userId, new RequestSubscriber<Result<ListRankBean>>() {
+    private void getRankDollTodayList(String userId){
+        HttpManager.getInstance().getRankDollTodayList(userId, new RequestSubscriber<Result<ListRankBean>>() {
             @Override
             public void _onSuccess(Result<ListRankBean> result) {
 
@@ -308,7 +308,7 @@ public class RankFragmentTwo extends BaseFragment {
             secondBean = list.get(1);
         if (length >= 3)
             thirdBean = list.get(2);
-        rankList.clear();
+            rankList.clear();
         if (length > 20) {
             for (int i = 3; i < 20; i++) {
                 rankList.add(list.get(i));
@@ -317,8 +317,6 @@ public class RankFragmentTwo extends BaseFragment {
             for (int i = 3; i < length; i++) {
                 rankList.add(list.get(i));
             }
-        } else {
-            rankList = list;
         }
         listRankAdapter.notify(rankList,isShowType);
         setViewDate(myNum);

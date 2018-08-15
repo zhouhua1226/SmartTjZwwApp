@@ -21,6 +21,7 @@ import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.view.PayTypeDialog;
 
 import java.util.List;
 
@@ -147,6 +148,24 @@ public class CardDetailActivity extends BaseActivity {
                 break;
         }
     }
+
+    /**
+     *选择支付方式
+     */
+    private void getPayTypeDialog(final String amount, final String reGold, final String payOutType) {
+        PayTypeDialog mPayTypeDialog = new PayTypeDialog(this, R.style.activitystyle);
+        mPayTypeDialog.show();
+        mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                if(resultCode==1){
+                    getOrderInfo(amount,reGold,payOutType);
+                }
+            }
+        });
+    }
+
+
     /**
      *获取订单信息
      */

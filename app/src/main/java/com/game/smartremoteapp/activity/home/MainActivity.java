@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private DownloadManagerUtil downloadManagerUtil;
     private long downloadId = 0;
     public static MainActivity mMainActivity;
-    private int lastIndex = 1;
+    private int lastIndex = 0;
     private FragmentTransaction transaction;
 
     @Override
@@ -93,7 +93,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     static {
         System.loadLibrary("SmartPlayer");
     }
-
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         setTranslucentStatus();
@@ -193,7 +192,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mExitTime = System.currentTimeMillis();
         } else {
             MyApplication.getInstance().exit();
-
         }
     }
 
@@ -216,6 +214,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onRestart() {
         super.onRestart();
+        LogUtils.loge(TAG,"onRestart()--------------");
+
         if (UserUtils.isUserChanger) { //账号切换
             UserUtils.isUserChanger = false;
             if ((YsdkUtils.loginResult.getData() != null) && (zwwjFragment != null)) {
@@ -226,9 +226,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
             getUserSign(UserUtils.USER_ID, "0"); //签到请求 0 查询签到信息 1签到
         } else {
-
             NettyUtils.pingRequest();
         }
+
     }
 
     //监控网关区
@@ -466,11 +466,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         int current = 0;
         switch (checkedId) {
-            case R.id.tab_rank:
+            case R.id.tab_home_bg:
                 current = 0;
                 break;
-            case R.id.tab_home_bg:
-                current = 1;
+            case R.id.tab_rank:
+                current =1;
                 break;
             case R.id.tab_mine:
                 current = 2;
@@ -478,12 +478,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         if (lastIndex != current) {
             selectFragment(current);
-            if (current == 1) {
+            if (current == 0) {
                 tab_zww.setBackgroundResource(R.drawable.zww_icon);
             } else {
                 tab_zww.setBackgroundResource(R.drawable.zww_unicon_jj);
             }
         }
+        lastIndex=current;
     }
 
     private void selectFragment(int index) {
@@ -491,20 +492,21 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         hideFragment(transaction);
         switch (index) {
             case 0:
-                if (rankFragment == null) {
-                    rankFragment = new RankFragmentTwo();
-                    transaction.add(R.id.show_fragment, rankFragment);
-                } else {
-                    transaction.show(rankFragment);
-                }
-                break;
-            case 1:
                 if (zwwjFragment == null) {
                     zwwjFragment = new ZWWJFragment();
                     transaction.add(R.id.show_fragment, zwwjFragment);
                 } else {
                     transaction.show(zwwjFragment);
                 }
+                break;
+            case 1:
+                if (rankFragment == null) {
+                    rankFragment = new RankFragmentTwo();
+                    transaction.add(R.id.show_fragment, rankFragment);
+                } else {
+                    transaction.show(rankFragment);
+                }
+
                 break;
             case 2:
                 if (myCenterFragment == null) {
@@ -513,10 +515,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 } else {
                     transaction.show(myCenterFragment);
                 }
+
                 break;
         }
         transaction.commitAllowingStateLoss();
         lastIndex = index;
+
     }
 
     //隐藏fragment

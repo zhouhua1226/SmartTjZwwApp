@@ -17,7 +17,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.base.MyApplication;
@@ -32,33 +34,27 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.game.smartremoteapp.R.id.webview;
 import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
-
 /**
  * Created by chenw on 2018/7/19.
  */
-
 public class WelcomeActivity extends BaseActivity{
 
     private static final String TAG ="WelcomeActivity-----" ;
     private String uid;
-    @BindView(webview)
-    WebView mWebView;
     @BindView(R.id.btn_timer)
     Button btn_timer;
+    @BindView(R.id.rl_mlayout)
+    RelativeLayout mlayout;
     private WebSettings s;
-
     private boolean isTimeFinsh=false;
     private boolean isLogin=false;
-
     private CountDownTimer myCountDownTimer;
     private boolean isTime=true;
-
+    private WebView mWebView;
+    private ImageView mImageView;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_welcome;
@@ -73,7 +69,6 @@ public class WelcomeActivity extends BaseActivity{
             toActivity();
         }
     }
-
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
@@ -90,6 +85,16 @@ public class WelcomeActivity extends BaseActivity{
     @Override
     protected void initView() {
         ButterKnife.bind(this);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mWebView = new WebView(getApplicationContext());
+        mWebView.setLayoutParams(params);
+        mlayout.addView(mWebView);
+
+        mImageView = new ImageView(getApplicationContext());
+        mImageView.setLayoutParams(params);
+        mlayout.addView(mImageView);
+        mImageView.setBackgroundResource(R.drawable.app_yd_naviage);
     }
 
     private void initWelcome() {
@@ -131,7 +136,6 @@ public class WelcomeActivity extends BaseActivity{
                });
        }
 
-
     /**
      *
      * 自动登录
@@ -166,20 +170,6 @@ public class WelcomeActivity extends BaseActivity{
             SPUtils.putBoolean(getApplicationContext(),"FIRST", false);
         }
         return user_first;
-    }
-
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mWebView != null) {
-            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            mWebView.clearHistory();
-            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
-            mWebView.destroy();
-            mWebView = null;
-        }
     }
 
  //倒计时
@@ -220,6 +210,7 @@ class MyCountDownTimer extends CountDownTimer {
     private void loadUrl(){
         mWebView.loadUrl(UrlUtils.ADVERTYURL);
         mWebView.reload();
+
     }
     //设置属性
     @SuppressLint("JavascriptInterface")
@@ -233,21 +224,18 @@ class MyCountDownTimer extends CountDownTimer {
         s.setGeolocationEnabled(true);
         s.setDomStorageEnabled(true);
         s.setBlockNetworkImage(true);
-        s.setRenderPriority(WebSettings.RenderPriority.HIGH);
         s.setCacheMode(WebSettings.LOAD_NO_CACHE);//关闭WebView中缓存
+        mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
         mWebView.requestFocus();
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         //webView.addJavascriptInterface(this,"Native");
-        mWebView.setWebViewClient(new WebViewClient()
-        {
-
+        mWebView.setWebViewClient(new WebViewClient() {
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view,url);
                 s.setBlockNetworkImage(false);
             }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if(url.equals(UrlUtils.ADVERTYURL)){
@@ -262,28 +250,39 @@ class MyCountDownTimer extends CountDownTimer {
                 }
           }
         });
-
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 //当进度走到100的时候做自己的操作，我这边是弹出dialog
-
+                if(progress == 100){
+                    mlayout.removeView(mImageView);
+                }
             }
         });
-
     }
 
-    //android webview点击返回键返回上一个html
+    //点击返回上一页面而不是退出浏览器
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK ){
-            if(mWebView.canGoBack()){
-                mWebView.goBack();// 返回前一个页面
-                return true;
-              }else{
-                MyApplication.getInstance().exit();
-            }
+        if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
+        }else{
+            myCountDownTimer.cancel();
+            MyApplication.getInstance().exit();
         }
         return super.onKeyDown(keyCode, event);
     }
 
+    //销毁Webview
+    @Override
+    protected void onDestroy() {
+        if (mWebView != null) {
+            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+            mWebView.clearHistory();
+            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
+            mWebView.destroy();
+            mWebView = null;
+        }
+        super.onDestroy();
+    }
 }
