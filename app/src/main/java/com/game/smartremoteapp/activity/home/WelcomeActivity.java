@@ -74,15 +74,6 @@ public class WelcomeActivity extends BaseActivity{
         }
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Log.e(TAG,"onStart()---");
-//        isTime=true;
-//        if(isTimeFinsh){
-//            toActivity();
-//        }
-//    }
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
@@ -120,13 +111,7 @@ public class WelcomeActivity extends BaseActivity{
             @Override
             public void onClick(View view) {
                 myCountDownTimer.cancel();
-                if(isLogin){
-                    Utils.toActivity(WelcomeActivity.this,MainActivity.class);
-                    finish();
-                }else{
-                   Utils.toActivity(WelcomeActivity.this,SplashActivity.class);
-                    finish();
-                }
+                setActivity();
             }
         });
         myCountDownTimer=  new  MyCountDownTimer(5000,1000).start();
@@ -219,13 +204,17 @@ class MyCountDownTimer extends CountDownTimer {
     private void  toActivity(){
         myCountDownTimer.cancel();
         if( isTimeFinsh&&isTime) {
-            if (isLogin ) {
-                Utils.toActivity(WelcomeActivity.this, MainActivity.class);
-                finish();
-            } else {
-                Utils.toActivity(WelcomeActivity.this, SplashActivity.class);
-                finish();
-            }
+            setActivity();
+        }
+    }
+    private void setActivity(){
+        if (isLogin ) {
+            Utils.toActivity(WelcomeActivity.this, MainActivity.class);
+            finish();
+        } else {
+            Utils.toActivity(WelcomeActivity.this, SplashActivity.class);//汤姆抓娃娃
+            // Utils.toActivity(WelcomeActivity.this, Splash1Activity.class);//蘑菇抓娃娃
+             finish();
         }
     }
     private void loadUrl(){

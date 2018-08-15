@@ -1,7 +1,10 @@
 package com.game.smartremoteapp.model.http.download;
 
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 
@@ -24,22 +27,23 @@ public class DownloadManagerUtil {
 
     public long download(String url) {
         //存储位置为Android/data/包名/file/Download文件夹
-        String files= null;try {
-             files = mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-          } catch (NullPointerException e) {
-            files= Environment.getExternalStorageDirectory()+"/temp/";
-         }
+        String files = null;
+        try { //Android/data/包名/file/Download为null
+            files = mContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        } catch (NullPointerException e) {
+            files = Environment.getExternalStorageDirectory() + "/temp/";
+        }
         Utils.deleteAll(files);
         //存储位置为Android/data/包名/file/Download文件夹
 
-        File   mFile = new File(files + "/"+title);
+        File mFile = new File(files + "/" + title);
         if (mFile.isFile() && mFile.exists()) {
             mFile.delete(); //如果存在删除
         }
         Uri uri = Uri.parse(url);
         DownloadManager.Request req = new DownloadManager.Request(uri);
         //设置WIFI下进行更新
-      //  req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+        //  req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
         //下载中和下载完后都显示通知栏
         req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         //使用系统默认的下载路径 此处为应用内 /android/data/packages ,所以兼容7.0
@@ -67,6 +71,34 @@ public class DownloadManagerUtil {
             dm.remove(downloadId);
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * 针对手机下载管理器禁用
+     */
+    public boolean isDownloadManagerAvailable() {
+        int state = mContext.getPackageManager().getApplicationEnabledSetting(
+                "com.android.providers.downloads");
+        if (state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                || state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+                || state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
+            //打开下载器管理
+            String packageName = "com.android.providers.downloads";
+            try {
+                Intent intent = new Intent(
+                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + packageName));
+                mContext.startActivity(intent);
+
+            } catch (ActivityNotFoundException e) {
+                Intent intent = new Intent(
+                        android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                mContext.startActivity(intent);
+            }
+            return false;
+        } else {//正常下载
+            return true;
         }
     }
 }

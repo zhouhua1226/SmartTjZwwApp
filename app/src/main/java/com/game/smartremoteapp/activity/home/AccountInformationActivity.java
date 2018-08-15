@@ -62,7 +62,7 @@ public class AccountInformationActivity extends BaseActivity {
     private String TAG = "AccountInformation";
     private String smsType="3000";
     private MyCountDownTimer myCountDownTimer;
-    private String realName, idCard, bankName, bankPlace, bankBranch, bankCardNum, smsCode;
+    private String realName, idCard, bankName, bankPlace, bankBranch, bankCardNum, smsCode,userPhone;
 
     @Override
     protected int getLayoutId() {
@@ -83,41 +83,46 @@ public class AccountInformationActivity extends BaseActivity {
     }
 
     private void initUserDate() {
-        controlView(UserUtils.IsBankInf);
+
         accountinfoNicknameTv.setText(UserUtils.NickName);
         if (UserUtils.IsBankInf.equals("0")) {
             accountinfoSubmitBtn.setText("提 交");
         } else {
-            accountinfoSubmitBtn.setText("修 改");
-            accountinfoUsernameEt.setText(UserUtils.BankBean.getUSER_REA_NAME());
-            accountinfoIdcardEt.setText(UserUtils.BankBean.getID_NUMBER());
-            accountinfoBanknameEt.setText(UserUtils.BankBean.getBANK_NAME());
-            accountinfoBankplaceEt.setText(UserUtils.BankBean.getBANK_ADDRESS());
-            accountinfoBranchbanknameEt.setText(UserUtils.BankBean.getBANK_BRANCH());
-            accountinfoBanknumEt.setText(UserUtils.BankBean.getBANK_CARD_NO());
+             accountinfoSubmitBtn.setText("修 改");
+            if(UserUtils.BankBean.getUSER_REA_NAME()!=null){
+                accountinfoUsernameEt.setText(UserUtils.BankBean.getUSER_REA_NAME());
+                accountinfoUsernameEt.setCursorVisible(false);//隐藏光标
+            }
+            if(UserUtils.BankBean.getID_NUMBER()!=null){
+                accountinfoIdcardEt.setText(UserUtils.BankBean.getID_NUMBER());
+                accountinfoIdcardEt.setCursorVisible(false);
+            }
+            if(UserUtils.BankBean.getBANK_NAME()!=null){
+                accountinfoBanknameEt.setText(UserUtils.BankBean.getBANK_NAME());
+                accountinfoBanknameEt.setCursorVisible(false);
+
+            }
+            if(UserUtils.BankBean.getBANK_ADDRESS()!=null){
+                accountinfoBankplaceEt.setText(UserUtils.BankBean.getBANK_ADDRESS());
+                accountinfoBankplaceEt.setCursorVisible(false);
+            }
+            if(UserUtils.BankBean.getBANK_BRANCH()!=null){
+                accountinfoBranchbanknameEt.setText(UserUtils.BankBean.getBANK_BRANCH());
+                accountinfoBranchbanknameEt.setCursorVisible(false);
+            }
+            if(UserUtils.BankBean.getBANK_CARD_NO()!=null){
+                accountinfoBanknumEt.setText(UserUtils.BankBean.getBANK_CARD_NO());
+                accountinfoBanknumEt.setCursorVisible(false);
+            }
 
         }
     }
 
-    private void controlView(String s){
-        if(s.equals("0")){
-            accountinfoUsernameEt.setEnabled(true);
-            accountinfoIdcardEt.setEnabled(true);
-            accountinfoBanknameEt.setEnabled(true);
-            accountinfoBankplaceEt.setEnabled(true);
-            accountinfoBranchbanknameEt.setEnabled(true);
-            accountinfoBanknumEt.setEnabled(true);
-        }else {
-            accountinfoUsernameEt.setEnabled(false);
-            accountinfoIdcardEt.setEnabled(false);
-            accountinfoBanknameEt.setEnabled(false);
-            accountinfoBankplaceEt.setEnabled(false);
-            accountinfoBranchbanknameEt.setEnabled(false);
-            accountinfoBanknumEt.setEnabled(false);
-        }
-    }
+
 
     private void getAccInfoDate() {
+
+        userPhone= accountinfoPhoneTv.getText().toString();
         realName = accountinfoUsernameEt.getText().toString();
         idCard = accountinfoIdcardEt.getText().toString();
         bankName = accountinfoBanknameEt.getText().toString();
@@ -126,21 +131,20 @@ public class AccountInformationActivity extends BaseActivity {
         bankCardNum = accountinfoBanknumEt.getText().toString();
         smsCode = accountinfoPhonecodeEt.getText().toString();
 
-        if (realName.equals("") || idCard.equals("") || bankName.equals("")
-                || bankPlace.equals("") || bankBranch.equals("") || bankCardNum.equals("") || smsCode.equals("")) {
-            MyToast.getToast(getApplicationContext(), "请将信息填写完整！").show();
-        } else {
-            if(Utils.checkIDcard(idCard)) {
-                int i=bankCardNum.length();
-                if(i >15 ) {
-                    getRegBankInf(UserUtils.USER_ID, smsType, UserUtils.UserPhone, smsCode, bankPlace, bankName, bankBranch, bankCardNum, idCard, realName);
-                }else {
-                    MyToast.getToast(getApplicationContext(), "您输入的银行卡号不符合规则！").show();
-                }
-            }else {
-                MyToast.getToast(getApplicationContext(), "您输入的身份证不符合规则！").show();
-            }
+        if (userPhone.isEmpty()||realName.isEmpty() || idCard.isEmpty() || bankName.isEmpty() ||
+                bankPlace.isEmpty() || bankBranch.isEmpty() || bankCardNum.isEmpty() || smsCode.isEmpty()) {
+               MyToast.getToast(getApplicationContext(), "请将信息填写完整！").show();
+              return;
         }
+         if(!Utils.checkIDcard(idCard)||Utils.isSpecialChar(idCard)){
+             MyToast.getToast(getApplicationContext(), "您输入的身份证有误,不能包含字符！").show();
+             return;
+         }
+         if(bankCardNum.length()<15||Utils.isSpecialChar(bankCardNum)){
+          MyToast.getToast(getApplicationContext(), "您输入的银行卡号有误,不能包含字符！").show();
+             return;
+         }
+        getRegBankInf(UserUtils.USER_ID, smsType, UserUtils.UserPhone, smsCode, bankPlace, bankName, bankBranch, bankCardNum, idCard, realName);
 
     }
 
@@ -174,11 +178,12 @@ public class AccountInformationActivity extends BaseActivity {
                 getAccInfoDate();
                 break;
             case R.id.accountinfo_smscode_tv:
-                if(Utils.isEmpty(UserUtils.UserPhone)){
+                userPhone= accountinfoPhoneTv.getText().toString();
+                if(Utils.isEmpty(UserUtils.UserPhone)||userPhone.isEmpty()){
                     MyToast.getToast(getApplicationContext(),"请先绑定手机号！").show();
                 }else {
                     myCountDownTimer.start();
-                    getPhoneCode(UserUtils.USER_ID, UserUtils.UserPhone, "3000");
+                    getPhoneCode(UserUtils.USER_ID, userPhone, "3000");
                 }
                 break;
             default:
@@ -242,11 +247,6 @@ public class AccountInformationActivity extends BaseActivity {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
                 if (result.getMsg().equals(Utils.HTTP_OK)) {
-                    controlView("0");
-                    if(!UserUtils.IsBankInf.equals("0")) {
-                        accountinfoIdcardEt.setText("");
-                        accountinfoBanknumEt.setText("");
-                    }
                     MyToast.getToast(getApplicationContext(), "已发送！").show();
                 }else {
                     MyToast.getToast(getApplicationContext(), "发送失败,请重试！").show();
@@ -266,7 +266,7 @@ public class AccountInformationActivity extends BaseActivity {
                 "2、真实姓名须同银行卡户名一致，身份证号码须同银行卡户主身份一直。\n" +
                 "3、请放心填写真实的个人资料，我们会对你的身份信息进行严格保密。\n" +
                 "4、以上资料仅用于提款到银行卡，请真实填写否则无法完成提款。\n" +
-                "5、如需修改账户信息，请先获取验证码，如遇其他问题请联系【汤姆抓娃娃】客服，客服QQ:2563582976。");
+                "5、如需修改账户信息，手机号与银行卡需重填，如遇其他问题请联系【汤姆抓娃娃】客服，客服QQ:2563582976。");
     }
 
 }

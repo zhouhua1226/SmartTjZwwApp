@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
 import com.game.smartremoteapp.activity.ctrl.view.PushCoinActivity;
-import com.game.smartremoteapp.activity.home.JoinEarnActivity;
+import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
@@ -79,8 +79,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 
     @BindView(R.id.zww_exshop_ibtn)
     ImageButton zwwExshopIBtn;
-    @BindView(R.id.zww_earnmoney_ibtn)
-    ImageButton zwwEarnmoneyIBtn;
+
     @BindView(R.id.rl_marqueeview)
     RelativeLayout  mArqueeView;
     @BindView(R.id.zww_banner)
@@ -107,7 +106,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     protected int getLayoutId() {
         return R.layout.fragment_zww;
     }
-    @OnClick({R.id.zww_exshop_ibtn,R.id.zww_earnmoney_ibtn})
+    @OnClick({R.id.zww_exshop_ibtn,R.id.zww_integral_ibtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.zww_exshop_ibtn:
@@ -121,8 +120,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 //                    MyToast.getToast(getContext(),"暂无活动！").show();
 //                }
                 break;
-            case R.id.zww_earnmoney_ibtn:
-                startActivity(new Intent(getContext(), JoinEarnActivity.class));
+            case R.id.zww_integral_ibtn:
+                startActivity(new Intent(getContext(), IntegralActivity.class));
                 break;
         }
     }
@@ -528,7 +527,7 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
         }
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(getContext(),"分享成功",Toast.LENGTH_SHORT).show();
+            shareGame();
         }
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
@@ -539,5 +538,20 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
             Toast.makeText(getContext(),"分享取消",Toast.LENGTH_SHORT).show();
         }
     };
+
+
+    private void shareGame(){
+        HttpManager.getInstance().shareGame(UserUtils.USER_ID ,new RequestSubscriber<Result<Void>>() {
+            @Override
+            public void _onSuccess(Result<Void> loginInfoResult) {
+                if(loginInfoResult.getCode()==0){
+                    Toast.makeText(getContext(),"分享成功",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
 }
 

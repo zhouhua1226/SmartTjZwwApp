@@ -4,13 +4,19 @@
     </style>
     <style name="BlackBarAppTheme" parent="MyAppTheme">
     </style>
-    <style name="jjLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MoguLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/icon_app_numshroom_start</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
+    </style>
+    <style name="TomLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/app_yd_naviage</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
-
     </style>
+
     <style name="mainTheme" parent="MyAppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

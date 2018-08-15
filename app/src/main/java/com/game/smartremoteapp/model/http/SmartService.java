@@ -19,6 +19,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -666,4 +667,13 @@ public interface SmartService {
     Observable<Result<HttpDataInfo>> wxRegister(@Field(UrlUtils.UID) String uid, @Field(UrlUtils.NAME) String name,
                                                 @Field(UrlUtils.GENDER) String gender,@Field(UrlUtils.ICONURL) String profile_image_url,
                                                 @Field(UrlUtils.REGCHANNEL) String regChannel, @Field(UrlUtils.CHANNELNUM) String channelNum);
+    //分享
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.SHAREGAME)
+    Observable<Result<Void>> shareGame(@Field(UrlUtils.USERID)String userId);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.INTEGRAL)
+    Observable<Result<String>> getPointsMallUrl(@Query(UrlUtils.USERID)String userId);
 }

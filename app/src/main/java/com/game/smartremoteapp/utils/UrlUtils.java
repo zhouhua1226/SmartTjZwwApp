@@ -339,4 +339,9 @@ public class UrlUtils {
     //第三方登录
     public static final String WXREGISTER = URL+"/pooh-web/app/sms/wxRegister";
 
+    //分享
+    public static final String SHAREGAME= URL+"/pooh-web/app/pointsMall/shareGame";
+
+    //积分商城
+    public static final String INTEGRAL = URL+"/pooh-web/app/pointsMall/getPointsMallUrl";
 }

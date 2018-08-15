@@ -35,7 +35,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(true);//初始化logger
+        LogUtils.logInit(false);//初始化logger
 
     }
     private void setCrashHandler() {

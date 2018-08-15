@@ -51,7 +51,7 @@
             android:text="投币数"/>
         <TextView
             android:visibility="visible"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="14sp"
