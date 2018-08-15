@@ -32,7 +32,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
             <TextView
                 android:id="@+id/user_name"
@@ -67,9 +67,41 @@
                     android:text="累积抓中0次"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
-
-
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_integral_task"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:background="@drawable/dialog_apptheme_bg">
+                <ImageView
+                    android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                    android:background="@drawable/icon_integral_sign" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="每日积分任务"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/icon_integral_arrow" />
+            </LinearLayout>
+
+
 
             <TextView
                 android:id="@+id/mycenter_agency_tv"
@@ -302,7 +334,6 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="1dp"
-            android:visibility="gone"
             android:background="@color/white">
             <ImageView
                 android:id="@+id/iv_mycenter_integral"

@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -36,22 +35,23 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMWeb;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
 
 /**
- * Created by mi on 2018/8/9.
+ * Created by mi on 2018/8/13.
  */
 
-public class IntegralActivity extends BaseActivity{
-
+public class IntegralTaskActivity extends BaseActivity {
     @BindView(R.id.lv_malayout)
     RelativeLayout mLayout;
     private  WebView webView;
 
-    private   GifView newswebGifView;
-    private String TAG="IntegralActivity----------";
+    private GifView newswebGifView;
+    private String TAG="IntegralActivity";
     private WebSettings s;
     private String urlPath;
     @Override
@@ -96,35 +96,42 @@ public class IntegralActivity extends BaseActivity{
     //设置属性
     @SuppressLint("JavascriptInterface")
     private void fresh(){
+
         loadUrl();
         s= webView.getSettings();
         s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        s.setUseWideViewPort(true); //将图片调整到适合webview的大小
-        s.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
         s.setJavaScriptEnabled(true);
-        s.setDomStorageEnabled(true);
-        s.setBlockNetworkImage(true);
+
         webView.requestFocus();
+        webView.setWebViewClient(new WebViewClient());
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.addJavascriptInterface(new JsInterface(), "AndroidWebView");
+        webView.addJavascriptInterface(new  JsInterface(), "AndroidWebView");
         webView.setWebViewClient(new WebViewClient()
         {
             @Override
             public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
                 super.onPageStarted(webView, s, bitmap);
+
             }
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view,url);
-               s.setBlockNetworkImage(false);
+                s.setBlockNetworkImage(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    //webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                }
+
             }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String s) {
-                Log.e(TAG,s);
                 webView.loadUrl(s);
                 return true;
             }
+
             @Override
             public void onReceivedError(WebView webView, int i, String s, String s1) {
                 super.onReceivedError(webView, i, s, s1);
@@ -145,44 +152,29 @@ public class IntegralActivity extends BaseActivity{
 
     }
 
-    //点击返回上一页面而不是退出浏览器
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    //销毁Webview
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         if (webView != null) {
             webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
             webView.clearHistory();
-
             ((ViewGroup) webView.getParent()).removeView(webView);
             webView.destroy();
             webView = null;
         }
-        super.onDestroy();
     }
-
 
     /**
      *积分商城
      */
     private void getPointsMallUrl(){
-        HttpManager.getInstance().getPointsMallUrl(UserUtils.USER_ID ,new RequestSubscriber<Result<String>>() {
+        HttpManager.getInstance().getPointsMallTask(UserUtils.USER_ID ,new RequestSubscriber<Result<String>>() {
             @Override
             public void _onSuccess(Result<String> loginInfoResult) {
                 if(loginInfoResult.getData()!=null){
                     urlPath=loginInfoResult.getData();
                     fresh();
                 }
-
             }
             @Override
             public void _onError(Throwable e) {
@@ -190,51 +182,47 @@ public class IntegralActivity extends BaseActivity{
         });
     }
 
-      //在js中调用window.AndroidWebView.showInfoFromJs(name)，便会触发此方法。
-        private class JsInterface {
-            public JsInterface( ) {
-            }
-          @JavascriptInterface
-          public void onBacktask() {
-              finish();
-          }
-            @JavascriptInterface
-            public void onBack() {
-                 finish();
-            }
-          //分享
-          @JavascriptInterface
-            public void share() {
-              PermissionsUtils.checkPermissions(IntegralActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                      PERMISSIOM_EXTERNAL_STORAGE, new PermissionsUtils.PermissionsResultListener() {
-                          @Override
-                          public void onSuccessful() {
-                              shareApp();
-                          }
-                          @Override
-                          public void onFailure() {
-                          }
-                      });
-            }
-          //邀请好友
-          @JavascriptInterface
-          public void  invite() {
-              Utils.toActivity(IntegralActivity.this,LnvitationCodeActivity.class);
-          }
-          //抓娃娃
-          @JavascriptInterface
-          public void  fist() {
-              MainActivity.mMainActivity.finish();
-              Intent intent=new Intent(IntegralActivity.this,MainActivity.class);
-              intent.putExtra("mainIndex",0);
-              Utils.toActivity(IntegralActivity.this,intent);
-              finish();
-          }
-          //充值
-          @JavascriptInterface
-          public void recharge() {
-              Utils.toActivity(IntegralActivity.this,RechargeActivity.class);
-          }
+    //在js中调用window.AndroidWebView.showInfoFromJs(name)，便会触发此方法。
+    private class JsInterface {
+        public JsInterface( ) {
+        }
+        @JavascriptInterface
+        public void onBacktask() {
+            finish();
+        }
+        //分享
+        @JavascriptInterface
+        public void share() {
+            PermissionsUtils.checkPermissions(IntegralTaskActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSIOM_EXTERNAL_STORAGE, new PermissionsUtils.PermissionsResultListener() {
+                        @Override
+                        public void onSuccessful() {
+                            shareApp();
+                        }
+                        @Override
+                        public void onFailure() {
+                        }
+                    });
+        }
+        //邀请好友
+        @JavascriptInterface
+        public void  invite() {
+            Utils.toActivity(IntegralTaskActivity.this,LnvitationCodeActivity.class);
+        }
+        //抓娃娃
+        @JavascriptInterface
+        public void  fist() {
+            MainActivity.mMainActivity.finish();
+            Intent intent=new Intent(IntegralTaskActivity.this,MainActivity.class);
+            intent.putExtra("mainIndex",0);
+            Utils.toActivity(IntegralTaskActivity.this,intent);
+            finish();
+        }
+        //充值
+        @JavascriptInterface
+        public void recharge() {
+            Utils.toActivity(IntegralTaskActivity.this,RechargeActivity.class);
+        }
     }
 
     //分享
@@ -242,7 +230,7 @@ public class IntegralActivity extends BaseActivity{
         new ShareDialog(this, new ShareDialog.OnShareIndexOnClicker() {
             @Override
             public void ShareIndexOnClicker(int index, final UMWeb web, final SHARE_MEDIA shareMedia) {
-                new ShareAction(IntegralActivity.this)
+                new ShareAction(IntegralTaskActivity.this)
                         .withMedia(web)
                         .setPlatform(shareMedia)
                         .setCallback(shareListener).share();

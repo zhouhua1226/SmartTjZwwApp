@@ -116,15 +116,15 @@ public class UrlUtils {
     public static final String REGGOLD = "regGold";
     public static final String PAYOUTTYPE = "payOutType";
 
-    public static final String URL = "http://111.231.139.61:18081";
+    public static final String URL = "http://47.100.15.18:8080";
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)
     //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)
     //APP图片拼接url
-    public static final String APPPICTERURL="http://111.231.139.61:8888/";
+    public static final String APPPICTERURL="http://47.100.15.18:8888/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
     //http://111.231.139.61:8888/ (汤姆抓娃娃腾讯云)
     //壕鑫客服链接
-    public static final String SOCKET_IP="111.231.74.65";//123.206.120.46(壕鑫正式)
+    public static final String SOCKET_IP="111.231.74.65 ";//123.206.120.46(壕鑫正式)
     // 47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
 
     //
@@ -228,7 +228,7 @@ public class UrlUtils {
     public static final String PAYCARDLISTURL=URL+"/pooh-web/app/pay/getPaycard";
 
     //用户竞猜记录
-//    http://192.168.1.21:8080/pooh-web/app/getGuessDetailTop10
+   //    http://192.168.1.21:8080/pooh-web/app/getGuessDetailTop10
     public static final String GETGUESSDETAIL=URL+"/pooh-web/app/betgame/getGuessDetailTop10";
 
     //金币流水接口
@@ -269,6 +269,12 @@ public class UrlUtils {
 
     //新娃娃排行榜接口
     public static final String RANKDOLLLISTURL=URL+"/pooh-web/app/rank/rankAndSelfList";
+
+    //竞猜今日排行榜接口
+    public static final String RANKBETLISTURLTODAY=URL+"/pooh-web/app/rank/rankBetListToday";
+
+    //新娃娃排行今日榜接口
+    public static final String RANKDOLLLISTURLTODAY=URL+"/pooh-web/app/rank/rankAndSelfListToday";
 
     //订单生成接口
     public static final String CREATEORDER=URL+"/pooh-web/app/pay/getTradeOrder_new";
@@ -344,4 +350,7 @@ public class UrlUtils {
 
     //积分商城
     public static final String INTEGRAL = URL+"/pooh-web/app/pointsMall/getPointsMallUrl";
+
+    //积分任务
+    public static final String INTEGRALTASK = URL+"/pooh-web/app/pointsMall/getPointsMallTask";
 }

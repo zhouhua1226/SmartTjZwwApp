@@ -21,9 +21,14 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.PayTypeDialog;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
+import com.ipaynow.plugin.api.IpaynowPlugin;
+import com.ipaynow.plugin.manager.route.dto.ResponseParams;
+import com.ipaynow.plugin.manager.route.impl.ReceivePayResult;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,7 +39,7 @@ import butterknife.OnClick;
  * Created by chenw on 2018/7/17.
  */
 
-public class RechargeActivity extends BaseActivity {
+public class RechargeActivity extends BaseActivity implements ReceivePayResult {
     @BindView(R.id.tv_account_money)
     TextView userBlance;
     @BindView(R.id.recharge_recyclerview)
@@ -75,11 +80,14 @@ public class RechargeActivity extends BaseActivity {
     private List<PayCardBean> mPayCardBeans= new ArrayList<>();
     private PayCardBean mWeek=null;
     private  PayCardBean  mMouth= null;
-
+    private static final String mAppID = "151615975028920";//参数只支持微信支付
+    private static final String mKey = "hX4uxxSsQVTWo3honWarbUkpqu5cA31A";
     private String reGold; //金币总数
     private String payOutType; //wc 周卡 mc 月卡 首冲 fc  正常 nm
     private String payType; //R 金币充值  P加盟
     private String isFirst;
+    private IpaynowPlugin mIpaynowplugin;
+    private HashMap<String, String> reqMap=new HashMap<String, String>();
     @Override
     protected int getLayoutId() {
         return R.layout.activity_recharge;
@@ -88,6 +96,7 @@ public class RechargeActivity extends BaseActivity {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        mIpaynowplugin = IpaynowPlugin.getInstance().init(this);// 1.插件初始化
 
         isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
         initView();
@@ -106,10 +115,10 @@ public class RechargeActivity extends BaseActivity {
             public void onItemClick(int position) {
                 PayCardBean mPayCardBean=mPayCardBeans.get(position);
                 String  isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
-                        if(isFirst.equals("0")){
+                          if(isFirst.equals("0")){
                              payOutType="fc";
-                            getOrderInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
-                        }else{
+                              getOrderInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
+                           }else{
                               payOutType="nm";
                               getOrderInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getGOLD());
 
@@ -226,10 +235,27 @@ public class RechargeActivity extends BaseActivity {
     }
 
     /**
+     *选择支付方式
+     */
+    private void getPayTypeDialog(final String amount, final String reGold) {
+        PayTypeDialog mPayTypeDialog = new PayTypeDialog(this, R.style.activitystyle);
+        mPayTypeDialog.show();
+        mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                 if(resultCode==1){
+                     getOrderInfo(amount,reGold);
+                 }else{
+
+                 }
+            }
+        });
+    }
+
+    /**
      *获取订单信息
      */
     private void getOrderInfo(String amount,String reGold) {
-
         HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount,
                 reGold,payOutType, new RequestSubscriber<Result<AlipayBean>>() {
             @Override
@@ -245,4 +271,10 @@ public class RechargeActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    public void onIpaynowTransResult(ResponseParams responseParams) {
+
+    }
+
 }

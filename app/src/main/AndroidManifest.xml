@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.game.smartremoteapp">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -365,6 +364,11 @@
         <activity android:name=".activity.home.IntegralActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden" />
+
+        <activity android:name=".activity.home.IntegralTaskActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden" />
+
        <!--  蘑菇抓娃娃 -->
         <activity
             android:name=".activity.mushroom.HomeActivity"
@@ -391,6 +395,26 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/mainTheme">
             </activity>
+        <!-- 现在支付 -->
+        <activity
+            android:name="com.ipaynow.plugin.presenter.PayMethodActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:theme="@android:style/Theme.Dialog"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信插件版支付 -->
+        <activity
+            android:name="com.ipaynow.plugin.inner_plugin.wechatpg.activity.WXPayActivity"
+            android:configChanges="keyboardHidden|navigation|orientation|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity-alias
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.ipaynow.plugin.inner_plugin.wechatpg.activity.WXPayActivity" />
 
     </application>
 

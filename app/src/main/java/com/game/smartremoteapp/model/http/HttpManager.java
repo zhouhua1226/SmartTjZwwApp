@@ -429,7 +429,23 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+    //竞猜今日排行榜
+    public void getRankBetTodayList(String userId,Subscriber<Result<ListRankBean>> subscriber){
+        Observable<Result<ListRankBean>> o =smartService.getRankBetTodayList(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 
+    //抓娃娃今日排行榜
+    public void getRankDollTodayList(String userId,Subscriber<Result<ListRankBean>> subscriber){
+        Observable<Result<ListRankBean>> o =smartService.getRankDollTodayList(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
     //竞猜排行榜
     public void getRankBetList(String userId,Subscriber<Result<ListRankBean>> subscriber){
         Observable<Result<ListRankBean>> o =smartService.getRankBetList(userId);
@@ -658,6 +674,24 @@ public class HttpManager {
     // 积分商城
     public void getPointsMallUrl(String userId, RequestSubscriber<Result<String>> subscriber) {
         Observable<Result<String>> o = smartService.getPointsMallUrl(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    // 积分商城
+    public void getPointsMallTask(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.getPointsMallTask(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    // 微信支付
+    public void getWeiXinPay(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.getWeiXinPay(userId);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

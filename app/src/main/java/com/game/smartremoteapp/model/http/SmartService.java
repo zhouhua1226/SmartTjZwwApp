@@ -19,7 +19,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -389,6 +388,25 @@ public interface SmartService {
     //竞猜排行
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
+    @POST(UrlUtils.RANKBETLISTURLTODAY)
+    Observable<Result<ListRankBean>> getRankBetTodayList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+    //新抓娃娃排行
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RANKDOLLLISTURLTODAY)
+    Observable<Result<ListRankBean>> getRankDollTodayList(
+            @Field(UrlUtils.USERID) String userId
+    );
+
+
+
+
+    //竞猜排行
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
     @POST(UrlUtils.RANKBETLISTURL)
     Observable<Result<ListRankBean>> getRankBetList(
             @Field(UrlUtils.USERID) String userId
@@ -673,7 +691,23 @@ public interface SmartService {
     @POST(UrlUtils.SHAREGAME)
     Observable<Result<Void>> shareGame(@Field(UrlUtils.USERID)String userId);
 
+    //积分商城
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    @GET(UrlUtils.INTEGRAL)
-    Observable<Result<String>> getPointsMallUrl(@Query(UrlUtils.USERID)String userId);
+    @FormUrlEncoded
+    @POST(UrlUtils.INTEGRAL)
+    Observable<Result<String>> getPointsMallUrl(@Field(UrlUtils.USERID) String userId);
+
+    //积分任务
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.INTEGRALTASK)
+    Observable<Result<String>> getPointsMallTask(@Field(UrlUtils.USERID)String userId);
+
+    //微信支付
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.SHAREGAME)
+    Observable<Result<String>> getWeiXinPay(@Field(UrlUtils.USERID) String userId);
+
+
 }

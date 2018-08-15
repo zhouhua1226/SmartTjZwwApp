@@ -43,6 +43,24 @@ public class UserBean implements Serializable {
     private String GENDER ;
     private String OPEN_TYPE ;
     private String  BDPHONE;
+    private int TODAY_GUESS;//今日抓娃娃总数
+    private int   TODAY_POOH ;;//今日竞猜总数
+
+    public int getTODAY_GUESS() {
+        return TODAY_GUESS;
+    }
+
+    public void setTODAY_GUESS(int TODAY_GUESS) {
+        this.TODAY_GUESS = TODAY_GUESS;
+    }
+
+    public int getTODAY_POOH() {
+        return TODAY_POOH;
+    }
+
+    public void setTODAY_POOH(int TODAY_POOH) {
+        this.TODAY_POOH = TODAY_POOH;
+    }
 
     public String getPHONE() {
         return PHONE;
