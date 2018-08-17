@@ -103,7 +103,10 @@ public class IntegralTaskActivity extends BaseActivity {
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);
         s.setJavaScriptEnabled(true);
-
+        s.setGeolocationEnabled(true);
+        s.setDomStorageEnabled(true);
+        s.setBlockNetworkImage(true);
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);//关闭WebView中缓存
         webView.requestFocus();
         webView.setWebViewClient(new WebViewClient());
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);

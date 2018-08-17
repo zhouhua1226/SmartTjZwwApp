@@ -8,6 +8,8 @@ import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
+import com.game.smartremoteapp.bean.NowPayBean;
+import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
@@ -703,11 +705,18 @@ public interface SmartService {
     @POST(UrlUtils.INTEGRALTASK)
     Observable<Result<String>> getPointsMallTask(@Field(UrlUtils.USERID)String userId);
 
-    //微信支付
+    //现在支付
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
-    @POST(UrlUtils.SHAREGAME)
-    Observable<Result<String>> getWeiXinPay(@Field(UrlUtils.USERID) String userId);
+    @POST(UrlUtils.ORDERWXTRADE)
+    Observable<NowPayBean<OrderBean>> getNowPayOrder(@Field(UrlUtils.USERID) String userId,
+                                                   @Field(UrlUtils.AMOUNT) String amount,
+                                                   @Field(UrlUtils.PAYCHANNELTYPE) String payChannelType,
+                                                   @Field(UrlUtils.REGGOLD) String regGold,
+                                                   @Field(UrlUtils.PAYOUTTYPE) String payOutType,
+                                                   @Field(UrlUtils.PAYTYPE) String payType,
+                                                   @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+                                                   @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
 
 
 }

@@ -64,13 +64,13 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener{
                 break;
             case R.id.rl_pay_weixin:
                 if (null != this.listener) {
-                    listener.getResult(0);
+                    listener.getResult(true);
                 }
                 PayTypeDialog.this.dismiss();
                 break;
             case R.id.rl_pay_alipay:
                 if (null != this.listener) {
-                    listener.getResult(1);
+                    listener.getResult(false);
                 }
                 PayTypeDialog.this.dismiss();
                 break;
@@ -87,9 +87,9 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener{
         /**
          * 获取结果的方法
          *
-         * @param resultCode 0.取消
+         * @param payChannelType
          */
-        void getResult(int resultCode);
+        void getResult(boolean payChannelType);
     }
 
 

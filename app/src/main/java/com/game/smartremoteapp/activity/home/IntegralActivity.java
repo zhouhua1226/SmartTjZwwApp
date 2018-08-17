@@ -99,11 +99,13 @@ public class IntegralActivity extends BaseActivity{
         loadUrl();
         s= webView.getSettings();
         s.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        s.setUseWideViewPort(true); //将图片调整到适合webview的大小
-        s.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        s.setUseWideViewPort(true);
+        s.setLoadWithOverviewMode(true);
         s.setJavaScriptEnabled(true);
+        s.setGeolocationEnabled(true);
         s.setDomStorageEnabled(true);
         s.setBlockNetworkImage(true);
+       // s.setCacheMode(WebSettings.LOAD_NO_CACHE);//关闭WebView中缓存
         webView.requestFocus();
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.addJavascriptInterface(new JsInterface(), "AndroidWebView");

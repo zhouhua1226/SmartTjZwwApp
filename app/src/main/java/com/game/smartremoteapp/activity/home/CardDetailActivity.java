@@ -2,6 +2,7 @@ package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +15,8 @@ import com.game.smartremoteapp.alipay.AlipayUtils;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.NowPayBean;
+import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PayCardBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -21,7 +24,12 @@ import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.view.MyLoading;
+import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PayTypeDialog;
+import com.ipaynow.plugin.api.IpaynowPlugin;
+import com.ipaynow.plugin.manager.route.dto.ResponseParams;
+import com.ipaynow.plugin.manager.route.impl.ReceivePayResult;
 
 import java.util.List;
 
@@ -33,7 +41,7 @@ import butterknife.OnClick;
  * Created by chenw on 2018/7/19.
  */
 
-public class CardDetailActivity extends BaseActivity {
+public class CardDetailActivity extends BaseActivity implements ReceivePayResult {
 
     private static final String TAG ="CardDetailActivity==========" ;
     @BindView(R.id.card_detail_radiogroup )
@@ -61,6 +69,8 @@ public class CardDetailActivity extends BaseActivity {
     private  PayCardBean  mMouth= null;
     private int type=1;
     private  String payOutType;
+    private IpaynowPlugin mIpaynowplugin;
+    private MyLoading mLoadingDialog;
     @Override
     protected int getLayoutId() {
         return R.layout.layout_card_detail;
@@ -70,6 +80,9 @@ public class CardDetailActivity extends BaseActivity {
     protected void afterCreate(Bundle savedInstanceState) {
         setStatusBarColor(R.color.white);
         initView();
+
+        mIpaynowplugin = IpaynowPlugin.getInstance().init(this);// 1.插件初始化
+        mLoadingDialog = new MyLoading(mIpaynowplugin.getDefaultLoading());
     }
 
     @Override
@@ -88,7 +101,7 @@ public class CardDetailActivity extends BaseActivity {
                         initWeekView();
                         break;
                 }
-    }
+            }
           });
 
         if(type>1){
@@ -113,6 +126,7 @@ public class CardDetailActivity extends BaseActivity {
             card_money.setText(mWeek.getAMOUNT());
         }
         payOutType="wc";
+        type=0;
     }
 
     private void initMouthView() {
@@ -129,6 +143,7 @@ public class CardDetailActivity extends BaseActivity {
             card_money.setText(mMouth.getAMOUNT());
         }
         payOutType="mc";
+        type=2;
     }
 
     @OnClick({R.id.image_back,R.id.iv_card_buy})
@@ -140,9 +155,9 @@ public class CardDetailActivity extends BaseActivity {
             case R.id.iv_card_buy:
                 if(mWeek!=null&&mMouth!=null) {
                     if (type > 1) {
-                        getOrderInfo(mMouth.getAMOUNT(), mMouth.getRECHARE(), payOutType);
+                        getPayTypeDialog(mMouth.getAMOUNT(), mMouth.getRECHARE(), payOutType);
                      } else {
-                        getOrderInfo(mWeek.getAMOUNT(), mWeek.getRECHARE(), payOutType);
+                        getPayTypeDialog(mWeek.getAMOUNT(), mWeek.getRECHARE(), payOutType);
                      }
                 }
                 break;
@@ -157,14 +172,37 @@ public class CardDetailActivity extends BaseActivity {
         mPayTypeDialog.show();
         mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
             @Override
-            public void getResult(int resultCode) {
-                if(resultCode==1){
+            public void getResult(boolean payChannelType) {
+                if(payChannelType){ //支付宝支付
+                    getNowPayOrder(amount,reGold,payOutType,"13");
+                }else{
                     getOrderInfo(amount,reGold,payOutType);
                 }
             }
         });
     }
 
+    /**
+     *获取微信订单信息
+     * @param
+     * @param amount
+     * @param reGold
+     */
+    private void getNowPayOrder(  String amount, String reGold,String payOutType, String payChannelType) {
+        HttpManager.getInstance().getNowPayOrder(UserUtils.USER_ID,  amount,payChannelType,
+                reGold,payOutType, new RequestSubscriber<NowPayBean<OrderBean>>() {
+                    @Override
+                    public void _onSuccess(NowPayBean<OrderBean> result) {
+                        if (result.getCode() == 0) {
+                            mIpaynowplugin.setCustomLoading(mLoadingDialog).setCallResultReceiver(CardDetailActivity.this).pay(result.getNowpayData());
+                        }
+                    }
+                    @Override
+                    public void _onError(Throwable e) {
+                        LogUtils.logi(e.getMessage());
+                    }
+                });
+    }
 
     /**
      *获取订单信息
@@ -235,5 +273,23 @@ public class CardDetailActivity extends BaseActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onIpaynowTransResult(ResponseParams responseParams) {
+        String respCode = responseParams.respCode;
+        String errorCode = responseParams.errorCode;
+        String errorMsg = responseParams.respMsg;
+        StringBuilder temp = new StringBuilder();
+        if (respCode.equals("00")) {
+            MyToast.getToast(getApplicationContext(),"支付成功!").show();
+        } else if (respCode.equals("02")) {
+            MyToast.getToast(getApplicationContext(),"支付取消!").show();
+        } else if (respCode.equals("01")) {
+            MyToast.getToast(getApplicationContext(),"支付失败!").show();
+            Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+        }  else {
+            Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+        }
     }
 }

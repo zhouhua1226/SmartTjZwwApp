@@ -7,6 +7,8 @@ import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
+import com.game.smartremoteapp.bean.NowPayBean;
+import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
@@ -689,12 +691,14 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
 
-    // 微信支付
-    public void getWeiXinPay(String userId, RequestSubscriber<Result<String>> subscriber) {
-        Observable<Result<String>> o = smartService.getWeiXinPay(userId);
-        o.subscribeOn(Schedulers.newThread())
+    // 现在支付
+    public void getNowPayOrder( String userId, String amount,String payChannelType,String reGold, String payOutType, RequestSubscriber<NowPayBean<OrderBean>> subscriber) {
+        Observable<NowPayBean<OrderBean>> o =smartService.getNowPayOrder(userId,amount,payChannelType,reGold,payOutType,"R",
+                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+                o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+
     }
 }
