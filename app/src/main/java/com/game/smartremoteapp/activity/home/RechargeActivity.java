@@ -3,6 +3,7 @@ package com.game.smartremoteapp.activity.home;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import com.game.smartremoteapp.alipay.AlipayUtils;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.AlipayBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.NowPayBean;
+import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PayCardBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
@@ -21,6 +24,8 @@ import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.MyLoading;
+import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.PayTypeDialog;
 import com.game.smartremoteapp.view.SpaceItemDecoration;
 import com.ipaynow.plugin.api.IpaynowPlugin;
@@ -28,18 +33,17 @@ import com.ipaynow.plugin.manager.route.dto.ResponseParams;
 import com.ipaynow.plugin.manager.route.impl.ReceivePayResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * Created by chenw on 2018/7/17.
  */
 
 public class RechargeActivity extends BaseActivity implements ReceivePayResult {
+    private static final String TAG = "RechargeActivity----------";
     @BindView(R.id.tv_account_money)
     TextView userBlance;
     @BindView(R.id.recharge_recyclerview)
@@ -82,12 +86,11 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
     private  PayCardBean  mMouth= null;
     private static final String mAppID = "151615975028920";//参数只支持微信支付
     private static final String mKey = "hX4uxxSsQVTWo3honWarbUkpqu5cA31A";
-    private String reGold; //金币总数
     private String payOutType; //wc 周卡 mc 月卡 首冲 fc  正常 nm
-    private String payType; //R 金币充值  P加盟
     private String isFirst;
     private IpaynowPlugin mIpaynowplugin;
-    private HashMap<String, String> reqMap=new HashMap<String, String>();
+    private MyLoading mLoadingDialog;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_recharge;
@@ -96,12 +99,13 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        mIpaynowplugin = IpaynowPlugin.getInstance().init(this);// 1.插件初始化
 
         isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
         initView();
         getAppUserInf();
         getPayCardList();
+        mIpaynowplugin = IpaynowPlugin.getInstance().init(this);// 1.插件初始化
+        mLoadingDialog = new MyLoading(mIpaynowplugin.getDefaultLoading());
     }
 
     @Override
@@ -116,12 +120,11 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 PayCardBean mPayCardBean=mPayCardBeans.get(position);
                 String  isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
                           if(isFirst.equals("0")){
-                             payOutType="fc";
-                              getOrderInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
+                              payOutType="fc";
+                              getPayTypeDialog(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
                            }else{
                               payOutType="nm";
-                              getOrderInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getGOLD());
-
+                              getPayTypeDialog(mPayCardBean.getAMOUNT(),mPayCardBean.getGOLD());
                 }
             }
         }));
@@ -140,14 +143,13 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
             case R.id.ll_mouth_car:
                 if(mMouth!=null){
                     payOutType="mc";
-                    getOrderInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                    getPayTypeDialog(mMouth.getAMOUNT(),mMouth.getRECHARE());
                 }
-
                 break;
             case R.id.ll_week_car:
                 if(mWeek!=null){
                     payOutType="wc";
-                    getOrderInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
+                    getPayTypeDialog(mWeek.getAMOUNT(), mWeek.getRECHARE());
                 }
                 break;
         }
@@ -224,38 +226,65 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
      * 调取支付支付界面
      */
     private void startPay(String orderInfo) {
-        AlipayUtils.startApliyPay(this, orderInfo, new AlipayUtils.OnApliyPayResultListenter() {
-            @Override
+         AlipayUtils.startApliyPay(this, orderInfo, new AlipayUtils.OnApliyPayResultListenter() {
+             @Override
             public void OnApliyPayResult(boolean isSuccess) {
-                if (isSuccess) {
-                    getAppUserInf();
-                }
-            }
-        });
-    }
-
-    /**
-     *选择支付方式
-     */
-    private void getPayTypeDialog(final String amount, final String reGold) {
-        PayTypeDialog mPayTypeDialog = new PayTypeDialog(this, R.style.activitystyle);
-        mPayTypeDialog.show();
-        mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
-            @Override
-            public void getResult(int resultCode) {
-                 if(resultCode==1){
-                     getOrderInfo(amount,reGold);
-                 }else{
-
+                 if (isSuccess) {
+                     getAppUserInf();
                  }
             }
         });
     }
 
     /**
-     *获取订单信息
+     *选择支付方式
+     * @param amount
+     *
      */
-    private void getOrderInfo(String amount,String reGold) {
+    private void getPayTypeDialog(final String amount, final String reGold) {
+        PayTypeDialog mPayTypeDialog = new PayTypeDialog(this, R.style.activitystyle);
+        mPayTypeDialog.show();
+        mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
+            @Override
+            public void getResult( boolean payChannelType) {
+                 if(payChannelType ){
+                     getNowPayOrder(amount,reGold, "13");
+                 }else{
+                     getOrderInfo(amount,reGold );
+                 }
+            }
+        });
+    }
+
+    /**
+     *获取微信订单信息
+     *
+     * @param amount
+     * @param reGold
+     */
+    private void getNowPayOrder( String amount, String reGold,String payChannelType) {
+        HttpManager.getInstance().getNowPayOrder(UserUtils.USER_ID,  amount,payChannelType,
+                 reGold,payOutType, new RequestSubscriber<NowPayBean<OrderBean>>() {
+                    @Override
+                    public void _onSuccess(NowPayBean<OrderBean> result) {
+                        if (result.getCode() == 0) {
+                            mIpaynowplugin.setCustomLoading(mLoadingDialog).setCallResultReceiver(RechargeActivity.this).pay(result.getNowpayData());
+                        }
+                    }
+                    @Override
+                    public void _onError(Throwable e) {
+                        LogUtils.logi(e.getMessage());
+                    }
+                });
+    }
+
+
+    /**
+     *获取支付宝订单信息
+     * @param amount
+     * @param reGold
+     */
+    private void getOrderInfo(String amount, String reGold) {
         HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount,
                 reGold,payOutType, new RequestSubscriber<Result<AlipayBean>>() {
             @Override
@@ -274,7 +303,20 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
     @Override
     public void onIpaynowTransResult(ResponseParams responseParams) {
-
-    }
-
+            String respCode = responseParams.respCode;
+            String errorCode = responseParams.errorCode;
+            String errorMsg = responseParams.respMsg;
+            StringBuilder temp = new StringBuilder();
+            if (respCode.equals("00")) {
+                getAppUserInf();
+                MyToast.getToast(getApplicationContext(),"支付成功!").show();
+            } else if (respCode.equals("02")) {
+                MyToast.getToast(getApplicationContext(),"支付取消!").show();
+            } else if (respCode.equals("01")) {
+                MyToast.getToast(getApplicationContext(),"支付失败!").show();
+                Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+            }  else {
+                Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+            }
+        }
 }

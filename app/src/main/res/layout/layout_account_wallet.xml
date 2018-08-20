@@ -139,7 +139,7 @@
             android:layout_toLeftOf="@+id/iv_right_arrow1"
             android:gravity="center|right"
             android:layout_marginRight="8dp"
-            android:text="1,000"
+            android:text="0"
             android:textColor="#f26d35"
             android:textSize="15sp" />
     </RelativeLayout>

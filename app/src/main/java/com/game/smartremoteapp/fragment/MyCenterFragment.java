@@ -17,7 +17,6 @@ import com.game.smartremoteapp.activity.home.AccountWalletActivity;
 import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
-import com.game.smartremoteapp.activity.home.GameCurrencyActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.IntegralTaskActivity;
@@ -215,9 +214,9 @@ public class MyCenterFragment extends BaseFragment {
                 //此处添加登录dialog
                 break;
             case R.id.mycenter_currencyrecord_tv:
-                //金币记录
+                //充值中心
                 //MyToast.getToast(getContext(),"金币记录").show();
-                startActivity(new Intent(getContext(), GameCurrencyActivity.class));
+                startActivity(new Intent(getContext(), RechargeActivity.class));
                 break;
             case R.id.mycenter_guessrecord_tv://竞猜记录
                 startActivity(new Intent(getContext(), BetRecordActivity.class));

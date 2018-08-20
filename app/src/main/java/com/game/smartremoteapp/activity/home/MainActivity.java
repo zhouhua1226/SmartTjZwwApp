@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         } else if (state.equals(Utils.TAG_SESSION_INVALID)) {
             LogUtils.loge("TAG_SESSION_INVALID");
             //TODO 重连后重新连接 QQ/WEIXIN 模式检测
-            getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
+             getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
         } else if (state.equals(Utils.TAG_GATEWAT_USING)) {
             LogUtils.loge("TAG_GATEWAT_USING");
         }

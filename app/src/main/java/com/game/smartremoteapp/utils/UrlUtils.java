@@ -78,6 +78,7 @@ public class UrlUtils {
     public static final String GENDER ="gender" ;
     public static final String ICONURL ="iconurl" ;
     public static final String REGCHANNEL ="regChannel" ;
+    public static final String PAYCHANNELTYPE ="payChannelType" ;
     //ysdk支付金额字段
     public static final String WXQQ_AMOUNT="amount";
     //签到接口
@@ -116,15 +117,15 @@ public class UrlUtils {
     public static final String REGGOLD = "regGold";
     public static final String PAYOUTTYPE = "payOutType";
 
-    public static final String URL = "http://47.100.15.18:8080";
+    public static final String URL = "http://111.231.139.61:18081";
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)
     //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)
     //APP图片拼接url
-    public static final String APPPICTERURL="http://47.100.15.18:8888/";
+    public static final String APPPICTERURL="http://111.231.139.61:8888/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
     //http://111.231.139.61:8888/ (汤姆抓娃娃腾讯云)
     //壕鑫客服链接
-    public static final String SOCKET_IP="111.231.74.65 ";//123.206.120.46(壕鑫正式)
+    public static final String SOCKET_IP="111.231.74.65";//123.206.120.46(壕鑫正式)
     // 47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
 
     //
@@ -353,4 +354,8 @@ public class UrlUtils {
 
     //积分任务
     public static final String INTEGRALTASK = URL+"/pooh-web/app/pointsMall/getPointsMallTask";
+
+    //微信订单信息
+    public static final String ORDERWXTRADE = URL+"/pooh-web/app/pay/getTradeOrderxdpay";
+
 }
