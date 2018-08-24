@@ -45,6 +45,24 @@ public class UserBean implements Serializable {
     private String  BDPHONE;
     private int TODAY_GUESS;//今日抓娃娃总数
     private int   TODAY_POOH ;;//今日竞猜总数
+    private String JCID;        //CP游戏用户ID
+    private String JDNUM;
+
+    public String getJDNUM() {
+        return JDNUM == null ? "" : JDNUM;
+    }
+
+    public void setJDNUM(String JDNUM) {
+        this.JDNUM = JDNUM;
+    }
+
+    public String getJCID() {
+        return JCID == null ? "" : JCID;
+    }
+
+    public void setJCID(String JCID) {
+        this.JCID = JCID;
+    }
 
     public int getTODAY_GUESS() {
         return TODAY_GUESS;

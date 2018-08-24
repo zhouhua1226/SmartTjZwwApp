@@ -70,14 +70,16 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="visible"
                 android:id="@+id/ll_integral_task"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="30dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
@@ -268,7 +270,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="#ededed" />
+                android:background="#ededed"
+                android:visibility="visible"
+                />
 
             <TextView
                 android:id="@+id/mycenter_guessrecord_tv"
@@ -279,7 +283,9 @@
                 android:gravity="center"
                 android:text="竞猜记录"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="visible"
+                />
         </LinearLayout>
 
         <RelativeLayout
@@ -334,7 +340,9 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:visibility="visible"
+            >
             <ImageView
                 android:id="@+id/iv_mycenter_integral"
                 android:layout_width="20dp"

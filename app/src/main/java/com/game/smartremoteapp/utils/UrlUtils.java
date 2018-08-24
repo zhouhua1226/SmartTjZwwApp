@@ -117,16 +117,19 @@ public class UrlUtils {
     public static final String REGGOLD = "regGold";
     public static final String PAYOUTTYPE = "payOutType";
 
-    public static final String URL = "http://111.231.139.61:18081";
+    public static final String URL = "http://47.100.15.18:8080";
     //http://115.159.58.231:18081(壕鑫腾讯云)   http://47.100.15.18:8080(阿里云测服)
     //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)
     //APP图片拼接url
-    public static final String APPPICTERURL="http://111.231.139.61:8888/";
+    public static final String APPPICTERURL="http://47.100.15.18:8888/";
     //http://115.159.58.231:8888/(壕鑫腾讯云)   http://47.100.15.18:8888/(阿里云测服)
     //http://111.231.139.61:8888/ (汤姆抓娃娃腾讯云)
     //壕鑫客服链接
-    public static final String SOCKET_IP="111.231.74.65";//123.206.120.46(壕鑫正式)
+    public static final String SOCKET_IP="47.100.8.129";//123.206.120.46(壕鑫正式)
     // 47.100.8.129(测试)   111.231.74.65 (第一抓娃娃)
+
+    //彩票url
+    public final static String CPURL = "http://60.55.47.172:8000/ajax/AppGateway.ashx";   	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
 
     //
     public static final String ADVERTYURL="http://111.231.139.61:18081/jc51/index.html";
@@ -357,5 +360,12 @@ public class UrlUtils {
 
     //微信订单信息
     public static final String ORDERWXTRADE = URL+"/pooh-web/app/pay/getTradeOrderxdpay";
+
+    //彩票游戏登录
+    public static final String CPGAMELOGINURL=URL + "/pooh-web/app/Jc51H5Game/login";
+
+    //金币兑换金豆
+    public static final String COINEXBEANSURL=URL + "/pooh-web/app/Jc51H5Game/getGoldenbean";
+
 
 }

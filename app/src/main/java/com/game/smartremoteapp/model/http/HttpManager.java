@@ -13,6 +13,7 @@ import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.Token;
+import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.google.gson.Gson;
@@ -701,4 +702,32 @@ public class HttpManager {
                 .subscribe(subscriber);
 
     }
+
+    //查询游戏豆
+    public void getGameBeans(String opt,String auth, RequestSubscriber<JCResult> subscriber) {
+        Observable<JCResult> o = smartService.getCPGameBeans(opt, auth);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    //CP游戏登录
+    public void getCPGameLogin(String userId, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.getCPGameLogin(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    //金币兑换CP游戏豆
+    public void getCoinEXGoldenbean(String userId,String beanNum, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.getCoinEXGoldenbean(userId, beanNum);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
 }

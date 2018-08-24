@@ -14,6 +14,8 @@ import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.Token;
+import com.game.smartremoteapp.protocol.JCResult;
+import com.game.smartremoteapp.protocol.JCUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 
 import retrofit2.http.Field;
@@ -718,5 +720,25 @@ public interface SmartService {
                                                    @Field(UrlUtils.WXQQ_CTYPE) String ctype,
                                                    @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
 
+
+    //查询CP游戏豆
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.CPURL)
+    Observable<JCResult> getCPGameBeans(@Field(JCUtils.OPT) String opt,
+                                      @Field(JCUtils.AUTH) String auth);
+
+    //CP游戏登录
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.CPGAMELOGINURL)
+    Observable<Result<HttpDataInfo>> getCPGameLogin(@Field(UrlUtils.USERID) String userId);
+
+    //金币兑换CP游戏豆
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.COINEXBEANSURL)
+    Observable<Result<HttpDataInfo>> getCoinEXGoldenbean(@Field(UrlUtils.USERID) String userId,
+                                                         @Field(JCUtils.BEANNUM) String beanNum);
 
 }

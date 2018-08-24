@@ -26,6 +26,7 @@ import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
+import com.game.smartremoteapp.protocol.JCUtils;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
@@ -104,7 +105,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         RxBus.get().register(this);
         initData();
         checkVersion();
-
+        getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
     }
 
     @Override
@@ -542,5 +543,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+    private void getCPGameLogin(String userId){
+        HttpManager.getInstance().getCPGameLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> stringResult) {
+                if(stringResult.getMsg().equals(Utils.HTTP_OK)){
+                    JCUtils.UID=stringResult.getData().getAppUser().getJCID();
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+
+            }
+        });
+    }
 
 }

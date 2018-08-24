@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
 import com.game.smartremoteapp.activity.ctrl.view.PushCoinActivity;
+import com.game.smartremoteapp.activity.home.GameCenterActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.NewsWebActivity;
 import com.game.smartremoteapp.adapter.ZWWAdapter;
@@ -110,7 +111,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.zww_exshop_ibtn:
-                shareApp();
+                startActivity(new Intent(getContext(),IntegralActivity.class));
+                //shareApp();
 //                if (!newsUrl.equals("")) {
 //                    Intent intent = new Intent(getContext(), NewsWebActivity.class);
 //                    intent.putExtra("newsurl", newsUrl);
@@ -121,7 +123,8 @@ public class ZWWJFragment extends BaseFragment implements PullToRefreshView.OnHe
 //                }
                 break;
             case R.id.zww_integral_ibtn:
-                startActivity(new Intent(getContext(), IntegralActivity.class));
+                //startActivity(new Intent(getContext(), IntegralActivity.class));
+                startActivity(new Intent(getContext(), GameCenterActivity.class));
                 break;
         }
     }
