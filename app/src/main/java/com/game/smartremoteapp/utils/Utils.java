@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -688,5 +690,67 @@ public class Utils {
             return s.matches("^[0-9]*$");
         else
             return false;
+    }
+
+    /**
+     * 判断 用户是否安装微信客户端
+     */
+    public static boolean isWeixinAvilible(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mm")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * 判断qq是否可用
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isQQClientAvailable(Context context) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mobileqq")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static String formatTime(Date time) {
+        //获取time距离当前的秒数
+        int ct = (int)((System.currentTimeMillis() - time.getTime())/1000);
+
+        if(ct == 0) {
+            return "刚刚";
+        }
+
+        if(ct > 0 && ct < 60) {
+            return ct + "秒前";
+        }
+
+        if(ct >= 60 && ct < 3600) {
+            return Math.max(ct / 60,1) + "分钟前";
+        }
+        if(ct >= 3600 && ct < 86400)
+            return ct / 3600 + "小时前";
+        if(ct >= 86400 && ct < 2592000){ //86400 * 30
+            int day = ct / 86400 ;
+            return day + "天前";
+        }
+        if(ct >= 2592000 && ct < 31104000) { //86400 * 30
+            return ct / 2592000 + "月前";
+        }
+        return ct / 31104000 + "年前";
     }
 }

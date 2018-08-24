@@ -10,10 +10,18 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.adapter.ShareAdapter;
+import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.PlateBean;
+import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.model.http.HttpManager;
+import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.UserUtils;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
@@ -32,11 +40,10 @@ public class ShareDialog {
     private View mView;
     private Context mContext;
     private List<PlateBean> mPlate=new ArrayList<>();
-
     private UMWeb web;
     private SHARE_MEDIA shareMedia;
-    private OnShareIndexOnClicker onShareIndexOnClicker;
-    public ShareDialog(Context context, OnShareIndexOnClicker onShareIndexOnClicker) {
+    private OnShareSuccessOnClicker onShareSuccessOnClicker;
+    public ShareDialog(Context context, OnShareSuccessOnClicker onShareSuccessOnClicker) {
         this.mContext = context;
         mAlertDialog = new Dialog(context, R.style.dialog);
         mAlertDialog.setCanceledOnTouchOutside(true);
@@ -47,7 +54,7 @@ public class ShareDialog {
         mRecyclerView = (RecyclerView) mAlertDialog.findViewById(R.id.share_recyclerview);
         mAlertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         mAlertDialog.getWindow().setGravity(Gravity.BOTTOM);
-        this.onShareIndexOnClicker=onShareIndexOnClicker;
+        this.onShareSuccessOnClicker=onShareSuccessOnClicker;
         initMedia();
         setInitView();
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +93,10 @@ public class ShareDialog {
                         shareMedia = SHARE_MEDIA.SINA;
                         break;
                 }
-                onShareIndexOnClicker.ShareIndexOnClicker(position, web, shareMedia);
+                new ShareAction((BaseActivity) mContext)
+                        .withMedia(web)
+                        .setPlatform(shareMedia)
+                        .setCallback(shareListener).share();
             }
 
         }));
@@ -100,7 +110,43 @@ public class ShareDialog {
         web.setThumb(new UMImage(mContext,BitmapFactory.decodeResource(mContext.getResources(), R.drawable.logo_share)));
     }
     //分享监听接口
-  public interface  OnShareIndexOnClicker{
-          void ShareIndexOnClicker(int index, UMWeb web, SHARE_MEDIA shareMedia);
+    public interface  OnShareSuccessOnClicker{
+          void onShareSuccess();
     }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            shareGame();
+        }
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(mContext,"分享失败"+t.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(mContext,"分享取消",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private void shareGame(){
+        HttpManager.getInstance().shareGame(UserUtils.USER_ID ,new RequestSubscriber<Result<Void>>() {
+            @Override
+            public void _onSuccess(Result<Void> loginInfoResult) {
+                if(loginInfoResult.getCode()==0){
+                    Toast.makeText(mContext,"分享成功",Toast.LENGTH_SHORT).show();
+                     if(onShareSuccessOnClicker!=null){
+                         onShareSuccessOnClicker.onShareSuccess();}
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
+
 }

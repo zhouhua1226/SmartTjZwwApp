@@ -3,11 +3,13 @@ package com.game.smartremoteapp.activity.home;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.base.MyApplication;
@@ -34,15 +37,17 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.utils.YsdkUtils;
 import com.game.smartremoteapp.view.MyToast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
+
 /**
  * Created by chenw on 2018/7/19.
  */
 public class WelcomeActivity extends BaseActivity{
-
-    private static final String TAG ="WelcomeActivity-----" ;
+    private static final String TAG ="WelcomeActivity-----";
     private String uid;
     @BindView(R.id.btn_timer)
     Button btn_timer;
@@ -69,7 +74,28 @@ public class WelcomeActivity extends BaseActivity{
             toActivity();
         }
     }
-
+  private void  setSelectServer(){
+      AlertDialog dialog = new AlertDialog.Builder(this)
+              .setMessage("设置应用类型")
+              .setCancelable(false)
+              .setPositiveButton("真实服", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
+                      HttpManager.setBaseUrl(UrlUtils.URL);
+                      getAuthLogin(uid);
+                      SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,false);
+                  }
+              })
+              .setNegativeButton("测试服", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
+                      HttpManager.setBaseUrl(UrlUtils.URL_TEST);
+                      getAuthLogin(uid);
+                      SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,true);
+                  }
+              }).create();
+      dialog.show();
+  }
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
@@ -99,6 +125,10 @@ public class WelcomeActivity extends BaseActivity{
 
     private void initWelcome() {
          fresh();
+        //默认真实服
+        HttpManager.setBaseUrl(UrlUtils.URL);
+        SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,false);
+
         if (SPUtils.getBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, false)) {
             //用户已经注册
             uid =  SPUtils.getString(getApplicationContext(), UserUtils.SP_TAG_USERID, "");
@@ -106,11 +136,12 @@ public class WelcomeActivity extends BaseActivity{
                 return;
             }
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-                getAuthLogin(uid);
+               // getAuthLogin(uid); //真实发布
             } else {
                 MyToast.getToast(getApplicationContext(), "请查看你的网络！").show();
             }
         }
+         setSelectServer();//测试
 
         btn_timer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +234,6 @@ class MyCountDownTimer extends CountDownTimer {
             finish();
         } else {
             Utils.toActivity(WelcomeActivity.this, SplashActivity.class);//汤姆抓娃娃
-            // Utils.toActivity(WelcomeActivity.this, Splash1Activity.class);//蘑菇抓娃娃
              finish();
         }
     }

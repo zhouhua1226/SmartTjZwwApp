@@ -17,7 +17,7 @@ public class SPUtils {
     public static UUID uuid;
     public static final String PREFS_DEVICE_ID = "device_id";//设备号id
 
-
+    public static String  ISTEST="istest";
     public static void init(Context context) {
         synchronized (SPUtils.class) {
             if (uuid == null) {

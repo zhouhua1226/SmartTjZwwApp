@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -38,11 +37,6 @@ import com.gatz.netty.utils.NettyUtils;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMWeb;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -201,7 +195,7 @@ public class SettingActivity extends BaseActivity {
                 if(appInfoResult!=null) {
                     String version = appInfoResult.getData().getVERSION();
                     if (VersionUtils.validateVersion(mVersion, version)) {
-                        updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                        updateApp(appInfoResult.getData());
                     } else {
                         MyToast.getToast(SettingActivity.this, "当前已是最新版本").show();
                     }
@@ -213,11 +207,12 @@ public class SettingActivity extends BaseActivity {
         });
 
     }
-    private void  updateApp(final String loadUri){
-
+    private void  updateApp(final AppInfo mAppInfo){
         UpdateDialog updateDialog=new UpdateDialog(this,R.style.easy_dialog_style);
         updateDialog.setCancelable(false);
         updateDialog.show();
+        updateDialog.setDialogTitle(mAppInfo.getVERSION());
+        updateDialog.setDialogContext(mAppInfo.getCONTENT());
         updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
          @Override
             public void getResult(boolean result ) {
@@ -227,7 +222,7 @@ public class SettingActivity extends BaseActivity {
                        downloadManagerUtil.clearCurrentTask(downloadId);
                      }
                    if(downloadManagerUtil.isDownloadManagerAvailable( )){
-                       downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+                       downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+mAppInfo.getDOWNLOAD_URL());
                    }
                }
            }
@@ -323,58 +318,15 @@ public class SettingActivity extends BaseActivity {
            }
        }
    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
     //分享
     private void shareApp() {
-        new ShareDialog(this, new ShareDialog.OnShareIndexOnClicker() {
+        new ShareDialog(this, new ShareDialog.OnShareSuccessOnClicker() {
             @Override
-            public void ShareIndexOnClicker(int index, final UMWeb web, final SHARE_MEDIA shareMedia) {
-                new ShareAction(SettingActivity.this)
-                        .withMedia(web)
-                        .setPlatform(shareMedia)
-                        .setCallback(shareListener).share();
+            public void onShareSuccess() {
 
             }
         });
     }
 
-
-    private UMShareListener shareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA platform) {
-
-        }
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-
-            shareGame();
-        }
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(getApplicationContext(),"分享失败"+t.getMessage(),Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(getApplicationContext(),"分享取消",Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private void shareGame(){
-        HttpManager.getInstance().shareGame(UserUtils.USER_ID ,new RequestSubscriber<Result<Void>>() {
-            @Override
-            public void _onSuccess(Result<Void> loginInfoResult) {
-                if(loginInfoResult.getCode()==0){
-                    Toast.makeText(getApplicationContext(),"分享成功",Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void _onError(Throwable e) {
-            }
-        });
-    }
 }
 

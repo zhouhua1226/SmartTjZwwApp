@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.HttpDataInfo;
@@ -22,7 +23,9 @@ import com.game.smartremoteapp.view.MyToast;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -98,12 +101,20 @@ public class LoginCodeActivity extends BaseActivity {
                 Utils.toActivity(this, RegisterActivity.class);
                 break;
             case R.id.login_qq_iv:
-                mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, authListener);//QQ授权
-                setGifView(true);
+                if(Utils.isQQClientAvailable(this)){
+                    mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, authListener);//QQ授权
+                    setGifView(true);
+                }else{
+                    MyToast.getToast(this,"你还未安装QQ客户端!").show();
+                }
                 break;
             case R.id.login_wx_iv:
-                mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN, authListener);//微信授权
-                setGifView(true);
+                if(Utils.isWeixinAvilible(this)) {
+                    mUMShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN, authListener);//微信授权
+                    setGifView(true);
+                }else{
+                    MyToast.getToast(this,"你还未安装微信客户端!").show();
+                }
                 break;
         }
     }
@@ -166,6 +177,11 @@ public class LoginCodeActivity extends BaseActivity {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
             Log.e(TAG, platform.toString() + "--data==" + data.toString());
+            if(data==null){
+                MyToast.getToast(getApplicationContext(),"登录失败！").show();
+                setGifView(false);
+                return;
+            }
             getPlatformInfo(platform);
         }
         @Override

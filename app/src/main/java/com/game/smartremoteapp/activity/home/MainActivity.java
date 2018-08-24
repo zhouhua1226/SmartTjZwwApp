@@ -1,6 +1,5 @@
 package com.game.smartremoteapp.activity.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -45,7 +44,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -197,7 +195,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void doServcerConnect() {
-        AppClient.getInstance().setHost(UrlUtils.SOCKET_IP);
+        String socket=UrlUtils.SOCKET_IP;
+        if(SPUtils.getBoolean(getApplicationContext(),SPUtils.ISTEST,false)){//是否测试服
+            socket= UrlUtils.SOCKET_IP_TEST;
+        }
+        AppClient.getInstance().setHost(socket);
         AppClient.getInstance().setPort(8580);
         if (!AppProperties.initProperties(getResources())) {
             LogUtils.loge("netty初始化配置信息出错");
@@ -247,7 +249,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         } else if (state.equals(Utils.TAG_SESSION_INVALID)) {
             LogUtils.loge("TAG_SESSION_INVALID");
             //TODO 重连后重新连接 QQ/WEIXIN 模式检测
-             getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
+           getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
         } else if (state.equals(Utils.TAG_GATEWAT_USING)) {
             LogUtils.loge("TAG_GATEWAT_USING");
         }
@@ -416,7 +418,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 if (appInfoResult != null) {
                     String version = appInfoResult.getData().getVERSION();
                     if (VersionUtils.validateVersion(Utils.getAppCodeOrName(MainActivity.this, 1), version)) {
-                        updateApp(appInfoResult.getData().getDOWNLOAD_URL());
+                        updateApp(appInfoResult.getData());
                     }
                 }
             }
@@ -428,10 +430,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     }
 
-    private void updateApp(final String loadUri) {
+    private void updateApp(final AppInfo mAppInfo) {
         UpdateDialog updateDialog = new UpdateDialog(this, R.style.easy_dialog_style);
-        updateDialog.setCancelable(false);
         updateDialog.show();
+        updateDialog.setDialogTitle(mAppInfo.getVERSION());
+        updateDialog.setDialogContext(mAppInfo.getCONTENT());
         updateDialog.setDialogResultListener(new UpdateDialog.DialogResultListener() {
             @Override
             public void getResult(boolean result) {
@@ -441,7 +444,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         downloadManagerUtil.clearCurrentTask(downloadId);
                     }
                     if(downloadManagerUtil.isDownloadManagerAvailable( )){
-                        downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+loadUri);
+                        downloadId = downloadManagerUtil.download(UrlUtils.APPPICTERURL+mAppInfo.getDOWNLOAD_URL());
                     }
                 }
             }
@@ -535,12 +538,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (myCenterFragment != null) {
             fragmentTransaction.hide(myCenterFragment);
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     private void getCPGameLogin(String userId){

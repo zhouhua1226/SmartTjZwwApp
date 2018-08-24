@@ -12,7 +12,7 @@ public class MyToast {
 	@SuppressLint("ShowToast")
 	public static Toast getToast(Context context, String msg)
 	{
-		if (toast == null) {
+		if (toast == null&&context!=null) {
 			toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 		} else {

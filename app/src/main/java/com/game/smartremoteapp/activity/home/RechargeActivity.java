@@ -84,8 +84,6 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
     private List<PayCardBean> mPayCardBeans= new ArrayList<>();
     private PayCardBean mWeek=null;
     private  PayCardBean  mMouth= null;
-    private static final String mAppID = "151615975028920";//参数只支持微信支付
-    private static final String mKey = "hX4uxxSsQVTWo3honWarbUkpqu5cA31A";
     private String payOutType; //wc 周卡 mc 月卡 首冲 fc  正常 nm
     private String isFirst;
     private IpaynowPlugin mIpaynowplugin;
@@ -121,10 +119,14 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 String  isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
                           if(isFirst.equals("0")){
                               payOutType="fc";
-                              getPayTypeDialog(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
+                            getPayTypeDialog(mPayCardBean.getID());
+                           // getNowPayOrder(mPayCardBean.getID(), "13");
+                            //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
                            }else{
                               payOutType="nm";
-                              getPayTypeDialog(mPayCardBean.getAMOUNT(),mPayCardBean.getGOLD());
+                             getPayTypeDialog(mPayCardBean.getID());
+                            // getNowPayOrder(mPayCardBean.getID(), "13");
+                           //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getRECHARE());
                 }
             }
         }));
@@ -143,13 +145,17 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
             case R.id.ll_mouth_car:
                 if(mMouth!=null){
                     payOutType="mc";
-                    getPayTypeDialog(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                    getPayTypeDialog(mMouth.getID());
+                 //  getNowPayOrder(mMouth.getID(), "13");
+                   // getOrderApaliyInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
                 }
                 break;
             case R.id.ll_week_car:
                 if(mWeek!=null){
                     payOutType="wc";
-                    getPayTypeDialog(mWeek.getAMOUNT(), mWeek.getRECHARE());
+                   getPayTypeDialog(mWeek.getID());
+                   //  getNowPayOrder(mWeek.getID(), "13");
+                    //getOrderApaliyInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
                 }
                 break;
         }
@@ -238,19 +244,18 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
     /**
      *选择支付方式
-     * @param amount
      *
      */
-    private void getPayTypeDialog(final String amount, final String reGold) {
+    private void getPayTypeDialog(final int pid) {
         PayTypeDialog mPayTypeDialog = new PayTypeDialog(this, R.style.activitystyle);
         mPayTypeDialog.show();
         mPayTypeDialog.setDialogResultListener(new PayTypeDialog.DialogResultListener() {
             @Override
             public void getResult( boolean payChannelType) {
                  if(payChannelType ){
-                     getNowPayOrder(amount,reGold, "13");
+                     getNowPayOrder(pid, "13");
                  }else{
-                     getOrderInfo(amount,reGold );
+                     getOrderInfo( pid );
                  }
             }
         });
@@ -258,13 +263,10 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
     /**
      *获取微信订单信息
-     *
-     * @param amount
-     * @param reGold
      */
-    private void getNowPayOrder( String amount, String reGold,String payChannelType) {
-        HttpManager.getInstance().getNowPayOrder(UserUtils.USER_ID,  amount,payChannelType,
-                 reGold,payOutType, new RequestSubscriber<NowPayBean<OrderBean>>() {
+    private void getNowPayOrder( int pid,  String payChannelType) {
+        HttpManager.getInstance().getNowWXPayOrder(UserUtils.USER_ID, pid+"",payChannelType,
+             payOutType, new RequestSubscriber<NowPayBean<OrderBean>>() {
                     @Override
                     public void _onSuccess(NowPayBean<OrderBean> result) {
                         if (result.getCode() == 0) {
@@ -281,12 +283,10 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
     /**
      *获取支付宝订单信息
-     * @param amount
-     * @param reGold
      */
-    private void getOrderInfo(String amount, String reGold) {
-        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount,
-                reGold,payOutType, new RequestSubscriber<Result<AlipayBean>>() {
+    private void getOrderInfo(int pid) {
+        HttpManager.getInstance().getOrderAlipay(UserUtils.USER_ID, pid+"",
+              payOutType, new RequestSubscriber<Result<AlipayBean>>() {
             @Override
             public void _onSuccess(Result<AlipayBean> result) {
                 if (result.getCode() == 0) {
@@ -299,6 +299,25 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 LogUtils.logi(e.getMessage());
             }
         });
+    }
+    /**
+     *获取支付宝订单信息
+     */
+    private void getOrderApaliyInfo(String  amount,String reGlold) {
+        HttpManager.getInstance().getTradeOrderAlipay(UserUtils.USER_ID, amount,reGlold,
+                payOutType, new RequestSubscriber<Result<AlipayBean>>() {
+                    @Override
+                    public void _onSuccess(Result<AlipayBean> result) {
+                        if (result.getCode() == 0) {
+                            startPay(result.getData().getAlipay()); //调用支付宝支付接口
+                        }
+                    }
+
+                    @Override
+                    public void _onError(Throwable e) {
+                        LogUtils.logi(e.getMessage());
+                    }
+                });
     }
 
     @Override

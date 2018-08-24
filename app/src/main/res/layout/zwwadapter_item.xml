@@ -2,27 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/zwwadapter_item_parent_layout"
-    android:layout_width="@dimen/PX_335"
+    android:layout_width="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp"
     android:layout_height="wrap_content">
-
     <com.game.smartremoteapp.view.RoundRoomImageView
         android:id="@+id/moppet_image"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/PX_335" />
-
-    <ImageView
-        android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="155dp"
-        android:visibility="gone" />
-
+        android:layout_height="@dimen/PX_335" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/moppet_image"
         android:background="@drawable/zwwadapter_item_bottom_bg">
-
         <TextView
             android:id="@+id/moppet_name_tv"
             android:layout_width="match_parent"
@@ -35,9 +28,7 @@
             tools:text="未知未知未知未知未知"
             android:layout_toLeftOf="@+id/monet_image"
             android:maxLines="1"
-            android:ellipsize="end"
-            />
-
+            android:ellipsize="end" />
         <ImageView
             android:id="@+id/monet_image"
             android:layout_width="15dp"
@@ -45,7 +36,6 @@
             android:layout_marginTop="11dp"
             android:layout_toLeftOf="@+id/moppet_money_tv"
             android:src="@drawable/ctrl_money_icon" />
-
         <TextView
             android:id="@+id/moppet_money_tv"
             android:layout_width="wrap_content"
@@ -65,7 +55,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="24dp">
-
         <ImageView
             android:id="@+id/moppet_connect_iv"
             android:layout_width="wrap_content"
@@ -74,13 +63,12 @@
             android:layout_marginStart="10dp"
             android:src="@drawable/ctrl_idling_icon"
             android:visibility="gone" />
-
         <TextView
             android:id="@+id/moppet_connect_tv"
             android:layout_width="60dp"
             android:layout_height="17dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="3dp"
+            android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/moppet_connect_iv"
             android:background="@drawable/room_statue_sleep_bg"
             android:gravity="center"

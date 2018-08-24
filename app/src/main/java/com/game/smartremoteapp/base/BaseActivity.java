@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.base;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import com.game.smartremoteapp.view.GuessingSuccessDialog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
 import com.umeng.message.PushAgent;
+import com.umeng.socialize.UMShareAPI;
 
 
 /**
@@ -184,9 +186,21 @@ public abstract class BaseActivity extends AppCompatActivity {
             view.setVisibility(View.INVISIBLE);
         }
     }
+    /**
+     * 权限返回
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionsUtils.onRequestPermissionsResult(requestCode, permissions,  grantResults);
+    }
+
+    /**
+     * 分享返回
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

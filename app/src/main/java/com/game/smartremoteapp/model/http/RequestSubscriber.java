@@ -15,9 +15,13 @@ public abstract class RequestSubscriber<T> extends Subscriber<T> {
     public void onError(Throwable e) {
         try {
             _onError(e);
-            Log.e( "OnErrorFailedException",e.getMessage());
+            if(e.getMessage()!=null) {
+                Log.e( "onError",e.getMessage());
+            }
         } catch (OnErrorFailedException e1) {
-            Log.e(e1.toString(), "OnErrorFailedException");
+            if(e1.getMessage()!=null) {
+                Log.e("OnErrorFailedException",e1.toString());
+            }
         }
     }
 

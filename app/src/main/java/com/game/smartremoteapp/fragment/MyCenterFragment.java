@@ -2,7 +2,6 @@ package com.game.smartremoteapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,7 +48,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.game.smartremoteapp.R.id.mycenter_mymoney_tv;
-import static com.game.smartremoteapp.utils.UserUtils.UserAmount;
 
 /**
  * Created by hongxiu on 2017/9/25.
@@ -122,7 +120,7 @@ public class MyCenterFragment extends BaseFragment {
         Log.e(TAG, "个人中心userId=" + UserUtils.USER_ID);
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             //getUserDate(UserUtils.USER_ID);
-            getUserAccBalCount(UserUtils.USER_ID);
+           // getUserAccBalCount(UserUtils.USER_ID);
             getAppUserInf(UserUtils.USER_ID);
         }
     }
@@ -269,23 +267,23 @@ public class MyCenterFragment extends BaseFragment {
         }
     }
 
-    private void getUserAccBalCount(String userId) {
-        HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
-            @Override
-            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
-                    String amount = httpDataInfoResult.getData().getAccBal();
-                    UserAmount=amount;
-                    mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
-                }
-            }
-
-            @Override
-            public void _onError(Throwable e) {
-                MyToast.getToast(getContext(), "网络异常！").show();
-            }
-        });
-    }
+//    private void getUserAccBalCount(String userId) {
+//        HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+//            @Override
+//            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+//                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
+//                    String amount = httpDataInfoResult.getData().getAccBal();
+//                    UserAmount=amount;
+//                  //  mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
+//                }
+//            }
+//
+//            @Override
+//            public void _onError(Throwable e) {
+//                MyToast.getToast(getContext(), "网络异常！").show();
+//            }
+//        });
+//    }
 
     private void getAppUserInf(String userId) {
         if (Utils.isEmpty(userId)) {

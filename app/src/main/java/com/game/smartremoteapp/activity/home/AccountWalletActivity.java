@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
@@ -29,7 +28,6 @@ import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.CardView;
-import com.game.smartremoteapp.view.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +40,11 @@ import butterknife.OnClick;
  * Created by chenw on 2018/7/18.
  */
 
-public class AccountWalletActivity extends BaseActivity implements CardView.OnCardViewOnClickListener {
+public class AccountWalletActivity extends BaseActivity implements CardView.OnCardViewOnClickListener{
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
-    @BindView(R.id.viewGroup)
-    LinearLayout mIndicator;
+     @BindView(R.id.viewGroup)
+     LinearLayout mIndicator;
     @BindView(R.id.tv_card_name)
     TextView card_name;
     @BindView(R.id.tv_card_days)
@@ -59,13 +57,10 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
     TextView tv_blance;
     @BindView(R.id.tv_gamebean)
     TextView tvGamebean;
-    @BindView(R.id.rl_gamebean)
-    RelativeLayout rlGamebean;
-
-    private List<View> viewList = new ArrayList<>();
-    private int type = 0;
-    private int weekDay = 0;
-    private int mouthDay = 0;
+    private List<View> viewList=new ArrayList<>() ;
+    private int type=0;
+    private int weekDay=0;
+    private int mouthDay=0;
 
     /**
      * 图片轮播指示个图
@@ -80,7 +75,6 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
     private CardView mCardView1;
     private CardView mCardView2;
     private CardView mCardView3;
-
     @Override
     protected int getLayoutId() {
         return R.layout.layout_account_wallet;
@@ -108,7 +102,6 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
         if(!TextUtils.isEmpty(JCUtils.GAMEJD)){
             tvGamebean.setText(JCUtils.GAMEJD);
         }
-
     }
 
     @OnClick({R.id.image_back, R.id.tv_recharge_detail,

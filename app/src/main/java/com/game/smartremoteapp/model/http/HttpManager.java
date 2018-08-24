@@ -35,21 +35,23 @@ public class HttpManager {
     private static HttpManager httpManager;
     private Retrofit retrofit;
     private SmartService smartService;
-
-    public static synchronized HttpManager getInstance() {
+    private   static  String baseUri;;
+    public static synchronized HttpManager getInstance( ) {
         if (httpManager == null) {
             httpManager = new HttpManager();
         }
         return httpManager;
     }
-
+    public static void setBaseUrl(String mBaseUrl) {
+        baseUri=mBaseUrl;
+    }
     private HttpManager() {
         Gson gson = new GsonBuilder().create();
         retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(HttpInstance.getInstance().getClient())
-                .baseUrl(UrlUtils.VIDEO_ROOT_URL)
+                .baseUrl(baseUri)
                 .build();
         smartService = retrofit.create(SmartService.class);
     }
@@ -697,6 +699,29 @@ public class HttpManager {
         Observable<NowPayBean<OrderBean>> o =smartService.getNowPayOrder(userId,amount,payChannelType,reGold,payOutType,"R",
                 UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
                 o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+
+    //新支付宝支付
+    public void getOrderAlipay( String userId, String pid , String payOutType, RequestSubscriber<Result<AlipayBean>> subscriber) {
+        Observable<Result<AlipayBean>> o =smartService.getApaliyPayOrder(userId,pid, Utils.appVersion,payOutType,"R",
+                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    // 现在微信支付
+    public void getNowWXPayOrder( String userId, String pid,String payChannelType,  String payOutType, RequestSubscriber<NowPayBean<OrderBean>> subscriber) {
+        Observable<NowPayBean<OrderBean>> o =smartService.getNowWXPayOrder(userId,pid,payChannelType,Utils.appVersion,payOutType,"R",
+                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+        o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

@@ -197,6 +197,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1.0"
+                        android:visibility="gone"
                         android:src="@drawable/coin_1_n" />
 
                     <ImageView
@@ -204,7 +205,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_5_n" />
 
@@ -213,7 +214,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_10_n" />
 
@@ -222,7 +223,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_20_n" />
 
@@ -231,7 +232,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
                         android:layout_weight="1.0"
                         android:src="@drawable/coin_50_n" />
                 </LinearLayout>

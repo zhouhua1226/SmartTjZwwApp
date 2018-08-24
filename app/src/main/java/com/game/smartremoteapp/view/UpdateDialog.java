@@ -26,7 +26,7 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
 
     private final static String TAG = "UpdateDialog";
     private Context mtx;
-    private TextView tv_title;//提示
+    private TextView tv_title,tv_context;//提示
     private Button dl_btn_confirm;//确定
 
     public UpdateDialog(Context context) {
@@ -64,11 +64,32 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
      * @param title
      */
     public void setDialogTitle(String title) {
-        tv_title.setText(title);
+        tv_title.setText( "有新版本（"+title+"）将要跟新");
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param title
+     */
+    public void setDialogContext(String title) {
+        if(title!=null) {
+            StringBuilder sb = new StringBuilder();
+            String a[] = title.split(" ");
+            for (int i = 0; i < a.length; i++) {
+                if(i==(a.length-1) ){
+                    sb.append(a[i]);
+                }else{
+                    sb.append(a[i] + "\n");
+                }
+            }
+            tv_context.setText(sb.toString());
+        }
     }
 
     public void findView() {
-        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_title = (TextView) findViewById(R.id.update_title);
+        tv_context = (TextView) findViewById(R.id.update_context);
         dl_btn_confirm = (Button) findViewById(R.id.update_sure_btn);
     }
 

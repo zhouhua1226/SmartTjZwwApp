@@ -89,11 +89,13 @@ public class DownloadManagerUtil {
                 Intent intent = new Intent(
                         android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(Uri.parse("package:" + packageName));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
 
             } catch (ActivityNotFoundException e) {
                 Intent intent = new Intent(
                         android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
             return false;

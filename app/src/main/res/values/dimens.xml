@@ -286,7 +286,9 @@
     <dimen name="land_userlogin_erro_text_width">193.3dp</dimen>
     <dimen name="land_edituser_erro_text_width">193.3dp</dimen>
 
-
+    <dimen name="textandiconmargin">10dp</dimen>
+    <dimen name="progress_bar_size">20dp</dimen>
+    <dimen name="space">10dp</dimen>
 
 
 </resources>

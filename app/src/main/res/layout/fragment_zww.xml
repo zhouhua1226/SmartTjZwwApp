@@ -7,12 +7,13 @@
     android:orientation="vertical">
     <View
         android:layout_width="match_parent"
-        android:background="@color/apptheme_bg"
-        android:layout_height="25dp"/>
+        android:layout_height="25dp"
+        android:background="@color/apptheme_bg" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/apptheme_bg">
+
         <ImageButton
             android:id="@+id/zww_exshop_ibtn"
             android:layout_width="45dp"
@@ -24,8 +25,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/app_titie_home" />
         <ImageButton
             android:id="@+id/zww_integral_ibtn"
@@ -34,96 +35,15 @@
             android:layout_centerVertical="true"
             android:background="@color/apptheme_bg"
             android:src="@drawable/zww_game_tab"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
     </RelativeLayout>
 
-    <com.game.smartremoteapp.view.PullToRefreshView
-        android:id="@+id/mPullToRefreshView"
+    <com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView
+        android:id="@+id/zww_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:scrollbars="none"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp">
-
-                        <com.youth.banner.Banner
-                            android:id="@+id/zww_banner"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"/>
-
-                        <RelativeLayout
-                            android:id="@+id/rl_marqueeview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:background="@color/backgroundcolor"
-                            android:orientation="horizontal"
-                            android:paddingBottom="2dp"
-                            android:paddingTop="2dp"
-                            android:visibility="invisible">
-                            <com.game.smartremoteapp.view.MarqueeView
-                                android:id="@+id/marqueeview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:mvAnimDuration="500"
-                                app:mvInterval="2000"
-                                app:mvTextSize="13sp" />
-                        </RelativeLayout>
-                    </RelativeLayout>
-
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/type_tly"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@color/white"
-                        app:tabIndicatorColor="@color/common_red_text_color"
-                        app:tabIndicatorHeight="0dp"
-                        app:tabSelectedTextColor="@color/common_red_text_color"
-                        app:tabTextAppearance="@style/MyTableyoutTextAppearance"
-                        app:tabTextColor="@color/black" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#dcdcdc" />
-                <com.game.smartremoteapp.view.EmptyLayout
-                    android:id="@+id/zww_emptylayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#eceaea">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/zww_recyclerview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:background="#eceaea"
-                        android:overScrollMode="never"
-                        android:scrollbars="none" />
-                </com.game.smartremoteapp.view.EmptyLayout>
-            </LinearLayout>
-        </ScrollView>
-    </com.game.smartremoteapp.view.PullToRefreshView>
+        android:layout_centerHorizontal="true"
+        android:background="#eceaea"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 </LinearLayout>

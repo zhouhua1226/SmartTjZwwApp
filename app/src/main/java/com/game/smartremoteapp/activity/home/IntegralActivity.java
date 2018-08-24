@@ -18,7 +18,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -31,13 +30,10 @@ import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.ShareDialog;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMWeb;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static com.game.smartremoteapp.utils.PermissionsUtils.PERMISSIOM_EXTERNAL_STORAGE;
 
 /**
@@ -241,52 +237,12 @@ public class IntegralActivity extends BaseActivity{
 
     //分享
     private void shareApp() {
-        new ShareDialog(this, new ShareDialog.OnShareIndexOnClicker() {
+        new ShareDialog(this, new ShareDialog.OnShareSuccessOnClicker() {
             @Override
-            public void ShareIndexOnClicker(int index, final UMWeb web, final SHARE_MEDIA shareMedia) {
-                new ShareAction(IntegralActivity.this)
-                        .withMedia(web)
-                        .setPlatform(shareMedia)
-                        .setCallback(shareListener).share();
+            public void onShareSuccess() {
+                fresh();
             }
         });
     }
 
-
-    private UMShareListener shareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA platform) {
-        }
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            shareGame();
-        }
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(getApplicationContext(),"分享失败"+t.getMessage(),Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(getApplicationContext(),"分享取消",Toast.LENGTH_SHORT).show();
-        }
-    };
-    private void shareGame(){
-        HttpManager.getInstance().shareGame(UserUtils.USER_ID ,new RequestSubscriber<Result<Void>>() {
-            @Override
-            public void _onSuccess(Result<Void> loginInfoResult) {
-                if(loginInfoResult.getCode()==0){
-                    Toast.makeText(getApplicationContext(),"分享成功",Toast.LENGTH_SHORT).show();
-                    fresh();
-                }
-            }
-            @Override
-            public void _onError(Throwable e) {
-            }
-        });
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
 }
