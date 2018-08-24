@@ -28,6 +28,15 @@ public class VideoBackBean implements Serializable{
     private String POST_STATE;
     private String SEND_ORDER_ID;
     private String CREATE_DATE;
+    private String MACHINE_TYPE;//娃娃机类型 1、娃娃机 2、推币机 3、金币机
+
+    public String getMACHINE_TYPE() {
+        return MACHINE_TYPE;
+    }
+
+    public void setMACHINE_TYPE(String MACHINE_TYPE) {
+        this.MACHINE_TYPE = MACHINE_TYPE;
+    }
 
     public String getCREATE_DATE() {
         return CREATE_DATE;

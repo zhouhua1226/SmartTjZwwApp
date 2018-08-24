@@ -87,6 +87,7 @@ public class MyCtachRecordActivity extends BaseActivity {
     private List<Integer> isSelect=new ArrayList<>();  //-1为已发货或已兑换  0为未选中  1为已选中
     private List<Integer> num = new ArrayList<>();
     private List<VideoBackBean> videoList = new ArrayList<>();
+    private List<VideoBackBean> mVideoList = new ArrayList<>();
     private List<VideoBackBean> selectList = new ArrayList<>();
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
@@ -135,7 +136,6 @@ public class MyCtachRecordActivity extends BaseActivity {
             mycatchrecodFhsureImage.setVisibility(View.GONE);
             mycatchrecodDialogImage.setVisibility(View.GONE);
         }
-
     }
 
     private void onClick() {
@@ -148,7 +148,6 @@ public class MyCtachRecordActivity extends BaseActivity {
         myCenterAdapter.setOnItemClickListener(new MyCenterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
                 if (isSelect.get(position)== -1) {
                     Intent intent = new Intent(context, RecordGameActivty.class);
                     Bundle bundle = new Bundle();
@@ -156,10 +155,6 @@ public class MyCtachRecordActivity extends BaseActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-//                    view.setBackgroundResource(R.drawable.mycatchrecord_select);
-//                    num.add(position);
-//                    selectList.add(videoList.get(position));
-//                    mycatchrecodSelectnumTv.setText("已选中"+selectList.size()+"个娃娃");
                     if (isSelect.get(position)==1) {
                         isSelect.set(position,0);
                         view.setBackgroundResource(R.drawable.mycatchrecord_unselect);
@@ -181,12 +176,8 @@ public class MyCtachRecordActivity extends BaseActivity {
                         gold+=Integer.parseInt(selectList.get(num.indexOf(position)).getCONVERSIONGOLD());
                         mycatchrecodSelectgoldTv.setText("一共可兑换"+gold+"金币");
                     }
-
-
                 }
-
             }
-
             @Override
             public void onItemLongClick(View view, int position) {
                 startActivity(new Intent(MyCtachRecordActivity.this, RecordGameTwoActivity.class));
@@ -199,24 +190,24 @@ public class MyCtachRecordActivity extends BaseActivity {
         HttpManager.getInstance().getVideoBackList(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
-                videoList = result.getData().getPlayback();
-
-                if (videoList.size() != 0) {
+                mVideoList = result.getData().getPlayback();
+                if (mVideoList.size() != 0) {
                     mycatchrecodFailTv.setVisibility(View.GONE);
                     //myCenterAdapter.notify(getCatchNum(removeDuplicate(videoList),videoReList));
-                    myCenterAdapter.notify(videoList);
-                    for (int i = 0; i < videoList.size(); i++) {
-                        if (videoList.get(i).getPOST_STATE().equals("0")) {
-                            islist.add(false);
-                            isList.add(false);
-                            isSelect.add(0);
-                        } else {
-                            islist.add(true);
-                            isList.add(true);
-                            isSelect.add(-1);
-
+                    for (int i = 0; i < mVideoList.size(); i++) {
+                        if (TYPE.equals("1")) { //1 邮寄
+                            if (mVideoList.get(i).getMACHINE_TYPE().equals("1")) {
+                                videoList.add(mVideoList.get(i));
+                                setPostState(mVideoList.get(i));
+                            }
+                        } else {  //  2兑换
+                            if (!mVideoList.get(i).getMACHINE_TYPE().equals("2")) {
+                                videoList.add(mVideoList.get(i));
+                                setPostState(mVideoList.get(i));
+                            }
                         }
                     }
+                    myCenterAdapter.notify(videoList);
                 } else {
                     LogUtils.logi("个人中心, 暂无数据");
                     mycatchrecodRecyclerview.setVisibility(View.GONE);
@@ -231,7 +222,17 @@ public class MyCtachRecordActivity extends BaseActivity {
             }
         });
     }
-
+  private void setPostState(VideoBackBean  mVideoBackBean){
+      if (mVideoBackBean.getPOST_STATE().equals("0")) {
+          islist.add(false);
+          isList.add(false);
+          isSelect.add(0);
+      } else {
+          islist.add(true);
+          isList.add(true);
+          isSelect.add(-1);
+      }
+  }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
