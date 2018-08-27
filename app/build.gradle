@@ -69,15 +69,15 @@ android {
         abortOnError false
     }
 
-    dexOptions{
+    dexOptions {
         incremental false
         javaMaxHeapSize "4G"
         preDexLibraries = false
     }
 }
 
-repositories{
-    flatDir{
+repositories {
+    flatDir {
         dirs 'libs'
     }
 }
@@ -117,7 +117,6 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     //最新版本
     compile files('libs/umeng-analytics-v6.1.0.jar')
-    compile files('libs/socket_api_release_v1.0.3.jar')
     compile 'com.orhanobut:logger:2.1.1'
     compile files('libs/ipaynow_base_v2.1.5_api1.0.0.jar')
     compile files('libs/SocialSDK_QQ_Simplify.jar')

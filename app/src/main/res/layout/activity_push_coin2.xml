@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ctrl.view.PushCoin2Activity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <SurfaceView
+            android:id="@+id/coin2_play_video_sv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/coin2_start_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="85dp"
+                android:text="Start" />
+
+            <RelativeLayout
+                android:layout_marginBottom="85dp"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/coin2_ctrl_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/coin2_play_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Play" />
+
+                <Button
+                    android:layout_marginStart="50dp"
+                    android:id="@+id/coin2_swap_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/coin2_play_btn"
+                    android:text="Swap" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/coin2_state_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="45dp"
+                android:text="TextView"
+                android:textColor="@color/recharge_red_color"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/coin2_info_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="46dp"
+                android:layout_marginTop="135dp">
+
+                <TextView
+                    android:id="@+id/coin2_bingo_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="bingo"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="45sp" />
+
+                <TextView
+                    android:textColor="@color/brown"
+                    android:id="@+id/coin2_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/coin2_bingo_tv"
+                    android:layout_centerHorizontal="true"
+                    android:text="0"
+                    android:textSize="45sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>

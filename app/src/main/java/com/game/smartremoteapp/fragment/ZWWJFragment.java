@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.view.CtrlActivity;
+import com.game.smartremoteapp.activity.ctrl.view.PushCoin2Activity;
 import com.game.smartremoteapp.activity.ctrl.view.PushCoinActivity;
 import com.game.smartremoteapp.activity.home.GameCenterActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
@@ -231,9 +232,9 @@ public class ZWWJFragment extends BaseFragment   {
             LogUtils.loge("房间推流地址2=" + url2);
             if (!TextUtils.isEmpty(url2) && !TextUtils.isEmpty(url1)) {
                 String type = currentRoomBeens.get(po).getDeviceType();
-                if (!TextUtils.isEmpty(type) && type.equals("2")) {
+                if (!TextUtils.isEmpty(type)) {
                     //TODO 推币机处理
-                    enterCoinNext(url1, url2);
+                    enterCoinNext(url1, url2, type);
                     return;
                 }
                 enterNext(currentRoomBeens.get(po).getDollName(),
@@ -252,8 +253,16 @@ public class ZWWJFragment extends BaseFragment   {
 
 
     //TODO 正式环境统一处理
-    private void enterCoinNext(String camera1, String camera2) {
-        Intent intent = new Intent(getActivity(), PushCoinActivity.class);
+    private void enterCoinNext(String camera1, String camera2, String type) {
+        Intent intent = null;
+        if (type.equals("2")) {
+            intent = new Intent(getActivity(), PushCoinActivity.class);
+        } else if (type.equals("3")) {
+            intent = new Intent(getActivity(), PushCoin2Activity.class);
+        }
+        if (intent == null) {
+            return;
+        }
         intent.putExtra(Utils.TAG_URL_MASTER, camera1);
         intent.putExtra(Utils.TAG_URL_SECOND, camera2);
         startActivity(intent);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -14,6 +15,7 @@ import com.gatz.netty.observer.HandlerObserver;
 import com.gatz.netty.observer.RequestSubscriber;
 import com.gatz.netty.observer.SuberInfo;
 import com.hwangjr.rxbus.RxBus;
+import com.iot.game.pooh.server.entity.json.Coin2ControlResponse;
 import com.iot.game.pooh.server.entity.json.CoinControlResponse;
 import com.iot.game.pooh.server.entity.json.GetStatusResponse;
 import com.iot.game.pooh.server.entity.json.MoveControlResponse;
@@ -73,6 +75,7 @@ public class SmartRemoteService extends Service {
                     Utils.connectStatus = ConnectResultEvent.CONNECT_SUCCESS;
                     RxBus.get().post(Utils.TAG_CONNECT_SUCESS, Utils.TAG_CONNECT_SUCESS);
                 }
+                Log.e(TAG, "PING_SUCCESS！");
             } else if (tag.equals(ConnectResultEvent.GATEWAY_UNEXIST) ||
                     (tag.equals(ConnectResultEvent.CONNECT_FAILURE))) {
                 if (!Utils.connectStatus.equals(ConnectResultEvent.CONNECT_FAILURE)) {
@@ -116,11 +119,13 @@ public class SmartRemoteService extends Service {
             } else if (tag.equals(ConnectResultEvent.PUSH_COIN_RESPONESE)) {
                 CoinControlResponse coinControlResponse = (CoinControlResponse) objs[0];
                 RxBus.get().post(Utils.TAG_COIN_RESPONSE, coinControlResponse);
-            }
-            else if (tag.equals(ConnectResultEvent.PUSH_COIN_BUSY)) {
+            } else if (tag.equals(ConnectResultEvent.PUSH_COIN_BUSY)) {
                 RxBus.get().post(Utils.TAG_COIN_DEVICE_STATE, "cbusy");
             } else if (tag.equals(ConnectResultEvent.PUSH_COIN_FREE)) {
                 RxBus.get().post(Utils.TAG_COIN_DEVICE_STATE, "cfree");
+            } else if (tag.equals(ConnectResultEvent.PUSH_COIN2_RESPONSE)) {
+                Coin2ControlResponse coin2ControlResponse = (Coin2ControlResponse) objs[0];
+                RxBus.get().post(Utils.TAG_COIN_RESPONSE, coin2ControlResponse);
             }
         }
 

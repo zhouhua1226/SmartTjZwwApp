@@ -132,7 +132,7 @@ public class UrlUtils {
     public static final String SOCKET_IP_TEST="47.100.8.129";//123.206.120.46(壕鑫正式)
 
     //彩票url
-    public final static String CPURL = "http://60.55.47.172:8000/ajax/AppGateway.ashx";   	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
+    public final static String CPURL = "http://106.75.143.0/ajax/AppGateway.ashx";   	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
 
     //
     public static final String ADVERTYURL="http://111.231.139.61:18081/jc51/index.html";
@@ -365,10 +365,10 @@ public class UrlUtils {
     public static final String ORDERAPALIYTRADENEW = "/pooh-web/app/pay/getTradeOrderAlipayVer";
 
     //彩票游戏登录
-    public static final String CPGAMELOGINURL=URL + "/pooh-web/app/Jc51H5Game/login";
+    public static final String CPGAMELOGINURL="/pooh-web/app/Jc51H5Game/login";
 
     //金币兑换金豆
-    public static final String COINEXBEANSURL=URL + "/pooh-web/app/Jc51H5Game/getGoldenbean";
+    public static final String COINEXBEANSURL="/pooh-web/app/Jc51H5Game/getGoldenbean";
 
 
 }

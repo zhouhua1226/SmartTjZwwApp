@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initNetty();
         RxBus.get().register(this);
         initData();
-        checkVersion();
+        //checkVersion();
         getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
     }
 

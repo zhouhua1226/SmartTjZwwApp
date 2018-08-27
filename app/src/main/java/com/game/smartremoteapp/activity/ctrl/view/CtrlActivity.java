@@ -286,7 +286,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     protected void initView() {
         ButterKnife.bind(this);
         RxBus.get().register(this);
-        NettyUtils.sendRoomInCmd();
+        NettyUtils.sendRoomInCmd("normal");
         ctrlGifView.setVisibility(View.VISIBLE);
         ctrlGifView.setEnabled(false);
         ctrlGifView.setMovieResource(R.raw.ctrl_video_loading);
@@ -1200,7 +1200,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
             Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
             ctrlStatusIv.setImageResource(R.drawable.point_green);
-            NettyUtils.sendRoomInCmd();
+            NettyUtils.sendRoomInCmd("normal");
             //TODO 后续修改获取网关状态接口
             NettyUtils.sendGetDeviceStatesCmd();
             isCurrentConnect = true;
@@ -1421,7 +1421,6 @@ public class CtrlActivity extends Activity implements IctrlView {
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG, "获取结果=" + loginInfoResult.getMsg());
                 if (loginInfoResult.getMsg().equals("success")) {
                     UserBean bean = loginInfoResult.getData().getAppUser();
                     if (bean != null) {

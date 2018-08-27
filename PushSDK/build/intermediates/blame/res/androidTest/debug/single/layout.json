@@ -2,5 +2,9 @@
     {
         "merged": "D:\\firstwwProject\\SmartTjZwwApp\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
         "source": "D:\\firstwwProject\\SmartTjZwwApp\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
+    },
+    {
+        "merged": "D:\\zww\\tianji\\SmartTjZwwApp\\PushSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\upush_notification.xml",
+        "source": "D:\\zww\\tianji\\SmartTjZwwApp\\PushSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\upush_notification.xml"
     }
 ]
