@@ -686,7 +686,7 @@ public class Utils {
     * @return 是整数返回true,否则返回false
    */
     public final static boolean isNumeric(String s) {
-        if (s != null && !"".equals(s.trim()))
+        if (!s.isEmpty()&&s != null && !"".equals(s.trim()))
             return s.matches("^[0-9]*$");
         else
             return false;

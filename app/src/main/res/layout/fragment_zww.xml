@@ -42,8 +42,6 @@
         android:id="@+id/zww_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:background="#eceaea"
-        android:overScrollMode="never"
         android:scrollbars="none" />
 </LinearLayout>

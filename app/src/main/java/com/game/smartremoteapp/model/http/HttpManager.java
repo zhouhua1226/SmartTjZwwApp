@@ -35,7 +35,7 @@ public class HttpManager {
     private static HttpManager httpManager;
     private Retrofit retrofit;
     private SmartService smartService;
-    private   static  String baseUri;;
+    private   static  String baseUri="http://47.100.15.18:8080";;
     public static synchronized HttpManager getInstance( ) {
         if (httpManager == null) {
             httpManager = new HttpManager();
@@ -360,7 +360,13 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-
+    public void getBannerNewList(String apkName,RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o =smartService.getBannernewList(apkName,UrlUtils.LOGIN_CHANNEL);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
     //获取轮播列表
     public void getBannerList(Subscriber<Result<HttpDataInfo>> subscriber){
         Observable<Result<HttpDataInfo>> o =smartService.getBannerList();
@@ -754,5 +760,15 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+    public void getBeanEXGold(String userId,String uid, String beanNum, RequestSubscriber<JCResult> subscriber) {
+        Observable<JCResult> o = smartService.getBeanEXGold(userId, uid,beanNum);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
 
 }

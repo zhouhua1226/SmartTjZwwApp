@@ -115,6 +115,10 @@ public class MyCtachRecordActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Log.e(TAG,"游戏记录查询userId="+ UserUtils.USER_ID);
+        if(videoList!=null&&videoList.size()>0&&myCenterAdapter!=null){
+            videoList.clear();
+            myCenterAdapter.notifyDataSetChanged();
+        }
         getVideoBackList(UserUtils.USER_ID);
     }
 
@@ -207,18 +211,20 @@ public class MyCtachRecordActivity extends BaseActivity {
                             }
                         }
                     }
-                    myCenterAdapter.notify(videoList);
+                    if(videoList.size()>0){
+                        myCenterAdapter.notify(videoList);
+                    }else{
+                        emtifyView();
+                    }
                 } else {
                     LogUtils.logi("个人中心, 暂无数据");
-                    mycatchrecodRecyclerview.setVisibility(View.GONE);
-                    mycatchrecodFailTv.setVisibility(View.VISIBLE);
+                    emtifyView();
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
-                mycatchrecodRecyclerview.setVisibility(View.GONE);
-                mycatchrecodFailTv.setVisibility(View.VISIBLE);
+                emtifyView();
             }
         });
     }
@@ -233,6 +239,11 @@ public class MyCtachRecordActivity extends BaseActivity {
           isSelect.add(-1);
       }
   }
+
+    private void emtifyView(){
+        mycatchrecodRecyclerview.setVisibility(View.GONE);
+        mycatchrecodFailTv.setVisibility(View.VISIBLE);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

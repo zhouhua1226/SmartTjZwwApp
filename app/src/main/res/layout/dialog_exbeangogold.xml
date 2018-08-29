@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="220dp"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/exgoldenbean_dialog_bg">
+    <LinearLayout
+       android:id="@+id/rl_edit_bean"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_dialog_exgodl_shape"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:layout_height="40dp">
+        <EditText
+            android:id="@+id/exgoldenbean_dialog_beannum_tv"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@color/backcolor"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:maxLength="8"
+            android:layout_marginLeft="8dp"
+            android:gravity="center|left"
+            android:textColor="@color/black"
+            android:hint="请输入整数金豆"
+            android:inputType="number"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/exgoldenbean_dialog_goldnum_tv"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:textSize="14sp"
+            android:gravity="center|right"
+            android:textColor="@color/brilliant_red"
+            tools:text="10金币"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_exchange_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/brilliant_red"
+        android:layout_below="@+id/rl_edit_bean"
+        android:layout_marginLeft="20dp"
+        tools:text="*兑换比列100金豆==1金币"
+        android:layout_marginTop="8dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tv_exchange_rate"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        >
+        <Button
+            android:id="@+id/exgoldenbean_dialog_cancle_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/exgoldenbean_dialog_cancle"
+            android:layout_marginRight="20dp" />
+        <Button
+            android:id="@+id/exgoldenbean_dialog_sure_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/exgoldenbean_dialog_sure" />
+    </LinearLayout>
+
+</RelativeLayout>

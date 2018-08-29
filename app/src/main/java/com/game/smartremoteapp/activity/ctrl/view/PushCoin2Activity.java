@@ -1,6 +1,10 @@
 package com.game.smartremoteapp.activity.ctrl.view;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Movie;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,14 +12,27 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
+import com.game.smartremoteapp.activity.home.GameInstrcutionActivity;
+import com.game.smartremoteapp.activity.home.RechargeActivity;
+import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.UserBean;
+import com.game.smartremoteapp.model.http.HttpManager;
+import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
+import com.game.smartremoteapp.view.CatchDollResultDialog;
+import com.game.smartremoteapp.view.GifView;
+import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.gatz.netty.global.ConnectResultEvent;
 import com.gatz.netty.utils.NettyUtils;
 import com.hwangjr.rxbus.RxBus;
@@ -23,13 +40,13 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.iot.game.pooh.server.entity.json.Coin2ControlResponse;
-import com.iot.game.pooh.server.entity.json.CoinControlResponse;
 import com.iot.game.pooh.server.entity.json.app.AppInRoomResponse;
 import com.iot.game.pooh.server.entity.json.app.AppOutRoomResponse;
 import com.iot.game.pooh.server.entity.json.enums.CoinStatusType;
 import com.iot.game.pooh.server.entity.json.enums.ReturnCode;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,26 +59,40 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     @BindView(R.id.coin2_play_video_sv)
     SurfaceView mPlaySv;
 
-    @BindView(R.id.coin2_start_btn)
-    Button startBtn;
+    @BindView(R.id.player_iv)
+    ImageView player_iv;
+    @BindView(R.id.player_name_tv)
+    TextView player_name;
+    @BindView(R.id.tv_room_peoples)
+    TextView room_peoples;
 
-    @BindView(R.id.coin2_ctrl_rl)
-    RelativeLayout ctrlRl;
-    @BindView(R.id.coin2_play_btn)
-    Button playBtn;
-    @BindView(R.id.coin2_swap_btn)
-    Button swapBtn;
+    @BindView(R.id.startgame_ll)
+    LinearLayout startBtn;
+    @BindView(R.id.ctrl_dollgold_tv)
+    TextView ctrl_dollgold;
+    @BindView(R.id.ctrl_dollstate_tv)
+    TextView ctrl_dollstate;
 
-    @BindView(R.id.coin2_info_rl)
-    RelativeLayout infoRl;
-    @BindView(R.id.coin2_time_tv)
-    TextView timeTv;
-    @BindView(R.id.coin2_bingo_tv)
-    TextView bingoTv;
-
+    @BindView(R.id.playgame_rl)
+    RelativeLayout playgame_rl;
+    @BindView(R.id.ctrl_play_dollgold_tv)
+    TextView dollgold_tv;
+    @BindView(R.id.ll_wiper)
+    LinearLayout ll_wiper;
+    @BindView(R.id.iv_add_recharge)
+    ImageView iv_add_recharge;
+    @BindView(R.id.tv_user_golds)
+    TextView user_golds;
+    @BindView(R.id.tv_time_count)
+    TextView time_count;
     @BindView(R.id.coin2_state_tv)
     TextView stateTv;
-
+    @BindView(R.id.ctrl_gif_view)
+    GifView ctrlGifView;
+    @BindView(R.id.ctrl_fail_iv)
+    ImageView ctrlFailIv;
+    @BindView(R.id.coin_gif_view)
+    GifView coinGif;
     private static final String TAG = "PushCoin2Activity-";
     private String currentUrl;
     private String playUrlMain;
@@ -76,13 +107,19 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     private static final int TAG_MY_START = 0x10f0;
     private static final int TAG_OTHER_START = 0x10f1;
     private static final int TAG_DEVICE_FREE = 0x10ff;
-
     private static final int TIME_OUT = 30;
 
-    static class UiHandler extends Handler {
-        WeakReference<PushCoin2Activity> ac;
-        private UiHandler(PushCoin2Activity pushCoin2Activity) {
-            ac = new WeakReference<>(pushCoin2Activity);
+    private String money="0";
+    private String userMoney="0";
+    private List<String> userInfos = new ArrayList<>();  //房屋内用户电话信息
+
+    private MediaPlayer mediaPlayer1;
+    private MediaPlayer mediaPlayer2;
+    private boolean isMePlay=false;
+     static   class UiHandler extends Handler {
+           WeakReference<PushCoin2Activity> ac;
+          private UiHandler(PushCoin2Activity pushCoin2Activity) {
+               ac = new WeakReference<>(pushCoin2Activity);
         }
 
         @Override
@@ -92,10 +129,20 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             if (activity == null) {
                 return;
             }
-            int what = msg.what;
-            if (what == 0) {
-                activity.timeTv.setText(String.valueOf(activity.timeCount));
-                activity.timeCount --;
+            switch (msg.what) {
+                case 0:
+                    activity.time_count.setText(activity.timeCount+"s");
+                    activity.timeCount--;
+                    break;
+                case 1:
+                    activity.ctrlGifView.setVisibility(View.GONE);
+                    activity.ctrlFailIv.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    activity.ctrlGifView.setVisibility(View.GONE);
+                    if ( activity.ctrlFailIv.getVisibility() == View.VISIBLE) {
+                        activity.ctrlFailIv.setVisibility(View.GONE);
+                    }
             }
         }
     }
@@ -112,40 +159,165 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     protected void onDestroy() {
         super.onDestroy();
         RxBus.get().unregister(this);
+        release();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        release();
+    }
+    private void release(){
         ctrlCompl.stopRecordView();
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
         ctrlCompl.stopTimeCounter();
         ctrlCompl.sendCmdOutRoom();
-        ctrlCompl = null;
-    }
+        if (mediaPlayer1 != null && mediaPlayer1.isPlaying()) {
+            mediaPlayer1.stop();
+            mediaPlayer1.release();
+            mediaPlayer1 = null;
+        }
+        if (mediaPlayer2 != null && mediaPlayer2.isPlaying()) {
+            mediaPlayer2.stop();
+            mediaPlayer2.release();
+            mediaPlayer2 = null;
+        }
 
+    }
     private void initData() {
         RxBus.get().register(this);
         NettyUtils.sendRoomInCmd("coin2push");
-        NettyUtils.pingRequest(); //判断连接
+        ctrlGifView.setVisibility(View.VISIBLE);
+        ctrlGifView.setEnabled(false);
+        ctrlGifView.setMovieResource(R.raw.ctrl_video_loading);
+        ctrlFailIv.setVisibility(View.GONE);
+        coinGif.setVisibility(View.GONE);
+        coinGif.setEnabled(false);
+
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
+        money=getIntent().getStringExtra(Utils.TAG_DOLL_GOLD);
+        money=Integer.parseInt(money)*10+"";
+
         ctrlCompl = new CtrlCompl(this, this);
         currentUrl = playUrlMain;
         ctrlCompl.startPlayVideo(mPlaySv, currentUrl);
+
         stateTv.setText("TAG_CONNECT_SUCESS");
         if (Utils.connectStatus.equals(ConnectResultEvent.CONNECT_FAILURE)) {
             stateTv.setText("网关异常");
         }
-    }
 
-    @OnClick({R.id.coin2_start_btn, R.id.coin2_play_btn, R.id.coin2_swap_btn})
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.coin2_start_btn) {
-            NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_START);
-        } else if (id == R.id.coin2_play_btn) {
-            NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_PLAY);
-        } else if (id == R.id.coin2_swap_btn) {
-            NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_SWAP);
+        player_name.setText(UserUtils.NickName);
+        Glide.with(this).load(UserUtils.UserImage).asBitmap().
+                error(R.mipmap.app_mm_icon).
+                transform(new GlideCircleTransform(this)).into(player_iv);
+        ctrl_dollgold.setText(money + "/次");
+        dollgold_tv.setText(money);
+        userMoney=UserUtils.UserBalance;
+        user_golds.setText(userMoney);
+
+        getUserDate(UserUtils.USER_ID);
+        mediaPlayer();
+    }
+    private void mediaPlayer(){
+        mediaPlayer2 = MediaPlayer.create(this, R.raw.down_coin);
+        // 设置音频流的类型
+        mediaPlayer2.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer2.setLooping(false);
+
+        mediaPlayer1 = MediaPlayer.create(this, R.raw.push_coin);
+        // 设置音频流的类型
+        mediaPlayer1.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer1.setLooping(false);
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Utils.showLogE(TAG, "onRestart");
+        if (ctrlFailIv.getVisibility() == View.VISIBLE) {
+            ctrlFailIv.setVisibility(View.GONE);
+        }
+        ctrlGifView.setVisibility(View.VISIBLE);
+        ctrlCompl.startPlayVideo(mPlaySv, currentUrl);
+        NettyUtils.sendRoomInCmd("coin2push");
+        if (!Utils.isEmpty(UserUtils.USER_ID)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getUserDate(UserUtils.USER_ID);    //2秒后获取用户余额并更新UI
+                }
+            }, 2000);
         }
     }
 
+    private void playPushMusic() {
+         mediaPlayer1.start();
+    }
+    private void playDownMusic() {
+         mediaPlayer2.start();
+    }
+    private void  pushCoinAnimat(){
+        Movie mMovie = Movie.decodeStream(getResources().openRawResource(
+                R.raw.coin_push_out));
+        coinGif.setVisibility(View.VISIBLE);
+        coinGif.setMovie(mMovie);
+        int dur=mMovie.duration();
+        //gif动画播放一次
+        coinGif.setPaused(false);
+        coinGif.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                coinGif.setPaused(true);
+                coinGif.setVisibility(View.GONE);
+            }
+        },dur);
+        Log.e(TAG,"dur===="+dur);
+    }
+
+
+    @OnClick({R.id.startgame_ll, R.id.playgame_rl, R.id.ll_wiper,
+              R.id.coin2_back, R.id.coin2_why, R.id.ll_message,R.id.recharge_ll})
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.startgame_ll:
+                if (judgeMoney()) {
+                    NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_START);
+                } else {
+                    setCatchResultDialog(0);
+                }
+                break;
+            case R.id.playgame_rl:
+                if (judgeMoney()) {
+                    NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_PLAY);
+                } else {
+                    setCatchResultDialog(0);
+                }
+                break;
+            case R.id.ll_wiper:
+                NettyUtils.sendPushCoin2Cmd(NettyUtils.USER_PUSH_COIN_SWAP);
+                break;
+            case R.id.coin2_back:
+                finish();
+                break;
+            case R.id.coin2_why:
+                startActivity(new Intent(this, GameInstrcutionActivity.class));
+                break;
+            case R.id.recharge_ll:
+                startActivity(new Intent(this, RechargeActivity.class));
+                break;
+        }
+
+    }
+    private boolean judgeMoney() {
+        if(!userMoney.isEmpty()&&!money.isEmpty()) {
+            if (Integer.parseInt(userMoney) >= Integer.parseInt(money)) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_ROOM_IN),
             @Tag(Utils.TAG_ROOM_OUT),
@@ -159,13 +331,43 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
             Log.e(TAG, "appInRoomResponse........" + appInRoomResponse.toString());
             Boolean free = appInRoomResponse.getFree();
-            if (!free) {
-                stateTv.setText("网关使用中!");
-                isOwnerUse(TAG_OTHER_START);
+            String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
+            long seq = appInRoomResponse.getSeq();
+
+            if ((seq != -2) && (!Utils.isEmpty(allUsers))) {
+                //TODO  我本人进来了
+                ctrlCompl.sendGetUserInfos(allUsers, true);
+                //是否玩家正在游戏中
+                if (!free) {
+//                    if (appInRoomResponse.getUserId().equals(UserUtils.USER_ID)) {
+//                        isOwnerUse(TAG_MY_START);
+//                    } else {
+//                        isOwnerUse(TAG_OTHER_START);
+//                    }
+                    isOwnerUse(TAG_OTHER_START);
+                    stateTv.setText("网关使用中!");
+                }
+            } else {
+                boolean is = false;
+                if (userInfos.size() == 1) {
+                    is = true;
+                }
+                userInfos.add(appInRoomResponse.getUserId());
+                getUserInfos(userInfos, is);
             }
+
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
             Log.e(TAG, "====" + appOutRoomResponse.toString());
+            long seq = appOutRoomResponse.getSeq();
+            if (seq == -2) {
+                userInfos.remove(appOutRoomResponse.getUserId());
+                if (appOutRoomResponse.getUserId().equals(UserUtils.USER_ID)) {
+                     getUserInfos(userInfos, true);
+                } else {
+                     getUserInfos(userInfos, false);
+                }
+            }
         }
     }
 
@@ -176,29 +378,56 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         }
         CoinStatusType statusType = response.getCoinStatusType();
         if (statusType.name().equals(CoinStatusType.BINGO.name())) {
-            bingCount = bingCount + response.getBingo();
-            bingoTv.setText(String.valueOf(bingCount));
             //刷新定时器
             timeCount = TIME_OUT;
+            if(!Utils.isNumeric(response.getBingo()+"")){
+                return;
+            }
+            if(isMePlay){ //自己玩
+                bingCount = bingCount + response.getBingo();
+                if(response.getBingo()!=null&&response.getBingo()>0) {
+                    if (!userMoney.isEmpty() && !money.isEmpty()) {
+                        userMoney = Integer.parseInt(userMoney) + response.getBingo()*10 + "";
+                        user_golds.setText(userMoney);
+                    }
+                    playDownMusic();
+                }
+            }
+            //  bingoTv.setText(String.valueOf(bingCount));
         } else if (statusType.name().equals(CoinStatusType.START.name())) {
             String uId = response.getUserId();
             if (TextUtils.isEmpty(uId)) {
                 return;
             }
             if (uId.equals(UserUtils.USER_ID)) {
-                isOwnerUse(TAG_MY_START);
+                isOwnerUse(TAG_MY_START);//自己玩
             } else {
-                isOwnerUse(TAG_OTHER_START);
+                isOwnerUse(TAG_OTHER_START);//他人玩
             }
         } else if (statusType.name().equals(CoinStatusType.SWAY.name())) {
-            timeCount = TIME_OUT;
+          //  timeCount = TIME_OUT;
         } else if (statusType.name().equals(CoinStatusType.PLAY.name())) {
             timeCount = TIME_OUT;
-        } else if (statusType.name().equals(CoinStatusType.END.name())) {
+            if(isMePlay) {//自己玩
+                if (!userMoney.isEmpty() && !money.isEmpty()) {
+                    userMoney = Integer.parseInt(userMoney) - Integer.parseInt(money) + "";
+                    user_golds.setText(userMoney);
+                }
+                playPushMusic();
+            }
+
+        } else if (statusType.name().equals(CoinStatusType.END.name())) {//游戏结束
+            Log.e(TAG, "====" + bingCount);
+            if(isMePlay) { //自己玩
+                if(bingCount>0) {
+                    pushCoinAnimat();
+                }
+                getUserDate(UserUtils.USER_ID);
+            }
             isOwnerUse(TAG_DEVICE_FREE);
         }
     }
-
+    //监控网关区
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAT_USING),
                     @Tag(Utils.TAG_CONNECT_ERR),
@@ -208,28 +437,48 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         Log.e(TAG, "网关........" + tag);
         stateTv.setText(tag);
     }
+    //设备状态
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
+            @Tag(Utils.TAG_COIN_DEVICE_STATE)})
+    public void getCoinDeviceState(String state) {
+        Utils.showLogE(TAG, "当前游戏机状态::::" + state);
+        if (state.equals("cbusy")) { //游戏中
 
+        } else if (state.equals("cfree")) {//休闲中
+            isOwnerUse(TAG_DEVICE_FREE);
+        }
+    }
 
     private void isOwnerUse(int is) {
         bingCount = 0;
         timeCount = TIME_OUT;
+        isMePlay=false;
         if (is == TAG_MY_START) {
-            ctrlRl.setVisibility(View.VISIBLE);
-            infoRl.setVisibility(View.VISIBLE);
-            startBtn.setVisibility(View.GONE);
+            isMePlay=true;
+            playgame_rl.setVisibility(View.VISIBLE);
+            ll_wiper.setVisibility(View.VISIBLE);
+            startBtn.setVisibility(View.INVISIBLE);
+            iv_add_recharge.setVisibility(View.INVISIBLE);
+            time_count.setVisibility(View.VISIBLE);
             startTimer();
         } else if (is == TAG_OTHER_START) {
             startBtn.setVisibility(View.VISIBLE);
             startBtn.setEnabled(false);
-            ctrlRl.setVisibility(View.GONE);
-            infoRl.setVisibility(View.GONE);
+            playgame_rl.setVisibility(View.GONE);
+            ll_wiper.setVisibility(View.INVISIBLE);
+            iv_add_recharge.setVisibility(View.VISIBLE);
+            time_count.setVisibility(View.GONE);
+            ctrl_dollstate.setText("排队");
             stopTimer();
         } else if (is == TAG_DEVICE_FREE) {
-            timeTv.setText(String.valueOf(timeCount));
-            bingoTv.setText(String.valueOf(bingCount));
-            ctrlRl.setVisibility(View.GONE);
-            infoRl.setVisibility(View.GONE);
+          //  time_count.setText(String.valueOf(timeCount));
+            time_count.setVisibility(View.GONE);
+         //   bingoTv.setText(String.valueOf(bingCount));
+            playgame_rl.setVisibility(View.GONE);
+            ll_wiper.setVisibility(View.INVISIBLE);
+            iv_add_recharge.setVisibility(View.VISIBLE);
             startBtn.setVisibility(View.VISIBLE);
+            ctrl_dollstate.setText("上机");
             startBtn.setEnabled(true);
             stopTimer();
         }
@@ -254,7 +503,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     }
 
     class Task extends TimerTask {
-
         @Override
         public void run() {
             uiHandler.sendEmptyMessage(0);
@@ -264,59 +512,92 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         }
     }
 
-
     @Override
     public void getTime(int time) {
-
     }
-
     @Override
     public void getTimeFinish() {
-
+        ctrlCompl.stopTimeCounter();
     }
 
     @Override
     public void getUserInfos(List<String> list, boolean is) {
-
+        //当前房屋的人数
+        userInfos = list;
+        int counter = userInfos.size();
+        Utils.showLogE(TAG, "当前房屋的人数::::" + counter);
+        if (counter > 0) {
+            String s = (counter + 20) + "人围观";//线人数 默认20个
+            room_peoples.setText(s);
+        }
     }
-
     @Override
-    public void getRecordErrCode(int code) {
-
-    }
-
+    public void getRecordErrCode(int code) {}
     @Override
-    public void getRecordSuecss() {
-
-    }
-
+    public void getRecordSuecss() {}
     @Override
-    public void getRecordAttributetoNet(String time, String name) {
-
-    }
-
+    public void getRecordAttributetoNet(String time, String name) {}
     @Override
     public void getPlayerErcErrCode(int code) {
-
+        LogUtils.loge("直播失败,错误码:::::" + code, TAG);
+        uiHandler.sendEmptyMessage(1);
     }
-
     @Override
     public void getPlayerSucess() {
-
+        LogUtils.loge("直播Sucess:::::", TAG);
+        uiHandler.sendEmptyMessage(2);
+    }
+    @Override
+    public void getVideoPlayConnect() {}
+    @Override
+    public void getVideoPlayStart() {}
+    @Override
+    public void getVideoStop() {}
+    //获取用户信息接口
+    private void getUserDate(String userId) {
+        HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
+                if (loginInfoResult.getMsg().equals("success")) {
+                    UserBean bean = loginInfoResult.getData().getAppUser();
+                    if (bean != null) {
+                        String balance = bean.getBALANCE();
+                        if (!TextUtils.isEmpty(balance)) {
+                            UserUtils.UserBalance = balance;
+                            userMoney=UserUtils.UserBalance;
+                            user_golds.setText(userMoney);
+                        }
+                    }
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
     }
 
-    @Override
-    public void getVideoPlayConnect() {
+    private void setCatchResultDialog(final int index  ) {
+        final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
+        catchDollResultDialog.setCancelable(false);
+        catchDollResultDialog.show();
+        catchDollResultDialog.setTitle("余额不足！");
+        catchDollResultDialog.setContent("请充值。");
+        catchDollResultDialog.setFail("取消充值");
+        catchDollResultDialog.setSuccess("前往充值");
+        catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
+        catchDollResultDialog.setDialogResultListener(new CatchDollResultDialog.DialogResultListener() {
+            @Override
+            public void getResult(int resultCode) {
+                if(resultCode>0) {
+                    switch (index) {
+                        case 0:
+                            Utils.toActivity(PushCoin2Activity.this, RechargeActivity.class);
+                            break;
 
-    }
-
-    @Override
-    public void getVideoPlayStart() {
-
-    }
-
-    @Override
-    public void getVideoStop() {
-
+                    }
+                }
+                catchDollResultDialog.dismiss();
+            }
+        });
     }
 }

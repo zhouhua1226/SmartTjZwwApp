@@ -19,6 +19,7 @@ import com.game.smartremoteapp.protocol.RspBodyBaseBean;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.EXGoldenBeanDialog;
+import com.game.smartremoteapp.view.ExchangeCoinDialog;
 import com.game.smartremoteapp.view.MyToast;
 
 import butterknife.BindView;
@@ -67,12 +68,18 @@ public class EXGoldenBeanActivity extends BaseActivity {
     protected void initView() {
         ButterKnife.bind(this);
         exgoldenbeanGdnumTv.setText(JCUtils.GAMEJD + JCUtils.JDNAME);
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getGameBeans();
+    }
 
     @OnClick({R.id.image_back, R.id.exgoldenbean_10_iv, R.id.exgoldenbean_20_iv,
             R.id.exgoldenbean_50_iv, R.id.exgoldenbean_100_iv, R.id.exgoldenbean_200_iv,
-            R.id.exgoldenbean_500_iv,R.id.exgoldenbean_gogame_tv})
+            R.id.exgoldenbean_500_iv,R.id.exgoldenbean_gogame_tv,R.id.exgoldenbean_exchange_coin_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -99,9 +106,52 @@ public class EXGoldenBeanActivity extends BaseActivity {
             case R.id.exgoldenbean_gogame_tv:
                 startActivity(new Intent(this,GameCenterActivity.class));
                 break;
+            case R.id.exgoldenbean_exchange_coin_tv:
+                if(Utils.isNumeric(JCUtils.GAMEJD)){
+                    if(Integer.parseInt(JCUtils.GAMEJD)>=100){
+                        showEXBtGDialog(JCUtils.GAMEJD);
+                    }else{
+                        MyToast.getToast(this,"你的金豆不足！").show();
+                    }
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    private void showEXBtGDialog(String beanNum) {
+        ExchangeCoinDialog exGoldenBeanDialog = new ExchangeCoinDialog(this, R.style.easy_dialog_style);
+        exGoldenBeanDialog.setCancelable(true);
+        exGoldenBeanDialog.show();
+        exGoldenBeanDialog.setText(beanNum + "");
+        exGoldenBeanDialog.setDialogResultListener(new  ExchangeCoinDialog.DialogResultListener() {
+            @Override
+            public void getResult(boolean resultCode,String bean) {
+                if (resultCode) {
+                    getBeanEXGold(bean);
+                }
+            }
+        });
+    }
+
+    private void getBeanEXGold(String beanNum) {
+        HttpManager.getInstance().getBeanEXGold(UserUtils.USER_ID,JCUtils.UID,  beanNum,  new RequestSubscriber<JCResult>() {
+            @Override
+            public void _onSuccess(JCResult jcResult) {
+                String error=jcResult.getError();
+                if(error.equals("0")){
+                    JCUtils.GAMEJD=jcResult.getJD();
+                    exgoldenbeanGdnumTv.setText(JCUtils.GAMEJD + JCUtils.JDNAME);
+                    MyToast.getToast(getApplicationContext(),"兑换成功").show();
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+
+            }
+        });
+
     }
 
     private void showEXDialog(final int beanNum) {

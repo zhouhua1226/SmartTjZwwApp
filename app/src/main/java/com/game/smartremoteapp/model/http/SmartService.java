@@ -326,6 +326,13 @@ public interface SmartService {
     @GET(UrlUtils.BANNERURL)
     Observable<Result<HttpDataInfo>> getBannerList();
 
+    //获取轮播列表
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.BANNERURLNEW)
+    Observable<Result<HttpDataInfo>> getBannernewList(@Field(UrlUtils.APKNAME) String apkName,
+                                                      @Field(UrlUtils.CHANNEL) String channel);
+
     //个人排名
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
@@ -764,4 +771,11 @@ public interface SmartService {
     Observable<Result<HttpDataInfo>> getCoinEXGoldenbean(@Field(UrlUtils.USERID) String userId,
                                                          @Field(JCUtils.BEANNUM) String beanNum);
 
+    //CP游戏豆兑换金币
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.BEANEXGOLDURL)
+    Observable<JCResult> getBeanEXGold(@Field("wwjuserid") String userId,
+                                                   @Field("userid") String uid ,
+                                                   @Field(UrlUtils.JD) String  jd);
 }

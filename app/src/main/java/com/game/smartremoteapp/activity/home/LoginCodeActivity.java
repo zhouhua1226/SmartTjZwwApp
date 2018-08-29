@@ -196,11 +196,7 @@ public class LoginCodeActivity extends BaseActivity {
         }
     };
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mUMShareAPI.onActivityResult(requestCode, resultCode, data);
-    }
+
     /**
      * 获取用户信息
      * @param platform
@@ -276,12 +272,6 @@ public class LoginCodeActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUMShareAPI.release();
     }
 
 }

@@ -430,9 +430,14 @@
             android:name=".activity.home.EXGoldenBeanActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".activity.home.GameInstrcutionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
-
     </application>
 
     <supports-screens
@@ -441,4 +446,5 @@
         android:largeScreens="true"
         android:xlargeScreens="true"
         android:anyDensity="true"/>
+
 </manifest>

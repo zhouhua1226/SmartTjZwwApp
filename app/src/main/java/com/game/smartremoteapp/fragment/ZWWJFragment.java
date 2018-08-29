@@ -234,17 +234,21 @@ public class ZWWJFragment extends BaseFragment   {
                 String type = currentRoomBeens.get(po).getDeviceType();
                 if (!TextUtils.isEmpty(type)) {
                     //TODO 推币机处理
-                    enterCoinNext(url1, url2, type);
+                    if(type.equals("1")){
+                        enterNext(currentRoomBeens.get(po).getDollName(),
+                                url1, url2,
+                                room_status,
+                                String.valueOf(currentRoomBeens.get(po).getDollGold()),
+                                currentRoomBeens.get(po).getDollId(),
+                                currentRoomBeens.get(po).getProb(),
+                                currentRoomBeens.get(po).getReward(),
+                                currentRoomBeens.get(po).getDollUrl());
+                    }else{
+                        enterCoinNext(url1, url2, type,String.valueOf(currentRoomBeens.get(po).getDollGold()));
+                    }
                     return;
                 }
-                enterNext(currentRoomBeens.get(po).getDollName(),
-                        url1, url2,
-                        room_status,
-                        String.valueOf(currentRoomBeens.get(po).getDollGold()),
-                        currentRoomBeens.get(po).getDollId(),
-                        currentRoomBeens.get(po).getProb(),
-                        currentRoomBeens.get(po).getReward(),
-                        currentRoomBeens.get(po).getDollUrl());
+
             } else {
                 LogUtils.loge("当前设备没有配置摄像头!");
             }
@@ -253,7 +257,7 @@ public class ZWWJFragment extends BaseFragment   {
 
 
     //TODO 正式环境统一处理
-    private void enterCoinNext(String camera1, String camera2, String type) {
+    private void enterCoinNext( String camera1, String camera2, String type,String dogold) {
         Intent intent = null;
         if (type.equals("2")) {
             intent = new Intent(getActivity(), PushCoinActivity.class);
@@ -263,13 +267,14 @@ public class ZWWJFragment extends BaseFragment   {
         if (intent == null) {
             return;
         }
+        intent.putExtra(Utils.TAG_DOLL_GOLD, dogold);
         intent.putExtra(Utils.TAG_URL_MASTER, camera1);
         intent.putExtra(Utils.TAG_URL_SECOND, camera2);
         startActivity(intent);
     }
 
     private void getBannerList() {
-        HttpManager.getInstance().getBannerList(new RequestSubscriber<Result<HttpDataInfo>>() {
+        HttpManager.getInstance().getBannerNewList(getContext().getPackageName(), new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 if (loginInfoResult.getMsg().equals("success")) {
@@ -350,6 +355,7 @@ public class ZWWJFragment extends BaseFragment   {
             @Override
             public void _onSuccess(Result<RoomListBean> loginInfoResult) {
                 zwwRecyclerview.stopLoadMore();
+
                 if (loginInfoResult.getMsg().equals("success")) {
                     if (loginInfoResult.getData() != null) {
                         List<RoomBean> roomBeens = dealWithRoomStats(loginInfoResult.getData().getDollList());
@@ -389,6 +395,7 @@ public class ZWWJFragment extends BaseFragment   {
                 currentType = String.valueOf(toyTypeBeanList.get(pos - 1).getID());
             }
             currentRoomBeens.clear();
+            zwwAdapter.notifyDataSetChanged();
             getToysByType(currentType, currentPage);
         }
 

@@ -15,7 +15,7 @@ import java.io.File;
  */
 
 public class DownloadReceiver extends BroadcastReceiver {
-    private String title = "汤姆抓娃娃测试.apk";
+    private String title = "汤姆抓娃娃.apk";
 
     @Override
     public void onReceive(Context context, Intent intent) {

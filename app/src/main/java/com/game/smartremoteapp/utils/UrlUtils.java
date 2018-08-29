@@ -27,6 +27,7 @@ public class UrlUtils {
     public static final String PW = "pw";
     public static final String CODE = "code";
     public static final String SMSCODE = "smsCode";
+    public static final String APKNAME = "apkName";
 
     public static final String FACEIMAGE = "base64Image";
     public static final String NICKNANME = "nickName";
@@ -74,6 +75,7 @@ public class UrlUtils {
     public static final String LOGIN_CHANNEL="ANDROID";
     public static final String CHANNELNUM = "channelNum";
     public static final String UID ="uid" ;
+    public static final String JD ="jd" ;
     public static final String NAME ="name" ;
     public static final String GENDER ="gender" ;
     public static final String ICONURL ="iconurl" ;
@@ -132,7 +134,13 @@ public class UrlUtils {
     public static final String SOCKET_IP_TEST="47.100.8.129";//123.206.120.46(壕鑫正式)
 
     //彩票url
+    public final static String GAMEINSTRUCTIONURL = "http://111.231.139.61:18081/docs/20180828/index.html";   	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
+
+    //彩票url
     public final static String CPURL = "http://106.75.143.0/ajax/AppGateway.ashx";   	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
+
+    //金币兑换金豆  	//60.55.47.172:8000(彩票测服)  106.75.143.0(彩票正服)
+    public static final String BEANEXGOLDURL="http://106.75.143.0/WebService/WwjRegister.asmx/JDExchangeJB";
 
     //
     public static final String ADVERTYURL="http://111.231.139.61:18081/jc51/index.html";
@@ -245,6 +253,9 @@ public class UrlUtils {
 
     //轮播接口
     public static final String BANNERURL="/pooh-web/app/runimg/getRunImage";
+
+    //轮播新接口
+    public static final String BANNERURLNEW="/pooh-web/app/runimg/getRunImageNew";
 
     //排行榜当前用户排名接口
     public static final String RANKLISTURL="/pooh-web/app/rank/rankSelfList";

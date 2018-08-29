@@ -1,6 +1,6 @@
 package com.game.smartremoteapp.model.http;
 
-import android.util.Log;
+import com.game.smartremoteapp.utils.LogUtils;
 
 import rx.Subscriber;
 import rx.exceptions.OnErrorFailedException;
@@ -14,13 +14,13 @@ public abstract class RequestSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         try {
-            _onError(e);
-            if(e.getMessage()!=null) {
-                Log.e( "onError",e.getMessage());
+            if(e!=null){
+                _onError(e);
+                LogUtils.loge(e.getMessage(), "onError");
             }
         } catch (OnErrorFailedException e1) {
             if(e1.getMessage()!=null) {
-                Log.e("OnErrorFailedException",e1.toString());
+                LogUtils.loge(e1.getMessage(),  "OnErrorFailedException");
             }
         }
     }
