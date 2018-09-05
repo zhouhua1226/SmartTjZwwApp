@@ -1,7 +1,5 @@
 package com.game.smartremoteapp.activity.ctrl.view;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Movie;
@@ -11,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
@@ -92,13 +91,8 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     GifView ctrlGifView;
     @BindView(R.id.ctrl_fail_iv)
     ImageView ctrlFailIv;
-    @BindView(R.id.recharge_ll)
-    RelativeLayout recharge_ll;
     @BindView(R.id.coin_gif_view)
     GifView coinGif;
-    @BindView(R.id.tv_add_coin_animant)
-    TextView add_coin_animant;
-
     private static final String TAG = "PushCoin2Activity-";
     private String currentUrl;
     private String playUrlMain;
@@ -112,7 +106,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
     private static final int TAG_MY_START = 0x10f0;
     private static final int TAG_OTHER_START = 0x10f1;
-    private static final int TAG_DEVICE_FREE = 0x10ff;
+    private static final int TAG_DEVICE_FREE_COIN2 = 0x10ff;
     private static final int TIME_OUT = 30;
 
     private String money="0";
@@ -174,13 +168,11 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         release();
     }
     private void release(){
-
         ctrlCompl.stopRecordView();
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
         ctrlCompl.stopTimeCounter();
         ctrlCompl.sendCmdOutRoom();
-
         if (mediaPlayer1 != null && mediaPlayer1.isPlaying()) {
             mediaPlayer1.stop();
             mediaPlayer1.release();
@@ -205,7 +197,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
         money=getIntent().getStringExtra(Utils.TAG_DOLL_GOLD);
-
+        money=Integer.parseInt(money)*10+"";
 
         ctrlCompl = new CtrlCompl(this, this);
         currentUrl = playUrlMain;
@@ -242,7 +234,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtils.loge("onRestart", TAG);
+        Utils.showLogE(TAG, "onRestart");
         if (ctrlFailIv.getVisibility() == View.VISIBLE) {
             ctrlFailIv.setVisibility(View.GONE);
         }
@@ -280,7 +272,9 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 coinGif.setVisibility(View.GONE);
             }
         },dur);
+        Log.e(TAG,"dur===="+dur);
     }
+
 
     @OnClick({R.id.startgame_ll, R.id.playgame_rl, R.id.ll_wiper,
               R.id.coin2_back, R.id.coin2_why, R.id.ll_message,R.id.recharge_ll})
@@ -311,7 +305,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 startActivity(new Intent(this, GameInstrcutionActivity.class));
                 break;
             case R.id.recharge_ll:
-              startActivity(new Intent(this, RechargeActivity.class));
+                startActivity(new Intent(this, RechargeActivity.class));
                 break;
         }
 
@@ -331,20 +325,26 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     public void getCoinDeviceResponse(Object response){
         if (response instanceof Coin2ControlResponse){
             Coin2ControlResponse coinControlResponse = (Coin2ControlResponse) response;
-            LogUtils.loge( "====" + coinControlResponse.toString(),TAG);
+            Log.e(TAG, "====" + coinControlResponse.toString());
             dealWithResponse(coinControlResponse);
         } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
-            LogUtils.loge("appInRoomResponse........" + appInRoomResponse.toString(),TAG);
+            Log.e(TAG, "appInRoomResponse........" + appInRoomResponse.toString());
             Boolean free = appInRoomResponse.getFree();
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             long seq = appInRoomResponse.getSeq();
+
             if ((seq != -2) && (!Utils.isEmpty(allUsers))) {
                 //TODO  我本人进来了
                 ctrlCompl.sendGetUserInfos(allUsers, true);
                 //是否玩家正在游戏中
-               if (!free) {
-                  isOwnerUse(TAG_OTHER_START);
+                if (!free) {
+//                    if (appInRoomResponse.getUserId().equals(UserUtils.USER_ID)) {
+//                        isOwnerUse(TAG_MY_START);
+//                    } else {
+//                        isOwnerUse(TAG_OTHER_START);
+//                    }
+                    isOwnerUse(TAG_OTHER_START);
                     stateTv.setText("网关使用中!");
                 }
             } else {
@@ -358,7 +358,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
-            LogUtils.loge("====" + appOutRoomResponse.toString(),TAG);
+            Log.e(TAG, "====" + appOutRoomResponse.toString());
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
                 userInfos.remove(appOutRoomResponse.getUserId());
@@ -387,9 +387,8 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 bingCount = bingCount + response.getBingo();
                 if(response.getBingo()!=null&&response.getBingo()>0) {
                     if (!userMoney.isEmpty() && !money.isEmpty()) {
-                        userMoney = Integer.parseInt(userMoney) + response.getBingo() + "";
+                        userMoney = Integer.parseInt(userMoney) + response.getBingo()*10 + "";
                         user_golds.setText(userMoney);
-                        setAnimant(response.getBingo());
                     }
                     playDownMusic();
                 }
@@ -418,14 +417,14 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             }
 
         } else if (statusType.name().equals(CoinStatusType.END.name())) {//游戏结束
-            isOwnerUse(TAG_DEVICE_FREE);
-            LogUtils.loge( "bingCount====" + bingCount,TAG);
+            Log.e(TAG, "====" + bingCount);
             if(isMePlay) { //自己玩
                 if(bingCount>0) {
                     pushCoinAnimat();
                 }
                 getUserDate(UserUtils.USER_ID);
             }
+            isOwnerUse(TAG_DEVICE_FREE_COIN2);
         }
     }
     //监控网关区
@@ -435,14 +434,19 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                     @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getGatwayStates(String tag) {
         //TODO 发送命令 网关在使用中
-        LogUtils.loge( "网关........" + tag,TAG);
+        Log.e(TAG, "网关........" + tag);
         stateTv.setText(tag);
     }
     //设备状态
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_COIN_DEVICE_STATE)})
     public void getCoinDeviceState(String state) {
-        LogUtils.loge( "当前游戏机状态::::" + state,TAG);
+        Utils.showLogE(TAG, "当前游戏机状态::::" + state);
+        if (state.equals("cbusy")) { //游戏中
+
+        } else if (state.equals("cfree")) {//休闲中
+            isOwnerUse(TAG_DEVICE_FREE_COIN2);
+        }
     }
 
     private void isOwnerUse(int is) {
@@ -455,7 +459,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             ll_wiper.setVisibility(View.VISIBLE);
             startBtn.setVisibility(View.INVISIBLE);
             iv_add_recharge.setVisibility(View.INVISIBLE);
-            recharge_ll.setEnabled(false);
             time_count.setVisibility(View.VISIBLE);
             startTimer();
         } else if (is == TAG_OTHER_START) {
@@ -464,18 +467,16 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             playgame_rl.setVisibility(View.GONE);
             ll_wiper.setVisibility(View.INVISIBLE);
             iv_add_recharge.setVisibility(View.VISIBLE);
-            recharge_ll.setEnabled(true);
             time_count.setVisibility(View.GONE);
             ctrl_dollstate.setText("排队");
             stopTimer();
-        } else if (is == TAG_DEVICE_FREE) {
+        } else if (is == TAG_DEVICE_FREE_COIN2) {
           //  time_count.setText(String.valueOf(timeCount));
             time_count.setVisibility(View.GONE);
          //   bingoTv.setText(String.valueOf(bingCount));
             playgame_rl.setVisibility(View.GONE);
             ll_wiper.setVisibility(View.INVISIBLE);
             iv_add_recharge.setVisibility(View.VISIBLE);
-            recharge_ll.setEnabled(true);
             startBtn.setVisibility(View.VISIBLE);
             ctrl_dollstate.setText("上机");
             startBtn.setEnabled(true);
@@ -524,7 +525,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         //当前房屋的人数
         userInfos = list;
         int counter = userInfos.size();
-        LogUtils.loge("当前房屋的人数::::" + counter, TAG);
+        Utils.showLogE(TAG, "当前房屋的人数::::" + counter);
         if (counter > 0) {
             String s = (counter + 20) + "人围观";//线人数 默认20个
             room_peoples.setText(s);
@@ -592,25 +593,11 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                         case 0:
                             Utils.toActivity(PushCoin2Activity.this, RechargeActivity.class);
                             break;
+
                     }
                 }
                 catchDollResultDialog.dismiss();
             }
         });
-    }
-
-    private void setAnimant(int bingCount){
-        add_coin_animant.setText(" + "+bingCount);
-        add_coin_animant.setVisibility(View.VISIBLE);
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(add_coin_animant, "alpha", 1f, 0f);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(add_coin_animant, "translationY", 0f,400f);
-        AnimatorSet animatorSet=new AnimatorSet();
-        //同时沿X,Y轴放大，且改变透明度，然后移动
-        //在3s内，沿x、y轴同时放大，然后缩小，在缩放的同时还要改变透明度。然后再完成3s的左右移动。
-        animatorSet.play(animator).with(alphaAnimator) ;
-        //每个动画都设置成3s，也可以分别设置
-        animatorSet.setDuration(1200);
-        animatorSet.start();
-
     }
 }

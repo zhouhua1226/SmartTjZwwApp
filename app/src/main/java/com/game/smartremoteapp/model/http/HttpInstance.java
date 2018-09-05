@@ -30,7 +30,7 @@ public class HttpInstance {
         });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                //.addInterceptor(interceptor)
                 .retryOnConnectionFailure(true)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)

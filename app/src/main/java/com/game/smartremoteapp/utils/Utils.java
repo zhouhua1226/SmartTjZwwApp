@@ -40,7 +40,7 @@ public class Utils {
 
 
     public static String connectStatus = ConnectResultEvent.CONNECT_FAILURE;
-    private static final boolean D = false;
+    private static final boolean D = true;
     private static final String TAG_DELIMETER = "---";
 
     public static final String TAG_SESSION_INVALID = "TAG_SESSION_INVALID";

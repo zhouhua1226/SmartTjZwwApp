@@ -37,7 +37,7 @@ import java.util.List;
 public class ShareDialog {
     private final TextView cancel;
     private final RecyclerView mRecyclerView;
-   private Dialog mAlertDialog;
+    private Dialog mAlertDialog;
     private View mView;
     private Context mContext;
     private List<PlateBean> mPlate=new ArrayList<>();
