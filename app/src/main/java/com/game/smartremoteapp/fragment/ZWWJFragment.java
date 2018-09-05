@@ -321,7 +321,7 @@ public class ZWWJFragment extends BaseFragment   {
         HttpManager.getInstance().getToyType(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
-                if (result.getMsg().equals("success")) {
+                if (result.getMsg().equals(Utils.HTTP_OK)) {
                     if (result.getData() != null&& mZwwHeadView.getTabLayout()!=null) {
                         toyTypeBeanList = result.getData().getToyTypeList();
                         mZwwHeadView.getTabLayout().addTab( mZwwHeadView.getTabLayout().newTab().
@@ -353,10 +353,8 @@ public class ZWWJFragment extends BaseFragment   {
         HttpManager.getInstance().getToyListByType(type, page, new RequestSubscriber<Result<RoomListBean>>() {
             @Override
             public void _onSuccess(Result<RoomListBean> loginInfoResult) {
-                zwwRecyclerview.refreshComplete();
-                zwwRecyclerview.stopLoadMore();
-
-                if (loginInfoResult.getMsg().equals("success")) {
+                setZwwRecyclerviewResult();
+                if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     if (loginInfoResult.getData() != null) {
                         List<RoomBean> roomBeens = dealWithRoomStats(loginInfoResult.getData().getDollList());
                         if (currentRoomBeens.size() == 0) {
@@ -379,10 +377,15 @@ public class ZWWJFragment extends BaseFragment   {
             }
             @Override
             public void _onError(Throwable e) {
-                zwwRecyclerview.refreshComplete();
-                zwwRecyclerview.stopLoadMore();
+                setZwwRecyclerviewResult();
             }
         });
+    }
+    private void setZwwRecyclerviewResult(){
+        if(zwwRecyclerview!=null){
+            zwwRecyclerview.refreshComplete();
+            zwwRecyclerview.stopLoadMore();
+        }
     }
     private TabLayout.OnTabSelectedListener tabSelectedListener
             = new TabLayout.OnTabSelectedListener() {

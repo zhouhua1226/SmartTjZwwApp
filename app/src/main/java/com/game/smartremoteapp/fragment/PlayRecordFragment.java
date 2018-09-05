@@ -4,19 +4,15 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.adapter.BetRecordAdapter;
 import com.game.smartremoteapp.adapter.PlayRecordAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.GameListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
-import com.game.smartremoteapp.bean.UserPaymentBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.Utils;
@@ -26,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by yincong on 2018/4/3 13:17
@@ -97,9 +91,10 @@ public class PlayRecordFragment extends BaseFragment {
 
             @Override
             public void _onError(Throwable e) {
-                MyToast.getToast(getContext(),"网络异常！");
-                playrecordRecyclerview.setVisibility(View.GONE);
-                failTv.setVisibility(View.VISIBLE);
+                if(playrecordRecyclerview!=null) {
+                    playrecordRecyclerview.setVisibility(View.GONE);
+                    failTv.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

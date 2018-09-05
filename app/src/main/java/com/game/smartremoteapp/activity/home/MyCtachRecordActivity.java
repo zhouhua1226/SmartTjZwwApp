@@ -312,8 +312,6 @@ public class MyCtachRecordActivity extends BaseActivity {
                 }
 
                 break;
-
-
             default:
                 break;
         }

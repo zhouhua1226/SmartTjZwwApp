@@ -259,11 +259,8 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         }
     }
 
-    private void playPushMusic() {
-         mediaPlayer1.start();
-    }
-    private void playDownMusic() {
-         mediaPlayer2.start();
+    private void playPushMusic() {if(mediaPlayer1!=null){mediaPlayer1.start();}}
+    private void playDownMusic(){if(mediaPlayer2!=null){mediaPlayer2.start();}
     }
     private void  pushCoinAnimat(){
         Movie mMovie = Movie.decodeStream(getResources().openRawResource(
@@ -311,7 +308,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 startActivity(new Intent(this, GameInstrcutionActivity.class));
                 break;
             case R.id.recharge_ll:
-              startActivity(new Intent(this, RechargeActivity.class));
+                startActivity(new Intent(this, RechargeActivity.class));
                 break;
         }
 
@@ -396,6 +393,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             }
             //  bingoTv.setText(String.valueOf(bingCount));
         } else if (statusType.name().equals(CoinStatusType.START.name())) {
+
             String uId = response.getUserId();
             if (TextUtils.isEmpty(uId)) {
                 return;
@@ -418,7 +416,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             }
 
         } else if (statusType.name().equals(CoinStatusType.END.name())) {//游戏结束
-            isOwnerUse(TAG_DEVICE_FREE);
             LogUtils.loge( "bingCount====" + bingCount,TAG);
             if(isMePlay) { //自己玩
                 if(bingCount>0) {
@@ -426,6 +423,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 }
                 getUserDate(UserUtils.USER_ID);
             }
+            isOwnerUse(TAG_DEVICE_FREE);
         }
     }
     //监控网关区
@@ -449,38 +447,43 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         bingCount = 0;
         timeCount = TIME_OUT;
         isMePlay=false;
-        if (is == TAG_MY_START) {
-            isMePlay=true;
-            playgame_rl.setVisibility(View.VISIBLE);
-            ll_wiper.setVisibility(View.VISIBLE);
-            startBtn.setVisibility(View.INVISIBLE);
-            iv_add_recharge.setVisibility(View.INVISIBLE);
-            recharge_ll.setEnabled(false);
-            time_count.setVisibility(View.VISIBLE);
-            startTimer();
-        } else if (is == TAG_OTHER_START) {
-            startBtn.setVisibility(View.VISIBLE);
-            startBtn.setEnabled(false);
-            playgame_rl.setVisibility(View.GONE);
-            ll_wiper.setVisibility(View.INVISIBLE);
-            iv_add_recharge.setVisibility(View.VISIBLE);
-            recharge_ll.setEnabled(true);
-            time_count.setVisibility(View.GONE);
-            ctrl_dollstate.setText("排队");
-            stopTimer();
-        } else if (is == TAG_DEVICE_FREE) {
-          //  time_count.setText(String.valueOf(timeCount));
-            time_count.setVisibility(View.GONE);
-         //   bingoTv.setText(String.valueOf(bingCount));
-            playgame_rl.setVisibility(View.GONE);
-            ll_wiper.setVisibility(View.INVISIBLE);
-            iv_add_recharge.setVisibility(View.VISIBLE);
-            recharge_ll.setEnabled(true);
-            startBtn.setVisibility(View.VISIBLE);
-            ctrl_dollstate.setText("上机");
-            startBtn.setEnabled(true);
-            stopTimer();
+        switch (is){
+            case TAG_MY_START:
+                isMePlay=true;
+                playgame_rl.setVisibility(View.VISIBLE);
+                ll_wiper.setVisibility(View.VISIBLE);
+                startBtn.setVisibility(View.INVISIBLE);
+                iv_add_recharge.setVisibility(View.INVISIBLE);
+                recharge_ll.setEnabled(false);
+                time_count.setVisibility(View.VISIBLE);
+                startTimer();
+                break;
+            case TAG_OTHER_START:
+                startBtn.setVisibility(View.VISIBLE);
+                startBtn.setEnabled(false);
+                playgame_rl.setVisibility(View.GONE);
+                ll_wiper.setVisibility(View.INVISIBLE);
+                iv_add_recharge.setVisibility(View.VISIBLE);
+                recharge_ll.setEnabled(true);
+                time_count.setVisibility(View.GONE);
+                ctrl_dollstate.setText("排队");
+                stopTimer();
+                break;
+            case TAG_DEVICE_FREE:
+                //  time_count.setText(String.valueOf(timeCount));
+                time_count.setVisibility(View.GONE);
+                //   bingoTv.setText(String.valueOf(bingCount));
+                playgame_rl.setVisibility(View.GONE);
+                ll_wiper.setVisibility(View.INVISIBLE);
+                iv_add_recharge.setVisibility(View.VISIBLE);
+                recharge_ll.setEnabled(true);
+                startBtn.setVisibility(View.VISIBLE);
+                ctrl_dollstate.setText("上机");
+                startBtn.setEnabled(true);
+                stopTimer();
+                break;
         }
+
     }
 
     public void startTimer() {
@@ -605,8 +608,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(add_coin_animant, "alpha", 1f, 0f);
         ObjectAnimator animator = ObjectAnimator.ofFloat(add_coin_animant, "translationY", 0f,400f);
         AnimatorSet animatorSet=new AnimatorSet();
-        //同时沿X,Y轴放大，且改变透明度，然后移动
-        //在3s内，沿x、y轴同时放大，然后缩小，在缩放的同时还要改变透明度。然后再完成3s的左右移动。
+        //同时沿Y轴移动，且改变透明度
         animatorSet.play(animator).with(alphaAnimator) ;
         //每个动画都设置成3s，也可以分别设置
         animatorSet.setDuration(1200);
