@@ -15,18 +15,19 @@ public class BannerBean implements Serializable{
     private String CONTENT;
     private String RUNIMAGE_ID;
     private String IMAGE_URL;
-    private int STATE;
+    private String STATE;
 
     private String HREF_ST;
     private String LIVESTREAM;
     private String RTMP_URL;
     private String SERVER_NAME;
     private String DEVICE_STATE;
-    public int getSTATE() {
+
+    public String getSTATE() {
         return STATE;
     }
 
-    public void setSTATE(int STATE) {
+    public void setSTATE(String STATE) {
         this.STATE = STATE;
     }
 

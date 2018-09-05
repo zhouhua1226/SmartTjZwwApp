@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.mushroom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -15,7 +14,6 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.ChannelUtils;
-import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -95,7 +93,6 @@ public class Splash1Activity extends BaseActivity {
         }
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            Log.e(TAG, platform.toString() + "--data==" + data.toString());
             getPlatformInfo(platform);
         }
         @Override
@@ -140,11 +137,7 @@ public class Splash1Activity extends BaseActivity {
                 String name= map.get("screen_name");
                 String gender= map.get("gender");
                 String profile_image_url= map.get("profile_image_url");
-                LogUtils.loge("个人信息刷新结果==uid=" + uid
-                        + " regChannel=" + regChannel
-                        + " name=" + name
-                        + " profile_image_url=" + profile_image_url
-                        + " gender=" + gender);
+
                 wxLoginTask(uid,name,gender,profile_image_url,regChannel);
             }
             @Override
@@ -183,7 +176,6 @@ public class Splash1Activity extends BaseActivity {
                     @Override
                     public void _onError(Throwable e) {
                         setGifView(false);
-                        LogUtils.logi(e.getMessage());
                     }
                 });
 

@@ -35,7 +35,7 @@ public class HttpManager {
     private static HttpManager httpManager;
     private Retrofit retrofit;
     private SmartService smartService;
-    private   static  String baseUri="http://47.100.15.18:8080";;
+    private   static  String baseUri= UrlUtils.URL;;
     public static synchronized HttpManager getInstance( ) {
         if (httpManager == null) {
             httpManager = new HttpManager();

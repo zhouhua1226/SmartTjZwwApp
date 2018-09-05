@@ -3,7 +3,6 @@ package com.game.smartremoteapp.activity.home;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by chenw on 2018/7/17.
  */
@@ -119,13 +119,13 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 String  isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
                           if(isFirst.equals("0")){
                               payOutType="fc";
-                            getPayTypeDialog(mPayCardBean.getID());
-                           // getNowPayOrder(mPayCardBean.getID(), "13");
+                           getPayTypeDialog(mPayCardBean.getID());
+                       // getNowPayOrder(mPayCardBean.getID(), "13");
                             //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
                            }else{
                               payOutType="nm";
-                             getPayTypeDialog(mPayCardBean.getID());
-                            // getNowPayOrder(mPayCardBean.getID(), "13");
+                            getPayTypeDialog(mPayCardBean.getID());
+                         //  getNowPayOrder(mPayCardBean.getID(), "13");
                            //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getRECHARE());
                 }
             }
@@ -145,8 +145,8 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
             case R.id.ll_mouth_car:
                 if(mMouth!=null){
                     payOutType="mc";
-                    getPayTypeDialog(mMouth.getID());
-                 //  getNowPayOrder(mMouth.getID(), "13");
+                   getPayTypeDialog(mMouth.getID());
+                 //getNowPayOrder(mMouth.getID(), "13");
                    // getOrderApaliyInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
                 }
                 break;
@@ -154,7 +154,7 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 if(mWeek!=null){
                     payOutType="wc";
                    getPayTypeDialog(mWeek.getID());
-                   //  getNowPayOrder(mWeek.getID(), "13");
+                   // getNowPayOrder(mWeek.getID(), "13");
                     //getOrderApaliyInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
                 }
                 break;
@@ -275,7 +275,7 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                     }
                     @Override
                     public void _onError(Throwable e) {
-                        LogUtils.logi(e.getMessage());
+                        LogUtils.logi(e.getMessage(),TAG);
                     }
                 });
     }
@@ -296,7 +296,7 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
             @Override
             public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
     }
@@ -315,7 +315,7 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
 
                     @Override
                     public void _onError(Throwable e) {
-                        LogUtils.logi(e.getMessage());
+                        LogUtils.logi(e.getMessage(),TAG);
                     }
                 });
     }
@@ -333,9 +333,9 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 MyToast.getToast(getApplicationContext(),"支付取消!").show();
             } else if (respCode.equals("01")) {
                 MyToast.getToast(getApplicationContext(),"支付失败!").show();
-                Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+                LogUtils.loge("respCode:" + respCode+"respMsg:"+errorMsg,TAG);
             }  else {
-                Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+                LogUtils.loge("respCode:" + respCode+"respMsg:"+errorMsg,TAG);
             }
         }
 }

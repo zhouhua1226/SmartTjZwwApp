@@ -26,6 +26,7 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
             signin_day4_ibtn,signin_day5_ibtn,signin_day6_ibtn,
             signin_day7_ibtn,cancle_ibtn,sure_ibtn;
 
+  private boolean isSiginSuccess=false;
 
     public SignInDialog(Context context) {
         super(context);
@@ -129,12 +130,12 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
      * @param isSign
      */
     public void isSignedView(boolean isSign){
-        sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
-//        if(isSign){
-//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_hassigned3);
-//        }else {
-//            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
-//        }
+        isSiginSuccess=isSign;
+        if(isSiginSuccess){
+            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_cannel_bg);
+        }else {
+            sure_ibtn.setBackgroundResource(R.drawable.tm_sign_sure_bg);
+        }
     }
 
     /**
@@ -152,10 +153,13 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signin_sure_ibtn:
-                if (null != this.listener) {
-                    listener.getResult(0);
+                if(!isSiginSuccess){
+                    if (null != this.listener) {
+                        listener.getResult(0);
+                    }
+                }else{
+                    SignInDialog.this.dismiss();
                 }
-                //SignInDialog.this.dismiss();
                 break;
             case R.id.signin_cancle_ibtn:
                 SignInDialog.this.dismiss();
@@ -170,6 +174,8 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
     public void setDialogResultListener(DialogResultListener listener) {
         this.listener = listener;
     }
+
+
 
     public interface DialogResultListener {
         /**

@@ -115,7 +115,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
     }

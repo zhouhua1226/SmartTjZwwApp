@@ -1,4 +1,6 @@
 package com.game.smartremoteapp.utils;
+
+import android.util.Log;
 import com.alibaba.fastjson.JSONObject;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -29,33 +31,25 @@ public class LogUtils {
     }
     public static void logd(String message) {
         if (DEBUG_ENABLE) {
-            Logger.d(message);
+            Log.d(TAG,message);
+        }
+    }
+    public static void loge(String message,String args) {
+        if (DEBUG_ENABLE) {
+            Log.e(args,message);
         }
     }
 
-    public static void loge(String message, Object... args) {
+    public static void logi(String message,String tag) {
         if (DEBUG_ENABLE) {
-            Logger.e(message, args);
+            Log.i(tag,message);
         }
     }
-
-    public static void logi(String message) {
+    public static void loggerE(String message,String args) {
         if (DEBUG_ENABLE) {
-            Logger.i(message);
+            Logger.e(message,args);
         }
     }
-    public static void logv(String message, Object... args) {
-        if (DEBUG_ENABLE) {
-            Logger.v(message, args);
-        }
-    }
-
-    public static void logwtf(String message, Object... args) {
-        if (DEBUG_ENABLE) {
-            Logger.wtf(message, args);
-        }
-    }
-
     public static void logjson(String message) {
         if (DEBUG_ENABLE) {
             if(isJson(message)){

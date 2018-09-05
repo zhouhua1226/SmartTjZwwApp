@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
 import com.game.smartremoteapp.service.SmartRemoteService;
 import com.game.smartremoteapp.utils.LogUtils;
@@ -35,8 +34,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(false);//初始化logger
-
+        LogUtils.logInit(true);//初始化logger 测试设置true    真实发布 设置false
     }
     private void setCrashHandler() {
 
@@ -49,7 +47,6 @@ public class MyApplication extends MultiDexApplication {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                Log.e(TAG,"友盟deviceToken="+deviceToken);
             }
 
             @Override

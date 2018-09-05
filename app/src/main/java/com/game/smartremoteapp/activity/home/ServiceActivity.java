@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import android.widget.ImageButton;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
@@ -137,7 +137,7 @@ public class ServiceActivity extends BaseActivity {
         kefuWebview.setWebChromeClient(new WebChromeClient() {
             // For Android 3.0+
             public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                Log.d(TAG, "openFileChoose(ValueCallback<Uri> uploadMsg)");
+                LogUtils.logd("openFileChoose(ValueCallback<Uri> uploadMsg)");
                 mUploadMessage = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -148,7 +148,7 @@ public class ServiceActivity extends BaseActivity {
 
             // For Android 3.0+
             public void openFileChooser(ValueCallback uploadMsg, String acceptType) {
-                Log.d(TAG, "openFileChoose( ValueCallback uploadMsg, String acceptType )");
+                LogUtils.logd( "openFileChoose( ValueCallback uploadMsg, String acceptType )");
                 mUploadMessage = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -159,7 +159,7 @@ public class ServiceActivity extends BaseActivity {
 
             // For Android 4.1
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-                Log.d(TAG, "openFileChoose(ValueCallback<Uri> uploadMsg, String acceptType, String capture)");
+                LogUtils.logd( "openFileChoose(ValueCallback<Uri> uploadMsg, String acceptType, String capture)");
                 mUploadMessage = uploadMsg;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -172,7 +172,7 @@ public class ServiceActivity extends BaseActivity {
             // For Android 5.0+
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
                                              FileChooserParams fileChooserParams) {
-                Log.d(TAG, "onShowFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture)");
+                LogUtils.logd( "openFileChoose(ValueCallback<Uri> uploadMsg, String acceptType, String capture)");
                 mUploadCallbackAboveL = filePathCallback;
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -252,7 +252,6 @@ public class ServiceActivity extends BaseActivity {
             is.close();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("TAG", "获取文件异常");
         }
 
         return image;
@@ -281,7 +280,6 @@ public class ServiceActivity extends BaseActivity {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("TAG", "转换异常");
         } finally {
             try {
                 if (baos != null) {
@@ -290,7 +288,6 @@ public class ServiceActivity extends BaseActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.d("TAG", "转换异常");
             }
         }
         return result;

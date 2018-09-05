@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.MediaController;
@@ -15,6 +14,7 @@ import android.widget.VideoView;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.view.MyToast;
 
@@ -75,8 +75,7 @@ public class VideoPlayBackActivity extends BaseActivity {
         String time = getIntent().getStringExtra("time");
         String videoUrl1 = UserUtils.RECODE_URL + time + ".mp4";
         File file = new File(videoUrl1);
-        Log.e(TAG, "录制视频目录=" + videoUrl1);
-        Log.e(TAG, "视频目录=" + videoUrl1);
+        LogUtils.loge( "录制视频目录=" + videoUrl1,TAG);
         Uri uri = Uri.parse(videoUrl1);
         //设置视频控制器
         MediaController mediaController = new MediaController(this);

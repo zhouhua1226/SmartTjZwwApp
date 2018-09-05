@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,6 +35,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.R.attr.tag;
 
 /**
  * Created by chenw on 2018/7/19.
@@ -156,11 +157,11 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
                 if(mWeek!=null&&mMouth!=null) {
                     if (type > 1) {
                        getPayTypeDialog(mMouth.getID());
-                       // getNowPayOrder(mMouth.getID(), "13");
+                     //getNowPayOrder(mMouth.getID(), "13");
                      //   getOrderApaliyInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
                      } else {
-                          getPayTypeDialog(mWeek.getID());//
-                      //  getNowPayOrder(mWeek.getID(), "13");//微信支付
+                         getPayTypeDialog(mWeek.getID());//
+                     //  getNowPayOrder(mWeek.getID(), "13");//微信支付
                       //  getOrderApaliyInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());//支付宝支付
                      }
                 }
@@ -182,7 +183,6 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
 
                     @Override
                     public void _onError(Throwable e) {
-                        LogUtils.logi(e.getMessage());
                     }
                 });
     }
@@ -219,7 +219,6 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
                     }
                     @Override
                     public void _onError(Throwable e) {
-                        LogUtils.logi(e.getMessage());
                     }
                 });
     }
@@ -240,7 +239,6 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
 
                     @Override
                     public void _onError(Throwable e) {
-                        LogUtils.logi(e.getMessage());
                     }
                 });
     }
@@ -308,9 +306,9 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
             MyToast.getToast(getApplicationContext(),"支付取消!").show();
         } else if (respCode.equals("01")) {
             MyToast.getToast(getApplicationContext(),"支付失败!").show();
-            Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+            LogUtils.loge( "respCode:" + respCode+"respMsg:"+errorMsg,TAG);
         }  else {
-            Log.e( TAG,"respCode:" + respCode+"respMsg:"+errorMsg);
+            LogUtils.loge( "respCode:" + respCode+"respMsg:"+errorMsg + tag,TAG);
         }
     }
 }

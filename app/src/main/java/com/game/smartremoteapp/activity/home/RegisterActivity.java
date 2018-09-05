@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +31,7 @@ import butterknife.OnClick;
  * Created by chenw on 2018/3/21.
  */
 public class RegisterActivity extends BaseActivity{
+    private static final String TAG ="RegisterActivity" ;
     @BindView(R.id.et_register_phone)
     EditText et_phone;
     @BindView(R.id.et_register_password)
@@ -124,7 +124,7 @@ public class RegisterActivity extends BaseActivity{
             }
             @Override
             public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
     }
@@ -144,16 +144,15 @@ public class RegisterActivity extends BaseActivity{
 
     private void getCodeTask(String phone) {
         String str = Base64.encodeToString(phone.getBytes(), Base64.DEFAULT);
-        LogUtils.logi(str);
+        LogUtils.logi(str,TAG);
         HttpManager.getInstance().getCode(str, new RequestSubscriber<Result<Void>>() {
             @Override
             public void _onSuccess(Result<Void> token) {
-                Log.e( "短信验证码------",token.toString());
                 MyToast.getToast(RegisterActivity.this,"验证码已发送").show();
             }
             @Override
             public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
     }

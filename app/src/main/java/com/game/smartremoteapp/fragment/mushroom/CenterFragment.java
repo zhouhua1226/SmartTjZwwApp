@@ -2,7 +2,6 @@ package com.game.smartremoteapp.fragment.mushroom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -70,7 +68,6 @@ public class CenterFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG, "个人中心userId=" + UserUtils.USER_ID);
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             getAppUserInf(UserUtils.USER_ID);
         }else{
@@ -185,11 +182,7 @@ public class CenterFragment extends BaseFragment {
                         UserUtils.UserPhone=result.getData().getAppUser().getBDPHONE();
                     }
                 }
-                LogUtils.loge( "个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
-                        + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
-                        + " 昵称=" + result.getData().getAppUser().getNICKNAME()
-                        + " 头像=" + UserUtils.UserImage
-                        + " 发货地址=" + UserUtils.UserAddress);
+
                 getUserImageAndName();
             }
 

@@ -196,8 +196,8 @@ public class HomeFragment extends BaseFragment implements PullToRefreshView.OnHe
                     + "/";
             String url1 = rtmpUrl1 + serviceName1 + idToken + liveStream1;
             String url2 = rtmpUrl2 + serviceName2 + idToken + liveStream2;
-            LogUtils.loge("房间推流地址1=" + url1);
-            LogUtils.loge("房间推流地址2=" + url2);
+            LogUtils.loge("房间推流地址1=" + url1,TAG);
+            LogUtils.loge("房间推流地址2=" + url2,TAG);
             if (!TextUtils.isEmpty(url2) && !TextUtils.isEmpty(url1)) {
                 String type = currentRoomBeens.get(po).getDeviceType();
                 if (!TextUtils.isEmpty(type) && type.equals("2")) {
@@ -214,7 +214,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshView.OnHe
                         currentRoomBeens.get(po).getReward(),
                         currentRoomBeens.get(po).getDollUrl());
             } else {
-                LogUtils.loge("当前设备没有配置摄像头!");
+                LogUtils.loge("当前设备没有配置摄像头!",TAG);
             }
         }
     }
@@ -268,16 +268,14 @@ public class HomeFragment extends BaseFragment implements PullToRefreshView.OnHe
                     bannerList = loginInfoResult.getData().getRunImage();
                     if (bannerList.size() > 0) {
                         for (int i = 0; i < bannerList.size(); i++) {
-                            int state = bannerList.get(i).getSTATE();
-                            switch (state){
-                                case 0:
+                            String state = bannerList.get(i).getSTATE();
+                            if(state!=null&&!state.equals("")){
+                                if(state.equals("0")){
                                     if(bannerList.get(i).getIMAGE_URL()!=null&&!bannerList.get(i).getIMAGE_URL().equals("")) {
                                         list.add(UrlUtils.APPPICTERURL+bannerList.get(i).getIMAGE_URL());
                                         nBannerList.add(bannerList.get(i));
                                     }
-                                    break;
-                                case 1:
-                                    break;
+                                }
                             }
                         }
                         initBanner(list,nBannerList);
@@ -286,7 +284,7 @@ public class HomeFragment extends BaseFragment implements PullToRefreshView.OnHe
             }
             @Override
             public void _onError(Throwable e) {
-                LogUtils.loge(e.getMessage());
+
             }
         });
     }

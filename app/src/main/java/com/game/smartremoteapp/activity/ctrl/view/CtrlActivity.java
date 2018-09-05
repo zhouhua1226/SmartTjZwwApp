@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -1141,10 +1140,10 @@ public class CtrlActivity extends Activity implements IctrlView {
                 }
             }
         } else if (response instanceof String) {
-            Utils.showLogE(TAG, "move faile....");
+            LogUtils.loge( "move faile....",TAG);
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
-            Utils.showLogE(TAG, appOutRoomResponse.toString());
+            LogUtils.loge( appOutRoomResponse.toString(),TAG);
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
                 userInfos.remove(appOutRoomResponse.getUserId());
@@ -1156,7 +1155,7 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
-            Utils.showLogE(TAG, "=====" + appInRoomResponse.toString());
+            LogUtils.loge( "=====" + appInRoomResponse.toString(),TAG);
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
             long seq = appInRoomResponse.getSeq();
@@ -1194,11 +1193,11 @@ public class CtrlActivity extends Activity implements IctrlView {
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_ERR");
+            LogUtils.loge( "TAG_CONNECT_ERR",TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
+            LogUtils.loge( "TAG_CONNECT_SUCESS",TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_green);
             NettyUtils.sendRoomInCmd("normal");
             //TODO 后续修改获取网关状态接口
@@ -1211,7 +1210,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_DISCONNECT)})
     public void getSingleGatwayDisConnect(String id) {
-        Utils.showLogE(TAG, "getSingleGatwayDisConnect id" + id);
+        LogUtils.loge("getSingleGatwayDisConnect id" + id,TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
@@ -1260,7 +1259,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     public void getDeviceFree(GatewayPoohStatusMessage message) {
         String roomId = message.getRoomId();
         int number = message.getGifinumber();
-        Utils.showLogE("getDeviceFree::::::" + roomId + "======" + number, TAG);
+        LogUtils.loge("getDeviceFree::::::" + roomId + "======" + number,TAG);
         if (roomId.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             getStartstation();
             setStartMode(true);

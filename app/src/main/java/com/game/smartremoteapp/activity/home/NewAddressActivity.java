@@ -1,7 +1,6 @@
 package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +13,7 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -141,7 +141,7 @@ public class NewAddressActivity extends BaseActivity {
         HttpManager.getInstance().getConsignee(name, phone, address, userID, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG,"收货信息结果="+loginInfoResult.getMsg());
+                LogUtils.loge("收货信息结果="+loginInfoResult.getMsg(),TAG);
                 String name=loginInfoResult.getData().getAppUser().getCNEE_NAME();
                 String phone=loginInfoResult.getData().getAppUser().getCNEE_PHONE();
                 String backaddress=loginInfoResult.getData().getAppUser().getCNEE_ADDRESS();

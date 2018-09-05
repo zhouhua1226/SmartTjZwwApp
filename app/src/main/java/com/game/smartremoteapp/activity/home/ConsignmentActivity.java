@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,7 +82,6 @@ public class ConsignmentActivity extends BaseActivity {
     private boolean isFormalAddress=true;
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
-    private String consignee = "尹聪,13687632490,上海市虹口区欧阳路196号10楼612,";
 
     @Override
     protected int getLayoutId() {
@@ -106,7 +104,6 @@ public class ConsignmentActivity extends BaseActivity {
             consignmentWwbdkyfTv.setText("娃娃币抵扣邮费");
         }
         list = (List<VideoBackBean>) getIntent().getSerializableExtra("record");//获取list方式
-        Log.e(TAG, "发货娃娃集合长度=" + list.size());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         consignmentRecyclerview.setLayoutManager(linearLayoutManager);
         consignmentRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -161,7 +158,6 @@ public class ConsignmentActivity extends BaseActivity {
                 if (length > 1) {
                     for (int i = 0; i < length; i++) {
                         if (i == 0) {
-                            Log.e(TAG, "adsadadfad" + (list.get(i).getID()));
                             stringId.append(list.get(i).getID());
                             stringDollId.append(list.get(i).getDOLLID());
                         } else {
@@ -169,7 +165,6 @@ public class ConsignmentActivity extends BaseActivity {
                             stringDollId.append(list.get(i).getDOLLID());
                         }
                     }
-                    Log.e(TAG, "发货娃娃编号=" + stringId);
                     if (Utils.isEmpty(information)) {
                         MyToast.getToast(this, "请设置收货信息！").show();
                     } else {
@@ -180,7 +175,6 @@ public class ConsignmentActivity extends BaseActivity {
                             MyToast.getToast(this, "请设置收货信息！").show();
                         } else {
                             if (fhType.equals("1") || fhType.equals("2")) {
-                                Log.e(TAG, "单个娃娃id" + list.get(0).getID()+fhType);
                                 if(isEnough()) {
                                     //getSendGoods(list.get(0).getID()+",", "1", information, remark, UserUtils.USER_ID, fhType);
                                     getSendGoods(list.get(0).getID() + ",", "1", information, remark, UserUtils.USER_ID, fhType, Utils.getProvinceNum(UserUtils.UserAddress));
@@ -226,7 +220,6 @@ public class ConsignmentActivity extends BaseActivity {
         HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG, "发货结果=" + loginInfoResult.getMsg());
                 list = loginInfoResult.getData().getPlayback();
                 MyToast.getToast(getApplicationContext(), "发货成功，请耐心等待！").show();
                 Intent intent = new Intent();

@@ -3,13 +3,13 @@ package com.game.smartremoteapp.activity.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -19,15 +19,18 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.SureCancelDialog;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -119,7 +122,7 @@ public class RecordGameActivty extends BaseActivity {
         ButterKnife.bind(this);
 
         String typ=MyCtachRecordActivity.TYPE;
-        Log.e(TAG,"typ="+typ);
+        LogUtils.loge("typ="+typ,TAG);
         if (typ.equals("1")){
             gamemoneyButton.setVisibility(View.GONE);
             shipmentsButton.setVisibility(View.VISIBLE);
@@ -245,7 +248,7 @@ public class RecordGameActivty extends BaseActivity {
         HttpManager.getInstance().getExChangeWWB(id, dollId, number, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG,"兑换结果="+loginInfoResult.getMsg());
+                LogUtils.loge("兑换结果="+loginInfoResult.getMsg(),TAG);
                 if(loginInfoResult.getMsg().equals("success")) {
                     UserUtils.UserBalance=loginInfoResult.getData().getAppUser().getBALANCE();
                     mydollStateTv.setText("已兑换");

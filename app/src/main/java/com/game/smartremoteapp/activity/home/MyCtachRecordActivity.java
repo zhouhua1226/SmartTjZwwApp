@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -114,7 +113,7 @@ public class MyCtachRecordActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"游戏记录查询userId="+ UserUtils.USER_ID);
+        LogUtils.loge("游戏记录查询userId="+ UserUtils.USER_ID,TAG);
         if(videoList!=null&&videoList.size()>0&&myCenterAdapter!=null){
             videoList.clear();
             myCenterAdapter.notifyDataSetChanged();
@@ -163,8 +162,6 @@ public class MyCtachRecordActivity extends BaseActivity {
                         isSelect.set(position,0);
                         view.setBackgroundResource(R.drawable.mycatchrecord_unselect);
                         isList.set(position,false);
-                        Log.e(TAG,"位置"+position);
-                        Log.e(TAG,"移除的位置"+num.indexOf(position));
                         gold-=Integer.parseInt(selectList.get(num.indexOf(position)).getCONVERSIONGOLD());
                         selectList.remove(num.indexOf(position));
                         num.remove(num.indexOf(position));
@@ -217,7 +214,7 @@ public class MyCtachRecordActivity extends BaseActivity {
                         emtifyView();
                     }
                 } else {
-                    LogUtils.logi("个人中心, 暂无数据");
+                    LogUtils.logi("个人中心, 暂无数据",TAG);
                     emtifyView();
                 }
             }
@@ -272,7 +269,6 @@ public class MyCtachRecordActivity extends BaseActivity {
             case R.id.mycatchrecod_fhsure_image:
                 //发货
                 final int lengths = selectList.size();
-                Log.e(TAG, "发货娃娃数量=" + lengths);
                 if (lengths > 0) {
                     Intent intent = new Intent(this, ConsignmentActivity.class);
                     Bundle bundle = new Bundle();
@@ -287,7 +283,6 @@ public class MyCtachRecordActivity extends BaseActivity {
             case R.id.mycatchrecod_dhsure_image:
                 //兑换
                 final int length = selectList.size();
-                Log.e(TAG, "兑换娃娃数量=" + length);
                 if (length > 0) {
                     SureCancelDialog sureCancelDialog = new SureCancelDialog(this, R.style.easy_dialog_style);
                     sureCancelDialog.setCancelable(false);
@@ -306,7 +301,6 @@ public class MyCtachRecordActivity extends BaseActivity {
                                         stringDollId.append(selectList.get(i).getDOLLID());
                                     }
                                 }
-                                Log.e(TAG, "兑换娃娃编号=" + stringId);
                                 getExChangeWWB(String.valueOf(stringId), String.valueOf(stringDollId), length + "", UserUtils.USER_ID);
                             } else {
                                 MyToast.getToast(getApplicationContext(), "兑换取消!").show();
@@ -329,7 +323,6 @@ public class MyCtachRecordActivity extends BaseActivity {
         HttpManager.getInstance().getExChangeWWB(id, dollId, number, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG, "兑换结果=" + loginInfoResult.getMsg());
                 if (loginInfoResult.getMsg().equals("success")) {
                     UserUtils.UserBalance = loginInfoResult.getData().getAppUser().getBALANCE();
 //                    videoList=loginInfoResult.getData().getPlayback();

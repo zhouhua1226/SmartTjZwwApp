@@ -23,7 +23,6 @@ import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.protocol.JCUtils;
 import com.game.smartremoteapp.protocol.RspBodyBaseBean;
-import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -319,7 +318,6 @@ public class AccountWalletActivity extends BaseActivity implements CardView.OnCa
 
             @Override
             public void _onError(Throwable e) {
-                LogUtils.loge(e.getMessage());
             }
         });
     }

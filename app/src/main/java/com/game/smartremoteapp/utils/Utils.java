@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,11 +98,6 @@ public class Utils {
     public static final long GET_STATUS_DELAY_TIME = 3*60*1000;
     public static final long GET_STATUS_PRE_TIME = 2*60*1000;
     public static final long OTHER_PLAYER_DELAY_TIME =6*1000 ;
-    public static void showLogE(String TAG, String msg) {
-        if (D) {
-            android.util.Log.e(TAG, TAG + TAG_DELIMETER + msg);
-        }
-    }
 
     public static int getInt(String c) {
         String regEx="[^0-9]";
@@ -707,6 +701,7 @@ public class Utils {
             }
         }
         return false;
+
     }
     /**
      * 判断qq是否可用
@@ -726,31 +721,5 @@ public class Utils {
             }
         }
         return false;
-    }
-    public static String formatTime(Date time) {
-        //获取time距离当前的秒数
-        int ct = (int)((System.currentTimeMillis() - time.getTime())/1000);
-
-        if(ct == 0) {
-            return "刚刚";
-        }
-
-        if(ct > 0 && ct < 60) {
-            return ct + "秒前";
-        }
-
-        if(ct >= 60 && ct < 3600) {
-            return Math.max(ct / 60,1) + "分钟前";
-        }
-        if(ct >= 3600 && ct < 86400)
-            return ct / 3600 + "小时前";
-        if(ct >= 86400 && ct < 2592000){ //86400 * 30
-            int day = ct / 86400 ;
-            return day + "天前";
-        }
-        if(ct >= 2592000 && ct < 31104000) { //86400 * 30
-            return ct / 2592000 + "月前";
-        }
-        return ct / 31104000 + "年前";
     }
 }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -85,7 +85,7 @@ public class IntegralActivity extends BaseActivity{
     }
 
     private void loadUrl(){
-        Log.e(TAG,"图片新闻url="+urlPath);
+        LogUtils.loge("图片新闻url="+urlPath,TAG);
         webView.loadUrl(urlPath.replace("\"", "/"));
         webView.reload();
     }
@@ -119,7 +119,7 @@ public class IntegralActivity extends BaseActivity{
             }
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String s) {
-                Log.e(TAG,s);
+                LogUtils.loge(s,TAG);
                 webView.loadUrl(s);
                 return true;
             }
@@ -222,6 +222,15 @@ public class IntegralActivity extends BaseActivity{
           //抓娃娃
           @JavascriptInterface
           public void  fist() {
+              MainActivity.mMainActivity.finish();
+              Intent intent=new Intent(IntegralActivity.this,MainActivity.class);
+              intent.putExtra("mainIndex",0);
+              Utils.toActivity(IntegralActivity.this,intent);
+              finish();
+          }
+          //竞猜
+          @JavascriptInterface
+          public void  betGame() {
               MainActivity.mMainActivity.finish();
               Intent intent=new Intent(IntegralActivity.this,MainActivity.class);
               intent.putExtra("mainIndex",0);

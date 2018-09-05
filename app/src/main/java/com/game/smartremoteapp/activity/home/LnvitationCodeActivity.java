@@ -4,7 +4,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +20,7 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -149,11 +149,10 @@ public class LnvitationCodeActivity extends BaseActivity {
         invitationcodeHasnumTv.setText(Html.fromHtml("已邀请<font color='#ff9700'>" + codeNum
                 + "</font>" + "人获得<font color='#ff9700'>" + currencyNum + "</font>金币"));
 
-        Log.e(TAG, "APP版本=" + Utils.appVersion +
+        LogUtils.loge("APP版本=" + Utils.appVersion +
                 "&手机IMEI=" + Utils.IMEI +
                 "&手机型号=" + Utils.deviceType +
-                "&系统版本=" + Utils.osVersion);
-
+                "&系统版本=" + Utils.osVersion,TAG);
     }
 
     /**

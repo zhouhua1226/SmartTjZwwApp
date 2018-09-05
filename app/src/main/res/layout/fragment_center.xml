@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backcolor"
-    android:scrollbars="none"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,9 +16,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:paddingTop="20dp"
             android:background="@color/apptheme_bg"
             android:gravity="center"
+            android:paddingTop="20dp"
             android:text="我的"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -70,21 +70,21 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="visible"
                 android:id="@+id/ll_integral_task"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="30dp"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_apptheme_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
-                android:paddingTop="5dp"
                 android:paddingRight="10dp"
-                android:background="@drawable/dialog_apptheme_bg">
+                android:paddingTop="5dp"
+                android:visibility="visible">
                 <ImageView
                     android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
@@ -92,9 +92,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
                     android:text="每日积分任务"
                     android:textColor="@color/white"
-                    android:layout_marginLeft="4dp"
                     android:textSize="12sp" />
                 <ImageView
                     android:layout_width="wrap_content"
@@ -103,7 +103,15 @@
                     android:background="@drawable/icon_integral_arrow" />
             </LinearLayout>
 
-
+                 <ImageButton
+                   android:id="@+id/imb_center_sign"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                     android:layout_above="@+id/ll_integral_task"
+                     android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/icon_center_sign" />
 
             <TextView
                 android:id="@+id/mycenter_agency_tv"
@@ -119,9 +127,9 @@
                 android:paddingRight="15dp"
                 android:paddingTop="5dp"
                 android:text="代理"
-                android:visibility="gone"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mycenter_excenter_tv"
@@ -145,8 +153,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/mycenter_pay_layout"
@@ -328,8 +336,8 @@
                 android:id="@+id/mycenter_golds_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/iv_right_arrow"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/iv_right_arrow"
                 android:gravity="center"
                 android:text="游戏币：0"
                 android:textColor="#f26d35"
@@ -435,8 +443,8 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="1dp"
-            android:visibility="gone"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"

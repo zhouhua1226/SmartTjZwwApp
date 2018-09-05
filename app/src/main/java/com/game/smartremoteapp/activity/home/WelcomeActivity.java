@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +67,6 @@ public class WelcomeActivity extends BaseActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"onResume---");
         isTime=true;
         if(isTimeFinsh){
             toActivity();
@@ -82,16 +80,18 @@ public class WelcomeActivity extends BaseActivity{
                   @Override
                   public void onClick(DialogInterface dialogInterface, int i) {
                       HttpManager.setBaseUrl(UrlUtils.URL);
-                      getAuthLogin(uid);
                       SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,false);
+                      getAuthLogin(uid);
+
                   }
               })
               .setNegativeButton("测试服", new DialogInterface.OnClickListener() {
                   @Override
                   public void onClick(DialogInterface dialogInterface, int i) {
                       HttpManager.setBaseUrl(UrlUtils.URL_TEST);
-                      getAuthLogin(uid);
                       SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,true);
+                      getAuthLogin(uid);
+
                   }
               }).create();
       dialog.show();
@@ -136,12 +136,12 @@ public class WelcomeActivity extends BaseActivity{
                 return;
             }
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-               // getAuthLogin(uid); //真实发布
+                 getAuthLogin(uid); //真实发布
             } else {
                 MyToast.getToast(getApplicationContext(), "请查看你的网络！").show();
             }
         }
-         setSelectServer();//测试
+     //  setSelectServer();//测试
 
         btn_timer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +173,9 @@ public class WelcomeActivity extends BaseActivity{
      * @param userId
      */
     private void getAuthLogin(String userId) {
+        if (Utils.isEmpty(userId)) {
+            return;
+        }
         HttpManager.getInstance().getAuthLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {

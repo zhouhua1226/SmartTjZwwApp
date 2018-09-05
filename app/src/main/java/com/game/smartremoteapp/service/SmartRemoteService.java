@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -75,7 +74,7 @@ public class SmartRemoteService extends Service {
                     Utils.connectStatus = ConnectResultEvent.CONNECT_SUCCESS;
                     RxBus.get().post(Utils.TAG_CONNECT_SUCESS, Utils.TAG_CONNECT_SUCESS);
                 }
-                Log.e(TAG, "PING_SUCCESS！");
+                LogUtils.loge("PING_SUCCESS！",TAG);
             } else if (tag.equals(ConnectResultEvent.GATEWAY_UNEXIST) ||
                     (tag.equals(ConnectResultEvent.CONNECT_FAILURE))) {
                 if (!Utils.connectStatus.equals(ConnectResultEvent.CONNECT_FAILURE)) {

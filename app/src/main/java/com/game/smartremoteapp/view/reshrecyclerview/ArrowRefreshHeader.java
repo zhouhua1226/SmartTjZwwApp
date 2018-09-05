@@ -13,8 +13,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.utils.Utils;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 public class ArrowRefreshHeader extends LinearLayout {
     private static final int ROTATE_ANIM_DURATION = 180;
@@ -75,7 +77,7 @@ public class ArrowRefreshHeader extends LinearLayout {
      * 刷新完成
      */
     public void refreshComplete(){
-        mHeaderTimeView.setText(Utils.formatTime(new Date()));
+        mHeaderTimeView.setText(getCurrentTime(new Date()));
         done();
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -83,7 +85,10 @@ public class ArrowRefreshHeader extends LinearLayout {
             }
         }, 500);
     }
-
+    public String getCurrentTime(Date data){
+        SimpleDateFormat format=new SimpleDateFormat("MM-dd HH:mm:ss");
+        return format.format(data);
+    }
     /**
      * 释放动作,如果当前显示的高度大于布局测量高度并且没有在刷新中,当前显示刷新状态.
      * 如果不满足刷新的条件,恢复到隐藏状态

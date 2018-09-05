@@ -3,14 +3,12 @@ package com.game.smartremoteapp.activity.home;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
@@ -114,7 +112,6 @@ public class NavigationPageActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.e(TAG, "viewpager位置Selected=" + position);
                 if(position==0){
                     lijitiyanTv.setVisibility(View.VISIBLE);
                 }else {

@@ -3,7 +3,7 @@ package com.game.smartremoteapp.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -78,8 +78,6 @@ public class SureCancelDialog extends Dialog implements View.OnClickListener{
      * @param content
      */
     public void setDialogContent(String content) {
-        Log.i(TAG, content);
-        Log.i(TAG, dl_tv_content + "");
         dl_tv_content.setText(content);
     }
 

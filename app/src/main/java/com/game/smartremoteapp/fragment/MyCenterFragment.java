@@ -2,7 +2,6 @@ package com.game.smartremoteapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,6 +47,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.game.smartremoteapp.R.id.mycenter_mymoney_tv;
+import static com.game.smartremoteapp.utils.UserUtils.UserAmount;
 
 /**
  * Created by hongxiu on 2017/9/25.
@@ -98,8 +98,6 @@ public class MyCenterFragment extends BaseFragment {
     @BindView(R.id.mycenter_accinfo_layout)
     RelativeLayout mycenterAccinfoLayout;
 
-
-
     private String TAG = "MyCenterActivity";
     private List<VideoBackBean> videoList = new ArrayList<>();
 
@@ -117,7 +115,6 @@ public class MyCenterFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG, "个人中心userId=" + UserUtils.USER_ID);
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             //getUserDate(UserUtils.USER_ID);
            // getUserAccBalCount(UserUtils.USER_ID);
@@ -166,7 +163,7 @@ public class MyCenterFragment extends BaseFragment {
                         + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
                         + " 昵称=" + result.getData().getAppUser().getNICKNAME()
                         + " 头像=" + UserUtils.UserImage
-                        + " 发货地址=" + UserUtils.UserAddress);
+                        + " 发货地址=" + UserUtils.UserAddress,TAG);
                 getUserImageAndName();
             }
 
@@ -184,7 +181,7 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
             R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,
-            R.id.mycenter_integral,R.id.ll_integral_task})
+            R.id.mycenter_integral,R.id.ll_integral_task,R.id.imb_center_sign})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mycenter_kefu_layout:
@@ -260,30 +257,32 @@ public class MyCenterFragment extends BaseFragment {
                 break;
             case R.id.ll_integral_task:
                 Utils.toActivity(getContext(),IntegralTaskActivity.class);
-
+                break;
+            case R.id.imb_center_sign:
+                MainActivity.mMainActivity.getUserSign(UserUtils.USER_ID, "0",true); //签到请求
                 break;
             default:
                 break;
         }
     }
 
-//    private void getUserAccBalCount(String userId) {
-//        HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
-//            @Override
-//            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-//                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
-//                    String amount = httpDataInfoResult.getData().getAccBal();
-//                    UserAmount=amount;
-//                  //  mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
-//                }
-//            }
-//
-//            @Override
-//            public void _onError(Throwable e) {
-//                MyToast.getToast(getContext(), "网络异常！").show();
-//            }
-//        });
-//    }
+     private void getUserAccBalCount(String userId) {
+         HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
+                   String amount = httpDataInfoResult.getData().getAccBal();
+                    UserAmount=amount;
+                   //  mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+                 MyToast.getToast(getContext(), "网络异常！").show();
+             }
+       });
+     }
 
     private void getAppUserInf(String userId) {
         if (Utils.isEmpty(userId)) {
@@ -325,7 +324,7 @@ public class MyCenterFragment extends BaseFragment {
                         + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
                         + " 昵称=" + result.getData().getAppUser().getNICKNAME()
                         + " 头像=" + UserUtils.UserImage
-                        + " 发货地址=" + UserUtils.UserAddress);
+                        + " 发货地址=" + UserUtils.UserAddress,TAG);
                 getUserImageAndName();
             }
 

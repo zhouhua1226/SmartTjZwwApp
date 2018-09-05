@@ -3,11 +3,11 @@ package com.game.smartremoteapp.base;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
-import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 /**
  * Created by mi on 2018/4/8.
@@ -50,7 +50,6 @@ public class ActivityLifecycleListener implements Application.ActivityLifecycleC
     }
 
     private void exit( ) {
-        LogUtils.loge("App退出了");
          if(UserUtils.USER_ID!=null){
            getLogout(UserUtils.USER_ID);
         }

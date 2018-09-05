@@ -5,10 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.game.smartremoteapp.utils.LogUtils;
 
 import java.util.List;
 import java.util.Timer;
@@ -118,13 +119,12 @@ public class TextViewAd extends TextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.i(TAG, "onSizeChanged: " + h);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (mTexts !=null) {
-            Log.i(TAG, "onDraw: " + mY);
+            LogUtils.logi("onDraw: " + mY,TAG);
             //获取当前的数据
 
              String model = mTexts.get(mIndex);
@@ -146,7 +146,7 @@ public class TextViewAd extends TextView {
             }
             //移动到最上面
             if (mY == 0 - indexBound.bottom) {
-                Log.i(TAG, "onDraw: " + getMeasuredHeight());
+                LogUtils.logi("onDraw: " + getMeasuredHeight(),TAG);
                 mY = getMeasuredHeight() - indexBound.top;//返回底部
                 mIndex++;//换下一组数据
             }

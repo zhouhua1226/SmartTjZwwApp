@@ -20,6 +20,7 @@ import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.utils.Utils;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -78,19 +79,32 @@ public class ShareDialog {
                 switch (position) {
                     //QQ好友
                     case 0:
+                        if(!Utils.isQQClientAvailable(mContext)){
+                            MyToast.getToast(mContext,"你还未安装QQ客户端!").show();
+                            return;
+                        }
                         shareMedia = SHARE_MEDIA.QQ;
                         break;
                     case 1://QQ朋友圈
+                        if(!Utils.isQQClientAvailable(mContext)){
+                            MyToast.getToast(mContext,"你还未安装QQ客户端!").show();
+                            return;
+                        }
                         shareMedia = SHARE_MEDIA.QZONE;
                         break;
                     case 2://微信好友
+                        if(!Utils.isWeixinAvilible(mContext)){
+                            MyToast.getToast(mContext,"你还未安装QQ客户端!").show();
+                            return;
+                        }
                         shareMedia = SHARE_MEDIA.WEIXIN;
                         break;
                     case 3://微信朋友圈
+                        if(!Utils.isWeixinAvilible(mContext)){
+                            MyToast.getToast(mContext,"你还未安装QQ客户端!").show();
+                            return;
+                        }
                         shareMedia = SHARE_MEDIA.WEIXIN_CIRCLE;
-                        break;
-                    case 4://新浪微博
-                        shareMedia = SHARE_MEDIA.SINA;
                         break;
                 }
                 new ShareAction((BaseActivity) mContext)

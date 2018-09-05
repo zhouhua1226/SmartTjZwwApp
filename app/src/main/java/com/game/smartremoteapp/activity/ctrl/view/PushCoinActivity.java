@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
@@ -162,7 +161,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Utils.showLogE(TAG, "onRestart");
+        LogUtils.loge( "onRestart",TAG);
         if (ctrlFailIv.getVisibility() == View.VISIBLE) {
             ctrlFailIv.setVisibility(View.GONE);
         }
@@ -434,7 +433,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                                         isStartSend = false;
                                         setBtnEnabled(true);
                                     } else {
-                                        Log.e(TAG, "结算完毕,但是玩家再次使用了......");
+                                        LogUtils.loge( "结算完毕,但是玩家再次使用了......",TAG);
                                     }
 
                                 }
@@ -486,7 +485,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
             }
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
-            Utils.showLogE(TAG, appOutRoomResponse.toString());
+            LogUtils.loge( appOutRoomResponse.toString(),TAG);
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
                 userInfos.remove(appOutRoomResponse.getUserId());
@@ -505,7 +504,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_COIN_DEVICE_STATE)})
     public void getCoinDeviceState(String state) {
-        Utils.showLogE(TAG, "当前游戏机状态::::" + state);
+        LogUtils.loge( "当前游戏机状态::::" + state,TAG);
         if (state.equals("cbusy")) { //游戏中
 
         } else if (state.equals("cfree")) {//休闲中
@@ -574,11 +573,12 @@ public class PushCoinActivity extends Activity implements IctrlView {
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_ERR");
+            LogUtils.loge( "TAG_CONNECT_ERR",TAG);
             ctrl_status.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            Utils.showLogE(TAG, "TAG_CONNECT_SUCESS");
+
+            LogUtils.loge( "TAG_CONNECT_SUCESS",TAG);
             ctrl_status.setImageResource(R.drawable.point_green);
             NettyUtils.sendRoomInCmd("normal");
             //TODO 后续修改获取网关状态接口
@@ -593,14 +593,14 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getGatwayStates(String tag) {
         //TODO 发送命令 网关在使用中
-        Log.e(TAG, "....网关status...." + tag);
+        LogUtils.loge( "....网关status...." + tag,TAG);
     }
 
     //监控单个网关连接区
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_DISCONNECT)})
     public void getSingleGatwayDisConnect(String id) {
-        Utils.showLogE(TAG, "getSingleGatwayDisConnect id" + id);
+        LogUtils.loge( "getSingleGatwayDisConnect id" + id,TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrl_status.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
@@ -610,7 +610,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_CONNECT)})
     public void getSingleGatwayConnect(String id) {
-        Utils.showLogE(TAG, "getSingleGatwayConnect id" + id);
+        LogUtils.loge("getSingleGatwayConnect id" + id,TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrl_status.setImageResource(R.drawable.point_green);
             isCurrentConnect = true;
@@ -622,7 +622,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
         //当前房屋的人数
         userInfos = list;
         int counter = userInfos.size();
-        Utils.showLogE(TAG, "当前房屋的人数::::" + counter);
+        LogUtils.loge("当前房屋的人数::::" + counter,TAG);
         if (counter > 0) {
             String s = (counter + 20) + "人在线";//线人数 默认20个
             player_counter.setText(s);
@@ -636,7 +636,7 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     for (int i = 0; i < counter; i++) {
                         if (!userInfos.get(i).equals(UserUtils.USER_ID)) {
                             showUserId = userInfos.get(i);
-                            Utils.showLogE(TAG, "显示观察者的userId::::" + showUserId);
+                            LogUtils.loge("显示观察者的userId::::" + showUserId,TAG);
                             getCtrlUserImage(showUserId);
                             break;
                         }

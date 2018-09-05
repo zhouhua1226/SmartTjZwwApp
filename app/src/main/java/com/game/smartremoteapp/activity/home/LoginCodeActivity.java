@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -162,7 +161,7 @@ public class LoginCodeActivity extends BaseActivity {
 
             @Override
             public void _onError(Throwable e) {
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
     }
@@ -176,7 +175,6 @@ public class LoginCodeActivity extends BaseActivity {
         }
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            Log.e(TAG, platform.toString() + "--data==" + data.toString());
             if(data==null){
                 MyToast.getToast(getApplicationContext(),"登录失败！").show();
                 setGifView(false);
@@ -229,7 +227,7 @@ public class LoginCodeActivity extends BaseActivity {
                          + " regChannel=" + regChannel
                          + " name=" + name
                          + " profile_image_url=" + profile_image_url
-                         + " gender=" + gender);
+                         + " gender=" + gender,TAG);
                  wxLoginTask(uid,name,gender,profile_image_url,regChannel);
              }
              @Override
@@ -268,7 +266,7 @@ public class LoginCodeActivity extends BaseActivity {
             @Override
             public void _onError(Throwable e) {
                 setGifView(false);
-                LogUtils.logi(e.getMessage());
+                LogUtils.logi(e.getMessage(),TAG);
             }
         });
 

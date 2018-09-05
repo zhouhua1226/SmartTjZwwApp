@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,14 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.protocol.JCUtils;
-import com.game.smartremoteapp.protocol.MD5;
 import com.game.smartremoteapp.protocol.MyBase64;
 import com.game.smartremoteapp.protocol.RspBodyBaseBean;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GifView;
@@ -97,7 +95,7 @@ public class GameCenterActivity extends Activity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.e("游戏中心--------------"+JCUtils.UID,JCUtils.GAMECENTERPATH+"?"+data);  //+"&phone="+ Build.BRAND+"&height="+getBottomStatusHeight(context)
+            LogUtils.loge( JCUtils.GAMECENTERPATH+"?"+data,TAG);
             webView.loadUrl(JCUtils.GAMECENTERPATH+"?"+data);
             webView.reload();
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -89,7 +88,6 @@ public class GameCurrencyActivity extends BaseActivity {
         HttpManager.getInstance().getPaymenList(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG,"金币流水列表="+loginInfoResult.getMsg());
                 list=loginInfoResult.getData().getPaymentList();
                 if(list.size()>0){
                     gameCurrencyAdapter.notify(list);

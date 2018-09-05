@@ -6,7 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
+
+import com.game.smartremoteapp.utils.LogUtils;
 
 import java.io.File;
 
@@ -19,7 +20,7 @@ public class DownloadReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-         Log.d("BroadcastReceiver", intent.getAction());
+        LogUtils.loge(intent.getAction(),"BroadcastReceiver");
         if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
           long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
            installApk(context, id);

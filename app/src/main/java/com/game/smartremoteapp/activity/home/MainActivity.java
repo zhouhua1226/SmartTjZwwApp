@@ -2,7 +2,6 @@ package com.game.smartremoteapp.activity.home;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -102,7 +101,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initNetty();
         RxBus.get().register(this);
         initData();
-        //checkVersion();
+        checkVersion();
         getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
     }
 
@@ -115,7 +114,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         SPUtils.putBoolean(getApplicationContext(), "isVibrator", true);
         SPUtils.putBoolean(getApplicationContext(), "isOpenMusic", true);
         UserUtils.isUserChanger = false;
-        getUserSign(UserUtils.USER_ID, "0"); //签到请求 0 查询签到信息 1签到
+        getUserSign(UserUtils.USER_ID, "0",false); //签到请求 0 查询签到信息 1签到
     }
 
     private void initNetty() {
@@ -148,7 +147,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         loginInfoResult = YsdkUtils.loginResult;
         if (loginInfoResult != null && !loginInfoResult.equals("")) {
             if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
-                LogUtils.logi("logIn::::" + loginInfoResult.getMsg());
+                LogUtils.logi("logIn::::" + loginInfoResult.getMsg(),TAG);
                 Utils.token = loginInfoResult.getData().getAccessToken();
                 UserUtils.sessionID = loginInfoResult.getData().getSessionID();
                 UserUtils.SRSToken = loginInfoResult.getData().getSRStoken();
@@ -202,7 +201,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         AppClient.getInstance().setHost(socket);
         AppClient.getInstance().setPort(8580);
         if (!AppProperties.initProperties(getResources())) {
-            LogUtils.loge("netty初始化配置信息出错");
+            LogUtils.loge("netty初始化配置信息出错",TAG);
             return;
         }
         new Thread(new Runnable() {
@@ -227,7 +226,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 if (YsdkUtils.loginResult.getData().getSessionID() != null)
                     zwwjFragment.setSessionId(YsdkUtils.loginResult.getData().getSessionID(), false);
             }
-            getUserSign(UserUtils.USER_ID, "0"); //签到请求 0 查询签到信息 1签到
+            getUserSign(UserUtils.USER_ID, "0",false); //签到请求 0 查询签到信息 1签到
         } else {
             NettyUtils.pingRequest();
         }
@@ -242,16 +241,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            LogUtils.loge("TAG_CONNECT_ERR");
+            LogUtils.loge("TAG_CONNECT_ERR",TAG);
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            LogUtils.loge("TAG_CONNECT_SUCESS");
+            LogUtils.loge("TAG_CONNECT_SUCESS",TAG);
             //getDeviceStates();
         } else if (state.equals(Utils.TAG_SESSION_INVALID)) {
-            LogUtils.loge("TAG_SESSION_INVALID");
+            LogUtils.loge("TAG_SESSION_INVALID",TAG);
             //TODO 重连后重新连接 QQ/WEIXIN 模式检测
            getAuthLogin(UserUtils.USER_ID, YsdkUtils.access_token, UrlUtils.LOGIN_CTYPE, UrlUtils.LOGIN_CHANNEL);
         } else if (state.equals(Utils.TAG_GATEWAT_USING)) {
-            LogUtils.loge("TAG_GATEWAT_USING");
+            LogUtils.loge("TAG_GATEWAT_USING",TAG);
         }
     }
 
@@ -264,7 +263,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         HttpManager.getInstance().getAuthLogin(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG, "断开重连 重新获取相关参数" + loginInfoResult.getMsg());
+                LogUtils.loge( "断开重连 重新获取相关参数" + loginInfoResult.getMsg(),TAG);
                 if (loginInfoResult.getMsg().equals("success")) {
                     if ((zwwjFragment != null) && (loginInfoResult.getData() != null)) {
                         zwwjFragment.setSessionId(loginInfoResult.getData().getSessionID(), true);
@@ -323,17 +322,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         });
     }
 
-    private void setSignInDialog(int[] num) {
+    private void setSignInDialog(int[] num,boolean isSign) {
         signInDialog = new SignInDialog(this, R.style.easy_dialog_style);
         signInDialog.setCancelable(true);
         signInDialog.show();
+        signInDialog.isSignedView(isSign);
         signInDialog.setBackGroundColor(num);
         signInDialog.setDialogResultListener(new SignInDialog.DialogResultListener() {
             @Override
             public void getResult(int resultCode) {
                 switch (resultCode) {
                     case 0:
-                        getUserSign(UserUtils.USER_ID, "1");
+                        getUserSign(UserUtils.USER_ID, "1",false);
                         break;
                     default:
                         break;
@@ -358,7 +358,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     //签到请求
-    private void getUserSign(String userId, final String signType) {
+    public void getUserSign(String userId, final String signType, final boolean isShow) {
         HttpManager.getInstance().getUserSign(userId, signType, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
@@ -367,23 +367,30 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         //查询处理
                         isSign = loginInfoResult.getData().getSign().getSIGN_TAG();
                         signNumber = Integer.parseInt(loginInfoResult.getData().getSign().getCSDATE());
-                        LogUtils.logi("签到天数=" + signNumber);
                         for (int i = 0; i < 7; i++) {
                             if (i < signNumber) {
                                 signDayNum[i] = 1;
-                            } else {
+                             } else {
                                 signDayNum[i] = 0;
                             }
                         }
-                        if (signNumber < 7) {
-                            if (isSign.equals("0")) {
-                                setSignInDialog(signDayNum);
-                            }
-                        }
+                       LogUtils.loge("signNumber=="+signNumber+";isSign=="+isSign,TAG);
+                       if (signNumber < 7) {
+                             if (isSign.equals("0")) {
+                                 setSignInDialog(signDayNum, false);
+                              }else{
+                                 if(isShow){
+                                     setSignInDialog(signDayNum, true);
+                                 }
+                             }
+                         }else{
+                           if(isShow){
+                               setSignInDialog(signDayNum, true);
+                           }
+                         }
                     } else {
                         //签到处理
                         String signgold = loginInfoResult.getData().getSign().getSIGNGOLD();
-                        LogUtils.logi("签到赠送金币" + signgold);
                         getSignSuccessDialog(signgold);
                         signNumber += 1;
                         for (int i = 0; i < 7; i++) {
@@ -400,7 +407,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     MyToast.getToast(getApplicationContext(), loginInfoResult.getMsg()).show();
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
 

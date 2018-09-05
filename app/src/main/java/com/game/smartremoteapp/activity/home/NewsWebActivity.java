@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.base.BaseActivity;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.MyToast;
 
@@ -86,7 +86,7 @@ public class NewsWebActivity extends BaseActivity {
 
     private void loadUrl(){
         String path=getIntent().getStringExtra("newsurl");
-        Log.e(TAG,"图片新闻url="+path);
+        LogUtils.loge("图片新闻url="+path,TAG);
         webView.loadUrl(path.replace("\"", "/"));
         webView.reload();
     }

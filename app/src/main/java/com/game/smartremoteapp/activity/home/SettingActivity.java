@@ -5,7 +5,6 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,6 +21,7 @@ import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.model.http.download.DownLoadRunnable;
 import com.game.smartremoteapp.model.http.download.DownloadManagerUtil;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
@@ -272,7 +272,7 @@ public class SettingActivity extends BaseActivity {
         HttpManager.getInstance().getLogout(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                Log.e(TAG, "退出登录结果=" + loginInfoResult.getMsg());
+                LogUtils.loge( "退出登录结果=" + loginInfoResult.getMsg(),TAG);
                 if (loginInfoResult.getMsg().equals("success")) {
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISLOGOUT, true);
                     SPUtils.putString(getApplicationContext(), YsdkUtils.AUTH_TOKEN, "");

@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -23,6 +23,7 @@ import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
+import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.PermissionsUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -83,7 +84,7 @@ public class IntegralTaskActivity extends BaseActivity {
     }
 
     private void loadUrl(){
-        Log.e(TAG,"图片新闻url="+urlPath);
+        LogUtils.loge("图片新闻url="+urlPath,TAG);
         webView.loadUrl(urlPath.replace("\"", "/"));
         webView.reload();
     }
@@ -149,6 +150,15 @@ public class IntegralTaskActivity extends BaseActivity {
 
     }
 
+    //点击返回上一页面而不是退出浏览器
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -209,6 +219,15 @@ public class IntegralTaskActivity extends BaseActivity {
         //抓娃娃
         @JavascriptInterface
         public void  fist() {
+            MainActivity.mMainActivity.finish();
+            Intent intent=new Intent(IntegralTaskActivity.this,MainActivity.class);
+            intent.putExtra("mainIndex",0);
+            Utils.toActivity(IntegralTaskActivity.this,intent);
+            finish();
+        }
+        //竞猜
+        @JavascriptInterface
+        public void  betGame() {
             MainActivity.mMainActivity.finish();
             Intent intent=new Intent(IntegralTaskActivity.this,MainActivity.class);
             intent.putExtra("mainIndex",0);
