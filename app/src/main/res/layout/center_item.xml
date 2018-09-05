@@ -21,13 +21,6 @@
 
             />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/moppet_image"
-            android:background="#e3e3e3"
-            android:visibility="gone" />
-
         <TextView
             android:id="@+id/moppet_name_tv"
             android:layout_width="wrap_content"
@@ -64,12 +57,6 @@
             android:textColor="@color/gray"
             android:textSize="11sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_alignParentBottom="true"
-            android:background="#d6d6d6"
-            android:visibility="visible" />
 
     </RelativeLayout>
 

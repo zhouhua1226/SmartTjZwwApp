@@ -151,22 +151,23 @@ public class MyCenterFragment extends BaseFragment {
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
-                UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
-                UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
-                UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
-                UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
-                String name = result.getData().getAppUser().getCNEE_NAME();
-                String phone = result.getData().getAppUser().getCNEE_PHONE();
-                String address = result.getData().getAppUser().getCNEE_ADDRESS();
-                UserUtils.UserAddress = name + " " + phone + " " + address;
-                LogUtils.loge("个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
-                        + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
-                        + " 昵称=" + result.getData().getAppUser().getNICKNAME()
-                        + " 头像=" + UserUtils.UserImage
-                        + " 发货地址=" + UserUtils.UserAddress,TAG);
-                getUserImageAndName();
+                if (result.getMsg().equals(Utils.HTTP_OK)) {
+                    UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
+                    UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
+                    UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+                    UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
+                    String name = result.getData().getAppUser().getCNEE_NAME();
+                    String phone = result.getData().getAppUser().getCNEE_PHONE();
+                    String address = result.getData().getAppUser().getCNEE_ADDRESS();
+                    UserUtils.UserAddress = name + " " + phone + " " + address;
+                    LogUtils.loge("个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
+                            + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
+                            + " 昵称=" + result.getData().getAppUser().getNICKNAME()
+                            + " 头像=" + UserUtils.UserImage
+                            + " 发货地址=" + UserUtils.UserAddress, TAG);
+                    getUserImageAndName();
+                }
             }
-
             @Override
             public void _onError(Throwable e) {
             }
@@ -293,41 +294,42 @@ public class MyCenterFragment extends BaseFragment {
         HttpManager.getInstance().getAppUserInf(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
-                if(result.getData().getAppUser()==null){
-                    return;
-                }
-                UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
-                UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
-                UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
-                UserUtils.UserWeekDay=result.getData().getAppUser().getWEEKS_CARD();
-                UserUtils.UserMouthDay=result.getData().getAppUser().getMONTH_CARD();
-
-                UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
-                String name = result.getData().getAppUser().getCNEE_NAME();
-                String phone = result.getData().getAppUser().getCNEE_PHONE();
-                String address = result.getData().getAppUser().getCNEE_ADDRESS();
-                if(name!=null && phone!=null && address!=null) {
-                    UserUtils.UserAddress = name + " " + phone + " " + address;
-                }
-                UserUtils.IsBankInf = result.getData().getIsBankInf();
-                UserUtils.BankBean = result.getData().getBankCard();
-                if(!UserUtils.IsBankInf.equals("0")){
-                    UserUtils.UserPhone=result.getData().getBankCard().getBANK_PHONE();
-                }else{
-                    if(result.getData().getAppUser().getBDPHONE().equals("")&&result.getData().getAppUser().getBDPHONE()!=null){
-                        UserUtils.UserPhone=result.getData().getAppUser().getPHONE();
-                    }else{
-                        UserUtils.UserPhone=result.getData().getAppUser().getBDPHONE();
+                if (result.getMsg().equals(Utils.HTTP_OK)) {
+                    if (result.getData().getAppUser() == null) {
+                        return;
                     }
-                }
-                LogUtils.loge( "个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
-                        + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
-                        + " 昵称=" + result.getData().getAppUser().getNICKNAME()
-                        + " 头像=" + UserUtils.UserImage
-                        + " 发货地址=" + UserUtils.UserAddress,TAG);
-                getUserImageAndName();
-            }
+                    UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
+                    UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
+                    UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+                    UserUtils.UserWeekDay = result.getData().getAppUser().getWEEKS_CARD();
+                    UserUtils.UserMouthDay = result.getData().getAppUser().getMONTH_CARD();
 
+                    UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
+                    String name = result.getData().getAppUser().getCNEE_NAME();
+                    String phone = result.getData().getAppUser().getCNEE_PHONE();
+                    String address = result.getData().getAppUser().getCNEE_ADDRESS();
+                    if (name != null && phone != null && address != null) {
+                        UserUtils.UserAddress = name + " " + phone + " " + address;
+                    }
+                    UserUtils.IsBankInf = result.getData().getIsBankInf();
+                    UserUtils.BankBean = result.getData().getBankCard();
+                    if (!UserUtils.IsBankInf.equals("0")) {
+                        UserUtils.UserPhone = result.getData().getBankCard().getBANK_PHONE();
+                    } else {
+                        if (result.getData().getAppUser().getBDPHONE().equals("") && result.getData().getAppUser().getBDPHONE() != null) {
+                            UserUtils.UserPhone = result.getData().getAppUser().getPHONE();
+                        } else {
+                            UserUtils.UserPhone = result.getData().getAppUser().getBDPHONE();
+                        }
+                    }
+                    LogUtils.loge("个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
+                            + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
+                            + " 昵称=" + result.getData().getAppUser().getNICKNAME()
+                            + " 头像=" + UserUtils.UserImage
+                            + " 发货地址=" + UserUtils.UserAddress, TAG);
+                    getUserImageAndName();
+                }
+            }
             @Override
             public void _onError(Throwable e) {
                 MyToast.getToast(getContext(), "网络异常！").show();

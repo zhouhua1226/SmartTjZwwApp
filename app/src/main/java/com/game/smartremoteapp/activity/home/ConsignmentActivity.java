@@ -92,17 +92,10 @@ public class ConsignmentActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        initAddressData();
     }
 
     private void initData() {
-        if (!Utils.isEmpty(UserUtils.UserAddress)) {
-            informationTv.setText(UserUtils.UserAddress);
-            consignmentWwbdkyfTv.setText(Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
-        } else {
-            informationTv.setText("新增收货地址");
-            consignmentWwbdkyfTv.setText("娃娃币抵扣邮费");
-        }
         list = (List<VideoBackBean>) getIntent().getSerializableExtra("record");//获取list方式
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         consignmentRecyclerview.setLayoutManager(linearLayoutManager);
@@ -115,14 +108,22 @@ public class ConsignmentActivity extends BaseActivity {
         } else {
             consignmentSingleyjLayout.setVisibility(View.VISIBLE);
         }
+    }
 
+    private void initAddressData() {
+        if (!Utils.isEmpty(UserUtils.UserAddress)) {
+            informationTv.setText(UserUtils.UserAddress);
+            consignmentWwbdkyfTv.setText(Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
+        } else {
+            informationTv.setText("新增收货地址");
+            consignmentWwbdkyfTv.setText("娃娃币抵扣邮费");
+        }
     }
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
-        //initData();
-
+        initData();
     }
 
     @Override
