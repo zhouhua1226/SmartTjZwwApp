@@ -34,7 +34,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(true);//初始化logger 测试设置true    真实发布 设置false
+        LogUtils.logInit(false);//初始化logger 测试设置true    真实发布 设置false
     }
     private void setCrashHandler() {
 

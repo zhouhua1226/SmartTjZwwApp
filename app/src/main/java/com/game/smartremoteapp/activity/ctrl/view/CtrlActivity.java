@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -115,7 +116,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     TextView playerCounterIv;
     @BindView(R.id.player2_iv)
     ImageView playerSecondIv;
-     @BindView(R.id.main_player_iv)
+    @BindView(R.id.main_player_iv)
     ImageView playerMainIv;
     @BindView(R.id.player_name_tv)
     TextView playerNameTv;
@@ -129,7 +130,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     ImageView ctrlChangeCameraIv;
 
     private static final String TAG = "CtrlActivity---";
-   @BindView(R.id.iv_quiz_layout)
+    @BindView(R.id.iv_quiz_layout)
     ImageView ctrlQuizLayout;
     @BindView(R.id.ctrl_instruction_image)
     ImageView ctrlInstructionImage; //竞猜介绍
@@ -236,12 +237,12 @@ public class CtrlActivity extends Activity implements IctrlView {
     //用户操作和竞猜
     private boolean isStart = false;
     private boolean isLottery = false;
-    private String periodsNum="null";
+    private String periodsNum = "null";
     private MediaPlayer mediaPlayer;
     private MediaPlayer btn_mediaPlayer;
     //显示的用户的name
     private String showName = "";
-    private int prob=0;         //抓取概率
+    private int prob = 0;         //抓取概率
     private String reward = "";    //预计奖金
     private String showUserId = "";
     private int betFlodNum = 5;   //默认投注倍数
@@ -250,8 +251,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     private List<TextView> betProList;    //追投
     private List<Marquee> marquees = new ArrayList<>();
     private Handler handler = new Handler();
-    private int betPro =1;   //追投期数   游戏中默认不追投0,休闲1
-    private boolean flag=false;//在游戏中true.休闲false
+    private int betPro = 1;   //追投期数   游戏中默认不追投0,休闲1
+    private boolean flag = false;//在游戏中true.休闲false
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +279,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         initData();
         coinTv.setText("我的游戏币:" + UserUtils.UserBalance);
         setVibrator();   //初始化振动器
-      //  getGuesserlast10();
+        //  getGuesserlast10();
         handler.post(mRunnable);
     }
 
@@ -305,11 +306,11 @@ public class CtrlActivity extends Activity implements IctrlView {
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
         playUrlSecond = getIntent().getStringExtra(Utils.TAG_URL_SECOND);
         dollName = getIntent().getStringExtra(Utils.TAG_ROOM_NAME);
-        if(Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD))){
+        if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD))) {
             money = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD));
         }
         dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
-        if(Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_ROOM_PROB))){
+        if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_ROOM_PROB))) {
             prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB));
         }
 
@@ -508,7 +509,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         }
     };
 
-    @OnClick({R.id.image_back,   R.id.ctrl_back_imag,
+    @OnClick({R.id.image_back, R.id.ctrl_back_imag,
             R.id.startgame_ll, R.id.ctrl_fail_iv, R.id.iv_quiz_layout,
             R.id.ctrl_instruction_image, R.id.ctrl_betting_winning, R.id.ctrl_betting_fail,
             R.id.ctrl_confirm_layout, R.id.ctrl_betting_back_button,
@@ -518,8 +519,8 @@ public class CtrlActivity extends Activity implements IctrlView {
             R.id.ctrl_betnum_six_tv, R.id.ctrl_betnum_seven_tv, R.id.ctrl_betnum_eight_tv,
             R.id.ctrl_betnum_nine_tv, R.id.ctrl_bet_tenflod_tv, R.id.ctrl_bet_twentyfold_tv,
             R.id.ctrl_bet_fiftyfold_tv, R.id.ctrl_bet_hundredfold_tv, R.id.ctrl_room_detail,
-            R.id.ctrl_betpernum_tv,R.id.ctrl_bet_onepro_tv,R.id.ctrl_bet_fivepro_tv,
-            R.id.ctrl_bet_tenpro_tv,R.id.ctrl_bet_twentypro_tv})
+            R.id.ctrl_betpernum_tv, R.id.ctrl_bet_onepro_tv, R.id.ctrl_bet_fivepro_tv,
+            R.id.ctrl_bet_tenpro_tv, R.id.ctrl_bet_twentypro_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -561,7 +562,7 @@ public class CtrlActivity extends Activity implements IctrlView {
 //                }
                 ctrlButtomLayout.setVisibility(View.GONE);
                 ctrlBetingLayout.setVisibility(View.VISIBLE);
-                if(!periodsNum.equals("null")){
+                if (!periodsNum.equals("null")) {
                     getPond(periodsNum, dollId);
                 }
                 ctrlBettingFail.setImageResource(R.drawable.ctrl_guess_unselect_bz);
@@ -605,24 +606,24 @@ public class CtrlActivity extends Activity implements IctrlView {
                     return;
                 }
                 int totalMoney;
-                if(flag){
-                    totalMoney = betMoney *(betPro+1) ;
-                }else{
-                    totalMoney = betMoney *  betPro ;
+                if (flag) {
+                    totalMoney = betMoney * (betPro + 1);
+                } else {
+                    totalMoney = betMoney * betPro;
                 }
-               if (Integer.parseInt(UserUtils.UserBalance) >= totalMoney) {
-                if (!zt.equals("")) {
-                     getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId,betPro,betFlodNum,flag);
-                       ctrlButtomLayout.setVisibility(View.VISIBLE);
+                if (Integer.parseInt(UserUtils.UserBalance) >= totalMoney) {
+                    if (!zt.equals("")) {
+                        getBets(UserUtils.USER_ID, Integer.valueOf(betMoney).intValue(), zt, periodsNum, dollId, betPro, betFlodNum, flag);
+                        ctrlButtomLayout.setVisibility(View.VISIBLE);
                         ctrlBetingLayout.setVisibility(View.GONE);
-                       isLottery = true;
-                       initBet();
+                        isLottery = true;
+                        initBet();
                     } else {
-                       MyToast.getToast(getApplicationContext(), "请下注！").show();
-                   }
-               } else {
+                        MyToast.getToast(getApplicationContext(), "请下注！").show();
+                    }
+                } else {
                     setCatchResultDialog(0);
-               }
+                }
                 break;
             case R.id.ctrl_betting_back_button:
                 initBet();
@@ -635,8 +636,8 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case R.id.ctrl_guessrecord_tv:
                 //startActivity(new Intent(this, BetRecordActivity.class));
-                Intent intent=new Intent(this,RoomPlayRecordActivity.class);
-                intent.putExtra("roomId",dollId);
+                Intent intent = new Intent(this, RoomPlayRecordActivity.class);
+                intent.putExtra("roomId", dollId);
                 startActivity(intent);
                 break;
             case R.id.ctrl_betnum_zero_tv:
@@ -729,57 +730,57 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case R.id.ctrl_betpernum_tv:
                 //显示隐藏追投期数逻辑
-                if(ctrlBetpernumLayout.getVisibility()==View.VISIBLE){
+                if (ctrlBetpernumLayout.getVisibility() == View.VISIBLE) {
                     ctrlBetpernumLayout.setVisibility(View.GONE);
                     Drawable rightUp = getResources().getDrawable(R.drawable.ctrl_betpronum_up);
                     rightUp.setBounds(0, 0, rightUp.getMinimumWidth(), rightUp.getMinimumHeight());
-                    ctrlBetpernumTv.setCompoundDrawables(null,null,rightUp,null);
-                }else {
+                    ctrlBetpernumTv.setCompoundDrawables(null, null, rightUp, null);
+                } else {
                     ctrlBetpernumLayout.setVisibility(View.VISIBLE);
                     Drawable rightDown = getResources().getDrawable(R.drawable.ctrl_betpronum_down);
                     rightDown.setBounds(0, 0, rightDown.getMinimumWidth(), rightDown.getMinimumHeight());
-                    ctrlBetpernumTv.setCompoundDrawables(null,null,rightDown,null);
+                    ctrlBetpernumTv.setCompoundDrawables(null, null, rightDown, null);
                 }
                 break;
             case R.id.ctrl_bet_onepro_tv:
-                if(betPro==1){
+                if (betPro == 1) {
                     ctrlBetOneproTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetOneproTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betPro=0;
-                }else {
+                    betPro = 0;
+                } else {
                     betPro = 1;
                     setBetProbg(0);
                 }
                 setBetRewardChange(betFlodNum);
                 break;
             case R.id.ctrl_bet_fivepro_tv:
-                if(betPro==5){
+                if (betPro == 5) {
                     ctrlBetFiveproTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetFiveproTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betPro=0;
-                }else {
+                    betPro = 0;
+                } else {
                     betPro = 5;
                     setBetProbg(1);
                 }
                 setBetRewardChange(betFlodNum);
                 break;
             case R.id.ctrl_bet_tenpro_tv:
-                if(betPro==10){
+                if (betPro == 10) {
                     ctrlBetTenproTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetTenproTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betPro=0;
-                }else {
+                    betPro = 0;
+                } else {
                     betPro = 10;
                     setBetProbg(2);
                 }
                 setBetRewardChange(betFlodNum);
                 break;
             case R.id.ctrl_bet_twentypro_tv:
-                if(betPro==20){
+                if (betPro == 20) {
                     ctrlBetTwentyproTv.setTextColor(getResources().getColor(R.color.white));
                     ctrlBetTwentyproTv.setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
-                    betPro=0;
-                }else {
+                    betPro = 0;
+                } else {
                     betPro = 20;
                     setBetProbg(3);
                 }
@@ -959,16 +960,16 @@ public class CtrlActivity extends Activity implements IctrlView {
 //        }
         if (isBet) {
             if (!isLottery) {
-              //  moneyImage.setImageResource(R.drawable.ctrl_bet_button);
+                //  moneyImage.setImageResource(R.drawable.ctrl_bet_button);
                 ctrlQuizLayout.setEnabled(true);
-                flag=true;
-                betPro=0;
+                flag = true;
+                betPro = 0;
             }
         } else {
-         //   moneyImage.setImageResource(R.drawable.ctrl_bet_button);
+            //   moneyImage.setImageResource(R.drawable.ctrl_bet_button);
             ctrlQuizLayout.setEnabled(true);
-            flag=false;
-            betPro=1;
+            flag = false;
+            betPro = 1;
         }
     }
 
@@ -994,7 +995,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         betFoldList.add(ctrlBetFiftyfoldTv);
         betFoldList.add(ctrlBetHundredfoldTv);
 
-        betProList=new ArrayList<>();
+        betProList = new ArrayList<>();
         betProList.add(ctrlBetOneproTv);
         betProList.add(ctrlBetFiveproTv);
         betProList.add(ctrlBetTenproTv);
@@ -1036,7 +1037,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
     //竞猜追投UI变动
-    private void setBetProbg(int proNum){
+    private void setBetProbg(int proNum) {
         for (int i = 0; i < betProList.size(); i++) {
             if (i == proNum) {
                 betProList.get(i).setTextColor(getResources().getColor(R.color.ctrl_textcolor));
@@ -1052,8 +1053,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     //竞猜奖金和金额UI变动
     private void setBetRewardChange(int num) {
         int re = Integer.parseInt(reward) * num;
-        betMoney = money * num ;
-        int showBetMoney= money*num;
+        betMoney = money * num;
+        int showBetMoney = money * num;
         ctrlBetremarkTv.setText("预计奖金" + re + "金币");
         ctrlConfirmLayout.setText(betMoney + "/次");
     }
@@ -1062,18 +1063,18 @@ public class CtrlActivity extends Activity implements IctrlView {
     private void initBet() {
         zt = "";
         betFlodNum = 5;
-        betPro=0;
+        betPro = 0;
         setBetNumBg(zt);
         setBetRewardChange(betFlodNum);
         ctrlBetpernumLayout.setVisibility(View.GONE);
         Drawable rightUp = getResources().getDrawable(R.drawable.ctrl_betpronum_up);
         rightUp.setBounds(0, 0, rightUp.getMinimumWidth(), rightUp.getMinimumHeight());
-        ctrlBetpernumTv.setCompoundDrawables(null,null,rightUp,null);
+        ctrlBetpernumTv.setCompoundDrawables(null, null, rightUp, null);
         for (int i = 0; i < betFoldList.size(); i++) {
             betFoldList.get(i).setTextColor(getResources().getColor(R.color.white));
             betFoldList.get(i).setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
         }
-        for(int i=0;i<betProList.size();i++){
+        for (int i = 0; i < betProList.size(); i++) {
             betProList.get(i).setTextColor(getResources().getColor(R.color.white));
             betProList.get(i).setBackgroundResource(R.drawable.ctrl_guess_unbetnum_bg);
         }
@@ -1100,19 +1101,18 @@ public class CtrlActivity extends Activity implements IctrlView {
                 }
                 if (moveControlResponse.getMoveType().name().equals(MoveType.START.name())) {
                     setStartMode(false);
+                    uiHandler.removeCallbacks(runnable);
                     //期号为空 竞猜流局
                     if (moveControlResponse.getRpcSuccess()) {
                         //获取期号
                         periodsNum = moveControlResponse.getPeriodsNum();
                     } else {
                         periodsNum = "null";
-                        //moneyImage.setImageResource(R.drawable.ctrl_bet_button);
                         ctrlQuizLayout.setEnabled(true);
                     }
                 } else if (moveControlResponse.getMoveType().name().equals(MoveType.CATCH.name())) {
                     //TODO 其他用户下爪了 观看者
                     LogUtils.loge("观看者观察到下爪了......", TAG);
-                 //   moneyImage.setImageResource(R.drawable.ctrl_unbet_button);
                     ctrlQuizLayout.setEnabled(false);
                     ctrlBetingLayout.setVisibility(View.GONE);
                     ctrlButtomLayout.setVisibility(View.VISIBLE);
@@ -1134,16 +1134,15 @@ public class CtrlActivity extends Activity implements IctrlView {
                         .equals(MoveType.CATCH.name())) {
                     //TODO 本人点击下爪了 下爪成功
                     LogUtils.loge("本人点击下爪成功......", TAG);
-                 //   moneyImage.setImageResource(R.drawable.ctrl_bet_button);
                     ctrlQuizLayout.setEnabled(true);
                     catchLl.setEnabled(false);
                 }
             }
         } else if (response instanceof String) {
-            LogUtils.loge( "move faile....",TAG);
+            LogUtils.loge("move faile....", TAG);
         } else if (response instanceof AppOutRoomResponse) {
             AppOutRoomResponse appOutRoomResponse = (AppOutRoomResponse) response;
-            LogUtils.loge( appOutRoomResponse.toString(),TAG);
+            LogUtils.loge(appOutRoomResponse.toString(), TAG);
             long seq = appOutRoomResponse.getSeq();
             if (seq == -2) {
                 userInfos.remove(appOutRoomResponse.getUserId());
@@ -1155,7 +1154,7 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         } else if (response instanceof AppInRoomResponse) {
             AppInRoomResponse appInRoomResponse = (AppInRoomResponse) response;
-            LogUtils.loge( "=====" + appInRoomResponse.toString(),TAG);
+            LogUtils.loge("=====" + appInRoomResponse.toString(), TAG);
             String allUsers = appInRoomResponse.getAllUserInRoom(); //返回的UserId
             Boolean free = appInRoomResponse.getFree();
             long seq = appInRoomResponse.getSeq();
@@ -1170,11 +1169,8 @@ public class CtrlActivity extends Activity implements IctrlView {
                 } else {
                     startgameLl.setBackgroundResource(R.drawable.icon_crt_paly_game);
                     startgame_text.setText("正在排队");
-                 //   startgameTextImag.setImageResource(R.drawable.ctrl_begin_loading);
                 }
-             //   ctrlQuizLayout.setVisibility(View.VISIBLE);
-                //moneyImage.setImageResource(R.drawable.ctrl_bet_button);
-              //  ctrlQuizLayout.setEnabled(true);
+
             } else {
                 boolean is = false;
                 if (userInfos.size() == 1) {
@@ -1193,11 +1189,11 @@ public class CtrlActivity extends Activity implements IctrlView {
             @Tag(Utils.TAG_CONNECT_SUCESS)})
     public void getConnectStates(String state) {
         if (state.equals(Utils.TAG_CONNECT_ERR)) {
-            LogUtils.loge( "TAG_CONNECT_ERR",TAG);
+            LogUtils.loge("TAG_CONNECT_ERR", TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
         } else if (state.equals(Utils.TAG_CONNECT_SUCESS)) {
-            LogUtils.loge( "TAG_CONNECT_SUCESS",TAG);
+            LogUtils.loge("TAG_CONNECT_SUCESS", TAG);
             ctrlStatusIv.setImageResource(R.drawable.point_green);
             NettyUtils.sendRoomInCmd("normal");
             //TODO 后续修改获取网关状态接口
@@ -1210,7 +1206,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(Utils.TAG_GATEWAY_SINGLE_DISCONNECT)})
     public void getSingleGatwayDisConnect(String id) {
-        LogUtils.loge("getSingleGatwayDisConnect id" + id,TAG);
+        LogUtils.loge("getSingleGatwayDisConnect id" + id, TAG);
         if (id.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
             ctrlStatusIv.setImageResource(R.drawable.point_red);
             isCurrentConnect = false;
@@ -1259,10 +1255,10 @@ public class CtrlActivity extends Activity implements IctrlView {
     public void getDeviceFree(GatewayPoohStatusMessage message) {
         String roomId = message.getRoomId();
         int number = message.getGifinumber();
-        LogUtils.loge("getDeviceFree::::::" + roomId + "======" + number,TAG);
+        LogUtils.loge("getDeviceFree::::::" + roomId + "======" + number + "====" + isStart, TAG);
         if (roomId.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
-            getStartstation();
-            setStartMode(true);
+//            getStartstation();
+//            setStartMode(true);
             getUserDate(UserUtils.USER_ID);    //再次获取用户余额并更新UI
             ctrlCompl.stopRecordView(); //录制完毕
             if (isStart) {
@@ -1284,12 +1280,22 @@ public class CtrlActivity extends Activity implements IctrlView {
                     }
                     setCatchResultDialog(2);
                 }
+            } else {
+                isStart = false;
+                uiHandler.postDelayed(runnable, 4*1000);
             }
-            isStart = false;  //标志复位
             isLottery = false;
             upTime = "";
         }
     }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            getStartstation();
+            setStartMode(true);
+        }
+    };
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
             @Tag(Utils.TAG_LOTTERY_DRAW)})
@@ -1330,7 +1336,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     //下注接口
     private void getBets(String userID, final Integer wager, String guessKey, String guessId,
                          String dollID, int afterVoting, int multiple, boolean flag) {
-        HttpManager.getInstance().getBets(userID, wager, guessKey, guessId, dollID,afterVoting,multiple,flag, new RequestSubscriber<Result<AppUserBean>>() {
+        HttpManager.getInstance().getBets(userID, wager, guessKey, guessId, dollID, afterVoting, multiple, flag, new RequestSubscriber<Result<AppUserBean>>() {
             @Override
             public void _onSuccess(Result<AppUserBean> appUserBeanResult) {
 
@@ -1339,7 +1345,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                     if (!TextUtils.isEmpty(balance)) {
                         coinTv.setText("我的游戏币:" + balance);
                         UserUtils.UserBalance = balance;
-                      //  coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + " 充值");
+                        //  coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + " 充值");
                     }
                 }
 
@@ -1426,7 +1432,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                         String balance = bean.getBALANCE();
                         //UserUtils.UserBetNum = bean.getBET_NUM();
                         if (!TextUtils.isEmpty(balance)) {
-                            coinTv.setText("我的游戏币:" +balance );
+                            coinTv.setText("我的游戏币:" + balance);
                             UserUtils.UserBalance = balance;
                         }
 //                        String showImage = UrlUtils.USERFACEIMAGEURL + bean.getIMAGE_URL();
@@ -1492,12 +1498,12 @@ public class CtrlActivity extends Activity implements IctrlView {
         //btn_mediaPlayer.start();
     }
 
-    private void setCatchResultDialog(final int index  ) {
+    private void setCatchResultDialog(final int index) {
         final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
         catchDollResultDialog.setCancelable(false);
         catchDollResultDialog.show();
 
-        switch (index){
+        switch (index) {
             case 0:
                 catchDollResultDialog.setTitle("余额不足！");
                 catchDollResultDialog.setContent("请充值。");
@@ -1525,17 +1531,28 @@ public class CtrlActivity extends Activity implements IctrlView {
         catchDollResultDialog.setDialogResultListener(new CatchDollResultDialog.DialogResultListener() {
             @Override
             public void getResult(int resultCode) {
-                if(resultCode>0) {
-                    switch (index) {
-                        case 0:
-                            Utils.toActivity(CtrlActivity.this, RechargeActivity.class);
-                            break;
-                    }
+                isStart = false;
+                if ((resultCode == 1) && (index == 0)) {
+                    Utils.toActivity(CtrlActivity.this, RechargeActivity.class);
+                    return;
                 }
-                catchDollResultDialog.dismiss();
+                if (resultCode == 1 ) {
+                    //TODO 在玩一次
+                    Log.e("===", "==START AGAIN===");
+                    if ((Utils.connectStatus.equals(ConnectResultEvent.CONNECT_SUCCESS))
+                            && (isCurrentConnect)) {
+                        ctrlCompl.sendCmdCtrl(MoveType.START);
+                        coinTv.setText("我的游戏币:" + (Integer.parseInt(UserUtils.UserBalance) - money));
+                        isStart = true;
+                    }
+                    setVibratorTime(300, -1);
+                    return;
+                }
+                getStartstation();
+                setStartMode(true);
             }
         });
-        if(index>0) {  //抓娃娃娃娃机
+        if (index > 0) {  //抓娃娃娃娃机
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -1547,6 +1564,8 @@ public class CtrlActivity extends Activity implements IctrlView {
                         } else {
                             catchDollResultDialog.dismiss();
                         }
+                        getStartstation();
+                        setStartMode(true);
                     }
                 }
             }, 3000);
