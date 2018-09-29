@@ -91,7 +91,6 @@ public class WelcomeActivity extends BaseActivity{
                       HttpManager.setBaseUrl(UrlUtils.URL_TEST);
                       SPUtils.putBoolean(getApplicationContext(),SPUtils.ISTEST,true);
                       getAuthLogin(uid);
-
                   }
               }).create();
       dialog.show();
@@ -136,12 +135,12 @@ public class WelcomeActivity extends BaseActivity{
                 return;
             }
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-                 getAuthLogin(uid); //真实发布
+                getAuthLogin(uid); //真实发布
             } else {
                 MyToast.getToast(getApplicationContext(), "请查看你的网络！").show();
             }
         }
-     //  setSelectServer();//测试
+        // setSelectServer();//测试
 
         btn_timer.setOnClickListener(new View.OnClickListener() {
             @Override

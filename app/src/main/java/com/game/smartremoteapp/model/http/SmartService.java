@@ -8,6 +8,7 @@ import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
+import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
@@ -735,10 +736,10 @@ public interface SmartService {
                                                        @Field(UrlUtils.PLAYID) String pid,
                                                        @Field(UrlUtils.PAYCHANNELTYPE) String payChannelType,
                                                        @Field(UrlUtils.APPVERSION) String appversion,
-                                                     @Field(UrlUtils.PAYOUTTYPE) String payOutType,
-                                                     @Field(UrlUtils.PAYTYPE) String payType,
-                                                     @Field(UrlUtils.WXQQ_CTYPE) String ctype,
-                                                     @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
+                                                        @Field(UrlUtils.PAYOUTTYPE) String payOutType,
+                                                       @Field(UrlUtils.PAYTYPE) String payType,
+                                                       @Field(UrlUtils.WXQQ_CTYPE) String ctype,
+                                                       @Field(UrlUtils.WXQQ_CHANNEL) String loginChannel);
     //支付宝支付
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
@@ -778,4 +779,23 @@ public interface SmartService {
     Observable<JCResult> getBeanEXGold(@Field("wwjuserid") String userId,
                                                    @Field("userid") String uid ,
                                                    @Field(UrlUtils.JD) String  jd);
+
+
+    //金币商城
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GOLDMAILURL)
+    Observable<Result<String>> getGoldMallUrl(@Field(UrlUtils.USERID) String userId);
+
+    //金币兑换列表
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.DOREWARD)
+    Observable<Result<String>> doReward(@Field(UrlUtils.USERID) String userId);
+
+    //金币兑换接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.REWARDGOLDBEAN)
+    Observable<Result<LoginRewardGoldBean>> getRewardInfo(@Field(UrlUtils.USERID) String userId);
 }

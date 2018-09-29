@@ -103,7 +103,7 @@ public class ConsignmentActivity extends BaseActivity {
         consignmentAdapter = new ConsignmentAdapter(this, list);
         consignmentRecyclerview.setAdapter(consignmentAdapter);
 
-        if (list.size() >= 2) {
+        if (list.size() >= 3) {
             consignmentSingleyjLayout.setVisibility(View.GONE);
         } else {
             consignmentSingleyjLayout.setVisibility(View.VISIBLE);

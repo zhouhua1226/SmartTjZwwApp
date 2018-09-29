@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="65dp">
+  <TextView
+      android:id="@+id/tv_reward_gold"
+      android:layout_width="wrap_content"
+      android:textSize="14sp"
+      android:textColor="#19180f"
+      android:layout_marginTop="10dp"
+      android:layout_marginLeft="12dp"
+      android:layout_alignParentLeft="true"
+      android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_reward_date"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#b2b2b2"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_reward_option"
+        android:layout_width="60dp"
+        android:layout_height="28dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_reward_gold_nomal"
+        android:gravity="center"
+        android:text="领取"
+        android:textSize="12sp" />
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_alignParentBottom="true"
+      android:background="@color/backcolor"></View>
+
+</RelativeLayout>

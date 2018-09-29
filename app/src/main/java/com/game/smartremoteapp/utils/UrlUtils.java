@@ -81,6 +81,8 @@ public class UrlUtils {
     public static final String ICONURL ="iconurl" ;
     public static final String REGCHANNEL ="regChannel" ;
     public static final String PAYCHANNELTYPE ="payChannelType" ;
+    public static final String  CTYPE_WX_PAY_ANROID="现在微信ANDROID";
+    public static final String  CTYPE_APLIAY_ANROID="支付宝ANDROID";
     //ysdk支付金额字段
     public static final String WXQQ_AMOUNT="amount";
     //签到接口
@@ -363,6 +365,9 @@ public class UrlUtils {
     //积分商城
     public static final String INTEGRAL = "/pooh-web/app/pointsMall/getPointsMallUrl";
 
+    //金币商城
+    public static final String GOLDMAILURL = "/pooh-web/app/goldMall/getGoldMallUrl";
+
     //积分任务
     public static final String INTEGRALTASK = "/pooh-web/app/pointsMall/getPointsMallTask";
 
@@ -381,5 +386,8 @@ public class UrlUtils {
     //金币兑换金豆
     public static final String COINEXBEANSURL="/pooh-web/app/Jc51H5Game/getGoldenbean";
 
-
+    //金币兑换
+    public static final String DOREWARD ="/pooh-web/app/loginReward/doReward";
+    //金币兑换列表
+    public static final String REWARDGOLDBEAN ="/pooh-web/app/loginReward/getRewardInfo";
 }

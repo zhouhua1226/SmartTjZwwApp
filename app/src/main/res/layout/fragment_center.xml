@@ -1,591 +1,614 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.game.smartremoteapp.view.ElasticScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backcolor"
-    android:orientation="vertical"
-    android:scrollbars="none">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backcolor"
-        android:orientation="vertical">
+    android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="60dp"
             android:background="@color/apptheme_bg"
             android:gravity="center"
             android:paddingTop="20dp"
             android:text="我的"
             android:textColor="@color/white"
             android:textSize="18sp" />
+     <android.support.v4.widget.NestedScrollView
+         android:layout_width="match_parent"
+         android:scrollbars="none"
+         android:layout_height="match_parent">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/backcolor"
+             android:orientation="vertical">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="150dp"
+                 android:background="@color/apptheme_bg">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@color/apptheme_bg">
-            <ImageView
-                android:id="@+id/user_image"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+                 <ImageView
+                     android:id="@+id/user_image"
+                     android:layout_width="70dp"
+                     android:layout_height="70dp"
+                     android:layout_centerVertical="true"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="50dp"
-                android:layout_toRightOf="@+id/user_image"
-                android:ellipsize="end"
-                android:gravity="left"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:text="用户名" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_name"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="7dp"
-                android:layout_toRightOf="@+id/user_image"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/user_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="20dp"
-                    android:text="累积抓中0次"
-                    android:textColor="@color/white"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_integral_task"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="30dp"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="@drawable/dialog_apptheme_bg"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:visibility="visible">
-                <ImageView
-                    android:layout_width="wrap_content"
+                 <TextView
+                     android:id="@+id/user_name"
+                     android:layout_width="150dp"
                      android:layout_height="wrap_content"
-                    android:background="@drawable/icon_integral_sign" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="每日积分任务"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:background="@drawable/icon_integral_arrow" />
-            </LinearLayout>
+                     android:layout_marginLeft="25dp"
+                     android:layout_marginTop="50dp"
+                     android:layout_toRightOf="@+id/user_image"
+                     android:ellipsize="end"
+                     android:gravity="left"
+                     android:maxLines="1"
+                     android:textColor="@color/white"
+                     android:textSize="15sp"
+                     android:textStyle="bold"
+                     tools:text="用户名" />
+
+                 <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@+id/user_name"
+                     android:layout_marginLeft="25dp"
+                     android:layout_marginTop="7dp"
+                     android:layout_toRightOf="@+id/user_image"
+                     android:gravity="center"
+                     android:orientation="horizontal">
+
+                     <TextView
+                         android:id="@+id/user_number"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:layout_marginRight="20dp"
+                         android:text="累积抓中0次"
+                         android:textColor="@color/white"
+                         android:textSize="13sp" />
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/ll_integral_task"
+                     android:layout_width="wrap_content"
+                     android:layout_height="30dp"
+                     android:layout_alignParentBottom="true"
+                     android:layout_alignParentRight="true"
+                     android:layout_marginBottom="30dp"
+                     android:layout_marginRight="@dimen/activity_horizontal_margin"
+                     android:background="@drawable/dialog_apptheme_bg"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingBottom="5dp"
+                     android:paddingLeft="10dp"
+                     android:paddingRight="10dp"
+                     android:paddingTop="5dp"
+                     android:visibility="visible">
+
+                     <ImageView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/icon_integral_sign" />
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginLeft="4dp"
+                         android:text="每日积分任务"
+                         android:textColor="@color/white"
+                         android:textSize="12sp" />
+
+                     <ImageView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginLeft="4dp"
+                         android:background="@drawable/icon_integral_arrow" />
+                 </LinearLayout>
 
                  <ImageButton
-                   android:id="@+id/imb_center_sign"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
+                     android:id="@+id/imb_center_sign"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
                      android:layout_above="@+id/ll_integral_task"
+                     android:layout_alignParentRight="true"
+                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
                      android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/icon_center_sign" />
+                     android:background="@drawable/icon_center_sign"
+                     android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/mycenter_agency_tv"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/white_border_corners"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp"
-                android:text="代理"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:visibility="gone" />
+                 <TextView
+                     android:visibility="gone"
+                     android:id="@+id/mycenter_agency_tv"
+                     android:layout_width="70dp"
+                     android:layout_height="wrap_content"
+                     android:layout_above="@+id/ll_integral_task"
+                     android:layout_alignParentRight="true"
+                     android:layout_centerVertical="true"
+                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                     android:layout_marginRight="@dimen/activity_horizontal_margin"
+                     android:background="@drawable/white_border_corners"
+                     android:gravity="center"
+                     android:paddingBottom="5dp"
+                     android:paddingLeft="10dp"
+                     android:paddingRight="15dp"
+                     android:paddingTop="5dp"
+                     android:text="代理"
+                     android:textColor="@color/white"
+                     android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/mycenter_excenter_tv"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/mycenter_agency_tv"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/white_border_corners"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="兑换中心"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:visibility="gone" />
+                 <TextView
+                     android:id="@+id/mycenter_excenter_tv"
+                     android:layout_width="70dp"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentRight="true"
+                     android:layout_below="@+id/mycenter_agency_tv"
+                     android:layout_marginRight="10dp"
+                     android:layout_marginTop="10dp"
+                     android:background="@drawable/white_border_corners"
+                     android:gravity="center"
+                     android:padding="5dp"
+                     android:text="兑换中心"
+                     android:textColor="@color/white"
+                     android:textSize="14sp"
+                     android:visibility="gone" />
 
-        </RelativeLayout>
+             </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:visibility="gone">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:background="@color/white"
+                 android:orientation="horizontal"
+                 android:visibility="gone">
 
-            <RelativeLayout
-                android:id="@+id/mycenter_pay_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                 <RelativeLayout
+                     android:id="@+id/mycenter_pay_layout"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_weight="1">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:drawableStart="@drawable/mycenter_pay"
-                    android:gravity="center"
-                    android:text="  充值"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerInParent="true"
+                         android:drawableStart="@drawable/mycenter_pay"
+                         android:gravity="center"
+                         android:text="  充值"
+                         android:textColor="@color/black"
+                         android:textSize="15sp" />
+                 </RelativeLayout>
+                 <View
+                     android:layout_width="1dp"
+                     android:layout_height="match_parent"
+                     android:layout_marginBottom="5dp"
+                     android:layout_marginTop="5dp"
+                     android:background="#ededed" />
+                 <RelativeLayout
+                     android:id="@+id/mycenter_withdraw_layout"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_weight="1">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerInParent="true"
+                         android:drawableLeft="@drawable/mycenter_withdraw"
+                         android:gravity="center"
+                         android:text="  提现"
+                         android:textColor="@color/black"
+                         android:textSize="15sp" />
+                 </RelativeLayout>
+             </LinearLayout>
 
-            </RelativeLayout>
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:layout_marginTop="1dp"
+                 android:visibility="gone"
+                 android:background="@color/white"
+                 android:orientation="horizontal">
+                 <TextView
+                     android:id="@+id/mycenter_mycurrency_tv"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_centerInParent="true"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:textColor="@color/black"
+                     android:textSize="15sp"
+                     tools:text="金币   1000" />
+                 <View
+                     android:layout_width="1dp"
+                     android:layout_height="match_parent"
+                     android:layout_marginBottom="5dp"
+                     android:layout_marginTop="5dp"
+                     android:background="#ededed" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="#ededed" />
+                 <TextView
+                     android:id="@+id/mycenter_mymoney_tv"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_centerInParent="true"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:textColor="@color/black"
+                     android:textSize="15sp"
+                     tools:text="余额   1000" />
+             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/mycenter_withdraw_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:layout_marginTop="10dp"
+                 android:background="@color/white"
+                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:drawableLeft="@drawable/mycenter_withdraw"
-                    android:gravity="center"
-                    android:text="  提现"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                 <TextView
+                     android:id="@+id/mycenter_currencyrecord_tv"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_centerInParent="true"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:text="充值中心"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            </RelativeLayout>
-        </LinearLayout>
+                 <View
+                     android:layout_width="1dp"
+                     android:layout_height="match_parent"
+                     android:layout_marginBottom="5dp"
+                     android:layout_marginTop="5dp"
+                     android:background="#ededed" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:visibility="gone">
+                 <TextView
+                     android:id="@+id/mycenter_logisticsorder_tv"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_centerInParent="true"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:text="订单查询"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/mycenter_mycurrency_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                tools:text="金币   1000" />
+                 <View
+                     android:layout_width="1dp"
+                     android:layout_height="match_parent"
+                     android:layout_marginBottom="5dp"
+                     android:layout_marginTop="5dp"
+                     android:background="#ededed"
+                     android:visibility="visible" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="#ededed" />
+                 <TextView
+                     android:id="@+id/mycenter_guessrecord_tv"
+                     android:layout_width="0dp"
+                     android:layout_height="match_parent"
+                     android:layout_centerInParent="true"
+                     android:layout_weight="1"
+                     android:gravity="center"
+                     android:text="竞猜记录"
+                     android:textColor="@color/black"
+                     android:textSize="15sp"
+                     android:visibility="visible" />
+             </LinearLayout>
 
-            <TextView
-                android:id="@+id/mycenter_mymoney_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                tools:text="余额   1000" />
-        </LinearLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_qianbao"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="10dp"
+                 android:background="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/white"
-            android:orientation="horizontal">
+                 <ImageView
+                     android:id="@+id/iv_my_qianbao"
+                     android:layout_width="20dp"
+                     android:layout_height="20dp"
+                     android:layout_alignParentLeft="true"
+                     android:layout_centerVertical="true"
+                     android:layout_marginLeft="12dp"
+                     android:background="@drawable/icon_my_qianbao" />
 
-            <TextView
-                android:id="@+id/mycenter_currencyrecord_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="充值中心"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:layout_toRightOf="@+id/iv_my_qianbao"
+                     android:gravity="center"
+                     android:text=" 我的钱包"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="#ededed" />
+                 <ImageView
+                     android:id="@+id/iv_right_arrow"
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
 
-            <TextView
-                android:id="@+id/mycenter_logisticsorder_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="订单查询"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+                 <TextView
+                     android:id="@+id/mycenter_golds_tv"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_toLeftOf="@+id/iv_right_arrow"
+                     android:gravity="center"
+                     android:text="游戏币：0"
+                     android:textColor="#f26d35"
+                     android:textSize="15sp" />
+             </RelativeLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="#ededed"
-                android:visibility="visible"
-                />
+             <RelativeLayout
+                 android:id="@+id/mycenter_integral"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white"
+                 android:visibility="visible">
 
-            <TextView
-                android:id="@+id/mycenter_guessrecord_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="竞猜记录"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:visibility="visible"
-                />
-        </LinearLayout>
+                 <ImageView
+                     android:id="@+id/iv_mycenter_integral"
+                     android:layout_width="20dp"
+                     android:layout_height="20dp"
+                     android:layout_alignParentLeft="true"
+                     android:layout_centerVertical="true"
+                     android:layout_marginLeft="12dp"
+                     android:background="@drawable/my_integral_bg" />
 
-        <RelativeLayout
-            android:id="@+id/mycenter_qianbao"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/white">
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:layout_toRightOf="@+id/iv_mycenter_integral"
+                     android:gravity="center"
+                     android:text=" 积分商城"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            <ImageView
-                android:id="@+id/iv_my_qianbao"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
-                android:background="@drawable/icon_my_qianbao" />
+                 <ImageView
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_toRightOf="@+id/iv_my_qianbao"
-                android:gravity="center"
-                android:text=" 我的钱包"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
 
-            <ImageView
-                android:id="@+id/iv_right_arrow"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-            <TextView
-                android:id="@+id/mycenter_golds_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/iv_right_arrow"
-                android:gravity="center"
-                android:text="游戏币：0"
-                android:textColor="#f26d35"
-                android:textSize="15sp" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/mycenter_integral"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:visibility="visible"
-            >
-            <ImageView
-                android:id="@+id/iv_mycenter_integral"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
-                android:background="@drawable/my_integral_bg" />
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_game_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_toRightOf="@+id/iv_mycenter_integral"
-                android:gravity="center"
-                android:text=" 积分商城"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_game"
+                     android:gravity="center"
+                     android:text="    游戏中心"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            <ImageView
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_catchrecord_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white">
 
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_catchrecord"
+                     android:gravity="center"
+                     android:text="   娃娃邮寄"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/mycenter_catchrecord_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white">
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_catchrecord"
-                android:gravity="center"
-                android:text="   娃娃邮寄"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+             <RelativeLayout
+                 android:id="@+id/mycenter_exshop_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white"
+                 android:visibility="visible">
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_wwexchange"
+                     android:gravity="center"
+                     android:text="   娃娃兑换"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-        <RelativeLayout
-            android:id="@+id/mycenter_exshop_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:visibility="visible">
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_wwexchange"
-                android:gravity="center"
-                android:text="   娃娃兑换"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+             <RelativeLayout
+                 android:id="@+id/mycenter_accinfo_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white"
+                 android:visibility="gone">
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/mycenter_accinfo_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:visibility="gone">
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_accinfo"
+                     android:gravity="center"
+                     android:text="   账户信息"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_accinfo"
-                android:gravity="center"
-                android:text="   账户信息"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/mycenter_joincode_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:visibility="gone">
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_joincode"
-                android:gravity="center"
-                android:text="   加盟码"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_joincode_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="10dp"
+                 android:background="@color/white"
+                 android:visibility="gone">
 
-        <RelativeLayout
-            android:id="@+id/mycenter_lnvitationcode_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:visibility="visible">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_lnvitacode"
-                android:gravity="center"
-                android:text="   邀请码"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_joincode"
+                     android:gravity="center"
+                     android:text="   加盟码"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-        <RelativeLayout
-            android:id="@+id/mycenter_setting_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white">
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_setting"
-                android:gravity="center"
-                android:text="   设置"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+             <RelativeLayout
+                 android:id="@+id/mycenter_lnvitationcode_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white"
+                 android:visibility="visible">
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_lnvitacode"
+                     android:gravity="center"
+                     android:text="   邀请码"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-        <RelativeLayout
-            android:id="@+id/mycenter_kefu_layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="1dp"
-            android:background="@color/white">
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:drawableLeft="@drawable/mycenter_service"
-                android:gravity="center"
-                android:text="   客服"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
+             <RelativeLayout
+                 android:id="@+id/mycenter_setting_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white">
 
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/right_arrow" />
-        </RelativeLayout>
-        <!--</LinearLayout>-->
-        <TextView
-            android:id="@+id/mycenter_none_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="200dp"
-            android:gravity="center_horizontal"
-            android:paddingTop="30dp"
-            android:text="暂无抓取成功记录！"
-            android:textColor="@color/gray"
-            android:visibility="gone" />
-    </LinearLayout>
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_setting"
+                     android:gravity="center"
+                     android:text="   设置"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
 
-</com.game.smartremoteapp.view.ElasticScrollView>
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
+
+             <RelativeLayout
+                 android:id="@+id/mycenter_kefu_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
+                 android:background="@color/white">
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_service"
+                     android:gravity="center"
+                     android:text="   客服"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
+
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
+         </LinearLayout>
+     </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

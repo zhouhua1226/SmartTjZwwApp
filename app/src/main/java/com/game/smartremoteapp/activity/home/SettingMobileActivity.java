@@ -40,8 +40,6 @@ public class SettingMobileActivity extends BaseActivity {
     TextView settingmobileSmscodeTv;
     @BindView(R.id.settingmobile_submit_btn)
     Button settingmobileSubmitBtn;
-
-    private String TAG="SettingMobile--";
     private MyCountDownTimer myCountDownTimer;
     private String phone;
     private String smsCode;
@@ -126,8 +124,6 @@ public class SettingMobileActivity extends BaseActivity {
         }
     }
 
-
-
     private void getPhoneCode(String userId,String phoneNumber,String smsType){
         if(Utils.isEmpty(userId)||Utils.isEmpty(phoneNumber)){
             return;
@@ -159,7 +155,6 @@ public class SettingMobileActivity extends BaseActivity {
                     MyToast.getToast(getApplicationContext(),result.getMsg()).show();
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
                 MyToast.getToast(getApplicationContext(),"网络异常！").show();

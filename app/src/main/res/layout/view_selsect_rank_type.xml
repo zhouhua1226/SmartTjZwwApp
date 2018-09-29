@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_dialog_shape"
+        android:orientation="vertical">
+   <TextView
+       android:id="@+id/tv_day_bank"
+       android:layout_width="match_parent"
+       android:text="日    榜"
+       android:textSize="12sp"
+       android:gravity="center"
+       android:textColor="@color/black"
+       android:layout_height="35dp" />
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/backcolor"
+        android:layout_height="1dp"></View>
+    <TextView
+        android:id="@+id/tv_week_bank"
+        android:layout_width="match_parent"
+        android:text="周    榜"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:layout_height="35dp" />
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/backcolor"
+        android:layout_height="1dp"></View>
+    <TextView
+        android:id="@+id/tv_mouth_bank"
+        android:layout_width="match_parent"
+        android:text="月    榜"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:layout_height="35dp" />
+</LinearLayout>
+    </RelativeLayout>

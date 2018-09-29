@@ -4,12 +4,7 @@
     </style>
     <style name="BlackBarAppTheme" parent="MyAppTheme">
     </style>
-    <style name="MoguLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/icon_app_numshroom_start</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
-    </style>
+
     <style name="TomLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/app_yd_naviage</item>
         <item name="windowNoTitle">true</item>
@@ -40,6 +35,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:button">@null</item>
         <item name="android:layout_weight">1.0</item>
-
+    </style>
+    <style name="bank_type_tab_style">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:textColor">@color/bank_tab_title_selector</item>
     </style>
 </resources>

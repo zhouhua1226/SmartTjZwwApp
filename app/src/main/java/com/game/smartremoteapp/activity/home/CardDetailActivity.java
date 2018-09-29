@@ -36,8 +36,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.attr.tag;
-
 /**
  * Created by chenw on 2018/7/19.
  */
@@ -156,13 +154,11 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
             case R.id.iv_card_buy:
                 if(mWeek!=null&&mMouth!=null) {
                     if (type > 1) {
-                       getPayTypeDialog(mMouth.getID());
-                     //getNowPayOrder(mMouth.getID(), "13");
-                     //   getOrderApaliyInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                        getPayTypeDialog(mMouth.getID());
+                       //getNowPayOrder(mMouth.getID(), "13");
                      } else {
-                         getPayTypeDialog(mWeek.getID());//
-                     //  getNowPayOrder(mWeek.getID(), "13");//微信支付
-                      //  getOrderApaliyInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());//支付宝支付
+                        getPayTypeDialog(mWeek.getID());//
+                       // getNowPayOrder(mWeek.getID(), "13");//微信支付
                      }
                 }
                 break;
@@ -308,7 +304,7 @@ public class CardDetailActivity extends BaseActivity implements ReceivePayResult
             MyToast.getToast(getApplicationContext(),"支付失败!").show();
             LogUtils.loge( "respCode:" + respCode+"respMsg:"+errorMsg,TAG);
         }  else {
-            LogUtils.loge( "respCode:" + respCode+"respMsg:"+errorMsg + tag,TAG);
+            LogUtils.loge( "respCode:" + respCode+"respMsg:"+errorMsg,TAG);
         }
     }
 }

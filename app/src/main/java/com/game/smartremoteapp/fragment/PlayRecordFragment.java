@@ -83,9 +83,10 @@ public class PlayRecordFragment extends BaseFragment {
                         failTv.setVisibility(View.VISIBLE);
                     }
                 }else {
-                    MyToast.getToast(getContext(),"请求异常！");
-                    playrecordRecyclerview.setVisibility(View.GONE);
-                    failTv.setVisibility(View.VISIBLE);
+                    if(playrecordRecyclerview!=null) {
+                        playrecordRecyclerview.setVisibility(View.GONE);
+                        failTv.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 

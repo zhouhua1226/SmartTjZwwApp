@@ -55,10 +55,8 @@ public class DrawMoneyActivity extends BaseActivity {
     @BindView(R.id.drawmoney_servicemobile_tv)
     TextView drawmoneyServicemobileTv;
 
-    private String TAG="DrawMoneyActivity";
     private MyCountDownTimer myCountDownTimer;
     private String phone,smsCode,amount;
-    private String userId="d7836bdf88df450bb7ce595430a542ae";
 
     @Override
     protected int getLayoutId() {

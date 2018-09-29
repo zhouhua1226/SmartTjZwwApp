@@ -38,9 +38,7 @@
             android:layout_alignParentRight="true"
             android:padding="10dp"
             android:layout_centerVertical="true"
-            android:visibility="visible"
-            />
-
+            android:visibility="visible" />
     </RelativeLayout>
 
     <LinearLayout
@@ -183,9 +181,7 @@
             android:textColor="@color/gray"
             android:layout_below="@+id/mycatchrecod_selectnum_tv"
             />
-
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/mycatchrecod_fail_tv"
@@ -199,6 +195,4 @@
         android:paddingTop="50dp"
         android:visibility="gone"
         />
-
-
 </RelativeLayout>

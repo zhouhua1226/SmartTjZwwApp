@@ -13,7 +13,7 @@ public class JCUtils {
     public static final String BEANNUM="beanNum";
     public static final String GOLDNUM="goldNum";
     public static final String JDNAME="金豆";
-    public static final String GAMECENTERPATH="http://www.jucai51.com/webgame/gamewawaji/IM_game.html";  //游戏中心 60.55.47.172:8000(测)  106.75.143.0(正)
+    public static final String GAMECENTERPATH="http://www.jucai51.com/webgame/gamewawaji/IM_game.html";  //游戏中心 60.55.47.172:8000(测)  www.jucai51.com(正)
 
     public static String UID="";
     public static String GAMEJD="0";

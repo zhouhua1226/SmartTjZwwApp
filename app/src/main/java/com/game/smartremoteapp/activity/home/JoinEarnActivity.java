@@ -107,8 +107,8 @@ public class JoinEarnActivity extends BaseActivity {
         catchDollResultDialog.show();
         switch (index) {
             case 0:
-                catchDollResultDialog.setTitle("余额不足！");
-                catchDollResultDialog.setContent("请充值。");
+                catchDollResultDialog.setTitle("您的金币余额不足");
+                catchDollResultDialog.setRechargeContent();
                 catchDollResultDialog.setFail("取消充值");
                 catchDollResultDialog.setSuccess("前往充值");
                 catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/backcolor"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/apptheme_bg">
+
+        <ImageButton
+            android:id="@+id/image_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/recode_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="领取金币"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <ImageButton
+            android:id="@+id/image_why"
+            android:layout_alignParentRight="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:visibility="gone"
+            android:src="@drawable/mycatchrecord_whsm" />
+
+    </RelativeLayout>
+    <com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView
+        android:id="@+id/regold_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:scrollbars="none" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_shape"
+            android:layout_height="90dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="昨日抓中金币"
+                android:textColor="#443d23"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="12dp"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_yesday_catch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/apptheme_bg"
+                android:textSize="30sp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:background="@drawable/bg_dialog_shape"
+            android:layout_height="90dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="今日可领赠币"
+                android:textColor="#443d23"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="12dp"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_today_receive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="0"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/apptheme_bg"
+                android:textSize="30sp" />
+        </RelativeLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_data_zhujie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="备注:当日抓中金币实时自动结算,可在次日领取赠币,赠币仅保留一天"
+        android:textColor="#bfc7ca"
+        android:textSize="12sp" />
+    <Button
+        android:id="@+id/btn_reward_receive"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_reward_gold_nomal"
+        android:gravity="center"
+        android:text="已领取"
+        android:textSize="14sp" />
+</LinearLayout>

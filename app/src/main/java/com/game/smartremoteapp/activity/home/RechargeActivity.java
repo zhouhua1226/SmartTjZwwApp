@@ -119,14 +119,13 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
                 String  isFirst=  SPUtils.getString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE,"0");
                           if(isFirst.equals("0")){
                               payOutType="fc";
-                           getPayTypeDialog(mPayCardBean.getID());
-                       // getNowPayOrder(mPayCardBean.getID(), "13");
-                            //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getFIRSTAWARD_GOLD());
+                             getPayTypeDialog(mPayCardBean.getID());
+                             // getNowPayOrder(mPayCardBean.getID(), "13");
                            }else{
                               payOutType="nm";
                             getPayTypeDialog(mPayCardBean.getID());
-                         //  getNowPayOrder(mPayCardBean.getID(), "13");
-                           //  getOrderApaliyInfo(mPayCardBean.getAMOUNT(),mPayCardBean.getRECHARE());
+                          // getNowPayOrder(mPayCardBean.getID(), "13");
+
                 }
             }
         }));
@@ -145,17 +144,15 @@ public class RechargeActivity extends BaseActivity implements ReceivePayResult {
             case R.id.ll_mouth_car:
                 if(mMouth!=null){
                     payOutType="mc";
-                   getPayTypeDialog(mMouth.getID());
-                 //getNowPayOrder(mMouth.getID(), "13");
-                   // getOrderApaliyInfo(mMouth.getAMOUNT(),mMouth.getRECHARE());
+                  getPayTypeDialog(mMouth.getID());
+                   // getNowPayOrder(mMouth.getID(), "13");
                 }
                 break;
             case R.id.ll_week_car:
                 if(mWeek!=null){
                     payOutType="wc";
-                   getPayTypeDialog(mWeek.getID());
-                   // getNowPayOrder(mWeek.getID(), "13");
-                    //getOrderApaliyInfo(mWeek.getAMOUNT(),mWeek.getRECHARE());
+                     getPayTypeDialog(mWeek.getID());
+                     // getNowPayOrder(mWeek.getID(), "13");
                 }
                 break;
         }

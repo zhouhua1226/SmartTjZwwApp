@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +39,7 @@ import java.util.regex.Pattern;
  * Created by zhouh on 2017/3/03.
  */
 public class Utils {
+
 
 
     public static String connectStatus = ConnectResultEvent.CONNECT_FAILURE;
@@ -53,8 +56,8 @@ public class Utils {
     public static final String TAG_MOVE_FAILE = "TAG_MOVE_FAILE";
     public static final String TAG_ROOM_IN = "TAG_ROOM_IN";
     public static final String TAG_ROOM_OUT = "TAG_ROOM_OUT";
-
-
+    public static final String TAG_DOLL_CONVERSION_GOLD ="TAG_DOLL_CONVERSION_GOLD" ;
+    public static final String TAG_DOLL_MACHINE_TYPE ="TAG_DOLL_MACHINE_TYPE" ;
     public static final String TAG_GATEWAY_SINGLE_CONNECT = "TAG_GATEWAY_SINGLE_CONNECT";
     public static final String TAG_GATEWAY_SINGLE_DISCONNECT = "TAG_GATEWAY_SINGLE_DISCONNECT";
 
@@ -132,6 +135,18 @@ public class Utils {
         Matcher m = p.matcher(value);
         return m.find();
     }
+
+    public static boolean getDateOver(String value)  {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dNow = new Date();   //当前时间
+        Calendar calendar = Calendar.getInstance();  //得到日历
+        calendar.setTime(dNow);//把当前时间赋给日历
+        calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+      //  Date  dBefore = calendar.getTime();   //得到前一天的时间
+        String dBefore=sdf.format(calendar.getTime());
+        return   dBefore.equals(value);
+    }
+
 
     /**
      * 身份证正则匹配

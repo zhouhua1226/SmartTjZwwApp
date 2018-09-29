@@ -7,6 +7,7 @@ import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.ListRankBean;
+import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
@@ -708,14 +709,13 @@ public class HttpManager {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
-
     }
 
 
     //新支付宝支付
     public void getOrderAlipay( String userId, String pid , String payOutType, RequestSubscriber<Result<AlipayBean>> subscriber) {
         Observable<Result<AlipayBean>> o =smartService.getApaliyPayOrder(userId,pid, Utils.appVersion,payOutType,"R",
-                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+                UrlUtils.CTYPE_APLIAY_ANROID,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -726,7 +726,7 @@ public class HttpManager {
     // 现在微信支付
     public void getNowWXPayOrder( String userId, String pid,String payChannelType,  String payOutType, RequestSubscriber<NowPayBean<OrderBean>> subscriber) {
         Observable<NowPayBean<OrderBean>> o =smartService.getNowWXPayOrder(userId,pid,payChannelType,Utils.appVersion,payOutType,"R",
-                UrlUtils.LOGIN_CTYPE,UrlUtils.LOGIN_CHANNEL);
+                UrlUtils.CTYPE_WX_PAY_ANROID,UrlUtils.LOGIN_CHANNEL);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -771,4 +771,26 @@ public class HttpManager {
     }
 
 
+    public void getGoldMainUrl(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.getGoldMallUrl(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getRewardInfo(String userId, RequestSubscriber<Result<LoginRewardGoldBean>> subscriber) {
+        Observable<Result<LoginRewardGoldBean>> o = smartService.getRewardInfo(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+    public void doReward(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.doReward(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

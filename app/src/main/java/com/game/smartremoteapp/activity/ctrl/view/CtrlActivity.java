@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -18,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,7 +82,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-
 
 /**
  * Created by zhouh on 2017/9/8. SomeCommits
@@ -212,6 +213,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     @BindView(R.id.ctrl_betpernum_layout)
     RelativeLayout ctrlBetpernumLayout;
 
+    @BindView(R.id.tv_add_coin_animant)
+    TextView add_coin_animant;
 
     private CtrlCompl ctrlCompl;
     private FillingCurrencyDialog fillingCurrencyDialog;
@@ -235,7 +238,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     private String playUrlSecond = "";
     private String currentUrl;
     //用户操作和竞猜
-    private boolean isStart = false;
+     private boolean isStart = false;
     private boolean isLottery = false;
     private String periodsNum = "null";
     private MediaPlayer mediaPlayer;
@@ -253,7 +256,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     private Handler handler = new Handler();
     private int betPro = 1;   //追投期数   游戏中默认不追投0,休闲1
     private boolean flag = false;//在游戏中true.休闲false
-
+    private int conversionGold=0;
+    private String machineType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,8 +317,12 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_ROOM_PROB))) {
             prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB));
         }
+        if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_DOLL_CONVERSION_GOLD))) {
+            conversionGold = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_CONVERSION_GOLD));
+        }
 
         reward = getIntent().getStringExtra(Utils.TAG_ROOM_REWARD);
+        machineType=getIntent().getStringExtra(Utils.TAG_DOLL_MACHINE_TYPE);
         //UserUtils.UserBetNum = YsdkUtils.loginResult.getData().getAppUser().getBET_NUM();
         if (!Utils.isEmpty(dollName)) {
             dollNameTv.setText(dollName);
@@ -527,9 +535,9 @@ public class CtrlActivity extends Activity implements IctrlView {
             case R.id.ctrl_back_imag:
                 finish();
                 break;
-
             case R.id.ll_recharge:
-                startActivity(new Intent(this, RechargeActivity.class));
+                 startActivity(new Intent(this, RechargeActivity.class));
+
                 break;
             case R.id.startgame_ll:
                 if (TextUtils.isEmpty(UserUtils.UserBalance)) {
@@ -1259,7 +1267,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (roomId.equals(AppGlobal.getInstance().getUserInfo().getRoomid())) {
 //            getStartstation();
 //            setStartMode(true);
-            getUserDate(UserUtils.USER_ID);    //再次获取用户余额并更新UI
+
             ctrlCompl.stopRecordView(); //录制完毕
             if (isStart) {
                 if (number != 0) {
@@ -1270,7 +1278,8 @@ public class CtrlActivity extends Activity implements IctrlView {
                     if (Utils.getIsOpenMusic(getApplicationContext())) {
                         playBtnMusic(R.raw.catch_success_music);
                     }
-                    setCatchResultDialog(1);
+                     setCatchResultDialog(1);
+                    //catchSuccessAnimat();
                 } else {
                     //删除本地视频
                     state = "0";
@@ -1348,12 +1357,9 @@ public class CtrlActivity extends Activity implements IctrlView {
                         //  coinTv.setText("  " + (Integer.parseInt(UserUtils.UserBalance) - totalMoney) + " 充值");
                     }
                 }
-
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }
@@ -1497,7 +1503,38 @@ public class CtrlActivity extends Activity implements IctrlView {
         btn_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         //btn_mediaPlayer.start();
     }
+    private void  catchSuccessAnimat(){
+        Movie mMovie = Movie.decodeStream(getResources().openRawResource(
+                R.raw.crt_catch_success));
+        ctrlGifView.setVisibility(View.VISIBLE);
+        changeBackgroundAlphaTo(0.5f);
+        ctrlGifView.setMovie(mMovie);
+        int dur=mMovie.duration();
+        //gif动画播放一次
+        ctrlGifView.setPaused(false);
+        ctrlGifView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ctrlGifView.setPaused(true);
+                ctrlGifView.setVisibility(View.GONE);
+                changeBackgroundAlphaTo(1.0f);
 
+            }
+        },dur);
+        getStartstation();
+        setStartMode(true);
+    }
+
+    private void changeBackgroundAlphaTo(float alphaValue) {
+        final WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.alpha = alphaValue;//０.０全透明．１.０不透明．
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getWindow().setAttributes(attributes);
+            }
+        });
+    }
     private void setCatchResultDialog(final int index) {
         final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
         catchDollResultDialog.setCancelable(false);
@@ -1505,15 +1542,20 @@ public class CtrlActivity extends Activity implements IctrlView {
 
         switch (index) {
             case 0:
-                catchDollResultDialog.setTitle("余额不足！");
-                catchDollResultDialog.setContent("请充值。");
+                catchDollResultDialog.setTitle("您的金币余额不足");
+                catchDollResultDialog.setRechargeContent();
                 catchDollResultDialog.setFail("取消充值");
                 catchDollResultDialog.setSuccess("前往充值");
                 catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
                 break;
             case 1:
                 catchDollResultDialog.setTitle("恭喜您！");
-                catchDollResultDialog.setContent("本次抓娃娃成功啦。");
+                if(!machineType.isEmpty()&&machineType.equals("3")){
+                    catchDollResultDialog.setDesc("本次抓娃娃成功啦");
+                    catchDollResultDialog.setContent("系统自动兑换"+"<font color='#FF0000'>" + conversionGold + "</font>"+"金币");
+                }else{
+                    catchDollResultDialog.setContent("本次抓娃娃成功啦");
+                }
                 catchDollResultDialog.setFail("稍后再试");
                 catchDollResultDialog.setSuccess("再抓一次");
                 catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
@@ -1521,7 +1563,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                 break;
             case 2:
                 catchDollResultDialog.setTitle("太可惜了！");
-                catchDollResultDialog.setContent("本次抓娃娃失败啦。");
+                catchDollResultDialog.setContent("本次抓娃娃失败啦");
                 catchDollResultDialog.setFail("稍后再试");
                 catchDollResultDialog.setSuccess("再抓一次");
                 catchDollResultDialog.setBackground(R.drawable.catchdialog_fail_bg);
@@ -1548,15 +1590,15 @@ public class CtrlActivity extends Activity implements IctrlView {
                     setVibratorTime(300, -1);
                     return;
                 }
-                getStartstation();
-                setStartMode(true);
+                setDefaultView();
             }
         });
-        if (index > 0) {  //抓娃娃娃娃机
+        if(index>0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (catchDollResultDialog.isShowing()) {
+                        isStart = false;
                         Context context = ((ContextWrapper) catchDollResultDialog.getContext()).getBaseContext();
                         if (context instanceof Activity) {
                             if (!((Activity) context).isFinishing() && !((Activity) context).isDestroyed())
@@ -1564,14 +1606,18 @@ public class CtrlActivity extends Activity implements IctrlView {
                         } else {
                             catchDollResultDialog.dismiss();
                         }
-                        getStartstation();
-                        setStartMode(true);
+                        setDefaultView();
                     }
                 }
             }, 3000);
         }
-    }
 
+    }
+  private void  setDefaultView(){
+      getStartstation();
+      setStartMode(true);
+      getUserDate(UserUtils.USER_ID);    //再次获取用户余额并更新UI
+  }
     private void showDetailDialog(String url) {
         View view = getLayoutInflater().inflate(R.layout.roomdetail_dialog, null);
         view.setFocusable(true);

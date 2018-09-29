@@ -25,6 +25,15 @@ public class RoomBean implements Serializable{
     private String prob;
     private String reward;
     private String deviceType;
+    private String machine_type;
+
+    public String getMACHINE_TYPE() {
+        return machine_type;
+    }
+
+    public void setMACHINE_TYPE(String machine_type) {
+        this.machine_type = machine_type;
+    }
 
     public String getProb() {
         return prob;

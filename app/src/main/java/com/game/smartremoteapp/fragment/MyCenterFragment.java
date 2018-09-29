@@ -2,6 +2,7 @@ package com.game.smartremoteapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,6 +16,7 @@ import com.game.smartremoteapp.activity.home.AccountWalletActivity;
 import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
+import com.game.smartremoteapp.activity.home.GameCenterActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.IntegralTaskActivity;
@@ -62,9 +64,6 @@ public class MyCenterFragment extends BaseFragment {
     TextView userNumber;
     @BindView(R.id.mycenter_golds_tv)
     TextView mycenter_golds;
-
-    @BindView(R.id.mycenter_none_tv)
-    TextView mycenterNoneTv;
     @BindView(R.id.mycenter_pay_layout)
     RelativeLayout mycenterPayLayout;
     @BindView(R.id.mycenter_catchrecord_layout)
@@ -117,11 +116,10 @@ public class MyCenterFragment extends BaseFragment {
         super.onResume();
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             //getUserDate(UserUtils.USER_ID);
-           // getUserAccBalCount(UserUtils.USER_ID);
-            getAppUserInf(UserUtils.USER_ID);
+              getUserAccBalCount(UserUtils.USER_ID);
+              getAppUserInf(UserUtils.USER_ID);
         }
     }
-
 
     private void getUserImageAndName() {
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
@@ -131,7 +129,8 @@ public class MyCenterFragment extends BaseFragment {
                 userName.setText("暂无昵称");
             }
             mycenter_golds.setText("游戏币:" + UserUtils.UserBalance );
-            //mycenterMymoneyTv.setText(Html.fromHtml("余额   "+"<font color='#ff9700'>0</font>"));
+            mycenterMycurrencyTv.setText("金币  "+UserUtils.UserBalance );
+            mycenterMymoneyTv.setText(Html.fromHtml("余额  "+"<font color='#ff9700'>0</font>"));
             userNumber.setText("累积抓中" + UserUtils.UserCatchNum + "次");
             Glide.with(getContext())
                     .load(UserUtils.UserImage)
@@ -181,7 +180,7 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
             R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
-            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,
+            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,R.id.mycenter_game_layout,
             R.id.mycenter_integral,R.id.ll_integral_task,R.id.imb_center_sign})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -262,6 +261,9 @@ public class MyCenterFragment extends BaseFragment {
             case R.id.imb_center_sign:
                 MainActivity.mMainActivity.getUserSign(UserUtils.USER_ID, "0",true); //签到请求
                 break;
+            case R.id.mycenter_game_layout:
+                startActivity(new Intent(getContext(), GameCenterActivity.class));
+                break;
             default:
                 break;
         }
@@ -274,7 +276,7 @@ public class MyCenterFragment extends BaseFragment {
                 if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                    String amount = httpDataInfoResult.getData().getAccBal();
                     UserAmount=amount;
-                   //  mycenterMymoneyTv.setText(Html.fromHtml("余额   " + "<font color='#ff9700'>" + amount + "</font>"));
+                     mycenterMymoneyTv.setText(Html.fromHtml("余额  " + "<font color='#ff9700'>" + amount + "</font>"));
                 }
             }
 

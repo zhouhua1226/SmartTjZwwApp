@@ -19,7 +19,6 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:src="@drawable/back" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,38 +26,35 @@
             android:text="绑定手机号"
             android:textColor="@color/white"
             android:textSize="18sp" />
-        />
     </RelativeLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="35dp"
         android:textColor="@color/gray"
-        android:text="输入手机号码，获取免费短信验证码"
-        />
+        android:textSize="14sp"
+        android:text="输入手机号码，获取免费短信验证码" />
 
     <EditText
         android:id="@+id/settingmobile_phone_et"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:hint="输入手机号码"
         android:inputType="phone"
         android:background="@drawable/gary_border"
-        android:textColorHint="@color/gray"
-        />
+        android:textColorHint="@color/gray" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         >
@@ -66,39 +62,36 @@
             android:id="@+id/settingmobile_smscode_et"
             android:layout_width="150dp"
             android:layout_height="35dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:paddingLeft="10dp"
             android:textColor="@color/black"
             android:hint="输入验证码"
             android:inputType="number"
             android:maxLength="10"
             android:background="@drawable/gary_border"
-            android:textColorHint="@color/gray"
-            />
-
+            android:textColorHint="@color/gray" />
         <TextView
             android:id="@+id/settingmobile_smscode_tv"
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:text="获取验证码"
+            android:textSize="12sp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:background="@drawable/setting_logout_btn_bg"
-
-            />
+            android:background="@drawable/setting_logout_btn_bg" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/settingmobile_submit_btn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:text="提 交"
         android:textColor="@color/white"
-        android:background="@drawable/setting_logout_btn_bg"
-        />
+        android:background="@drawable/setting_logout_btn_bg" />
 
 </LinearLayout>

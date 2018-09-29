@@ -195,6 +195,16 @@
                 />
 
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_add_coin_animant"
+            android:textColor="@color/apptheme_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_push2_coin_gold"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:textSize="26sp" />
         <com.game.smartremoteapp.view.GifView
             android:id="@+id/ctrl_gif_view"
             android:layout_width="match_parent"
@@ -266,7 +276,7 @@
                 android:id="@+id/coin_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的游戏币:5678"
+                android:text="我的游戏币:0"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/white"
                 android:textSize="10sp"
@@ -835,4 +845,5 @@
         android:background="@drawable/icon_room_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 </RelativeLayout>

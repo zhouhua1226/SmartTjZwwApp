@@ -121,8 +121,10 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
     private MediaPlayer mediaPlayer1;
     private MediaPlayer mediaPlayer2;
+     private MediaPlayer mediaPlayer3;
     private boolean isMePlay=false;
-     static   class UiHandler extends Handler {
+
+    static   class UiHandler extends Handler {
            WeakReference<PushCoin2Activity> ac;
           private UiHandler(PushCoin2Activity pushCoin2Activity) {
                ac = new WeakReference<>(pushCoin2Activity);
@@ -171,10 +173,14 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     @Override
     protected void onStop() {
         super.onStop();
+        if (mediaPlayer3 != null && mediaPlayer3.isPlaying()) {
+            mediaPlayer3.stop();
+            mediaPlayer3.release();
+            mediaPlayer3 = null;
+        }
         release();
     }
     private void release(){
-
         ctrlCompl.stopRecordView();
         ctrlCompl.stopPlayVideo();
         ctrlCompl.stopRecordView();
@@ -191,9 +197,9 @@ public class PushCoin2Activity extends Activity implements IctrlView{
             mediaPlayer2.release();
             mediaPlayer2 = null;
         }
-
     }
     private void initData() {
+
         RxBus.get().register(this);
         NettyUtils.sendRoomInCmd("coin2push");
         ctrlGifView.setVisibility(View.VISIBLE);
@@ -205,7 +211,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
         playUrlMain = getIntent().getStringExtra(Utils.TAG_URL_MASTER);
         money=getIntent().getStringExtra(Utils.TAG_DOLL_GOLD);
-
 
         ctrlCompl = new CtrlCompl(this, this);
         currentUrl = playUrlMain;
@@ -227,6 +232,9 @@ public class PushCoin2Activity extends Activity implements IctrlView{
 
         getUserDate(UserUtils.USER_ID);
         mediaPlayer();
+        if (Utils.getIsOpenMusic(getApplicationContext())) {
+            playRoomMusic();   //播放房间背景音乐
+        }
     }
     private void mediaPlayer(){
         mediaPlayer2 = MediaPlayer.create(this, R.raw.down_coin);
@@ -238,6 +246,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         // 设置音频流的类型
         mediaPlayer1.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer1.setLooping(false);
+
     }
     @Override
     protected void onRestart() {
@@ -250,17 +259,30 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         ctrlCompl.startPlayVideo(mPlaySv, currentUrl);
         NettyUtils.sendRoomInCmd("coin2push");
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getUserDate(UserUtils.USER_ID);    //2秒后获取用户余额并更新UI
-                }
-            }, 2000);
+            getgetUserDate();
+        }
+        if (Utils.getIsOpenMusic(getApplicationContext())) {
+            playRoomMusic();   //播放房间背景音乐
         }
     }
-
+  private void getgetUserDate(){
+      new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+              getUserDate(UserUtils.USER_ID);    //2秒后获取用户余额并更新UI
+          }
+      }, 2000);
+  }
     private void playPushMusic() {if(mediaPlayer1!=null){mediaPlayer1.start();}}
-    private void playDownMusic(){if(mediaPlayer2!=null){mediaPlayer2.start();}
+    private void playDownMusic(){if(mediaPlayer2!=null){mediaPlayer2.start();}}
+    private void playRoomMusic(){
+        if(mediaPlayer3==null){
+            mediaPlayer3 = MediaPlayer.create(this, R.raw.push_coin_music);
+            // 设置音频流的类型
+            mediaPlayer3.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer3.setLooping(true);
+        }
+        mediaPlayer3.start();
     }
     private void  pushCoinAnimat(){
         Movie mMovie = Movie.decodeStream(getResources().openRawResource(
@@ -282,7 +304,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     @OnClick({R.id.startgame_ll, R.id.playgame_rl, R.id.ll_wiper,
               R.id.coin2_back, R.id.coin2_why, R.id.ll_message,R.id.recharge_ll})
     public void onClick(View v) {
-
         switch (v.getId()){
             case R.id.startgame_ll:
                 if (judgeMoney()) {
@@ -421,7 +442,7 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 if(bingCount>0) {
                     pushCoinAnimat();
                 }
-                getUserDate(UserUtils.USER_ID);
+                getgetUserDate();
             }
             isOwnerUse(TAG_DEVICE_FREE);
         }
@@ -582,8 +603,8 @@ public class PushCoin2Activity extends Activity implements IctrlView{
         final CatchDollResultDialog catchDollResultDialog = new CatchDollResultDialog(this, R.style.activitystyle);
         catchDollResultDialog.setCancelable(false);
         catchDollResultDialog.show();
-        catchDollResultDialog.setTitle("余额不足！");
-        catchDollResultDialog.setContent("请充值。");
+        catchDollResultDialog.setTitle("您的金币余额不足");
+        catchDollResultDialog.setRechargeContent();
         catchDollResultDialog.setFail("取消充值");
         catchDollResultDialog.setSuccess("前往充值");
         catchDollResultDialog.setBackground(R.drawable.catchdialog_success_bg);
@@ -605,14 +626,19 @@ public class PushCoin2Activity extends Activity implements IctrlView{
     private void setAnimant(int bingCount){
         add_coin_animant.setText(" + "+bingCount);
         add_coin_animant.setVisibility(View.VISIBLE);
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(add_coin_animant, "alpha", 1f, 0f);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(add_coin_animant, "translationY", 0f,400f);
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(add_coin_animant, "alpha", 1f, 0.2f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(add_coin_animant, "translationY", 0f,500f);
         AnimatorSet animatorSet=new AnimatorSet();
         //同时沿Y轴移动，且改变透明度
         animatorSet.play(animator).with(alphaAnimator) ;
         //每个动画都设置成3s，也可以分别设置
-        animatorSet.setDuration(1200);
+        animatorSet.setDuration(1500);
         animatorSet.start();
-
+        add_coin_animant.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                add_coin_animant.setVisibility(View.GONE);
+            }
+        },1500);
     }
 }
