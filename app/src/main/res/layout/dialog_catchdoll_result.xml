@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_below="@+id/catchdialog_content_tv"
             android:layout_marginTop="30dp"
-            android:layout_height="100dp">
+            android:layout_height="80dp">
             <TextView
                 android:id="@+id/catchdialog_fail_tv"
                 android:layout_width="wrap_content"

@@ -8,6 +8,26 @@ import java.util.List;
  */
 
 public class LoginRewardGoldBean implements Serializable {
+    private UserBean appUser;
+
+    public UserBean getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(UserBean appUser) {
+        this.appUser = appUser;
+    }
+
+    private RewardGoldManagerBean RewardGoldManager;
+
+    public RewardGoldManagerBean getRewardGoldManager() {
+        return RewardGoldManager;
+    }
+
+    public void setRewardGoldManager(RewardGoldManagerBean rewardGoldManager) {
+        RewardGoldManager = rewardGoldManager;
+    }
+
     private List<LoginRewardGold> LoginRewardGold;
 
     public List<LoginRewardGold> getLoginRewardGold() {

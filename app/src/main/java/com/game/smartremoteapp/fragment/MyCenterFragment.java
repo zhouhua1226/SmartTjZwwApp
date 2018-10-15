@@ -116,7 +116,7 @@ public class MyCenterFragment extends BaseFragment {
         super.onResume();
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             //getUserDate(UserUtils.USER_ID);
-              getUserAccBalCount(UserUtils.USER_ID);
+             // getUserAccBalCount(UserUtils.USER_ID);
               getAppUserInf(UserUtils.USER_ID);
         }
     }
@@ -138,7 +138,6 @@ public class MyCenterFragment extends BaseFragment {
                     .dontAnimate()
                     .transform(new GlideCircleTransform(getContext()))
                     .into(userImage);
-
         } else {
             userName.setText("请登录");
             videoList.clear();
@@ -282,7 +281,7 @@ public class MyCenterFragment extends BaseFragment {
 
             @Override
             public void _onError(Throwable e) {
-                 MyToast.getToast(getContext(), "网络异常！").show();
+
              }
        });
      }
@@ -334,10 +333,8 @@ public class MyCenterFragment extends BaseFragment {
             }
             @Override
             public void _onError(Throwable e) {
-                MyToast.getToast(getContext(), "网络异常！").show();
             }
         });
     }
-
 
 }

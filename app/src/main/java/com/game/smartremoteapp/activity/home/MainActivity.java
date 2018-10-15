@@ -45,8 +45,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,10 +95,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initView();
         mMainActivity = this;
         initFragment();
-        getDollList();          //获取房间列表
         initNetty();
         RxBus.get().register(this);
         initData();
+        getDollList();          //获取房间列表
         checkVersion();
         getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
     }
@@ -167,15 +165,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                         loginInfoResult.getData().getAppUser().getCNEE_PHONE() + " " +
                         loginInfoResult.getData().getAppUser().getCNEE_ADDRESS();
             }
-        } else {
-            if (zwwjFragment != null) {
-                zwwjFragment.showError();
-            }
         }
     }
 
     //重写返回键
-//重写返回键
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             exit();
@@ -273,7 +266,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }
@@ -283,16 +275,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         HttpManager.getInstance().getDollList(new RequestSubscriber<Result<RoomListBean>>() {
             @Override
             public void _onSuccess(Result<RoomListBean> roomListBean) {
-                if (zwwjFragment != null)
-                    zwwjFragment.dismissEmptyLayout();
-                if (roomListBean.getMsg().equals("success")) {
+                if (roomListBean.getMsg().equals(Utils.HTTP_OK)) {
                     if (roomListBean.getData() == null) {
                         return;
                     }
                     roomList = roomListBean.getData().getDollList();
                     if (roomList.size() == 0) {
-                        if (zwwjFragment != null)
-                            zwwjFragment.showError();
+                        return;
                     } else {
                         if (zwwjFragment != null) {
                             for (int i = 0; i < roomList.size(); i++) {
@@ -301,13 +290,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                 roomList.set(i, bean);
                             }
                             //TODO 按照规则重新排序
-                            Collections.sort(roomList, new Comparator<RoomBean>() {
-                                @Override
-                                public int compare(RoomBean t1, RoomBean t2) {
-                                    return t2.getDollState().compareTo(t1.getDollState());
-                                }
-                            });
-                            zwwjFragment.notifyAdapter(roomList, roomListBean.getData().getPd().getTotalPage());
+//                            Collections.sort(roomList, new Comparator<RoomBean>() {
+//                                @Override
+//                                public int compare(RoomBean t1, RoomBean t2) {
+//                                    return t2.getDollState().compareTo(t1.getDollState());
+//                                }
+//                            });
+                        zwwjFragment.notifyAdapter(roomList, roomListBean.getData().getPd().getTotalPage());
                         }
                     }
                     initDoConnect();
@@ -315,10 +304,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
 
             @Override
-            public void _onError(Throwable e) {
-                if (zwwjFragment != null)
-                    zwwjFragment.showError();
-            }
+            public void _onError(Throwable e) {}
+
         });
     }
 
@@ -388,6 +375,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                setSignInDialog(signDayNum, true);
                            }
                          }
+
                     } else {
                         //签到处理
                         String signgold = loginInfoResult.getData().getSign().getSIGNGOLD();
@@ -433,7 +421,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             public void _onError(Throwable e) {
             }
         });
-
     }
 
     private void updateApp(final AppInfo mAppInfo) {
@@ -554,10 +541,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     JCUtils.UID=stringResult.getData().getAppUser().getJCID();
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }

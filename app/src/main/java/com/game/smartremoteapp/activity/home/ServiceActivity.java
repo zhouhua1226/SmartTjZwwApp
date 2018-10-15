@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -317,24 +316,6 @@ public class ServiceActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(getResources().getColor(R.color.main_red));
         }
-
     }
-
-
-    //改写物理按键——返回的逻辑
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (kefuWebview.canGoBack()) {
-                kefuWebview.goBack();//返回上一页面
-                return true;
-            } else {
-                finish();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 
 }

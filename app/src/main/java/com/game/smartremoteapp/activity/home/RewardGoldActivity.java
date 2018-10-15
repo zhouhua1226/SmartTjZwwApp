@@ -1,5 +1,7 @@
 package com.game.smartremoteapp.activity.home;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.game.smartremoteapp.adapter.RewardGoldAdapter;
 import com.game.smartremoteapp.base.BaseActivity;
 import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.SupportBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.UserUtils;
@@ -31,6 +34,12 @@ import butterknife.OnClick;
  */
 
 public class RewardGoldActivity extends BaseActivity{
+    @BindView(R.id.tv_happy_word)
+    TextView happy_word;
+    @BindView(R.id.tv_do_support)
+    TextView do_support;
+    @BindView(R.id.tv_do_support_animant)
+    TextView support_animant;
     @BindView(R.id.tv_today_receive)
     TextView today_receive;
     @BindView(R.id.tv_yesday_catch)
@@ -43,6 +52,8 @@ public class RewardGoldActivity extends BaseActivity{
     private List<LoginRewardGoldBean.LoginRewardGold> mLoginRewardGoldBeans=new ArrayList<>();
     private QuizInstrictionDialog instrictionDialog;
     private  LoginRewardGoldBean.LoginRewardGold mLoginRewardGold;
+    private String supportNum="0";
+    private String isDoSupport="0";
     @Override
     protected int getLayoutId() {
         return R.layout.activity_reward_gold;
@@ -71,7 +82,7 @@ public class RewardGoldActivity extends BaseActivity{
 //        });
         getRewardInfo(UserUtils.USER_ID);
     }
-    @OnClick({R.id.image_back,R.id.image_why,R.id.btn_reward_receive})
+    @OnClick({R.id.image_back,R.id.image_why,R.id.btn_reward_receive,R.id.tv_do_support})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -89,6 +100,14 @@ public class RewardGoldActivity extends BaseActivity{
                     doRewardInfo(UserUtils.USER_ID,mLoginRewardGold);
                 }
                 break;
+            case R.id.tv_do_support:
+                if(isDoSupport.equals("0")){
+                    doSupport(UserUtils.USER_ID);
+                    setAnimant();
+                }else{
+                    MyToast.getToast(getApplicationContext(), "今日您已点过赞！").show();
+                }
+                break;
         }
     }
 
@@ -98,6 +117,10 @@ public class RewardGoldActivity extends BaseActivity{
             public void _onSuccess(Result<LoginRewardGoldBean> result) {
                 if (result.getMsg().equals(Utils.HTTP_OK)) {
                     if(result.getData()!=null){
+                        supportNum= result.getData().getRewardGoldManager().getSUPPORTNUM();
+                        do_support.setText("  "+supportNum);
+                        happy_word.setText(result.getData().getRewardGoldManager().getWORD());
+                        isDoSupport=result.getData().getAppUser().getSUPPORTTAG();
                         if(result.getData().getLoginRewardGold().size()>0){
                             mLoginRewardGold=result.getData().getLoginRewardGold().get(0);
                             initdata(mLoginRewardGold);
@@ -146,5 +169,31 @@ public class RewardGoldActivity extends BaseActivity{
             public void _onError(Throwable e) {
             }
         });
+    }
+
+    private void doSupport(String userId) {
+        HttpManager.getInstance().doSupport(userId, new RequestSubscriber<Result<SupportBean>>() {
+            @Override
+            public void _onSuccess(Result<SupportBean> result) {
+                if (result.getMsg().equals(Utils.HTTP_OK)) {
+                    isDoSupport="1";
+                    do_support.setText("  "+result.getData().getAllSupportNum());
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
+    private void setAnimant(){
+        support_animant.setVisibility(View.VISIBLE);
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(support_animant, "alpha", 1f, 0.0f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(support_animant, "translationY", 0f,-150f);
+        AnimatorSet animatorSet=new AnimatorSet();
+        //同时沿Y轴移动，且改变透明度
+        animatorSet.play(animator).with(alphaAnimator) ;
+        //每个动画都设置成3s，也可以分别设置
+        animatorSet.setDuration(1200);
+        animatorSet.start();
     }
 }

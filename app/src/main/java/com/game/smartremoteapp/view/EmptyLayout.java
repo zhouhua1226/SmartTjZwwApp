@@ -8,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.view.reshrecyclerview.BaseMoreFooter;
-
-
 /**
  * Created by cx on 2017/11/16
  */
 
-public class EmptyLayout extends RelativeLayout implements View.OnClickListener,BaseMoreFooter {
+public class EmptyLayout extends RelativeLayout implements View.OnClickListener  {
 
     private View mView;
     private ImageView iv_empty;//空页
@@ -107,54 +103,8 @@ public class EmptyLayout extends RelativeLayout implements View.OnClickListener,
     public void onClick(View v) {
         if (onClickReTryListener != null) {
             onClickReTryListener.onClickReTry(v);
+            showLoading();
         }
-    }
-    /**
-     * 加载中
-     */
-    @Override
-    public void loading() {
-
-    }
-    /**
-     * 加载完成
-     */
-    @Override
-    public void complete() {
-
-    }
-    /**
-     * 没有更多数据了
-     */
-    @Override
-    public void noMore() {
-        mView.setVisibility(GONE);
-    }
-
-    @Override
-    public void clickLoadMore() {
-
-    }
-
-    @Override
-    public boolean isClickLoadMore() {
-        return false;
-    }
-    /**
-     * 当前是否是加载中
-     * @return true 是 false 不是
-     */
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    /**
-     * 这个在子类掉用view 的 {@link android.view.View#setVisibility(int visibility) setVisibility}
-     */
-    @Override
-    public void setViewVisibility(int visibility) {
-
     }
 
     public static interface OnClickReTryListener {

@@ -54,10 +54,13 @@ public class ZWWJFragment extends BaseFragment   {
     Unbinder unbinder;
     @BindView(R.id.zww_exshop_ibtn)
     ImageButton zwwExshopIBtn;
+    @BindView(R.id.empty_view)
+    EmptyLayout emptyView;
+
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
     private String sessionId;
-    private EmptyLayout.OnClickReTryListener onClickReTryListener;
+
     private List<VideoBackBean> playBackBeanList = new ArrayList<>();
     private List<Marquee> marquees = new ArrayList<>();
     private List<BannerBean> bannerList = new ArrayList<>();//轮播图接口返回BannerBean
@@ -69,7 +72,6 @@ public class ZWWJFragment extends BaseFragment   {
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
     private ZwwHeadView mZwwHeadView;
-    private EmptyLayout zwwEmptylayout;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
@@ -107,21 +109,23 @@ public class ZWWJFragment extends BaseFragment   {
         HttpManager.getInstance().getUserList(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> listRankBeanResult) {
-                playBackBeanList = listRankBeanResult.getData().getPlayback();
-                for (int i = 0; i < playBackBeanList.size(); i++) {
-                    Marquee marquee = new Marquee();
-                    String nickname = playBackBeanList.get(i).getNICKNAME();
-                    if (nickname.length() > 10) {
-                        nickname.substring(0, 10);
+                if (listRankBeanResult.getMsg().equals(Utils.HTTP_OK)) {
+                    playBackBeanList = listRankBeanResult.getData().getPlayback();
+                    for (int i = 0; i < playBackBeanList.size(); i++) {
+                        Marquee marquee = new Marquee();
+                        String nickname = playBackBeanList.get(i).getNICKNAME();
+                        if (nickname.length() > 10) {
+                            nickname.substring(0, 10);
+                        }
+                        String s = "恭喜" + "<font color='#FF0000'>" + nickname + "</font>"
+                                + "抓中一个" + playBackBeanList.get(i).getDOLL_NAME();
+                        marquee.setTitle(s);
+                        marquee.setImgUrl(UrlUtils.APPPICTERURL + playBackBeanList.get(i).getIMAGE_URL());
+                        marquees.add(marquee);
                     }
-                    String s = "恭喜" + "<font color='#FF0000'>" + nickname + "</font>"
-                            + "抓中一个" + playBackBeanList.get(i).getDOLL_NAME();
-                    marquee.setTitle(s);
-                    marquee.setImgUrl(UrlUtils.APPPICTERURL + playBackBeanList.get(i).getIMAGE_URL());
-                    marquees.add(marquee);
-                }
-                if(marquees.size()>0) {
-                    mZwwHeadView.setMarqueeview(marquees);
+                    if (marquees.size() > 0) {
+                        mZwwHeadView.setMarqueeview(marquees);
+                    }
                 }
             }
             @Override
@@ -131,22 +135,26 @@ public class ZWWJFragment extends BaseFragment   {
         });
     }
     private void initData() {
-
         mZwwHeadView=new ZwwHeadView(getActivity());
-        zwwEmptylayout=new EmptyLayout(getActivity());
         zwwAdapter = new ZWWAdapter(getActivity(), currentRoomBeens);
         zwwAdapter.setmOnItemClickListener(onItemClickListener);
-        zwwRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        zwwRecyclerview.setLayoutManager( new GridLayoutManager(getContext(), 2));
         zwwRecyclerview.addHeaderView(mZwwHeadView);
         zwwRecyclerview.setAdapter(zwwAdapter);
-       // zwwRecyclerview.setPullRefreshEnabled(false);
         zwwRecyclerview.setLoadingListener(onPullListener);
-        if (onClickReTryListener != null) {
-            zwwEmptylayout.setOnClickReTryListener(onClickReTryListener);
-        }
+
         if (mZwwHeadView.getTabLayout() != null) {
             mZwwHeadView.getTabLayout().addOnTabSelectedListener(tabSelectedListener);
         }
+        emptyView.setOnClickReTryListener(new EmptyLayout.OnClickReTryListener() {
+            @Override
+            public void onClickReTry(View view) {
+                currentPage = 1;
+                currentRoomBeens.clear();
+                zwwAdapter.notifyDataSetChanged();
+                getToysByType(currentType, currentPage);
+            }
+        });
     }
 
     public void notifyAdapter(List<RoomBean> rooms, int page) {
@@ -155,16 +163,14 @@ public class ZWWJFragment extends BaseFragment   {
         zwwAdapter.notify(currentRoomBeens);
     }
 
-    public void showError() {
-        if(zwwEmptylayout!=null&&zwwRecyclerview!=null) {
-            zwwRecyclerview.addFootView(zwwEmptylayout);
-            zwwEmptylayout.showEmpty();
-        }
-    }
-
-    public void dismissEmptyLayout() {
-        if(zwwEmptylayout!=null) {
-            zwwEmptylayout.dismiss();
+    public void showError(List<RoomBean> currentRoomBeens) {
+        if(currentRoomBeens.size()>0){
+            zwwRecyclerview.setPullRefreshEnabled(true);
+            emptyView.dismiss();
+            zwwAdapter.notify(currentRoomBeens);
+        }else{
+            zwwRecyclerview.setPullRefreshEnabled(false);
+            emptyView.showEmpty();
         }
     }
 
@@ -258,7 +264,6 @@ public class ZWWJFragment extends BaseFragment   {
                     }
                     return;
                 }
-
             } else {
                 LogUtils.loge("当前设备没有配置摄像头!",TAG);
             }
@@ -287,7 +292,7 @@ public class ZWWJFragment extends BaseFragment   {
         HttpManager.getInstance().getBannerNewList("汤姆抓娃娃", new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                if (loginInfoResult.getMsg().equals("success")) {
+                if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     bannerList = loginInfoResult.getData().getRunImage();
                     if (bannerList.size() > 0) {
                         for (int i = 0; i < bannerList.size(); i++) {
@@ -359,7 +364,6 @@ public class ZWWJFragment extends BaseFragment   {
      * 根据类型获取娃娃机
      */
     private void getToysByType(String type, int page) {
-        dismissEmptyLayout();
         HttpManager.getInstance().getToyListByType(type, page, new RequestSubscriber<Result<RoomListBean>>() {
             @Override
             public void _onSuccess(Result<RoomListBean> loginInfoResult) {
@@ -367,27 +371,27 @@ public class ZWWJFragment extends BaseFragment   {
                 if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     if (loginInfoResult.getData() != null) {
                         List<RoomBean> roomBeens = dealWithRoomStats(loginInfoResult.getData().getDollList());
-                        if (currentRoomBeens.size() == 0) {
-                            currentRoomBeens = roomBeens;
-                        } else {
-                            //TODO 增加的
-                            currentRoomBeens.addAll(roomBeens);
-                        }
+                          if (currentRoomBeens.size() == 0) {
+                              currentRoomBeens = roomBeens;
+                          } else {
+                              //TODO 增加的
+                              currentRoomBeens.addAll(roomBeens);
+                          }
 //                        Collections.sort(currentRoomBeens, new Comparator<RoomBean>() {
 //                            @Override
 //                            public int compare(RoomBean t1, RoomBean t2) {
 //                                return t2.getDollState().compareTo(t1.getDollState());
 //                            }
 //                        });
-                        zwwAdapter.notify(currentRoomBeens);
+                        showError(currentRoomBeens);
                         currentSumPage = loginInfoResult.getData().getPd().getTotalPage();
-
                     }
                 }
             }
             @Override
             public void _onError(Throwable e) {
                 setZwwRecyclerview();
+                showError(currentRoomBeens);
             }
         });
     }
@@ -464,7 +468,6 @@ public class ZWWJFragment extends BaseFragment   {
         new ShareDialog(getContext(),new ShareDialog.OnShareSuccessOnClicker() {
             @Override
             public void onShareSuccess() {
-
             }
         });
     }

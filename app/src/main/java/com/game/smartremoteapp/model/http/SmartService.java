@@ -14,6 +14,7 @@ import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
+import com.game.smartremoteapp.bean.SupportBean;
 import com.game.smartremoteapp.bean.Token;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.protocol.JCUtils;
@@ -798,4 +799,10 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.REWARDGOLDBEAN)
     Observable<Result<LoginRewardGoldBean>> getRewardInfo(@Field(UrlUtils.USERID) String userId);
+
+    //点赞接口
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.DOSUPPORT)
+    Observable<Result<SupportBean>> doSupport(@Field(UrlUtils.USERID)String userId);
 }

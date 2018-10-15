@@ -13,6 +13,7 @@ import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
+import com.game.smartremoteapp.bean.SupportBean;
 import com.game.smartremoteapp.bean.Token;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.utils.UrlUtils;
@@ -792,5 +793,14 @@ public class HttpManager {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    public void doSupport(String userId, RequestSubscriber<Result<SupportBean>> subscriber) {
+        Observable<Result<SupportBean>> o = smartService.doSupport(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
     }
 }

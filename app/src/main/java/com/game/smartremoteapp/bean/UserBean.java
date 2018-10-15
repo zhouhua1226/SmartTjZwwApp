@@ -47,6 +47,15 @@ public class UserBean implements Serializable {
     private int   TODAY_POOH ;;//今日竞猜总数
     private String JCID;        //CP游戏用户ID
     private String JDNUM;
+    private String SUPPORTTAG; //是否点过赞
+
+    public String getSUPPORTTAG() {
+        return SUPPORTTAG;
+    }
+
+    public void setSUPPORTTAG(String SUPPORTTAG) {
+        this.SUPPORTTAG = SUPPORTTAG;
+    }
 
     public String getJDNUM() {
         return JDNUM == null ? "" : JDNUM;

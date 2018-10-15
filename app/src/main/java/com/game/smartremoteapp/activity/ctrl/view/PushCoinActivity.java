@@ -495,10 +495,8 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     getUserInfos(userInfos, false);
                 }
             }
-
         }
     }
-
 
     //设备状态
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
@@ -665,10 +663,8 @@ public class PushCoinActivity extends Activity implements IctrlView {
                     Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)
                             .asBitmap().
                             transform(new GlideCircleTransform(PushCoinActivity.this)).into(player2_iv);
-
                 }
             }
-
             @Override
             public void _onError(Throwable e) {
                 Glide.with(getApplicationContext()).load(R.mipmap.app_mm_icon)

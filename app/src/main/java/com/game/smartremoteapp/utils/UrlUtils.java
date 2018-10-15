@@ -390,4 +390,6 @@ public class UrlUtils {
     public static final String DOREWARD ="/pooh-web/app/loginReward/doReward";
     //金币兑换列表
     public static final String REWARDGOLDBEAN ="/pooh-web/app/loginReward/getRewardInfo";
+    //点赞
+    public static final String DOSUPPORT ="/pooh-web/app/loginReward/doSupport" ;
 }

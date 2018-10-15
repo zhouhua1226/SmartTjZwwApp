@@ -116,12 +116,68 @@
         android:id="@+id/btn_reward_receive"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
+        android:layout_marginBottom="30dp"
         android:visibility="gone"
         android:background="@drawable/bg_reward_gold_nomal"
         android:gravity="center"
         android:text="已领取"
         android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_dialog_shape"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_everyday_happey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="每日一乐"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="#605f56"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_happy_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_everyday_happey"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:textColor="#605f56"
+            android:textSize="16sp" />
+
+           <TextView
+               android:id="@+id/tv_do_support"
+               android:layout_width="wrap_content"
+               android:drawableLeft="@drawable/icon_do_support"
+               android:text="  0"
+               android:gravity="center_vertical"
+               android:layout_below="@+id/tv_happy_word"
+               android:layout_marginTop="8dp"
+               android:textSize="14sp"
+               android:visibility="visible"
+               android:textColor="@color/apptheme_bg"
+               android:layout_alignParentLeft="true"
+               android:layout_marginLeft="@dimen/activity_horizontal_margin"
+               android:layout_marginBottom="8dp"
+               android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_do_support_animant"
+            android:layout_width="wrap_content"
+            android:drawableLeft="@drawable/icon_do_support"
+            android:layout_below="@+id/tv_happy_word"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content" />
+        </RelativeLayout>
+
 </LinearLayout>

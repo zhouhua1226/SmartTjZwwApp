@@ -37,11 +37,19 @@
             android:src="@drawable/icon_reward_gold"
             android:visibility="visible" />
     </RelativeLayout>
-
-    <com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView
-        android:id="@+id/zww_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#eceaea"
-        android:scrollbars="none" />
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView
+           android:id="@+id/zww_recyclerview"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="#eceaea"
+           android:scrollbars="none" />
+        <com.game.smartremoteapp.view.EmptyLayout
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_marginTop="221dp"
+            android:layout_height="match_parent"/>
+   </FrameLayout>
 </LinearLayout>
