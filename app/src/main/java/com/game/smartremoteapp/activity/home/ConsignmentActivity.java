@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,28 +59,20 @@ public class ConsignmentActivity extends BaseActivity {
     EditText remarkEt;
     @BindView(R.id.consignment_recyclerview)
     RecyclerView consignmentRecyclerview;
-    @BindView(R.id.consignment_hdfk_tv)
-    TextView consignmentHdfkTv;
-    @BindView(R.id.consignment_wwbdkyf_tv)
-    TextView consignmentWwbdkyfTv;
+
     @BindView(R.id.consignment_singleyj_layout)
-    LinearLayout consignmentSingleyjLayout;
-    @BindView(R.id.consignment_hdfk_imag)
-    ImageView consignmentHdfkImag;
-    @BindView(R.id.consignment_wwbdkyf_imag)
-    ImageView consignmentWwbdkyfImag;
-    @BindView(R.id.consignment_hdfk_layout)
-    LinearLayout consignmentHdfkLayout;
-    @BindView(R.id.consignment_wwbdkyf_layout)
-    LinearLayout consignmentWwbdkyfLayout;
+    LinearLayout  SingleyjLayout;
+    @BindView(R.id.consignment_hdfk_cb)
+    CheckBox hdfk_cb;
+    @BindView(R.id.consignment_wwbdkyf_cb)
+    CheckBox wwbdkyf_cb;
 
     private String TAG = "ConsignmentActivity--";
     private VideoBackBean videoBackBean;
     private ConsignmentAdapter consignmentAdapter;
     private List<VideoBackBean> list = new ArrayList<>();
     private String information = "";
-    private String fhType = "0";
-    private boolean isFormalAddress=true;
+    private String fhType = "0";  //选货到付款  免邮：0  金币抵扣 ：1    货到付款 ：2 暂不不支持
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
 
@@ -104,19 +97,22 @@ public class ConsignmentActivity extends BaseActivity {
         consignmentRecyclerview.setAdapter(consignmentAdapter);
 
         if (list.size() >= 3) {
-            consignmentSingleyjLayout.setVisibility(View.GONE);
+            fhType="0";
+            SingleyjLayout.setVisibility(View.GONE);
         } else {
-            consignmentSingleyjLayout.setVisibility(View.VISIBLE);
+            fhType="1";
+            wwbdkyf_cb.setEnabled(false);
+            SingleyjLayout.setVisibility(View.VISIBLE);
         }
     }
 
     private void initAddressData() {
         if (!Utils.isEmpty(UserUtils.UserAddress)) {
             informationTv.setText(UserUtils.UserAddress);
-            consignmentWwbdkyfTv.setText(Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
+             wwbdkyf_cb.setText( "  "+Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
         } else {
             informationTv.setText("新增收货地址");
-            consignmentWwbdkyfTv.setText("娃娃币抵扣邮费");
+            wwbdkyf_cb.setText("  娃娃币抵扣邮费");
         }
     }
 
@@ -138,9 +134,7 @@ public class ConsignmentActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.image_back, R.id.consignment_rl, R.id.shipping_button,
-            R.id.consignment_hdfk_tv, R.id.consignment_wwbdkyf_tv,
-            R.id.consignment_hdfk_layout,R.id.consignment_wwbdkyf_layout})
+    @OnClick({R.id.image_back, R.id.consignment_rl, R.id.shipping_button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
@@ -154,68 +148,49 @@ public class ConsignmentActivity extends BaseActivity {
                 if(!Utils.isEmpty(UserUtils.UserAddress)){
                     information = UserUtils.UserAddress.replace(" ", ",");
                 }
-                String remark = remarkEt.getText().toString();
-                final int length = list.size();
-                if (length > 1) {
-                    for (int i = 0; i < length; i++) {
-                        if (i == 0) {
-                            stringId.append(list.get(i).getID());
-                            stringDollId.append(list.get(i).getDOLLID());
-                        } else {
-                            stringId.append("," + list.get(i).getID());
-                            stringDollId.append(list.get(i).getDOLLID());
-                        }
-                    }
-                    if (Utils.isEmpty(information)) {
-                        MyToast.getToast(this, "请设置收货信息！").show();
-                    } else {
-                        getSendGoods(String.valueOf(stringId), length + "", information, remark, UserUtils.USER_ID, "0", Utils.getProvinceNum(UserUtils.UserAddress));
-                    }
-                } else {
-                    if (Utils.isEmpty(information)) {
-                            MyToast.getToast(this, "请设置收货信息！").show();
-                        } else {
-                            if (fhType.equals("1") || fhType.equals("2")) {
-                                if(isEnough()) {
-                                    //getSendGoods(list.get(0).getID()+",", "1", information, remark, UserUtils.USER_ID, fhType);
-                                    getSendGoods(list.get(0).getID() + ",", "1", information, remark, UserUtils.USER_ID, fhType, Utils.getProvinceNum(UserUtils.UserAddress));
-                                }else {
-                                    if(isFormalAddress) {
-                                        MyToast.getToast(getApplicationContext(), "您的余额不足！").show();
-                                    }else {
-                                        MyToast.getToast(getApplicationContext(), "暂不支持您所填写的地区！").show();
-                                    }
-                                }
-                            }else {
-                                MyToast.getToast(this,"请选择邮寄付款方式！").show();
-                            }
-                        }
+                setgetSendGoods();
+                break;
 
-                }
-                break;
-            case R.id.consignment_hdfk_layout:
-                //选货到付款  免邮：0  金币抵扣 ：1  货到付款 ：2
-                fhType = "2";
-                setYJType(fhType);
-                break;
-            case R.id.consignment_wwbdkyf_layout:
-                //娃娃币抵扣运费
-                fhType = "1";
-                setYJType(fhType);
-                break;
         }
     }
 
-    private void setYJType(String type) {
-        if (type.equals("2")) {
-            consignmentHdfkImag.setImageResource(R.drawable.consignment_select);
-            consignmentWwbdkyfImag.setImageResource(R.drawable.consignment_unselect);
-        } else if (type.equals("1")) {
-            consignmentHdfkImag.setImageResource(R.drawable.consignment_unselect);
-            consignmentWwbdkyfImag.setImageResource(R.drawable.consignment_select);
+private void  setgetSendGoods(){
+    String remark = remarkEt.getText().toString();
+     int length = list.size();
+    if(length<1){
+        MyToast.getToast(this, "请选择邮寄娃娃！").show();
+        return;
+    }
+    if (Utils.isEmpty(information)) {
+        MyToast.getToast(this, "请设置收货信息！").show();
+        return;
+    }
+    if(!isFormalAddress()) {
+        MyToast.getToast(getApplicationContext(), "暂不支持您所填写的地区！").show();
+        return;
+    }
+    if (fhType.equals("1") || fhType.equals("2")) {
+        if(!isEnough()) {
+            MyToast.getToast(getApplicationContext(), "您的余额不足！").show();
+            return;
         }
     }
+    String dollID=list.get(0).getID() + ",";
+    if(length > 1){
+        for (int i = 0; i < length; i++) {
+            if (i == 0) {
+                stringId.append(list.get(i).getID());
+                stringDollId.append(list.get(i).getDOLLID());
+            } else {
+                stringId.append("," + list.get(i).getID());
+                stringDollId.append(list.get(i).getDOLLID());
+            }
+        }
+        dollID=String.valueOf(stringId);
+    }
 
+    getSendGoods(dollID, length + "", information, remark, UserUtils.USER_ID,fhType, Utils.getProvinceNum(UserUtils.UserAddress));
+}
     private void getSendGoods(String dollID, String number, String consignee, String remark, String userID, String mode,String costNum) {
         //Log.e(TAG, "发货参数=" + costNum);
         HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum, new RequestSubscriber<Result<HttpDataInfo>>() {
@@ -252,11 +227,15 @@ public class ConsignmentActivity extends BaseActivity {
                 return false;
             }
         } else {
-            isFormalAddress=false;
             return false;
         }
     }
-
+    private boolean isFormalAddress(){
+        if (!Utils.getJBDKNum(UserUtils.UserAddress).equals("")) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     protected void onDestroy() {

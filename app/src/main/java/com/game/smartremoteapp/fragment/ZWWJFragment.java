@@ -54,8 +54,6 @@ public class ZWWJFragment extends BaseFragment   {
     Unbinder unbinder;
     @BindView(R.id.zww_exshop_ibtn)
     ImageButton zwwExshopIBtn;
-    @BindView(R.id.empty_view)
-    EmptyLayout emptyView;
 
     private List<RoomBean> currentRoomBeens = new ArrayList<>();
     private ZWWAdapter zwwAdapter;
@@ -72,6 +70,8 @@ public class ZWWJFragment extends BaseFragment   {
     private List<ToyTypeBean> toyTypeBeanList;
     private String currentType = "";  //首页
     private ZwwHeadView mZwwHeadView;
+    private EmptyLayout mEmptyLayout;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_zww;
@@ -136,17 +136,20 @@ public class ZWWJFragment extends BaseFragment   {
     }
     private void initData() {
         mZwwHeadView=new ZwwHeadView(getActivity());
+        mEmptyLayout=new EmptyLayout(getActivity());
         zwwAdapter = new ZWWAdapter(getActivity(), currentRoomBeens);
         zwwAdapter.setmOnItemClickListener(onItemClickListener);
-        zwwRecyclerview.setLayoutManager( new GridLayoutManager(getContext(), 2));
         zwwRecyclerview.addHeaderView(mZwwHeadView);
+        zwwRecyclerview.setEmptyView(mEmptyLayout);
+        zwwRecyclerview.setLayoutManager( new GridLayoutManager(getContext(), 2));
         zwwRecyclerview.setAdapter(zwwAdapter);
         zwwRecyclerview.setLoadingListener(onPullListener);
-
+        zwwRecyclerview.setPageSize(8);
+        zwwRecyclerview.setPullRefreshEnabled(true);
         if (mZwwHeadView.getTabLayout() != null) {
             mZwwHeadView.getTabLayout().addOnTabSelectedListener(tabSelectedListener);
         }
-        emptyView.setOnClickReTryListener(new EmptyLayout.OnClickReTryListener() {
+        mEmptyLayout.setOnClickReTryListener(new EmptyLayout.OnClickReTryListener() {
             @Override
             public void onClickReTry(View view) {
                 currentPage = 1;
@@ -164,13 +167,13 @@ public class ZWWJFragment extends BaseFragment   {
     }
 
     public void showError(List<RoomBean> currentRoomBeens) {
-        if(currentRoomBeens.size()>0){
-            zwwRecyclerview.setPullRefreshEnabled(true);
-            emptyView.dismiss();
+        if(zwwRecyclerview!=null&&mEmptyLayout!=null&&zwwAdapter!=null) {
+            if (currentRoomBeens.size() > 0) {
+                mEmptyLayout.dismiss();
+            } else {
+                mEmptyLayout.showEmpty();
+            }
             zwwAdapter.notify(currentRoomBeens);
-        }else{
-            zwwRecyclerview.setPullRefreshEnabled(false);
-            emptyView.showEmpty();
         }
     }
 
@@ -371,12 +374,12 @@ public class ZWWJFragment extends BaseFragment   {
                 if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     if (loginInfoResult.getData() != null) {
                         List<RoomBean> roomBeens = dealWithRoomStats(loginInfoResult.getData().getDollList());
-                          if (currentRoomBeens.size() == 0) {
-                              currentRoomBeens = roomBeens;
-                          } else {
-                              //TODO 增加的
-                              currentRoomBeens.addAll(roomBeens);
-                          }
+                             if (currentRoomBeens.size() == 0) {
+                                  currentRoomBeens = roomBeens;
+                             } else {
+                                 //TODO 增加的
+                                 currentRoomBeens.addAll(roomBeens);
+                             }
 //                        Collections.sort(currentRoomBeens, new Comparator<RoomBean>() {
 //                            @Override
 //                            public int compare(RoomBean t1, RoomBean t2) {

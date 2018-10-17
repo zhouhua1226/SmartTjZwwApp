@@ -98,6 +98,7 @@
 
     </RelativeLayout>
 
+
     <LinearLayout
         android:id="@+id/consignment_singleyj_layout"
         android:layout_width="match_parent"
@@ -105,52 +106,31 @@
         android:layout_marginTop="1dp"
         android:background="@color/white"
         android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/consignment_hdfk_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:visibility="gone">
-            <ImageView
-                android:id="@+id/consignment_hdfk_imag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/consignment_unselect"
-                android:layout_marginLeft="20dp" />
-            <TextView
-                android:id="@+id/consignment_hdfk_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="货到付款"
-                android:layout_gravity="center_vertical"
-                android:textColor="#5b5b5b"
-                android:layout_marginLeft="10dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/consignment_wwbdkyf_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/consignment_wwbdkyf_imag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/consignment_unselect"
-                android:layout_marginLeft="20dp" />
-            <TextView
-                android:id="@+id/consignment_wwbdkyf_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="80娃娃币抵扣邮费"
-                android:layout_gravity="center_vertical"
-                android:textColor="#5b5b5b"
-                android:layout_marginLeft="10dp" />
-        </LinearLayout>
+        <CheckBox
+            android:id="@+id/consignment_hdfk_cb"
+            android:layout_width="wrap_content"
+            android:button="@null"
+            android:drawableLeft="@drawable/cb_select_post_type"
+            android:text="   货到付款"
+            android:layout_gravity="center_vertical"
+            android:textColor="#5b5b5b"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:id="@+id/consignment_wwbdkyf_cb"
+            android:layout_width="wrap_content"
+            android:button="@null"
+            android:drawableLeft="@drawable/cb_select_post_type"
+            android:text="   80娃娃币抵扣邮费"
+            android:layout_gravity="center_vertical"
+            android:textColor="#5b5b5b"
+            android:checked="true"
+            android:layout_marginLeft="12dp"
+            android:layout_height="wrap_content" />
     </LinearLayout>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -181,15 +161,15 @@
             android:maxLength="20" />
 
     </RelativeLayout>
-        <Button
-            android:id="@+id/shipping_button"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/setting_logout_btn_bg"
-            android:text="确定发货"
-            android:textSize="14sp"
-            android:textColor="@color/brown" />
+    <Button
+        android:id="@+id/shipping_button"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/setting_logout_btn_bg"
+        android:text="确定发货"
+        android:textSize="14sp"
+        android:textColor="@color/brown" />
 </LinearLayout>

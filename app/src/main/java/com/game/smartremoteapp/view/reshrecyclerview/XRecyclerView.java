@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 public class XRecyclerView extends RecyclerView implements LoadingMoreFooterClickCallback{
 
+    private WrapAdapter wrapAdapter;
     public interface LoadingListener {
 
         void onRefresh();
@@ -35,6 +36,9 @@ public class XRecyclerView extends RecyclerView implements LoadingMoreFooterClic
     private int visibleThreshold = 1; // list到达 最后一个item的时候 触发加载
     private LoadingListener mLoadingListener;
     private ArrowRefreshHeader mRefreshHeader;//header view
+
+    private View emptyView;
+
     public XRecyclerView(Context context) {
         super(context);
         init(context);
@@ -183,13 +187,41 @@ public class XRecyclerView extends RecyclerView implements LoadingMoreFooterClic
             mRefreshHeader.setArrowImageView(resId);
         }
     }
+    //添加空布局
+    public void setEmptyView(View emptyView) {
+        this.emptyView = emptyView;
+    }
+
 
     @Override
     public void setAdapter(Adapter adapter) {
         mAdapter = adapter;
-        WrapAdapter wrapAdapter = new WrapAdapter(mHeaderViews, mFootViews, mAdapter);
-        mAdapter.registerAdapterDataObserver(new AdapterDataObserverImpl(wrapAdapter));
+        if(wrapAdapter==null) {
+            wrapAdapter = new WrapAdapter(mHeaderViews, mFootViews, mAdapter, emptyView);
+            mAdapter.registerAdapterDataObserver(new AdapterDataObserverImpl(wrapAdapter));
+        }
         super.setAdapter(wrapAdapter);
+    }
+
+    @Override
+    public void setLayoutManager(LayoutManager layout) {
+        super.setLayoutManager(layout);
+        if (mAdapter != null) {
+            if (layout instanceof GridLayoutManager) {
+                final GridLayoutManager gridManager = ((GridLayoutManager) layout);
+                gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        return (wrapAdapter.isHeader(position)
+                                || wrapAdapter.isRefreshHeader(position))
+                                || wrapAdapter.isFooter(position)
+                                || wrapAdapter.isEmptyView(position)
+                                ? gridManager.getSpanCount() : 1;
+                    }
+                });
+
+            }
+        }
     }
 
     @Override

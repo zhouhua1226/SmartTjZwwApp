@@ -17,17 +17,20 @@ public class WrapAdapter extends RecyclerView.Adapter{
     private static final int TYPE_HEADER =  -4;
     private static final int TYPE_FOOTER =  -3;
     private static final int TYPE_NORMAL =  0;
+    private static final int TYPE_EMPTY_VIEW = -2;
 
     private RecyclerView.Adapter adapter;
     private ArrayList<View> mHeaderViews;
     private ArrayList<BaseMoreFooter> mFootViews;
 
     private int headerPosition = 1;
+    private View emptyView;
 
-    public WrapAdapter(ArrayList<View> headerViews, ArrayList<BaseMoreFooter> footViews, RecyclerView.Adapter adapter) {
+    public WrapAdapter(ArrayList<View> headerViews, ArrayList<BaseMoreFooter> footViews, RecyclerView.Adapter adapter,View emptyView) {
         this.adapter = adapter;
         this.mHeaderViews = headerViews;
         this.mFootViews = footViews;
+        this.emptyView=emptyView;
     }
 //        解释一下，我们设置了一个SpanSizeLookup，这个类是一个抽象类，而且仅有一个抽象方法getSpanSize，
 //        这个方法的返回值决定了我们每个position上的item占据的单元格个数。假如GridLayoutManager设置的每行的个数为2的话，
@@ -41,7 +44,7 @@ public class WrapAdapter extends RecyclerView.Adapter{
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return (isHeader(position)||  isFooter(position)) ? gridManager.getSpanCount() : 1;
+                    return (isHeader(position)||  isFooter(position)|| isEmptyView(position)) ? gridManager.getSpanCount() : 1;
                 }
             });
         }
@@ -53,12 +56,22 @@ public class WrapAdapter extends RecyclerView.Adapter{
         ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
         if(lp != null
                 && lp instanceof StaggeredGridLayoutManager.LayoutParams
-                &&  (isHeader( holder.getLayoutPosition()) || isFooter( holder.getLayoutPosition())) ) {
+                &&  (isHeader( holder.getLayoutPosition()) || isFooter( holder.getLayoutPosition())&&isEmptyView( holder.getLayoutPosition())) ) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             p.setFullSpan(true);
         }
     }
+    public boolean isEmptyView(int position){
+        return shouldDisplayEmptyView() && position==mHeaderViews.size();
+    }
 
+    /**
+     * 是否需要显示EmptyView
+     * @return
+     */
+    private boolean shouldDisplayEmptyView(){
+        return adapter.getItemCount()==0 && emptyView!=null;
+    }
     public boolean isHeader(int position) {
         return position >= 0 && position < mHeaderViews.size();
     }
@@ -85,6 +98,8 @@ public class WrapAdapter extends RecyclerView.Adapter{
             return new SimpleViewHolder(mHeaderViews.get(0));
         } else if (viewType == TYPE_HEADER) {
             return new SimpleViewHolder(mHeaderViews.get(headerPosition++ ));
+        } else if (viewType == TYPE_EMPTY_VIEW ){
+            return new SimpleViewHolder(emptyView);
         } else if (viewType == TYPE_FOOTER) {
             return new SimpleViewHolder((View) mFootViews.get(0));
         }
@@ -93,10 +108,10 @@ public class WrapAdapter extends RecyclerView.Adapter{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (isHeader(position)) {
+        if (isHeader(position)||isEmptyView(position) ) {
             return;
         }
-        int adjPosition = position - getHeadersCount();
+        int adjPosition = position -  getHeadersCount();
         int adapterCount;
         if (adapter != null) {
             adapterCount = adapter.getItemCount();
@@ -108,11 +123,17 @@ public class WrapAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
+        int count;
         if (adapter != null) {
-            return getHeadersCount() + getFootersCount() + adapter.getItemCount();
+            count= getHeadersCount() + getFootersCount() + adapter.getItemCount();
         } else {
-            return getHeadersCount() + getFootersCount();
+            count= getHeadersCount() + getFootersCount();
         }
+        //如果Adapter中没有数据 则多加1用于显示EmptyView
+        if(shouldDisplayEmptyView()){
+            count+=1;
+        }
+       return count;
     }
 
     @Override
@@ -122,6 +143,9 @@ public class WrapAdapter extends RecyclerView.Adapter{
         }
         if (isHeader(position)) {
             return TYPE_HEADER;
+        }
+        if(isEmptyView(position)){
+            return TYPE_EMPTY_VIEW;
         }
         if(isFooter(position)){
             return TYPE_FOOTER;
