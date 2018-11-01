@@ -18,8 +18,8 @@ android {
         applicationId "com.game.smartremoteapp"
         minSdkVersion 17
         targetSdkVersion 22  //后期完善加入6.0
-        versionCode 12
-        versionName "1.1.2"
+        versionCode 14
+        versionName "1.1.4"
         multiDexEnabled true
         signingConfig signingConfigs.release
     }

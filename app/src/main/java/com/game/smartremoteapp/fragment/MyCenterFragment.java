@@ -15,6 +15,7 @@ import com.game.smartremoteapp.activity.home.AccountInformationActivity;
 import com.game.smartremoteapp.activity.home.AccountWalletActivity;
 import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
+import com.game.smartremoteapp.activity.home.DollWallActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
 import com.game.smartremoteapp.activity.home.GameCenterActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
@@ -177,7 +178,7 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_joincode_layout, R.id.mycenter_currencyrecord_tv,
             R.id.mycenter_guessrecord_tv, R.id.mycenter_logisticsorder_tv,
             R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
-            R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,
+            R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,R.id.mycenter_doll_layout,
             R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
             R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,R.id.mycenter_game_layout,
             R.id.mycenter_integral,R.id.ll_integral_task,R.id.imb_center_sign})
@@ -262,6 +263,9 @@ public class MyCenterFragment extends BaseFragment {
                 break;
             case R.id.mycenter_game_layout:
                 startActivity(new Intent(getContext(), GameCenterActivity.class));
+                break;
+            case R.id.mycenter_doll_layout:
+                startActivity(new Intent(getContext(), DollWallActivity.class));
                 break;
             default:
                 break;

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.game.smartremoteapp.R;
-class SpinView extends ImageView {
+public class SpinView extends ImageView {
 
     private float mRotateDegrees;
     private int mFrameTime;

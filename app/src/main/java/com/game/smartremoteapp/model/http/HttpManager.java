@@ -10,11 +10,13 @@ import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
+import com.game.smartremoteapp.bean.PictureListBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.SupportBean;
 import com.game.smartremoteapp.bean.Token;
+import com.game.smartremoteapp.bean.ToyNumBean;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.Utils;
@@ -802,5 +804,21 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 
+    }
+
+    public void getUserDollPicture(String userId, RequestSubscriber<Result<PictureListBean>> requestSubscriber) {
+        Observable<Result<PictureListBean>> o = smartService.getUserDollPicture(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+    public void getDollToyNum(String roomId, RequestSubscriber<Result<ToyNumBean>> requestSubscriber) {
+        Observable<Result<ToyNumBean>> o = smartService.getDollToyNum(roomId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
     }
 }

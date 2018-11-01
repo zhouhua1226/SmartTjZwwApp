@@ -140,7 +140,7 @@
             android:layout_marginTop="10dp"
             android:textStyle="bold"
             android:textColor="#605f56"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
         <TextView
             android:id="@+id/tv_happy_word"
             android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:textColor="#605f56"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
            <TextView
                android:id="@+id/tv_do_support"

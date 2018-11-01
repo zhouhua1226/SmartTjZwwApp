@@ -41,7 +41,6 @@ import java.util.regex.Pattern;
 public class Utils {
 
 
-
     public static String connectStatus = ConnectResultEvent.CONNECT_FAILURE;
     private static final boolean D = true;
     private static final String TAG_DELIMETER = "---";
@@ -60,6 +59,7 @@ public class Utils {
     public static final String TAG_DOLL_MACHINE_TYPE ="TAG_DOLL_MACHINE_TYPE" ;
     public static final String TAG_GATEWAY_SINGLE_CONNECT = "TAG_GATEWAY_SINGLE_CONNECT";
     public static final String TAG_GATEWAY_SINGLE_DISCONNECT = "TAG_GATEWAY_SINGLE_DISCONNECT";
+    public static final String TAG_DOLL_ROOMID = "TAG_ROOM_ID";
 
     public static final String TAG_DEVICE_FREE = "TAG_DEVICE_FREE";
     public static final String TAG_DEVICE_ERR = "TAG_DEVICE_ERR";

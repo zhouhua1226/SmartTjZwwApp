@@ -387,6 +387,7 @@
                  android:id="@+id/mycenter_game_layout"
                  android:layout_width="match_parent"
                  android:layout_height="45dp"
+                 android:visibility="gone"
                  android:layout_marginTop="1dp"
                  android:background="@color/white">
 
@@ -497,10 +498,37 @@
              </RelativeLayout>
 
              <RelativeLayout
-                 android:id="@+id/mycenter_joincode_layout"
+                 android:id="@+id/mycenter_doll_layout"
                  android:layout_width="match_parent"
                  android:layout_height="45dp"
                  android:layout_marginTop="10dp"
+                 android:background="@color/white">
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/mycenter_dollwall"
+                     android:gravity="center"
+                     android:text="    娃娃墙"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
+
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_joincode_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="1dp"
                  android:background="@color/white"
                  android:visibility="gone">
 

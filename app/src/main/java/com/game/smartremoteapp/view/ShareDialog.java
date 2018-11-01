@@ -1,6 +1,7 @@
 package com.game.smartremoteapp.view;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,8 @@ public class ShareDialog {
     private UMWeb web;
     private SHARE_MEDIA shareMedia;
     private OnShareSuccessOnClicker onShareSuccessOnClicker;
+    private boolean isImage=false;
+    private UMImage image;
     public ShareDialog(Context context, OnShareSuccessOnClicker onShareSuccessOnClicker) {
         this.mContext = context;
         mAlertDialog = new Dialog(context, R.style.dialog);
@@ -107,15 +111,32 @@ public class ShareDialog {
                         shareMedia = SHARE_MEDIA.WEIXIN_CIRCLE;
                         break;
                 }
-                new ShareAction((BaseActivity) mContext)
-                        .withMedia(web)
-                        .setPlatform(shareMedia)
-                        .setCallback(shareListener).share();
-            }
-
-        }));
-
+                shareAction();
+            }  }));
     }
+
+    private void shareAction() {
+        if(isImage&&image!=null){
+            new ShareAction((Activity) mContext)
+                    .withMedia(image)
+                    .setPlatform(shareMedia)
+                    .setCallback(shareListener)
+                    .share();
+        }else {
+            new ShareAction((BaseActivity) mContext)
+                    .withMedia(web)
+                    .setPlatform(shareMedia)
+                    .setCallback(shareListener).
+                     share();
+        }
+    }
+   public  void setImage(File file){
+         this.isImage=true;
+         image = new UMImage(mContext, file);//本地文件
+         image.setTitle(mContext.getString(R.string.app_name));
+         image.setDescription(mContext.getString(R.string.app_description));
+         image.compressStyle = UMImage.CompressStyle.QUALITY;//质量压缩，适合长图的分享
+   }
 
     private void initMedia(){
         web = new UMWeb(mContext.getString(R.string.load_web));
@@ -123,6 +144,7 @@ public class ShareDialog {
         web.setDescription(mContext.getString(R.string.app_description));
         web.setThumb(new UMImage(mContext,BitmapFactory.decodeResource(mContext.getResources(), R.drawable.logo_share)));
     }
+
     //分享监听接口
     public interface  OnShareSuccessOnClicker{
           void onShareSuccess();
