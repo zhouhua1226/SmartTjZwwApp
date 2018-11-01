@@ -105,7 +105,7 @@ public class RewardGoldActivity extends BaseActivity{
                     doSupport(UserUtils.USER_ID);
                     setAnimant();
                 }else{
-                    MyToast.getToast(getApplicationContext(), "今日您已点过赞！").show();
+                    MyToast.getToast(getApplicationContext(), "您已点过赞！").show();
                 }
                 break;
         }
@@ -136,7 +136,7 @@ public class RewardGoldActivity extends BaseActivity{
 
     private void initdata(LoginRewardGoldBean.LoginRewardGold mLoginRewardGold) {
         if(Utils.getDateOver(mLoginRewardGold.getCreateTime())){
-            today_receive.setText(mLoginRewardGold.getGold());
+            today_receive.setText(mLoginRewardGold.getRewardGold());
             yesday_catch.setText(mLoginRewardGold.getGold());
             reward_receive.setVisibility(View.VISIBLE);
             if(mLoginRewardGold.getTag().equals("Y")){

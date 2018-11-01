@@ -43,6 +43,15 @@ public class LoginRewardGoldBean implements Serializable {
         private String createTime;
         private String tag;
         private String gold;
+        private String rewardGold;
+
+        public String getRewardGold() {
+            return rewardGold;
+        }
+
+        public void setRewardGold(String rewardGold) {
+            this.rewardGold = rewardGold;
+        }
 
         public String getId() {
             return id;

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/icon_wall_doll_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/apptheme_bg">
+
+        <ImageButton
+            android:id="@+id/image_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我的娃娃墙"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_doll_share"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_share_show"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_height="100dp">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/user_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/app_mm_icon"
+            android:scaleType="centerCrop"
+            app:riv_border_width="2dip"
+            app:riv_border_color="@color/white"
+            app:riv_mutate_background="true"
+            app:riv_oval="true"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/user_image"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_code"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon_doll_share_code"
+            android:scaleType="centerCrop"
+            app:riv_border_width="2dip"
+            app:riv_corner_radius="2dip"
+            app:riv_border_color="@color/white"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@drawable/icon_wall_doll_rope" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="70dp"
+                            android:layout_height="90dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="16dp"
+                            android:paddingTop="10dp"
+                            android:background="@drawable/icon_wall_doll_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa1"
+                                android:layout_width="match_parent"
+                                android:scaleType="fitXY"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+
+                            <ImageView
+                                android:id="@+id/iv_wawa5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+
+                            <ImageView
+                                android:id="@+id/iv_wawa9"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+
+                            <ImageView
+                                android:id="@+id/iv_wawa13"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@drawable/icon_wall_doll_rope" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="70dp"
+                            android:layout_height="90dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="16dp"
+                            android:paddingTop="10dp"
+                            android:background="@drawable/icon_wall_doll_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa2"
+                                android:layout_width="match_parent"
+                                android:scaleType="fitXY"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:padding="4dp"
+                            android:layout_marginTop="40dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa10"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa14"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@drawable/icon_wall_doll_rope" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="70dp"
+                            android:layout_height="90dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="16dp"
+                            android:paddingTop="10dp"
+                            android:background="@drawable/icon_wall_doll_border">
+                        <ImageView
+                            android:id="@+id/iv_wawa3"
+                            android:layout_width="match_parent"
+                            android:scaleType="fitXY"
+                            android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa7"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa11"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa15"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@drawable/icon_wall_doll_rope" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="70dp"
+                            android:layout_height="90dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="6dp"
+                            android:paddingBottom="16dp"
+                            android:paddingTop="10dp"
+                            android:background="@drawable/icon_wall_doll_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa4"
+                                android:layout_width="match_parent"
+                                android:scaleType="fitXY"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa8"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa12"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="40dp"
+                            android:padding="4dp"
+                            android:background="@drawable/icon_wall_doll_small_border">
+                            <ImageView
+                                android:id="@+id/iv_wawa16"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/icon_wall_doll_line" />
+    </FrameLayout>
+</LinearLayout>

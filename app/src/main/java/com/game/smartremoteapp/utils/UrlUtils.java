@@ -14,6 +14,7 @@ public class UrlUtils {
     public static final  String APP_WEIXIN_ID ="wx23d0856f453d5dd3" ;
     public static final  String APP_WEIXIN_KEY ="d3f03de007c2faf1fa690378e10cc7f7" ;
 
+
     public static final  String APP_QQ_ID ="1106675519" ;
     public static final  String APP_QQ_KEY ="lc3yvvSbTbCI3G5j" ;
 
@@ -392,4 +393,9 @@ public class UrlUtils {
     public static final String REWARDGOLDBEAN ="/pooh-web/app/loginReward/getRewardInfo";
     //点赞
     public static final String DOSUPPORT ="/pooh-web/app/loginReward/doSupport" ;
+    //娃娃墙
+    public static final String DOLLPICTURE ="/pooh-web/api/play/getUserDollPicture" ;
+
+    //房间娃娃数
+    public static final String DOLLTOYNUM = "/pooh-web/app/doll/getDollToyNum";
 }

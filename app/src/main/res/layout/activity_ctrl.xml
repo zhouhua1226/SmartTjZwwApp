@@ -2,215 +2,360 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:zhouh="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:zhouh="http://schemas.android.com/apk/res-auto"
     android:background="#ffcad3"
     android:orientation="vertical"
     tools:context=".activity.ctrl.view.CtrlActivity">
 
-    <RelativeLayout
-        android:id="@+id/layout_top_select"
-        android:layout_width="fill_parent"
-        android:layout_height="45dp"
-        android:visibility="gone"
-        android:background="@drawable/bg03">
-
-        <ImageButton
-            android:id="@+id/image_back"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="@drawable/back"
-            android:visibility="visible" />
-
-        <TextView
-            android:text="@string/room_default_name"
-            android:id="@+id/doll_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <ImageButton
-            android:id="@+id/image_service"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="@drawable/kf1" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/realplay_rl"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layout_top_select"
-        >
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <SurfaceView
+            android:id="@+id/realplay_sv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent" />
+
+        <RelativeLayout
+            android:id="@+id/player_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <SurfaceView
-                android:id="@+id/realplay_sv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent" />
-
-            <RelativeLayout
-                android:id="@+id/player_layout"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:layout_marginTop="15dp"
-                >
-
-                <ImageView
-                    android:id="@+id/ctrl_back_imag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ctr_backbtn_bg"
-                    android:src="@drawable/white_x_bg"
-                    android:padding="8dp"
-                    android:layout_marginLeft="10dp"
-                    />
+            <LinearLayout
+                android:id="@+id/ll_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@drawable/mycenter_gamecurrency_bg"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp">
 
                 <TextView
-                    android:id="@+id/ctrl_guessrecord_tv"
+                    android:id="@+id/player_counter_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ctr_game_record"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginRight="5dp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/player2_iv"
+                    android:paddingLeft="10dp"
+                    android:text="0人在线"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/player2_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/app_mm_icon" />
+
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:background="@drawable/mycenter_gamecurrency_bg">
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="···"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/ctrl_guessrecord_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/ll_player"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:drawableLeft="@drawable/ctr_game_record"
+                android:gravity="center_vertical" />
+
+            <RelativeLayout
+                android:id="@+id/player_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_player"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/fl_room_stuate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
                     <TextView
-                        android:text="0人在线"
-                        android:layout_marginEnd="10dp"
-                        android:layout_toStartOf="@+id/player2_iv"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:id="@+id/player_counter_tv"
+                        android:id="@+id/player_name_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        />
+                        android:layout_height="27dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="38dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/ctr_money_bg"
+                        android:ellipsize="end"
+                        android:gravity="center|center_vertical"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="7dp"
+                        android:text="热抓中"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
 
                     <ImageView
-                        android:id="@+id/player2_iv"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
+                        android:id="@+id/main_player_iv"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
                         android:src="@mipmap/app_mm_icon" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="···"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="10dp"
-                        />
+                    <ImageView
+                        android:id="@+id/ctrl_status_iv"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:background="@drawable/point_green" />
+                </FrameLayout>
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_catch_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/fl_room_stuate"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/ctr_money_bg"
+                    android:drawableLeft="@drawable/crt_catch_num"
+                    android:drawablePadding="3dp"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="累计抓中0次"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/ctrl_nowtime_tv"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:textColor="#fcf005"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="00:00:00:000" />
+
+            <RelativeLayout
+                android:id="@+id/ctrl_buttom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/crtl_bottom_height"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="40dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_quiz_layout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:orientation="horizontal"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/ctrl_guessrecord_tv"
-                    >
-                    <FrameLayout
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/icon_crt_guesss"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/ctrl_instruction_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/iv_quiz_layout"
+                    android:background="@drawable/ctrl_guess_introduce_imag"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/ll_recharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/coin_tv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/player_name_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="27dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="热抓中"
-                            android:paddingLeft="15dp"
-                            android:layout_marginRight="15dp"
-                            android:gravity="center|center_vertical"
-                            android:textColor="@android:color/white"
-                            android:textSize="12sp"
-                            android:background="@drawable/ctr_ty_bg"
-                            android:layout_marginLeft="38dp"
-                            android:paddingRight="7dp"
-                            android:maxLength="6"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="游戏币:0"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
 
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:id="@+id/main_player_iv"
-                            android:layout_marginLeft="10dp"
-                            android:src="@mipmap/app_mm_icon" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/icon_crt_recharge" />
+                </LinearLayout>
 
-                        <ImageView
-                            android:layout_gravity="right|center_vertical"
-                            android:id="@+id/ctrl_status_iv"
-                            android:background="@drawable/point_green"
-                            android:layout_width="9dp"
-                            android:layout_height="9dp"
+                <!--开始按钮-->
+                <LinearLayout
+                    android:id="@+id/startgame_ll"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/icon_crt_start_game"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
-                            />
-                    </FrameLayout>
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/startgame_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_vertical"
+                        android:text="开始游戏"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/ctrl_dollgold_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_vertical"
+                        android:text="19/次"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </RelativeLayout>
-            <com.game.smartremoteapp.view.RoomMarqueeView
-                android:id="@+id/ctrl_marqueeview"
-                android:layout_width="match_parent"
+
+            <!--操作按钮-->
+            <RelativeLayout
+                android:id="@+id/operation_rl"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/front_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ctrl_up_imag" />
+
+                <ImageView
+                    android:id="@+id/back_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ctrl_down_imag" />
+
+                <ImageView
+                    android:id="@+id/left_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ctrl_left_imag" />
+
+                <ImageView
+                    android:id="@+id/right_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ctrl_right_imag" />
+            </RelativeLayout>
+
+            <!--下爪子按钮-->
+            <RelativeLayout
+                android:id="@+id/catch_ll"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone">
+
+                <com.game.smartremoteapp.view.TimeCircleProgressView
+                    android:id="@+id/ctrl_time_progress_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    zhouh:circleColor="@android:color/transparent"
+                    zhouh:progressBgColor="@android:color/white"
+                    zhouh:progressColor="#bfece5"
+                    zhouh:radius="28dp"
+                    zhouh:strokeWidth="5dp" />
+
+                <LinearLayout
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <!--爪子-->
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:src="@drawable/ctrl_uncatch_tongs"
+
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!--投注  -->
+            <include layout="@layout/layout_ctrl_bet" />
+
+            <ImageView
+                android:id="@+id/ctrl_change_camera_iv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="107dp"
-                app:mvAnimDuration="500"
-                app:mvInterval="2000"
-                app:mvTextSize="13sp"
-                />
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ctrl_change_view" />
 
-        </FrameLayout>
+            <ImageView
+                android:id="@+id/ctrl_room_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_room_detail" />
 
-        <TextView
-            android:id="@+id/tv_add_coin_animant"
-            android:textColor="@color/apptheme_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/icon_push2_coin_gold"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:textSize="26sp" />
+        </RelativeLayout>
+
         <com.game.smartremoteapp.view.GifView
             android:id="@+id/ctrl_gif_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="false"
             android:visibility="gone" />
+
         <ImageView
             android:id="@+id/ctrl_fail_iv"
             android:layout_width="match_parent"
@@ -218,205 +363,15 @@
             android:background="@drawable/ctrl_video_load_failed"
             android:clickable="true"
             android:visibility="gone" />
-    </RelativeLayout>
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/ctrl_nowtime_tv"
-        android:layout_width="80dp"
+    <ImageView
+        android:id="@+id/ctrl_back_imag"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="4dp"
-        tools:text="00:00:00:000"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:textColor="#fcf005"
-        android:maxLines="1"
-        />
-
-    <RelativeLayout
-        android:visibility="visible"
-        android:id="@+id/ctrl_buttom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/crtl_bottom_height"
-        android:layout_marginBottom="40dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:layout_alignParentBottom="true">
-
-        <ImageView
-            android:id="@+id/iv_quiz_layout"
-            android:layout_width="wrap_content"
-            android:src="@drawable/icon_crt_guesss"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            />
-        <ImageView
-            android:id="@+id/ctrl_instruction_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ctrl_guess_introduce_imag"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/iv_quiz_layout"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="6dp"
-            android:visibility="visible"
-            />
-
-        <LinearLayout
-            android:id="@+id/ll_recharge"
-            android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/coin_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的游戏币:0"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                ></TextView>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:src="@drawable/icon_crt_recharge"
-                android:layout_marginTop="3dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <!--开始按钮-->
-        <LinearLayout
-            android:id="@+id/startgame_ll"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-           android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_vertical"
-            android:background="@drawable/icon_crt_start_game"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/startgame_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="开始游戏"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/ctrl_dollgold_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="19/次"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </RelativeLayout>
-
-
-    <!--操作按钮-->
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/operation_rl"
-        android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="7dp"
-        android:layout_width="170dp"
-        android:layout_height="170dp">
-        <ImageView
-            android:id="@+id/front_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ctrl_up_imag"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/back_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ctrl_down_imag"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/left_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ctrl_left_imag"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true" />
-
-        <ImageView
-            android:id="@+id/right_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ctrl_right_imag"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
-    <!--下爪子按钮-->
-    <RelativeLayout
-        android:id="@+id/catch_ll"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="20dp"
-        android:visibility="gone"
-        android:layout_width="70dp"
-        android:layout_height="70dp">
-        <com.game.smartremoteapp.view.TimeCircleProgressView
-            android:id="@+id/ctrl_time_progress_view"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            zhouh:circleColor="@android:color/transparent"
-            zhouh:radius="28dp"
-            zhouh:progressBgColor="@android:color/white"
-            zhouh:progressColor="#bfece5"
-            zhouh:strokeWidth="5dp"
-            />
-        <LinearLayout
-            android:layout_centerInParent="true"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <!--爪子-->
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:src="@drawable/ctrl_uncatch_tongs"
-
-                />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <!--投注  -->
-    <include
-         layout="@layout/layout_ctrl_bet" />
-
-    <ImageView
-        android:layout_centerVertical="true"
-        android:id="@+id/ctrl_change_camera_iv"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ctrl_change_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ImageView
-        android:layout_centerVertical="true"
-        android:id="@+id/ctrl_room_detail"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/icon_room_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/ctr_backbtn_bg"
+        android:padding="8dp"
+        android:src="@drawable/white_x_bg" />
 </RelativeLayout>

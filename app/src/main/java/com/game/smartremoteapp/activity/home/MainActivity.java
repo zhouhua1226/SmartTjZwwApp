@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         initData();
         getDollList();          //获取房间列表
         checkVersion();
-        getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
+      //  getCPGameLogin(UserUtils.USER_ID);   //CP游戏登录
     }
 
     @Override
@@ -546,5 +546,4 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
         });
     }
-
 }

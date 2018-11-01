@@ -11,11 +11,13 @@ import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
+import com.game.smartremoteapp.bean.PictureListBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.SupportBean;
 import com.game.smartremoteapp.bean.Token;
+import com.game.smartremoteapp.bean.ToyNumBean;
 import com.game.smartremoteapp.protocol.JCResult;
 import com.game.smartremoteapp.protocol.JCUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
@@ -805,4 +807,16 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.DOSUPPORT)
     Observable<Result<SupportBean>> doSupport(@Field(UrlUtils.USERID)String userId);
+
+    //娃娃墙
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.DOLLPICTURE)
+    Observable<Result<PictureListBean>> getUserDollPicture(@Field(UrlUtils.USERID)String userId);
+
+    //房间娃娃墙
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.DOLLTOYNUM)
+    Observable<Result<ToyNumBean>> getDollToyNum(@Field(UrlUtils.ROOMID)String roomId);
 }

@@ -1,5 +1,6 @@
 package com.game.smartremoteapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
+import com.game.smartremoteapp.activity.home.DollWallActivity;
 import com.game.smartremoteapp.adapter.ListRankAdapter;
 import com.game.smartremoteapp.base.BaseFragment;
 import com.game.smartremoteapp.bean.ListRankBean;
@@ -110,7 +112,6 @@ public class RankFragmentTwo extends BaseFragment {
         initData();
         getRankDollTodayList(UserUtils.USER_ID);
     }
-
 
     private void initData() {
         setShowChangeView(isShowType);
@@ -218,7 +219,7 @@ public class RankFragmentTwo extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.ranktwo_catchtitle_tv, R.id.ranktwo_guesstitle_tv})
+    @OnClick({R.id.ranktwo_catchtitle_tv, R.id.ranktwo_guesstitle_tv,R.id.ib_rank_doll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ranktwo_catchtitle_tv:
@@ -236,6 +237,9 @@ public class RankFragmentTwo extends BaseFragment {
                 isShowType=2;
                 setShowChangeView(isShowType);
                 getRankBetTodayList(UserUtils.USER_ID);
+                break;
+            case R.id.ib_rank_doll:
+                startActivity(new Intent(getContext(), DollWallActivity.class));
                 break;
             default:
                 break;

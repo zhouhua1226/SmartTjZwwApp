@@ -42,6 +42,7 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Marquee;
 import com.game.smartremoteapp.bean.PondResponseBean;
 import com.game.smartremoteapp.bean.Result;
+import com.game.smartremoteapp.bean.ToyNumBean;
 import com.game.smartremoteapp.bean.UserBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
@@ -55,7 +56,6 @@ import com.game.smartremoteapp.view.GifView;
 import com.game.smartremoteapp.view.GlideCircleTransform;
 import com.game.smartremoteapp.view.MyToast;
 import com.game.smartremoteapp.view.QuizInstrictionDialog;
-import com.game.smartremoteapp.view.RoomMarqueeView;
 import com.game.smartremoteapp.view.TimeCircleProgressView;
 import com.game.smartremoteapp.view.VibratorView;
 import com.gatz.netty.global.AppGlobal;
@@ -96,8 +96,6 @@ public class CtrlActivity extends Activity implements IctrlView {
     GifView ctrlGifView;
     @BindView(R.id.ctrl_fail_iv)
     ImageView ctrlFailIv;
-    @BindView(R.id.image_back)
-    ImageButton imageBack;
     @BindView(R.id.coin_tv)
     TextView coinTv;//我的游戏币:5678
     @BindView(R.id.front_image)
@@ -114,8 +112,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     RelativeLayout catchLl;
     @BindView(R.id.operation_rl)
     RelativeLayout operationRl;
-    @BindView(R.id.doll_name)
-    TextView dollNameTv;
+
     @BindView(R.id.player_counter_tv)
     TextView playerCounterIv;
     @BindView(R.id.player2_iv)
@@ -156,18 +153,12 @@ public class CtrlActivity extends Activity implements IctrlView {
     RelativeLayout ctrlBetingLayout;
     @BindView(R.id.player_layout)
     RelativeLayout playerLayout;
-    @BindView(R.id.realplay_rl)
-    RelativeLayout realplayRl;
+
     @BindView(R.id.ll_recharge)
     LinearLayout rechargeView;
-    @BindView(R.id.ctrl_betting_back_button)
-    Button ctrlBettingBackButton;
+
     @BindView(R.id.startgame_text)
     TextView startgame_text;
-    @BindView(R.id.ctrl_back_imag)
-    ImageView ctrlBackImag;
-    @BindView(R.id.ctrl_guessrecord_tv)
-    TextView ctrlGuessrecordTv;
     @BindView(R.id.ctrl_betremark_tv)
     TextView ctrlBetremarkTv;
     @BindView(R.id.ctrl_betnum_five_tv)
@@ -190,8 +181,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     CheckBox ctrlBetnumThreeTv;
     @BindView(R.id.ctrl_betnum_four_tv)
     CheckBox ctrlBetnumFourTv;
-    @BindView(R.id.ctrl_marqueeview)
-    RoomMarqueeView ctrlMarqueeview;
+
     @BindView(R.id.ctrl_bet_tenflod_tv)
     TextView ctrlBetTenflodTv;
     @BindView(R.id.ctrl_bet_twentyfold_tv)
@@ -215,9 +205,8 @@ public class CtrlActivity extends Activity implements IctrlView {
     TextView ctrlBetTwentyproTv;
     @BindView(R.id.ctrl_betpernum_layout)
     RelativeLayout ctrlBetpernumLayout;
-
-    @BindView(R.id.tv_add_coin_animant)
-    TextView add_coin_animant;
+    @BindView(R.id.tv_catch_num)
+    TextView catch_num;
 
     private CtrlCompl ctrlCompl;
     private FillingCurrencyDialog fillingCurrencyDialog;
@@ -258,7 +247,6 @@ public class CtrlActivity extends Activity implements IctrlView {
     private int betFlodNum = 5;   //默认投注倍数
     private int betPro = 1;   //追投期数   游戏中默认不追投0,休闲1
 
-   // private List<TextView> betViewList;
     private List<TextView> betFoldList;
     private List<TextView> betProList;    //追投
     private List<Marquee> marquees = new ArrayList<>();
@@ -266,6 +254,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     private boolean flag = false;//在游戏中true.休闲false
     private int conversionGold=0;
     private String machineType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -321,6 +310,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD))) {
             money = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_DOLL_GOLD));
         }
+
         dollId = getIntent().getStringExtra(Utils.TAG_DOLL_Id);
         if (Utils.isNumeric(getIntent().getStringExtra(Utils.TAG_ROOM_PROB))) {
             prob = Integer.parseInt(getIntent().getStringExtra(Utils.TAG_ROOM_PROB));
@@ -334,9 +324,7 @@ public class CtrlActivity extends Activity implements IctrlView {
 
         machineType=getIntent().getStringExtra(Utils.TAG_DOLL_MACHINE_TYPE);
         //UserUtils.UserBetNum = YsdkUtils.loginResult.getData().getAppUser().getBET_NUM();
-        if (!Utils.isEmpty(dollName)) {
-            dollNameTv.setText(dollName);
-        }
+
         betMoney = money * betFlodNum;
         ctrlDollgoldTv.setText(money + "/次");
         ctrlConfirmLayout.setText(betMoney + "/次");   //下注金额 250
@@ -349,8 +337,9 @@ public class CtrlActivity extends Activity implements IctrlView {
         setStartMode(getIntent().getBooleanExtra(Utils.TAG_ROOM_STATUS, true));
         currentUrl = playUrlMain;
         ctrlCompl.startPlayVideo(mRealPlaySv, currentUrl);
-    }
 
+        getDollToyNum(dollId);
+    }
 
     @Override
     protected void onDestroy() {
@@ -570,8 +559,7 @@ public class CtrlActivity extends Activity implements IctrlView {
     }
 
 
-    @OnClick({R.id.image_back, R.id.ctrl_back_imag,
-            R.id.startgame_ll, R.id.ctrl_fail_iv, R.id.iv_quiz_layout,
+    @OnClick({ R.id.ctrl_back_imag, R.id.startgame_ll, R.id.ctrl_fail_iv, R.id.iv_quiz_layout,
             R.id.ctrl_instruction_image, R.id.ctrl_betting_winning, R.id.ctrl_betting_fail,
             R.id.ctrl_confirm_layout, R.id.ctrl_betting_back_button,
             R.id.ctrl_change_camera_iv, R.id.ctrl_guessrecord_tv, R.id.ll_recharge,
@@ -581,7 +569,6 @@ public class CtrlActivity extends Activity implements IctrlView {
             R.id.ctrl_bet_tenpro_tv, R.id.ctrl_bet_twentypro_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.image_back:
             case R.id.ctrl_back_imag:
                 finish();
                 break;
@@ -636,7 +623,6 @@ public class CtrlActivity extends Activity implements IctrlView {
 //                quizInstrictionDialog.setTitle("竞猜游戏说明");
 //                quizInstrictionDialog.setContent(Utils.readAssetsTxt(this, "guessintroduce"));
                 break;
-
             case R.id.ctrl_betting_winning:
                 zt = "1";
                 ctrlBettingFail.setImageResource(R.drawable.ctrl_guess_unselect_bz);
@@ -1300,6 +1286,7 @@ public class CtrlActivity extends Activity implements IctrlView {
                     }
                      setCatchResultDialog(1);
                     //catchSuccessAnimat();
+                    getDollToyNum(dollId);
                 } else {
                     //删除本地视频
                     state = "0";
@@ -1467,7 +1454,20 @@ public class CtrlActivity extends Activity implements IctrlView {
             }
         });
     }
-
+    //获取房间抓中娃娃数
+    private void getDollToyNum(String roomId) {
+        HttpManager.getInstance().getDollToyNum(roomId, new RequestSubscriber<Result<ToyNumBean>>() {
+            @Override
+            public void _onSuccess(Result<ToyNumBean> loginInfoResult) {
+                if (loginInfoResult.getMsg().equals("success")) {
+                    catch_num.setText("累计抓中"+loginInfoResult.getData().getToyNum()+"次");
+                }
+            }
+            @Override
+            public void _onError(Throwable e) {
+            }
+        });
+    }
     private void getGuesserlast10() {
         HttpManager.getInstance().getGuesserlast10(new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -1488,8 +1488,8 @@ public class CtrlActivity extends Activity implements IctrlView {
                                 marquee.setTitle(s);
                                 marquees.add(marquee);
                             }
-                            ctrlMarqueeview.setImage(true);
-                            ctrlMarqueeview.startWithList(marquees);
+                          //  ctrlMarqueeview.setImage(true);
+                           // ctrlMarqueeview.startWithList(marquees);
                         }
                     }
                 }
@@ -1637,7 +1637,7 @@ public class CtrlActivity extends Activity implements IctrlView {
         final PopupWindow mPop = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPop.setOutsideTouchable(true);
         mPop.setFocusable(true);
-        mPop.showAtLocation(realplayRl, Gravity.CENTER, 0, 0);//在屏幕居中，无偏移
+        mPop.showAtLocation(mRealPlaySv, Gravity.CENTER, 0, 0);//在屏幕居中，无偏移
         ImageView imageView = (ImageView) view.findViewById(R.id.roomdetail_dialog_iv);
         Glide.with(this)
                 .load(UrlUtils.APPPICTERURL + url)
