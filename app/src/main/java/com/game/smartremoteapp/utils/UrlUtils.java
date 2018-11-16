@@ -30,6 +30,8 @@ public class UrlUtils {
     public static final String SMSCODE = "smsCode";
     public static final String APKNAME = "apkName";
 
+    public static final String AGE = "age";
+    public static final String IMAGE ="image" ;
     public static final String FACEIMAGE = "base64Image";
     public static final String NICKNANME = "nickName";
     public static final String USERNAME = "userName";
@@ -42,6 +44,7 @@ public class UrlUtils {
     public static final String GUESSPRONUM="afterVoting";   //追投期数
     public static final String GUESSMULTIPLE="multiple";   //竞猜倍数
 
+    public static final String MODEL ="MODEL";
     public static final String PAYTYPE = "payType";
     public static final String USERID = "userId";
     public static final String WAGER = "wager";
@@ -63,6 +66,7 @@ public class UrlUtils {
     public static final String SENDGOODSUSERID="userId";
     public static final String SENDGOODSMODE="mode";
     public static final String SENDGOODSCOSTNUM="costNum";
+    public static final String SENDGOODSLEVEL ="level" ;
     public static final String FLAG ="flag" ;
     //微信QQ登录接口
     public static final String WXQQ_UID="uid";
@@ -398,4 +402,10 @@ public class UrlUtils {
 
     //房间娃娃数
     public static final String DOLLTOYNUM = "/pooh-web/app/doll/getDollToyNum";
+
+    //等级
+    public static final String USERLEVEL = "/pooh-web/app/level/getUserLevel";
+
+
+    public static final String UPDATEUSERINFO = "/pooh-web/api/user/updateUserInfo";
 }

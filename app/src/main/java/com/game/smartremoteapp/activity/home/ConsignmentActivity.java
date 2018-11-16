@@ -72,7 +72,7 @@ public class ConsignmentActivity extends BaseActivity {
     private ConsignmentAdapter consignmentAdapter;
     private List<VideoBackBean> list = new ArrayList<>();
     private String information = "";
-    private String fhType = "0";  //选货到付款  免邮：0  金币抵扣 ：1    货到付款 ：2 暂不不支持
+    private String fhType = "0";  //0 免邮：1  金币抵扣 ：2  货到付款 暂不不支持：3 用户13级2件包邮
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
 
@@ -95,12 +95,16 @@ public class ConsignmentActivity extends BaseActivity {
         consignmentRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         consignmentAdapter = new ConsignmentAdapter(this, list);
         consignmentRecyclerview.setAdapter(consignmentAdapter);
-
         if (list.size() >= 3) {
-            fhType="0";
+            fhType="0";//免邮：0
             SingleyjLayout.setVisibility(View.GONE);
-        } else {
-            fhType="1";
+        } else if(UserUtils.LEVEL>=13&&list.size()>1) {
+            fhType="3";//满13级2件包邮
+            SingleyjLayout.setVisibility(View.VISIBLE);
+            wwbdkyf_cb.setEnabled(false);
+            wwbdkyf_cb.setText("  13级特权2件包邮");
+          }else{
+            fhType="1";//1  金币抵扣
             wwbdkyf_cb.setEnabled(false);
             SingleyjLayout.setVisibility(View.VISIBLE);
         }
@@ -108,11 +112,15 @@ public class ConsignmentActivity extends BaseActivity {
 
     private void initAddressData() {
         if (!Utils.isEmpty(UserUtils.UserAddress)) {
-            informationTv.setText(UserUtils.UserAddress);
-             wwbdkyf_cb.setText( "  "+Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
+             informationTv.setText(UserUtils.UserAddress);
+            if(fhType.equals("1")){
+                wwbdkyf_cb.setText( "  "+Utils.getJBDKNum(UserUtils.UserAddress)+"娃娃币抵扣邮费");
+            }
         } else {
-            informationTv.setText("新增收货地址");
-            wwbdkyf_cb.setText("  娃娃币抵扣邮费");
+             informationTv.setText("新增收货地址");
+             if(fhType.equals("1")){
+                wwbdkyf_cb.setText("  娃娃币抵扣邮费");
+            }
         }
     }
 
@@ -127,12 +135,6 @@ public class ConsignmentActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 
     @OnClick({R.id.image_back, R.id.consignment_rl, R.id.shipping_button})
     public void onViewClicked(View view) {
@@ -150,7 +152,6 @@ public class ConsignmentActivity extends BaseActivity {
                 }
                 setgetSendGoods();
                 break;
-
         }
     }
 
@@ -188,12 +189,11 @@ private void  setgetSendGoods(){
         }
         dollID=String.valueOf(stringId);
     }
-
-    getSendGoods(dollID, length + "", information, remark, UserUtils.USER_ID,fhType, Utils.getProvinceNum(UserUtils.UserAddress));
-}
+      getSendGoods(dollID, length + "", information, remark, UserUtils.USER_ID,fhType, Utils.getProvinceNum(UserUtils.UserAddress));
+    }
     private void getSendGoods(String dollID, String number, String consignee, String remark, String userID, String mode,String costNum) {
         //Log.e(TAG, "发货参数=" + costNum);
-        HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum, new RequestSubscriber<Result<HttpDataInfo>>() {
+        HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum,null, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
                 list = loginInfoResult.getData().getPlayback();
@@ -205,10 +205,8 @@ private void  setgetSendGoods(){
                 setResult(0, intent);
                 finish();
             }
-
             @Override
             public void _onError(Throwable e) {
-
             }
         });
     }

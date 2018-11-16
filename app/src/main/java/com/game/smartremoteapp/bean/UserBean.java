@@ -49,6 +49,43 @@ public class UserBean implements Serializable {
     private String JDNUM;
     private String SUPPORTTAG; //是否点过赞
 
+    private int LEVEL; //用户等级
+    private String LEVEL_16_TAG;
+    private String LEVEL_18_TAG;
+    private int AGE;
+
+    public int getAGE() {
+        return AGE;
+    }
+
+    public void setAGE(int AGE) {
+        this.AGE = AGE;
+    }
+
+    public int getLEVEL() {
+        return LEVEL;
+    }
+
+    public void setLEVEL(int LEVEL) {
+        this.LEVEL = LEVEL;
+    }
+
+    public String getLEVEL_16_TAG() {
+        return LEVEL_16_TAG;
+    }
+
+    public void setLEVEL_16_TAG(String LEVEL_16_TAG) {
+        this.LEVEL_16_TAG = LEVEL_16_TAG;
+    }
+
+    public String getLEVEL_18_TAG() {
+        return LEVEL_18_TAG;
+    }
+
+    public void setLEVEL_18_TAG(String LEVEL_18_TAG) {
+        this.LEVEL_18_TAG = LEVEL_18_TAG;
+    }
+
     public String getSUPPORTTAG() {
         return SUPPORTTAG;
     }

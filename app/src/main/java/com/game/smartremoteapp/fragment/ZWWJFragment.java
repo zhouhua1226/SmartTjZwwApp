@@ -32,7 +32,6 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.EmptyLayout;
 import com.game.smartremoteapp.view.MyToast;
-import com.game.smartremoteapp.view.ShareDialog;
 import com.game.smartremoteapp.view.ZwwHeadView;
 import com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView;
 import com.gatz.netty.utils.NettyUtils;
@@ -273,7 +272,6 @@ public class ZWWJFragment extends BaseFragment   {
         }
     }
 
-
     //TODO 正式环境统一处理
     private void enterCoinNext( String camera1, String camera2, String type,String dogold) {
         Intent intent = null;
@@ -308,7 +306,6 @@ public class ZWWJFragment extends BaseFragment   {
                                     }
                                 }
                             }
-
                         }
                        mZwwHeadView.initBanner(list,nBannerList);
                     }
@@ -466,14 +463,5 @@ public class ZWWJFragment extends BaseFragment   {
         super.onResume();
         getUserList();
     }
-    //分享
-    private void shareApp() {
-        new ShareDialog(getContext(),new ShareDialog.OnShareSuccessOnClicker() {
-            @Override
-            public void onShareSuccess() {
-            }
-        });
-    }
-
 }
 

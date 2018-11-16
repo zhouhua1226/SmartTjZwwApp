@@ -58,4 +58,5 @@
     <color name="common_red_text_color">#ff6464</color>
     <color name="recharge_red_color">#fc2f2f</color>
     <color name="recharge_blue_color">#72c6ff</color>
+    <color name="black_gray_color">#8d8d8d</color>
 </resources>

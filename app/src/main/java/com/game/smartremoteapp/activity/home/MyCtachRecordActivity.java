@@ -275,7 +275,6 @@ public class MyCtachRecordActivity extends BaseActivity {
                     bundle.putSerializable("record", (Serializable) selectList);//序列化,要注意转化(Serializable)
                     intent.putExtras(bundle);//发送数据
                     startActivityForResult(intent, 1);
-                    finish();
                 } else {
                     MyToast.getToast(getApplicationContext(), "请至少选择一个娃娃！").show();
                 }

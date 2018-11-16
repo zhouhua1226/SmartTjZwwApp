@@ -81,7 +81,6 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.MyVi
                 }
             });
         }
-
     }
 
     @Override

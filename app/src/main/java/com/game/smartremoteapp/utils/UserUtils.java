@@ -23,6 +23,8 @@ public class UserUtils {
     public static final String SP_TAG_PROVINCECITY="SP_TAG_PROVINCECITY";
     public static final String SP_TAG_ISEXCHANGE="SP_TAG_ISEXCHANGE";
     public static final String SP_TAG_PHONE="SP_TAG_PHONE";
+    public static final String SP_TAG_PASSWORD="SP_TAG_PASSWORD";
+    public static final String SP_TAG_CODE="SP_TAG_CODE";
     public static final String SP_FIRET_CHARGE = "SP_FIRET_CHARGE";
 
     public static String sessionID = "";
@@ -40,10 +42,14 @@ public class UserUtils {
     public static String UserAmount="";
     public static String UserWeekDay="";
     public static String UserMouthDay="";
+    public static  String LEVEL_16_TAG="";
+    public static  String LEVEL_18_TAG="";
     public static int UserBetNum;
-
+    public static  int LEVEL=0;
     public static int id;
     public static SRStoken SRSToken;
+    public static String GENDER;   //用户性别
+    public static int AGE=0;   //用户性别
     public static boolean isUserChanger = false;  //是否切换
 
     public static final String RECODE_URL = Environment.getExternalStorageDirectory().getPath()

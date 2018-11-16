@@ -165,7 +165,7 @@ public class NewAddressActivity extends BaseActivity {
                 .setThemeColor(getResources().getColor(R.color.apptheme_bg))
                 .setWheelItemTextNormalColor(getResources().getColor(R.color.gray_drak))
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.apptheme_bg))
-                .setWheelItemTextSize(13)
+                .setWheelItemTextSize(14)
                 .setAddressBack(new OnAddressSetListener() {
                     @Override
                     public void onAddressDateSet(AddressDialog mAddressDialog, String provice, String city, String county) {

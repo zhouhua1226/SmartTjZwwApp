@@ -151,6 +151,7 @@ public class LoginCodeActivity extends BaseActivity {
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     SPUtils.putString(getApplicationContext(), SP_TAG_PHONE, phone);
+                    UserUtils.AGE = httpDataInfoResult.getData().getAppUser().getAGE();
                     MyToast.getToast(getApplicationContext(), "登录成功！").show();
                     Utils.toActivity(LoginCodeActivity.this, MainActivity.class);
                     finish();
@@ -206,6 +207,7 @@ public class LoginCodeActivity extends BaseActivity {
              }
              @Override
              public void onComplete(SHARE_MEDIA platform, int i, Map<String, String> map) {
+                 LogUtils.loge(map.toString(),TAG);
                  if(map==null){
                      MyToast.getToast(getApplicationContext(),"登录失败！").show();
                      setGifView(false);
@@ -256,6 +258,7 @@ public class LoginCodeActivity extends BaseActivity {
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     MyToast.getToast(getApplicationContext(), "登录成功！").show();
+                    UserUtils.AGE = httpDataInfoResult.getData().getAppUser().getAGE();
                     Utils.toActivity(LoginCodeActivity.this, MainActivity.class);
                     finish();
                 } else {
