@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backcolor"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/apptheme_bg">
+        <ImageButton
+            android:id="@+id/image_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+        <TextView
+            android:id="@+id/recode_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发红包"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="30dp"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_redpack_shape">
+        <TextView
+            android:id="@+id/tv_gold_number_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="金币"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_gold_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="个"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/et_gold_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_gold_number"
+            android:layout_toRightOf="@+id/tv_gold_number_desc"
+            android:layout_marginRight="4dp"
+            android:background="@color/white"
+            android:gravity="center|right"
+            android:hint="0"
+            android:maxLength="6"
+            android:inputType="number"
+            android:textColorHint="#a0a5a4"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="金币不得少于10个哦"
+        android:textColor="#b1b1b1"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_redpack_shape">
+        <TextView
+            android:id="@+id/tv_redpack_number_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="红包个数"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_redpack_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="个"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/et_redwallet_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_redpack_number"
+            android:layout_toRightOf="@+id/tv_redpack_number_desc"
+            android:layout_marginRight="4dp"
+            android:inputType="number"
+            android:maxLength="5"
+            android:background="@color/white"
+            android:gravity="center|right"
+            android:hint="0"
+            android:textColorHint="#a0a5a4"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="红包个数不得少于2个哦"
+        android:textColor="#b1b1b1"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/btn_send_redwallet"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:enabled="false"
+        android:background="@drawable/bg_select_redpack"
+        android:text="塞金币进红包"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

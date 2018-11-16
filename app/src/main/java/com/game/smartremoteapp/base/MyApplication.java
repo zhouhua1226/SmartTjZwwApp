@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+
 import com.game.smartremoteapp.service.SmartRemoteService;
 import com.game.smartremoteapp.utils.LogUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
@@ -12,6 +13,7 @@ import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -32,7 +34,7 @@ public class MyApplication extends MultiDexApplication {
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(false);//初始化logger 测试设置true    真实发布 设置false
+        LogUtils.logInit(true);//初始化logger 测试设置true    真实发布 设置false
     }
     private void setCrashHandler() {
 

@@ -6,6 +6,7 @@ import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.LevelBean;
 import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
@@ -93,8 +94,8 @@ public class HttpManager {
                 .subscribe(subscriber);
     }
     //手机号注册
-    public void getRegiter( String phone, String pass, String code,String channelNum, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
-        Observable<Result<HttpDataInfo>> o =smartService.getRegiter(phone,pass,code,channelNum);
+    public void getRegiter(String phone, String pass, String code,   String channelNum, RequestSubscriber<Result<HttpDataInfo>> subscriber) {
+        Observable<Result<HttpDataInfo>> o =smartService.getRegiter(phone,pass,code, channelNum );
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -248,8 +249,9 @@ public class HttpManager {
     }
 
     //发货
-    public void getSendGoods(String id,String number,String consignee,String remark,String userID,String mode,String costNum,Subscriber<Result<HttpDataInfo>>subscriber){
-        Observable<Result<HttpDataInfo>> o =smartService.getSendGoods(id,number,consignee,remark,userID,mode,costNum);
+    public void getSendGoods(String id,String number,String consignee,String remark,String userID,
+                             String mode,String costNum, String level,Subscriber<Result<HttpDataInfo>>subscriber){
+        Observable<Result<HttpDataInfo>> o =smartService.getSendGoods(id,number,consignee,remark,userID,mode,costNum,level );
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -821,4 +823,19 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(requestSubscriber);
     }
+    public void getgetUserLevel(String userId, RequestSubscriber<Result<LevelBean>> requestSubscriber) {
+        Observable<Result<LevelBean>> o = smartService.getgetUserLevel(userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+    public void perfectInformation(String nickname,String gender, int age,String userId, RequestSubscriber<Result<HttpDataInfo>> requestSubscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.perfectInformation(userId,nickname,gender,age);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
 }

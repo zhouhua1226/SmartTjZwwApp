@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/apptheme_bg">
+
+        <ImageButton
+            android:id="@+id/image_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/recode_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="完善信息"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_add_deader"
+        android:layout_width="80dp"
+        android:src="@drawable/icon_infor_add_header"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_height="80dp" />
+
+    <LinearLayout
+        android:id="@+id/rl_youxibi"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="昵称"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp"
+            android:hint="请输入昵称"
+            android:maxLength="11"
+            android:background="@color/white"
+            android:textColorHint="@color/hihtcolor"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray_line"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_height="1dp"></View>
+
+    <RelativeLayout
+        android:id="@+id/rl_user_gener"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp">
+
+        <TextView
+            android:id="@+id/tv_gener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="性别"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_user_gener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_gener"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/iv_right_arrow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/arrow_gray" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray_line"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_height="1dp"></View>
+
+    <RelativeLayout
+        android:id="@+id/rl_user_age"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp">
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="年龄"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_user_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_year"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/arrow_gray" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray_line"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_height="1dp"></View>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="注册成功后，性别不可修改"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black_gray_color"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_sure_infor"
+        android:layout_width="250dp"
+        android:text="确定"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/dialog_apptheme_bg"
+        android:layout_height="40dp" />
+
+</LinearLayout>

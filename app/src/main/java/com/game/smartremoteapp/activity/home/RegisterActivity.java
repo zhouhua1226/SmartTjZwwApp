@@ -100,6 +100,8 @@ public class RegisterActivity extends BaseActivity{
             MyToast.getToast(this,"请输入短信验证码").show();
             return;
         }
+
+
         regiterTask(phone,pass,code,
                 ChannelUtils.getChannelNum());//渠道
     }

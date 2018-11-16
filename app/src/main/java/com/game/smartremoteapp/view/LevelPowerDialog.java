@@ -30,11 +30,12 @@ public class LevelPowerDialog extends Dialog {
         ibClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               dismiss();
+                dismiss();
             }
         });
     }
   public void setLevelPowerBg(int icon){
       iv_level.setBackgroundResource(icon);
   }
+
 }

@@ -467,7 +467,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 current = 0;
                 break;
             case R.id.tab_rank:
-                current =1;
+                if(UserUtils.AGE==0){
+                    Utils.toActivity(this,PerfectInformationActivity.class);
+                    current=lastIndex;
+                    setTab(current);
+                }else{
+                    current =1;
+                }
                 break;
             case R.id.tab_mine:
                 current = 2;
@@ -483,7 +489,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
         lastIndex=current;
     }
-
+   private void setTab(int current){
+       tab_rank.setChecked(false);
+       if(current==0){
+        tab_home.setChecked(true);
+       }else if(current==2){
+           tab_mine.setChecked(true);
+       }
+   }
     private void selectFragment(int index) {
         transaction = getSupportFragmentManager().beginTransaction();
         hideFragment(transaction);
@@ -497,13 +510,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 break;
             case 1:
-                if (rankFragment == null) {
-                    rankFragment = new RankFragmentTwo();
-                    transaction.add(R.id.show_fragment, rankFragment);
-                } else {
-                    transaction.show(rankFragment);
-                }
-
+                    if (rankFragment == null) {
+                        rankFragment = new RankFragmentTwo();
+                        transaction.add(R.id.show_fragment, rankFragment);
+                    } else {
+                        transaction.show(rankFragment);
+                    }
                 break;
             case 2:
                 if (myCenterFragment == null) {

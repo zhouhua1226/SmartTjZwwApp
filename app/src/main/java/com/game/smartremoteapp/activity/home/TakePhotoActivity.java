@@ -106,10 +106,10 @@ public class TakePhotoActivity extends BaseActivity  {
             public void _onSuccess(Result<AppUserBean> result) {
                 if(result.getCode()==0) {
                     UserUtils.UserImage= UrlUtils.USERFACEIMAGEURL+result.getData().getAppUser().getIMAGE_URL();
-                    MyToast.getToast(getApplicationContext(),"修改成功！").show();
+                    MyToast.getToast(getApplicationContext(),"头像修改成功！").show();
                      finish();
                 }else{
-                    MyToast.getToast(getApplicationContext(),"修改失败!").show();
+                    MyToast.getToast(getApplicationContext(),"头像修改失败!").show();
                 }
             }
             @Override

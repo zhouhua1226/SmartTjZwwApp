@@ -376,32 +376,6 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden" />
 
-       <!--  蘑菇抓娃娃 -->
-        <activity
-            android:name=".activity.mushroom.HomeActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/mainTheme">
-        </activity>
-        <activity
-            android:name=".activity.mushroom.Splash1Activity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/mainTheme">
-            </activity>
-            <activity
-                android:name=".activity.mushroom.LoginActivity"
-                android:configChanges="orientation|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/mainTheme">
-            </activity>
-            <activity
-                android:name=".activity.mushroom.RegisterOneActivity"
-                android:configChanges="orientation|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/mainTheme">
-            </activity>
         <!-- 现在支付 -->
         <activity
             android:name="com.ipaynow.plugin.presenter.PayMethodActivity"
@@ -457,6 +431,21 @@
         <activity
             android:name=".activity.home.LevelActivity"
             android:configChanges="orientation|keyboardHidden"></activity>
+
+        <activity
+            android:name=".activity.home.SendRedPackActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.home.PerfectInformationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.home.RedWalletDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/mainTheme">
+        </activity>
     </application>
 
     <supports-screens

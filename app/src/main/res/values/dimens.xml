@@ -101,6 +101,7 @@
     <!-- margin -->
     <dimen name="margin_0">0dip</dimen>
     <dimen name="margin_2">1dip</dimen>
+    <dimen name="margin_3">1.5dip</dimen>
     <dimen name="margin_4">2dip</dimen>
     <dimen name="margin_5">2.5dip</dimen>
     <dimen name="margin_6">3dip</dimen>

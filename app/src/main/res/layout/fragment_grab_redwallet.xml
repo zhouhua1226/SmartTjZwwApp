@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@color/apptheme_bg" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@color/apptheme_bg">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:text="抢红包"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <com.game.smartremoteapp.view.reshrecyclerview.XRecyclerView
+            android:id="@+id/grw_recyclerview"
+            android:layout_width="match_parent"
+            android:background="#f3f3f2"
+            android:overScrollMode="never"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+    </LinearLayout>

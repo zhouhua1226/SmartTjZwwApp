@@ -7,11 +7,10 @@ package com.game.smartremoteapp.bean;
 public class LevelPowerBean {
     public int icon;
     public String levelPowerTitle;
-    public String leveLvalue;
-
-    public LevelPowerBean(int icon, String levelPowerTitle, String leveLvalue) {
+    public int mlevel;
+    public LevelPowerBean(int icon, String levelPowerTitle,int mlevel) {
         this.icon = icon;
         this.levelPowerTitle = levelPowerTitle;
-        this.leveLvalue = leveLvalue;
+        this.mlevel = mlevel;
     }
 }

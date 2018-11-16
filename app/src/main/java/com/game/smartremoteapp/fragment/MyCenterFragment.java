@@ -13,7 +13,6 @@ import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.home.AccountDetailActivity;
 import com.game.smartremoteapp.activity.home.AccountInformationActivity;
 import com.game.smartremoteapp.activity.home.AccountWalletActivity;
-import com.game.smartremoteapp.activity.home.AgencyActivity;
 import com.game.smartremoteapp.activity.home.BetRecordActivity;
 import com.game.smartremoteapp.activity.home.DollWallActivity;
 import com.game.smartremoteapp.activity.home.DrawMoneyActivity;
@@ -21,13 +20,16 @@ import com.game.smartremoteapp.activity.home.GameCenterActivity;
 import com.game.smartremoteapp.activity.home.InformationActivity;
 import com.game.smartremoteapp.activity.home.IntegralActivity;
 import com.game.smartremoteapp.activity.home.IntegralTaskActivity;
+import com.game.smartremoteapp.activity.home.LevelActivity;
 import com.game.smartremoteapp.activity.home.LnvitationCodeActivity;
 import com.game.smartremoteapp.activity.home.LoginCodeActivity;
 import com.game.smartremoteapp.activity.home.MainActivity;
 import com.game.smartremoteapp.activity.home.MyCtachRecordActivity;
 import com.game.smartremoteapp.activity.home.MyJoinCodeActivity;
 import com.game.smartremoteapp.activity.home.MyLogisticsOrderActivity;
+import com.game.smartremoteapp.activity.home.PerfectInformationActivity;
 import com.game.smartremoteapp.activity.home.RechargeActivity;
+import com.game.smartremoteapp.activity.home.SendRedPackActivity;
 import com.game.smartremoteapp.activity.home.ServiceActivity;
 import com.game.smartremoteapp.activity.home.SettingActivity;
 import com.game.smartremoteapp.base.BaseFragment;
@@ -37,10 +39,12 @@ import com.game.smartremoteapp.bean.VideoBackBean;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
 import com.game.smartremoteapp.utils.LogUtils;
+import com.game.smartremoteapp.utils.SPUtils;
 import com.game.smartremoteapp.utils.UrlUtils;
 import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.GlideCircleTransform;
+import com.game.smartremoteapp.view.LevelNoticeDialog;
 import com.game.smartremoteapp.view.MyToast;
 
 import java.util.ArrayList;
@@ -49,7 +53,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.game.smartremoteapp.R.id.mycenter_mymoney_tv;
 import static com.game.smartremoteapp.utils.UserUtils.UserAmount;
 
 /**
@@ -65,6 +68,9 @@ public class MyCenterFragment extends BaseFragment {
     TextView userNumber;
     @BindView(R.id.mycenter_golds_tv)
     TextView mycenter_golds;
+    @BindView(R.id.user_level)
+    TextView userLevel;
+
     @BindView(R.id.mycenter_pay_layout)
     RelativeLayout mycenterPayLayout;
     @BindView(R.id.mycenter_catchrecord_layout)
@@ -77,13 +83,10 @@ public class MyCenterFragment extends BaseFragment {
     TextView mycenterMycurrencyTv;
     @BindView(R.id.mycenter_exshop_layout)
     RelativeLayout mycenterExshopLayout;
-    @BindView(R.id.mycenter_agency_tv)
-    TextView mycenterAgencyTv;
-    @BindView(R.id.mycenter_excenter_tv)
-    TextView mycenterExcenterTv;
+
     @BindView(R.id.mycenter_withdraw_layout)
     RelativeLayout mycenterWithdrawLayout;
-     @BindView(R.id.mycenter_mymoney_tv)
+    @BindView(R.id.mycenter_mymoney_tv)
     TextView mycenterMymoneyTv;
     @BindView(R.id.mycenter_currencyrecord_tv)
     TextView mycenterCurrencyrecordTv;
@@ -100,7 +103,7 @@ public class MyCenterFragment extends BaseFragment {
 
     private String TAG = "MyCenterActivity";
     private List<VideoBackBean> videoList = new ArrayList<>();
-
+    private LevelNoticeDialog mDialog;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_center;
@@ -109,7 +112,6 @@ public class MyCenterFragment extends BaseFragment {
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
         Glide.get(getContext()).clearMemory();
-
     }
 
     @Override
@@ -117,8 +119,8 @@ public class MyCenterFragment extends BaseFragment {
         super.onResume();
         if (!Utils.isEmpty(UserUtils.USER_ID)) {
             //getUserDate(UserUtils.USER_ID);
-             // getUserAccBalCount(UserUtils.USER_ID);
-              getAppUserInf(UserUtils.USER_ID);
+            // getUserAccBalCount(UserUtils.USER_ID);
+            getAppUserInf(UserUtils.USER_ID);
         }
     }
 
@@ -129,10 +131,12 @@ public class MyCenterFragment extends BaseFragment {
             } else {
                 userName.setText("暂无昵称");
             }
-            mycenter_golds.setText("游戏币:" + UserUtils.UserBalance );
-            mycenterMycurrencyTv.setText("金币  "+UserUtils.UserBalance );
-            mycenterMymoneyTv.setText(Html.fromHtml("余额  "+"<font color='#ff9700'>0</font>"));
-            userNumber.setText("累积抓中" + UserUtils.UserCatchNum + "次");
+            mycenter_golds.setText("游戏币:" + UserUtils.UserBalance);
+            mycenterMycurrencyTv.setText("金币  " + UserUtils.UserBalance);
+            mycenterMymoneyTv.setText(Html.fromHtml("余额  " + "<font color='#ff9700'>0</font>"));
+            userNumber.setText(UserUtils.UserCatchNum + "次");
+            userLevel.setText("LV " + UserUtils.LEVEL);
+            setUserLevel(UserUtils.LEVEL);
             Glide.with(getContext())
                     .load(UserUtils.UserImage)
                     .error(R.mipmap.app_mm_icon)
@@ -146,6 +150,42 @@ public class MyCenterFragment extends BaseFragment {
         }
     }
 
+    private void setUserLevel(int level) {
+        switch (level){
+            case 13:
+               if(!SPUtils.getBoolean(getContext(),SPUtils.LEVEL_13_TAG,false)){
+                   SPUtils.putBoolean(getContext(),SPUtils.LEVEL_13_TAG,true);
+                    showLevelPowerDialog(R.drawable.icon_level_13);
+                }
+                break;
+            case 16:
+                if(!SPUtils.getBoolean(getContext(),SPUtils.LEVEL_16_TAG,false)){
+                    SPUtils.putBoolean(getContext(),SPUtils.LEVEL_16_TAG,true);
+                    showLevelPowerDialog(R.drawable.icon_level_16);
+                }
+                break;
+            case 18:
+                if(!SPUtils.getBoolean(getContext(),SPUtils.LEVEL_18_TAG,false)){
+                    SPUtils.putBoolean(getContext(),SPUtils.LEVEL_18_TAG,true);
+                    showLevelPowerDialog(R.drawable.icon_level_18);
+                }
+                break;
+            case 31:
+                if(!SPUtils.getBoolean(getContext(),SPUtils.LEVEL_13_TAG,false)){
+                    SPUtils.putBoolean(getContext(),SPUtils.LEVEL_31_TAG,true);
+                    showLevelPowerDialog(R.drawable.icon_level_31);
+                }
+                break;
+        }
+    }
+
+    private void showLevelPowerDialog(int iocn){
+        if(mDialog==null){
+            mDialog = new LevelNoticeDialog(getContext(), R.style.easy_dialog_style);
+        }
+        mDialog.show();
+        mDialog.setLevelNoticeBg(iocn);
+    }
     private void getUserDate(String userId) {
         HttpManager.getInstance().getUserDate(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
@@ -167,6 +207,7 @@ public class MyCenterFragment extends BaseFragment {
                     getUserImageAndName();
                 }
             }
+
             @Override
             public void _onError(Throwable e) {
             }
@@ -177,11 +218,10 @@ public class MyCenterFragment extends BaseFragment {
             R.id.mycenter_pay_layout, R.id.user_name, R.id.mycenter_catchrecord_layout,
             R.id.mycenter_joincode_layout, R.id.mycenter_currencyrecord_tv,
             R.id.mycenter_guessrecord_tv, R.id.mycenter_logisticsorder_tv,
-            R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout,
-            R.id.mycenter_agency_tv, R.id.mycenter_excenter_tv,R.id.mycenter_doll_layout,
-            R.id.mycenter_withdraw_layout,R.id.mycenter_accinfo_layout,
-            R.id.mycenter_mymoney_tv,R.id.mycenter_qianbao,R.id.mycenter_game_layout,
-            R.id.mycenter_integral,R.id.ll_integral_task,R.id.imb_center_sign})
+            R.id.mycenter_lnvitationcode_layout, R.id.mycenter_exshop_layout, R.id.mycenter_doll_layout,
+            R.id.ll_user_info, R.id.mycenter_withdraw_layout, R.id.mycenter_accinfo_layout,
+            R.id.mycenter_mymoney_tv, R.id.mycenter_qianbao, R.id.mycenter_game_layout,
+            R.id.mycenter_integral, R.id.ll_integral_task,R.id.mycenter_sendredwallet_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.mycenter_kefu_layout:
@@ -197,8 +237,8 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), RechargeActivity.class));
                 break;
             case R.id.mycenter_catchrecord_layout:
-                Intent intent=new Intent(getContext(),MyCtachRecordActivity.class);
-                intent.putExtra("type","1");
+                Intent intent = new Intent(getContext(), MyCtachRecordActivity.class);
+                intent.putExtra("type", "1");
                 startActivity(intent);
                 break;
             case R.id.mycenter_joincode_layout:
@@ -223,43 +263,37 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), LnvitationCodeActivity.class));
                 break;
             case R.id.mycenter_exshop_layout:
-                Intent intent2=new Intent(getContext(),MyCtachRecordActivity.class);
-                intent2.putExtra("type","2");
+                Intent intent2 = new Intent(getContext(), MyCtachRecordActivity.class);
+                intent2.putExtra("type", "2");
                 startActivity(intent2);
                 break;
-            case R.id.mycenter_agency_tv:
-                //MyToast.getToast(context,"功能开发中！").show();
-                startActivity(new Intent(getContext(), AgencyActivity.class));
-                break;
-            case R.id.mycenter_excenter_tv:
-                //MyToast.getToast(getContext(),"功能开发中！").show();
-                //startActivity(new Intent(getContext(), ExChangeCenterActivity.class));
-                break;
+//            case R.id.mycenter_agency_tv:
+//                //MyToast.getToast(context,"功能开发中！").show();
+//                startActivity(new Intent(getContext(), AgencyActivity.class));
+//                break;
+
             case R.id.mycenter_withdraw_layout:
-                if(UserUtils.IsBankInf.equals("0")||UserUtils.BankBean==null){
+                if (UserUtils.IsBankInf.equals("0") || UserUtils.BankBean == null) {
                     MyToast.getToast(getContext(), "请先完善账户信息！").show();
-                    startActivity(new Intent(getContext(),AccountInformationActivity.class));
-                }else {
-                    startActivity(new Intent(getContext(),DrawMoneyActivity.class));
+                    startActivity(new Intent(getContext(), AccountInformationActivity.class));
+                } else {
+                    startActivity(new Intent(getContext(), DrawMoneyActivity.class));
                 }
                 break;
             case R.id.mycenter_accinfo_layout:
-                startActivity(new Intent(getContext(),AccountInformationActivity.class));
+                startActivity(new Intent(getContext(), AccountInformationActivity.class));
                 break;
-            case mycenter_mymoney_tv:
-                startActivity(new Intent(getContext(),AccountDetailActivity.class));
+            case R.id.mycenter_mymoney_tv:
+                startActivity(new Intent(getContext(), AccountDetailActivity.class));
                 break;
-            case  R.id.mycenter_qianbao:
-                Utils.toActivity(getContext(),AccountWalletActivity.class);
+            case R.id.mycenter_qianbao:
+                Utils.toActivity(getContext(), AccountWalletActivity.class);
                 break;
-            case  R.id.mycenter_integral:
-                Utils.toActivity(getContext(),IntegralActivity.class);
+            case R.id.mycenter_integral:
+                Utils.toActivity(getContext(), IntegralActivity.class);
                 break;
             case R.id.ll_integral_task:
-                Utils.toActivity(getContext(),IntegralTaskActivity.class);
-                break;
-            case R.id.imb_center_sign:
-                MainActivity.mMainActivity.getUserSign(UserUtils.USER_ID, "0",true); //签到请求
+                Utils.toActivity(getContext(), IntegralTaskActivity.class);
                 break;
             case R.id.mycenter_game_layout:
                 startActivity(new Intent(getContext(), GameCenterActivity.class));
@@ -267,28 +301,38 @@ public class MyCenterFragment extends BaseFragment {
             case R.id.mycenter_doll_layout:
                 startActivity(new Intent(getContext(), DollWallActivity.class));
                 break;
+            case R.id.ll_user_info:
+                startActivity(new Intent(getContext(), LevelActivity.class));
+                break;
+            case R.id.mycenter_sendredwallet_layout:
+                if(UserUtils.AGE>0){
+                    startActivity(new Intent(getContext(), SendRedPackActivity.class));
+                }else{
+                    startActivity(new Intent(getContext(), PerfectInformationActivity.class));
+                }
+                break;
             default:
                 break;
         }
     }
 
-     private void getUserAccBalCount(String userId) {
-         HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+    private void getUserAccBalCount(String userId) {
+        HttpManager.getInstance().getUserAccBalCount(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
-             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
+            public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
                 if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
-                   String amount = httpDataInfoResult.getData().getAccBal();
-                    UserAmount=amount;
-                     mycenterMymoneyTv.setText(Html.fromHtml("余额  " + "<font color='#ff9700'>" + amount + "</font>"));
+                    String amount = httpDataInfoResult.getData().getAccBal();
+                    UserAmount = amount;
+                    mycenterMymoneyTv.setText(Html.fromHtml("余额  " + "<font color='#ff9700'>" + amount + "</font>"));
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
 
-             }
-       });
-     }
+            }
+        });
+    }
 
     private void getAppUserInf(String userId) {
         if (Utils.isEmpty(userId)) {
@@ -308,7 +352,9 @@ public class MyCenterFragment extends BaseFragment {
                     UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
                     UserUtils.UserWeekDay = result.getData().getAppUser().getWEEKS_CARD();
                     UserUtils.UserMouthDay = result.getData().getAppUser().getMONTH_CARD();
-
+                    UserUtils.LEVEL = result.getData().getAppUser().getLEVEL();
+                    UserUtils.LEVEL_16_TAG = result.getData().getAppUser().getLEVEL_16_TAG();
+                    UserUtils.LEVEL_18_TAG = result.getData().getAppUser().getLEVEL_18_TAG();
                     UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
                     String name = result.getData().getAppUser().getCNEE_NAME();
                     String phone = result.getData().getAppUser().getCNEE_PHONE();
@@ -328,13 +374,16 @@ public class MyCenterFragment extends BaseFragment {
                         }
                     }
                     LogUtils.loge("个人信息刷新结果=" + result.getMsg() + "余额=" + result.getData().getAppUser().getBALANCE()
-                            + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
-                            + " 昵称=" + result.getData().getAppUser().getNICKNAME()
-                            + " 头像=" + UserUtils.UserImage
-                            + " 发货地址=" + UserUtils.UserAddress, TAG);
+                                    + " 抓取次数=" + result.getData().getAppUser().getDOLLTOTAL()
+                                    + " 昵称=" + result.getData().getAppUser().getNICKNAME()
+                                    + " 头像=" + UserUtils.UserImage
+                                    + " 发货地址=" + UserUtils.UserAddress
+                                    + " 等级=" + UserUtils.LEVEL,
+                            TAG);
                     getUserImageAndName();
                 }
             }
+
             @Override
             public void _onError(Throwable e) {
             }

@@ -91,7 +91,7 @@ public class MyLogisticsOrderActivity extends BaseActivity {
         HttpManager.getInstance().getLogisticsOrder(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                if(loginInfoResult.getMsg().equals("success")){
+                if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                     list=loginInfoResult.getData().getLogistics();
                     if(list.size()>0){
                         logisticsAdapter.notify(list);

@@ -7,6 +7,7 @@ import com.game.smartremoteapp.bean.AppUserBean;
 import com.game.smartremoteapp.bean.BetRecordBean;
 import com.game.smartremoteapp.bean.CoinListBean;
 import com.game.smartremoteapp.bean.HttpDataInfo;
+import com.game.smartremoteapp.bean.LevelBean;
 import com.game.smartremoteapp.bean.ListRankBean;
 import com.game.smartremoteapp.bean.LoginRewardGoldBean;
 import com.game.smartremoteapp.bean.NowPayBean;
@@ -217,7 +218,8 @@ public interface SmartService {
             @Field(UrlUtils.SENDGOODSREMARK) String remark,
             @Field(UrlUtils.SENDGOODSUSERID) String userId,
             @Field(UrlUtils.SENDGOODSMODE) String mode,
-            @Field(UrlUtils.SENDGOODSCOSTNUM) String costNum
+            @Field(UrlUtils.SENDGOODSCOSTNUM) String costNum,
+            @Field(UrlUtils.SENDGOODSLEVEL) String level
     );
 
 
@@ -415,8 +417,6 @@ public interface SmartService {
     Observable<Result<ListRankBean>> getRankDollTodayList(
             @Field(UrlUtils.USERID) String userId
     );
-
-
 
 
     //竞猜排行
@@ -819,4 +819,18 @@ public interface SmartService {
     @FormUrlEncoded
     @POST(UrlUtils.DOLLTOYNUM)
     Observable<Result<ToyNumBean>> getDollToyNum(@Field(UrlUtils.ROOMID)String roomId);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.USERLEVEL)
+    Observable<Result<LevelBean>> getgetUserLevel(@Field(UrlUtils.USERID)String userId);
+
+    //完善用户信息
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.UPDATEUSERINFO)
+    Observable<Result<HttpDataInfo>> perfectInformation(@Field(UrlUtils.USERID)String userId,
+                                                        @Field("nickname") String nickname,
+                                                        @Field(UrlUtils.GENDER) String gender,
+                                                        @Field(UrlUtils.AGE) int age);
 }

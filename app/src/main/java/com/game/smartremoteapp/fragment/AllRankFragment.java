@@ -80,7 +80,6 @@ public class AllRankFragment extends BaseFragment {
         mXRecyclerView.setLoadingListener(onPullListener);
     }
 
-
     /**
      * 上拉加载、下拉刷新监听
      */

@@ -51,6 +51,7 @@
                      tools:text="用户名" />
 
                  <LinearLayout
+                     android:id="@+id/ll_user_info"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_below="@+id/user_name"
@@ -59,13 +60,21 @@
                      android:layout_toRightOf="@+id/user_image"
                      android:gravity="center"
                      android:orientation="horizontal">
-
+                     <TextView
+                         android:id="@+id/user_level"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:text="LV 5"
+                         android:textColor="@color/white"
+                         android:textSize="13sp" />
                      <TextView
                          android:id="@+id/user_number"
                          android:layout_width="wrap_content"
                          android:layout_height="match_parent"
-                         android:layout_marginRight="20dp"
-                         android:text="累积抓中0次"
+                         android:layout_marginLeft="8dp"
+                         android:drawableLeft="@drawable/icon_level_catch"
+                         android:drawablePadding="4dp"
+                         android:text="0次"
                          android:textColor="@color/white"
                          android:textSize="13sp" />
                  </LinearLayout>
@@ -74,9 +83,8 @@
                      android:id="@+id/ll_integral_task"
                      android:layout_width="wrap_content"
                      android:layout_height="30dp"
-                     android:layout_alignParentBottom="true"
                      android:layout_alignParentRight="true"
-                     android:layout_marginBottom="30dp"
+                     android:layout_centerVertical="true"
                      android:layout_marginRight="@dimen/activity_horizontal_margin"
                      android:background="@drawable/dialog_apptheme_bg"
                      android:gravity="center_vertical"
@@ -106,54 +114,6 @@
                          android:layout_marginLeft="4dp"
                          android:background="@drawable/icon_integral_arrow" />
                  </LinearLayout>
-
-                 <ImageButton
-                     android:id="@+id/imb_center_sign"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_above="@+id/ll_integral_task"
-                     android:layout_alignParentRight="true"
-                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                     android:layout_marginRight="@dimen/activity_horizontal_margin"
-                     android:background="@drawable/icon_center_sign"
-                     android:visibility="visible" />
-
-                 <TextView
-                     android:visibility="gone"
-                     android:id="@+id/mycenter_agency_tv"
-                     android:layout_width="70dp"
-                     android:layout_height="wrap_content"
-                     android:layout_above="@+id/ll_integral_task"
-                     android:layout_alignParentRight="true"
-                     android:layout_centerVertical="true"
-                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                     android:layout_marginRight="@dimen/activity_horizontal_margin"
-                     android:background="@drawable/white_border_corners"
-                     android:gravity="center"
-                     android:paddingBottom="5dp"
-                     android:paddingLeft="10dp"
-                     android:paddingRight="15dp"
-                     android:paddingTop="5dp"
-                     android:text="代理"
-                     android:textColor="@color/white"
-                     android:textSize="14sp" />
-
-                 <TextView
-                     android:id="@+id/mycenter_excenter_tv"
-                     android:layout_width="70dp"
-                     android:layout_height="wrap_content"
-                     android:layout_alignParentRight="true"
-                     android:layout_below="@+id/mycenter_agency_tv"
-                     android:layout_marginRight="10dp"
-                     android:layout_marginTop="10dp"
-                     android:background="@drawable/white_border_corners"
-                     android:gravity="center"
-                     android:padding="5dp"
-                     android:text="兑换中心"
-                     android:textColor="@color/white"
-                     android:textSize="14sp"
-                     android:visibility="gone" />
-
              </RelativeLayout>
 
              <LinearLayout
@@ -496,12 +456,39 @@
                      android:scaleType="centerInside"
                      android:src="@drawable/right_arrow" />
              </RelativeLayout>
+             <RelativeLayout
+                 android:id="@+id/mycenter_sendredwallet_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="45dp"
+                 android:layout_marginTop="10dp"
+                 android:background="@color/white"
+                 android:visibility="visible">
 
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="10dp"
+                     android:drawableLeft="@drawable/icon_send_redwallet"
+                     android:gravity="center"
+                     android:text="   发红包"
+                     android:textColor="@color/black"
+                     android:textSize="15sp" />
+
+                 <ImageView
+                     android:layout_width="45dp"
+                     android:layout_height="45dp"
+                     android:layout_alignParentEnd="true"
+                     android:layout_centerVertical="true"
+                     android:background="@android:color/transparent"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/right_arrow" />
+             </RelativeLayout>
              <RelativeLayout
                  android:id="@+id/mycenter_doll_layout"
                  android:layout_width="match_parent"
                  android:layout_height="45dp"
-                 android:layout_marginTop="10dp"
+                 android:layout_marginTop="1dp"
                  android:background="@color/white">
 
                  <TextView

@@ -14,9 +14,13 @@ import java.util.UUID;
  */
 public class SPUtils {
 
+
     public static UUID uuid;
     public static final String PREFS_DEVICE_ID = "device_id";//设备号id
-
+    public static final String LEVEL_13_TAG ="LEVEL_13_TAG" ;
+    public static final String LEVEL_16_TAG ="LEVEL_16_TAG" ;
+    public static final String LEVEL_18_TAG ="LEVEL_18_TAG" ;
+    public static final String LEVEL_31_TAG ="LEVEL_31_TAG" ;
     public static String  ISTEST="istest";
     public static void init(Context context) {
         synchronized (SPUtils.class) {

@@ -99,7 +99,6 @@ public class RankFragmentTwo extends BaseFragment {
     private UserBean secondBean=new UserBean();
     private UserBean thirdBean=new UserBean();
     private String myNum = "";
-    private boolean isOutTen = true;
     private int isShowType=1;  //1:展示娃娃榜  2:展示竞猜榜
 
     @Override

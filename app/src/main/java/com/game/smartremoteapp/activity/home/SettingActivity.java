@@ -281,8 +281,6 @@ public class SettingActivity extends BaseActivity {
                     NettyUtils.destoryConnect();
                     MainActivity.mMainActivity.finish();//汤姆抓娃娃
                     startActivity(new Intent(SettingActivity.this, SplashActivity.class));
-                   // HomeActivity.mMainActivity.finish();////蘑菇抓娃娃
-                   // startActivity(new Intent(SettingActivity.this, Splash1Activity.class));
                     finish();
                 }
             }
