@@ -14,8 +14,11 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.bean.ConsigneeBean;
@@ -767,5 +770,23 @@ public class Utils {
             }
         }
         return age;
+    }
+    /**
+     * 重设 view 的宽高
+     */
+    public static void setViewLayoutParams(Context mtx,View view) {
+        //获取status_bar_height资源的ID
+        int resourceId =mtx.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            int statusBarHeight = mtx.getResources().getDimensionPixelSize(resourceId);
+            if (statusBarHeight > 0) {
+                LinearLayout.LayoutParams sp_params = new LinearLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                sp_params.height = statusBarHeight;
+                view.setLayoutParams(sp_params);
+            }
+        }
     }
 }

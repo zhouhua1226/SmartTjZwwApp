@@ -9,7 +9,7 @@ public class Result<T> implements Serializable{
     private T data;
     private int code;
     private String msg;
-
+    private String url;
     public void setCode(int code) {
         this.code = code;
     }
@@ -32,5 +32,13 @@ public class Result<T> implements Serializable{
 
     public T getData() {
         return data;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

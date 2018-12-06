@@ -467,7 +467,9 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.AUTHLOGINURL)
-    Observable<Result<HttpDataInfo>> getAuthLogin(@Field(UrlUtils.USERID) String userId, @Field(UrlUtils.CTYPE) String ctype, @Field(UrlUtils.CHANNEL) String channel);
+    Observable<Result<HttpDataInfo>> getAuthLogin(@Field(UrlUtils.USERID) String userId,
+                                                  @Field(UrlUtils.CTYPE) String ctype,
+                                                  @Field(UrlUtils.CHANNEL) String channel);
 
 
     //查询可推广加盟的接口
@@ -833,4 +835,10 @@ public interface SmartService {
                                                         @Field("nickname") String nickname,
                                                         @Field(UrlUtils.GENDER) String gender,
                                                         @Field(UrlUtils.AGE) int age);
+
+    //完善用户信息
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.RECURL)
+    Observable<Result<String>> getRecUrl(@Field(UrlUtils.APPVERSION)String appVersion, @Field(UrlUtils.USERID)String userId);
 }

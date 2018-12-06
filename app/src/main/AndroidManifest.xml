@@ -44,9 +44,15 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/mainTheme">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" >
         </activity>
-
+        <activity
+            android:name=".activity.home.HomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+         >
+        </activity>
         <!--=============================友盟相关=============================================-->
 
         <meta-data
@@ -444,8 +450,12 @@
             android:name=".activity.home.RedWalletDetailActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/mainTheme">
+            android:theme="@style/BlackBarAppTheme">
         </activity>
+
+        <activity android:name=".activity.home.PayH5Activity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden" />
     </application>
 
     <supports-screens

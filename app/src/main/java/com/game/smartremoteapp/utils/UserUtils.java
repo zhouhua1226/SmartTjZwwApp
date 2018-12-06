@@ -18,6 +18,7 @@ public class UserUtils {
     //SP_TAG
     public static final String SP_TAG_LOGIN = "SP_TAG_LOGIN";
     public static final String SP_TAG_USERID="SP_TAG_USERID";
+    public static final String SP_TAG_SESSIONID="SP_TAG_SESSIONID";
     public static final String SP_TAG_ISLOGOUT="SP_TAG_ISLOGOUT";
     public static final String SP_TAG_ISOPENMUSIC="SP_TAG_ISOPENMUSIC";
     public static final String SP_TAG_PROVINCECITY="SP_TAG_PROVINCECITY";

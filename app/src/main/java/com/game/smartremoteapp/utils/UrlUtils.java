@@ -408,4 +408,6 @@ public class UrlUtils {
 
 
     public static final String UPDATEUSERINFO = "/pooh-web/api/user/updateUserInfo";
+
+    public static final String RECURL ="/pooh-web/app/pay/getRecUrl" ;
 }

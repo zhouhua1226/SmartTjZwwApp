@@ -838,4 +838,12 @@ public class HttpManager {
                 .subscribe(requestSubscriber);
     }
 
+    public void getRecUrl(String userId, RequestSubscriber<Result<String>> subscriber) {
+        Observable<Result<String>> o = smartService.getRecUrl(Utils.appVersion,userId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
 }
