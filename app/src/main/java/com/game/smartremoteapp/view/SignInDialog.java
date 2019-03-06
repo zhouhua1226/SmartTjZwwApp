@@ -47,6 +47,7 @@ public class SignInDialog extends Dialog implements View.OnClickListener{
         setContentView(R.layout.signin_dialog);
         findView();
         setListner();
+
     }
 
     /**

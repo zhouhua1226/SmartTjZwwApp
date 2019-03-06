@@ -9,6 +9,7 @@ import java.io.Serializable;
  * 类描述：
  */
 public class VideoBackBean implements Serializable{
+    private boolean is_select;
 
     private String DOLL_NAME;
     private String DOLLID;
@@ -29,6 +30,14 @@ public class VideoBackBean implements Serializable{
     private String SEND_ORDER_ID;
     private String CREATE_DATE;
     private String MACHINE_TYPE;//娃娃机类型 1、娃娃机 2、推币机 3、金币机
+
+    public boolean getIs_select() {
+        return is_select;
+    }
+
+    public void setIs_select(boolean is_select) {
+        this.is_select = is_select;
+    }
 
     public String getMACHINE_TYPE() {
         return MACHINE_TYPE;

@@ -27,7 +27,6 @@ import com.game.smartremoteapp.utils.UserUtils;
 import com.game.smartremoteapp.utils.Utils;
 import com.game.smartremoteapp.view.MyToast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,14 +195,18 @@ private void  setgetSendGoods(){
         HttpManager.getInstance().getSendGoods(dollID, number, consignee, remark, userID, mode,costNum,null, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-                list = loginInfoResult.getData().getPlayback();
-                MyToast.getToast(getApplicationContext(), "发货成功，请耐心等待！").show();
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("record", (Serializable) list);
-                intent.putExtras(bundle);
-                setResult(0, intent);
-                finish();
+                if (loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
+                    list = loginInfoResult.getData().getPlayback();
+                    MyToast.getToast(getApplicationContext(), "发货成功，请耐心等待！").show();
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("record", Utils.HTTP_OK);
+                    intent.putExtras(bundle);
+                    setResult(2, intent);
+                    finish();
+                }else{
+                    MyToast.getToast(getApplicationContext(), loginInfoResult.getMsg()).show();
+                }
             }
             @Override
             public void _onError(Throwable e) {

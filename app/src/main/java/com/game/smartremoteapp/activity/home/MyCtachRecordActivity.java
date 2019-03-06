@@ -2,6 +2,7 @@ package com.game.smartremoteapp.activity.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.game.smartremoteapp.R.id.mycatchrecod_selectgold_tv;
 
 /**
  * Created by yincong on 2017/12/22 13:48
@@ -73,21 +76,17 @@ public class MyCtachRecordActivity extends BaseActivity {
     TextView mycatchrecodSelectnumTv;
     @BindView(R.id.mycatchrecod_bottom_layout)
     RelativeLayout mycatchrecodBottomLayout;
-    @BindView(R.id.mycatchrecod_selectgold_tv)
+     @BindView(mycatchrecod_selectgold_tv)
     TextView mycatchrecodSelectgoldTv;
 
     private String TAG = "MyCtachRecordActivity";
     private Context context = MyCtachRecordActivity.this;
-    private boolean isSelest = false;
     private QuizInstrictionDialog quizInstrictionDialog;
     private MyCenterAdapter myCenterAdapter;
-    private List<Boolean> isList = new ArrayList<>();
-    private List<Boolean> islist = new ArrayList<>();
-    private List<Integer> isSelect=new ArrayList<>();  //-1为已发货或已兑换  0为未选中  1为已选中
-    private List<Integer> num = new ArrayList<>();
-    private List<VideoBackBean> videoList = new ArrayList<>();
-    private List<VideoBackBean> mVideoList = new ArrayList<>();
+    private List<VideoBackBean> showList = new ArrayList<>();//列表显示
+    private List<VideoBackBean> mVideoList = new ArrayList<>();//后台返回数据
     private List<VideoBackBean> selectList = new ArrayList<>();
+
     private StringBuffer stringId = new StringBuffer("");
     private StringBuffer stringDollId = new StringBuffer("");
     private int gold=0;
@@ -110,19 +109,8 @@ public class MyCtachRecordActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LogUtils.loge("游戏记录查询userId="+ UserUtils.USER_ID,TAG);
-        if(videoList!=null&&videoList.size()>0&&myCenterAdapter!=null){
-            videoList.clear();
-            myCenterAdapter.notifyDataSetChanged();
-        }
-        getVideoBackList(UserUtils.USER_ID);
-    }
-
     private void initData() {
-        myCenterAdapter = new MyCenterAdapter(context, videoList);
+        myCenterAdapter = new MyCenterAdapter(context, showList);
         mycatchrecodRecyclerview.setAdapter(myCenterAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mycatchrecodRecyclerview.setLayoutManager(linearLayoutManager);
@@ -133,12 +121,15 @@ public class MyCtachRecordActivity extends BaseActivity {
             recodeTitleTv.setText("娃娃邮寄");
             mycatchrecodDhsureImage.setVisibility(View.GONE);
             mycatchrecodFhsureImage.setVisibility(View.VISIBLE);
+            mycatchrecodSelectgoldTv.setTextColor(Color.RED);
+            mycatchrecodSelectgoldTv.setText("备注：充值后才能发货哦");
         }else {
             recodeTitleTv.setText("娃娃兑换");
             mycatchrecodDhsureImage.setVisibility(View.VISIBLE);
             mycatchrecodFhsureImage.setVisibility(View.GONE);
             mycatchrecodDialogImage.setVisibility(View.GONE);
         }
+        getVideoBackList(UserUtils.USER_ID);
     }
 
     private void onClick() {
@@ -151,32 +142,27 @@ public class MyCtachRecordActivity extends BaseActivity {
         myCenterAdapter.setOnItemClickListener(new MyCenterAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (isSelect.get(position)== -1) {
-                    Intent intent = new Intent(context, RecordGameActivty.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("record", videoList.get(position));
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-                    if (isSelect.get(position)==1) {
-                        isSelect.set(position,0);
-                        view.setBackgroundResource(R.drawable.mycatchrecord_unselect);
-                        isList.set(position,false);
-                        gold-=Integer.parseInt(selectList.get(num.indexOf(position)).getCONVERSIONGOLD());
-                        selectList.remove(num.indexOf(position));
-                        num.remove(num.indexOf(position));
-                        mycatchrecodSelectnumTv.setText("已选中"+selectList.size()+"个娃娃");
-                        mycatchrecodSelectgoldTv.setText("一共可兑换"+gold+"金币");
-                    } else {
-                        isSelect.set(position,1);
-                        view.setBackgroundResource(R.drawable.mycatchrecord_select);
-                        isList.set(position, true);
-                        num.add(position);
-                        selectList.add(videoList.get(position));
-                        mycatchrecodSelectnumTv.setText("已选中" + selectList.size() + "个娃娃");
-                        gold+=Integer.parseInt(selectList.get(num.indexOf(position)).getCONVERSIONGOLD());
+                VideoBackBean mVideoBackBean=  showList.get(position);
+                if (mVideoBackBean.getPOST_STATE().equals("0")) {
+                    if(mVideoBackBean.getIs_select()){//已选择
+                        gold-=Integer.parseInt(mVideoBackBean.getCONVERSIONGOLD());
+                        selectList.remove(mVideoBackBean);
+                     }else{
+                        gold+=Integer.parseInt(mVideoBackBean.getCONVERSIONGOLD());
+                        selectList.add(mVideoBackBean);
+                    }
+                    mycatchrecodSelectnumTv.setText("已选中"+selectList.size()+"个娃娃");
+                    if(!TYPE.equals("1")){
                         mycatchrecodSelectgoldTv.setText("一共可兑换"+gold+"金币");
                     }
+                    mVideoBackBean.setIs_select(!mVideoBackBean.getIs_select());
+                    myCenterAdapter.notifyDataSetChanged();
+                } else {
+                    Intent intent = new Intent(context, RecordGameActivty.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("record", showList.get(position));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             }
             @Override
@@ -198,18 +184,18 @@ public class MyCtachRecordActivity extends BaseActivity {
                     for (int i = 0; i < mVideoList.size(); i++) {
                         if (TYPE.equals("1")) { //1 邮寄
                             if (mVideoList.get(i).getMACHINE_TYPE().equals("1")) {
-                                videoList.add(mVideoList.get(i));
+                                showList.add(mVideoList.get(i));
                                 setPostState(mVideoList.get(i));
                             }
                         } else {  //  2兑换
                             if (!mVideoList.get(i).getMACHINE_TYPE().equals("2")) {
-                                videoList.add(mVideoList.get(i));
+                                showList.add(mVideoList.get(i));
                                 setPostState(mVideoList.get(i));
                             }
                         }
                     }
-                    if(videoList.size()>0){
-                        myCenterAdapter.notify(videoList);
+                    if(showList.size()>0){
+                        myCenterAdapter.notify(showList);
                     }else{
                         emtifyView();
                     }
@@ -227,16 +213,9 @@ public class MyCtachRecordActivity extends BaseActivity {
     }
   private void setPostState(VideoBackBean  mVideoBackBean){
       if (mVideoBackBean.getPOST_STATE().equals("0")) {
-          islist.add(false);
-          isList.add(false);
-          isSelect.add(0);
-      } else {
-          islist.add(true);
-          isList.add(true);
-          isSelect.add(-1);
-      }
+          mVideoBackBean.setIs_select(false);
+       }
   }
-
     private void emtifyView(){
         mycatchrecodRecyclerview.setVisibility(View.GONE);
         mycatchrecodFailTv.setVisibility(View.VISIBLE);
@@ -274,7 +253,7 @@ public class MyCtachRecordActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("record", (Serializable) selectList);//序列化,要注意转化(Serializable)
                     intent.putExtras(bundle);//发送数据
-                    startActivityForResult(intent, 1);
+                   startActivityForResult(intent, 1);
                 } else {
                     MyToast.getToast(getApplicationContext(), "请至少选择一个娃娃！").show();
                 }
@@ -346,13 +325,25 @@ public class MyCtachRecordActivity extends BaseActivity {
         if (data == null) {
             return;
         }
-        videoList = (List<VideoBackBean>) data.getExtras().getSerializable("record");
         // 根据返回码的不同，设置参数
-        if (requestCode == 1) {
-            myCenterAdapter.notify(videoList);
+        if (requestCode == 1 && resultCode == 2) {
+            if ( data.getExtras().getSerializable("record").equals(Utils.HTTP_OK)) {
+                LogUtils.loge("游戏记录查询userId="+ UserUtils.USER_ID,TAG);
+                gold=0;
+                if(showList!=null&&showList.size()>0&&myCenterAdapter!=null){
+                    showList.clear();
+                    selectList.clear();
+                    myCenterAdapter.notifyDataSetChanged();
+                }
+                mycatchrecodSelectnumTv.setText("已选中"+selectList.size()+"个娃娃");
+                if(!TYPE.equals("1")){
+                    mycatchrecodSelectgoldTv.setText("一共可兑换"+gold+"金币");
+                }
+                getVideoBackList(UserUtils.USER_ID);
+            }
+          }
         }
     }
-
 
 //    //记录数据重组   11/28 17:55
 //    private List<VideoBackBean> getCatchNum(List<VideoBackBean> list, List<VideoBackBean> reList) {
@@ -383,4 +374,4 @@ public class MyCtachRecordActivity extends BaseActivity {
 //        return list;
 //    }
 
-}
+

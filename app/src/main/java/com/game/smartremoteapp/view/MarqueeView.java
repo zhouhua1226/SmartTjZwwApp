@@ -154,6 +154,7 @@ public class MarqueeView extends ViewFlipper {
         ImageView ivMarquee = (ImageView) view.findViewById(R.id.ivMarquee);
         tvMarquee = (TextView) view.findViewById(R.id.tvMarquee);
         tvMarquee.setText(Html.fromHtml(marquee.getTitle()));
+        ivMarquee.setVisibility(GONE);
         if (isImage) {
             ivMarquee.setVisibility(VISIBLE);
             Glide.with(mContext)

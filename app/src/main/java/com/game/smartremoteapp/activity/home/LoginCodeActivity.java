@@ -147,11 +147,15 @@ public class LoginCodeActivity extends BaseActivity {
                 if (httpDataInfoResult.getCode() == 0) {
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
+                    UserUtils.sessionID=httpDataInfoResult.getData().getSessionID();
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE, httpDataInfoResult.getData().getAppUser().getFIRST_CHARGE());
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     SPUtils.putString(getApplicationContext(), SP_TAG_PHONE, phone);
-                    UserUtils.AGE = httpDataInfoResult.getData().getAppUser().getAGE();
+                    UserUtils.GENDER=httpDataInfoResult.getData().getAppUser().getGENDER();
+                    UserUtils.AGE=httpDataInfoResult.getData().getAppUser().getAGE();
+                    UserUtils.WXACCOUNT=httpDataInfoResult.getData().getAppUser().getWXACCOUNT();
+                    UserUtils.QQACCOUNT=httpDataInfoResult.getData().getAppUser().getQQACCOUNT();
                     MyToast.getToast(getApplicationContext(), "登录成功！").show();
                     Utils.toActivity(LoginCodeActivity.this, MainActivity.class);
                     finish();
@@ -254,11 +258,15 @@ public class LoginCodeActivity extends BaseActivity {
                 if (httpDataInfoResult.getCode() == 0) {
                     YsdkUtils.loginResult = httpDataInfoResult;
                     UserUtils.USER_ID = httpDataInfoResult.getData().getAppUser().getUSER_ID();
+                    UserUtils.sessionID=httpDataInfoResult.getData().getSessionID();
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE, httpDataInfoResult.getData().getAppUser().getFIRST_CHARGE());
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_LOGIN, true);
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_TAG_USERID, UserUtils.USER_ID);
                     MyToast.getToast(getApplicationContext(), "登录成功！").show();
-                    UserUtils.AGE = httpDataInfoResult.getData().getAppUser().getAGE();
+                    UserUtils.GENDER=httpDataInfoResult.getData().getAppUser().getGENDER();
+                    UserUtils.AGE=httpDataInfoResult.getData().getAppUser().getAGE();
+                    UserUtils.WXACCOUNT=httpDataInfoResult.getData().getAppUser().getWXACCOUNT();
+                    UserUtils.QQACCOUNT=httpDataInfoResult.getData().getAppUser().getQQACCOUNT();
                     Utils.toActivity(LoginCodeActivity.this, MainActivity.class);
                     finish();
                 } else {

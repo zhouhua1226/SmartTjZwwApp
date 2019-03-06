@@ -19,13 +19,11 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.bean.ConsigneeBean;
 import com.game.smartremoteapp.view.CatchDollResultDialog;
 import com.game.smartremoteapp.view.GuessingSuccessDialog;
 import com.gatz.netty.global.ConnectResultEvent;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -212,8 +210,8 @@ public class Utils {
     }
     //dp转px
     public static void setDrawableSize(Context context, RadioButton radioButton) {
-            int size =  dip2px(context,25f);
-            int space =  dip2px(context,10f);
+            int size =  dip2px(context,28f);
+            int space =  dip2px(context,8f);
             Drawable drawable = radioButton.getCompoundDrawables()[1];
             drawable.setBounds(0, space, size, size + space);
             radioButton.setCompoundDrawables(null, drawable, null, null);

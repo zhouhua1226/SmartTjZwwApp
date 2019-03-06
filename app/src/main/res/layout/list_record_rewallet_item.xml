@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="55dp"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/item_userImag"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@mipmap/app_mm_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
@@ -20,9 +19,9 @@
         android:layout_toRightOf="@+id/item_userImag"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:text="独来独往"
+        android:maxLength="12"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/item_gold_number"
@@ -32,7 +31,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
-        android:text="100金币"
         android:textColor="@color/black"
         android:textSize="14sp" />
 </RelativeLayout>

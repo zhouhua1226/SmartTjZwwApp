@@ -30,6 +30,8 @@ public class UrlUtils {
     public static final String SMSCODE = "smsCode";
     public static final String APKNAME = "apkName";
 
+    public static final String WXACCOUNT = "wxaccount";
+    public static final String QQACCOUNT = "qqaccount";
     public static final String AGE = "age";
     public static final String IMAGE ="image" ;
     public static final String FACEIMAGE = "base64Image";
@@ -88,6 +90,8 @@ public class UrlUtils {
     public static final String PAYCHANNELTYPE ="payChannelType" ;
     public static final String  CTYPE_WX_PAY_ANROID="现在微信ANDROID";
     public static final String  CTYPE_APLIAY_ANROID="支付宝ANDROID";
+
+    public static final String USERPLAYNUMBER = "num";
     //ysdk支付金额字段
     public static final String WXQQ_AMOUNT="amount";
     //签到接口
@@ -125,7 +129,9 @@ public class UrlUtils {
     public static final String ROOMID="roomId";
     public static final String REGGOLD = "regGold";
     public static final String PAYOUTTYPE = "payOutType";
-
+    public static final String REDUSERID ="redUserId" ;
+    public static final String REDID ="redId" ;
+    public static final String ISHIT ="ishit" ;
     //  http://47.100.15.18:8080(阿里云测服)
     //http://111.231.139.61:18081(汤姆抓娃娃腾讯云)
     public static final String URL = "http://111.231.139.61:18081";
@@ -410,4 +416,19 @@ public class UrlUtils {
     public static final String UPDATEUSERINFO = "/pooh-web/api/user/updateUserInfo";
 
     public static final String RECURL ="/pooh-web/app/pay/getRecUrl" ;
+    public static final String LNVITATIONCODECONTROL_URL="/pooh-web/app/version/versionDisplay";
+
+    public static final String SGAREREDPACKAGE ="/pooh-web/app/redPackage/shareRedPackage";
+
+    public static final String SHOWREDPACKAGE ="/pooh-web/app/redPackage/showRedPackage";
+
+    public static final String GETREDPACKAGE ="/pooh-web/app/redPackage/getRedPackage";
+
+    public static final String GETREDPACKAGEINFO ="/pooh-web/app/redPackage/getRedPackageInfo";
+
+    public static final String GETESNDREDPACKAGERECORD ="/pooh-web/app/redPackage/showUserSendRedPackageInfo" ;
+
+    public static final String GETRESIVEREDPACKAGERECORD ="/pooh-web/app/redPackage/showUserGetRedPackageInfo" ;
+
+    public static final String SLIDESHOW ="/pooh-web/app/redPackage/slideShow" ;
 }

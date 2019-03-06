@@ -26,6 +26,8 @@
     <string name="umeng_socialize_female">女</string>
     <string name="umeng_socialize_male">男</string>
     <string name="protocol">同意用户协议与隐私条款</string>
+    <string name="http_error">请求错误，请检查网络！</string>
+    <string name="http_empty">数据为空，请重试！</string>
     <!-- 刷新 -->
     <string name="listview_header_hint_normal">下拉刷新</string>
     <string name="listview_header_hint_release">释放立即刷新</string>

@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
 import com.game.smartremoteapp.activity.ctrl.presenter.CtrlCompl;
@@ -504,7 +503,6 @@ public class PushCoin2Activity extends Activity implements IctrlView{
                 stopTimer();
                 break;
         }
-
     }
 
     public void startTimer() {

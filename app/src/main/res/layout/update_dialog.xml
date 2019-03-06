@@ -33,6 +33,7 @@
             android:layout_width="150dp"
             android:layout_height="35dp"
             android:text="马上更新"
+            android:gravity="center"
             android:textColor="@color/white"
             android:background="@drawable/update_btn_bg"
             android:layout_marginTop="25dp"

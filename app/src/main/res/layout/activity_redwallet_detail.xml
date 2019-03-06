@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/icon_redwallet_detail_bg"
     android:orientation="vertical">
-
+   <View
+       android:id="@+id/mv_view"
+       android:layout_width="match_parent"
+       android:layout_height="25dp"></View>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
         android:layout_height="45dp">
         <TextView
             android:id="@+id/tv_back"
@@ -36,10 +38,8 @@
         android:id="@+id/user_image"
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/PX_45"
         android:scaleType="centerCrop"
         android:src="@mipmap/app_mm_icon"
         app:riv_border_color="#f5dacc"
@@ -54,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="TOM的红包"
         android:textColor="@color/black"
         android:textSize="14sp" />
 
@@ -62,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:orientation="horizontal">
 
         <TextView
@@ -80,24 +79,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginLeft="3dp"
-            android:text="个"
+            android:text="金币"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_redwallet_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:text="已存入账户"
         android:textColor="@color/black"
         android:textSize="13sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -107,7 +106,7 @@
             android:layout_height="45dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
-            android:text="领取1/3"
+            android:text="领取0/3"
             android:textColor="#757575"
             android:textSize="14sp" />
 

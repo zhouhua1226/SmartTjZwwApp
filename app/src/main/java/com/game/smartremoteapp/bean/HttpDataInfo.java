@@ -16,6 +16,15 @@ public class HttpDataInfo implements Serializable{
     private List<VideoBackBean> dollCount;
     private BetsBackBean betsBackBean;
     private List<PlayBackBean> playBackBeen;
+
+    public List<SlideRedPackageBean> getList() {
+        return list;
+    }
+
+    public void setList(List<SlideRedPackageBean> list) {
+        this.list = list;
+    }
+
     private VideoBackBean playBack;
     private List<ExChangeMoneyBean> conversionList;
     private OrderBean Order;
@@ -40,7 +49,17 @@ public class HttpDataInfo implements Serializable{
     private BankCardBean bankCard;
     private PagesBean pd;
     private List<GameListBean> gameList;
+    private List<SlideRedPackageBean>  list;
     private CoinPusher coinPusher;
+    private String ANDROID_INVITATION;    //邀请码页面控制字段   0 显示    1 隐藏
+
+    public String getANDROID_INVITATION() {
+        return ANDROID_INVITATION;
+    }
+
+    public void setANDROID_INVITATION(String ANDROID_INVITATION) {
+        this.ANDROID_INVITATION = ANDROID_INVITATION;
+    }
 
     public CoinPusher getCoinPusher() {
         return coinPusher;

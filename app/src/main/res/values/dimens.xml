@@ -10,6 +10,7 @@
 
     <dimen name="PX_10">10px</dimen>
     <dimen name="PX_335">335px</dimen>
+    <dimen name="PX_45">45px</dimen>
     <!--  -->
     <dimen name="root_layout_width">443.5dp</dimen>
     <dimen name="root_layout_height">330dp</dimen>

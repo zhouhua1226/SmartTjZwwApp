@@ -18,8 +18,8 @@ import com.game.smartremoteapp.bean.HttpDataInfo;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomBean;
 import com.game.smartremoteapp.bean.RoomListBean;
+import com.game.smartremoteapp.fragment.GrabRedWalletFragment;
 import com.game.smartremoteapp.fragment.MyCenterFragment;
-import com.game.smartremoteapp.fragment.RankFragmentTwo;
 import com.game.smartremoteapp.fragment.ZWWJFragment;
 import com.game.smartremoteapp.model.http.HttpManager;
 import com.game.smartremoteapp.model.http.RequestSubscriber;
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     ImageView tab_zww;
 
     private ZWWJFragment zwwjFragment;//抓娃娃
-    private RankFragmentTwo rankFragment;//排行榜
+    private GrabRedWalletFragment rankFragment;//排行榜
     private MyCenterFragment myCenterFragment;//我的
     private long mExitTime;
     private List<RoomBean> roomList = new ArrayList<>();
@@ -91,7 +91,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
-        setTranslucentStatus();
         initView();
         mMainActivity = this;
         initFragment();
@@ -467,13 +466,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 current = 0;
                 break;
             case R.id.tab_rank:
-                if(UserUtils.AGE==0){
-                    Utils.toActivity(this,PerfectInformationActivity.class);
-                    current=lastIndex;
-                    setTab(current);
-                }else{
-                    current =1;
-                }
+                current =1;
                 break;
             case R.id.tab_mine:
                 current = 2;
@@ -482,9 +475,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (lastIndex != current) {
             selectFragment(current);
             if (current == 0) {
-                tab_zww.setBackgroundResource(R.drawable.zww_icon);
+                tab_zww.setBackgroundResource(R.drawable.zww_icon_christmans);
             } else {
-                tab_zww.setBackgroundResource(R.drawable.zww_unicon_jj);
+                tab_zww.setBackgroundResource(R.drawable.zww_unicon_christmas);
             }
         }
         lastIndex=current;
@@ -511,7 +504,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case 1:
                     if (rankFragment == null) {
-                        rankFragment = new RankFragmentTwo();
+                        rankFragment = new GrabRedWalletFragment();
                         transaction.add(R.id.show_fragment, rankFragment);
                     } else {
                         transaction.show(rankFragment);

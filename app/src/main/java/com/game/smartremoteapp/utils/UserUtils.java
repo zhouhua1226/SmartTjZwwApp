@@ -46,12 +46,17 @@ public class UserUtils {
     public static  String LEVEL_16_TAG="";
     public static  String LEVEL_18_TAG="";
     public static int UserBetNum;
+
     public static  int LEVEL=0;
     public static int id;
     public static SRStoken SRSToken;
     public static String GENDER;   //用户性别
-    public static int AGE=0;   //用户性别
+    public static int AGE=0;   //用户年龄
+    public static String GENDER_MALE = "男";
+    public static String GENDER_FEMALE = "女";
     public static boolean isUserChanger = false;  //是否切换
+    public static String WXACCOUNT;   //用户年龄
+    public static String QQACCOUNT;   //用户年龄
 
     public static final String RECODE_URL = Environment.getExternalStorageDirectory().getPath()
             + "/SmartRemoteApp/";

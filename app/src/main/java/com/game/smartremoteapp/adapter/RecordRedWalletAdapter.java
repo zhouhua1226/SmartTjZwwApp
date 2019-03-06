@@ -1,15 +1,20 @@
 package com.game.smartremoteapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.game.smartremoteapp.R;
-import com.game.smartremoteapp.bean.UserBean;
+import com.game.smartremoteapp.bean.UserInfoBean;
+import com.game.smartremoteapp.utils.UrlUtils;
+import com.game.smartremoteapp.utils.UserUtils;
+import com.game.smartremoteapp.view.GlideCircleTransform;
 
 import java.util.List;
 
@@ -19,10 +24,10 @@ import java.util.List;
 
 public class RecordRedWalletAdapter extends RecyclerView.Adapter<RecordRedWalletAdapter.ViewHolder> {
     private Context mContext;
-    private List<UserBean>   mDatas;
+    private List<UserInfoBean>   mDatas;
     private ZWWAdapter.OnItemClickListener mOnItemClickListener;
 
-    public RecordRedWalletAdapter(Context context, List<UserBean>  mUserBeans) {
+    public RecordRedWalletAdapter(Context context, List<UserInfoBean>  mUserBeans) {
         this.mContext = context;
         this.mDatas = mUserBeans;
     }
@@ -40,6 +45,27 @@ public class RecordRedWalletAdapter extends RecyclerView.Adapter<RecordRedWallet
 
     @Override
     public void onBindViewHolder(RecordRedWalletAdapter.ViewHolder holder, final int position) {
+        UserInfoBean bean = mDatas.get(position);
+        if(UserUtils.USER_ID.equals(bean.getUserId())){
+            holder.username.setTextColor(Color.RED);
+            holder.gold_number.setTextColor(Color.RED);
+        }
+        holder.username.setText(bean.getNickname());
+        holder.gold_number.setText(bean.getGold()+"金币");
+        Glide.with(mContext).load(UrlUtils.APPPICTERURL + bean.getImgurl())
+                .error(R.mipmap.app_mm_icon)
+                .dontAnimate()
+                .centerCrop()
+                .transform(new GlideCircleTransform(mContext))
+                .into(holder.userImag);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnItemClickListener!=null){
+                    mOnItemClickListener.onItemClick(position);
+                }
+            }
+        });
 
     }
     @Override
@@ -48,16 +74,16 @@ public class RecordRedWalletAdapter extends RecyclerView.Adapter<RecordRedWallet
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private Button reward_option;
-        private TextView reward_gold,reward_date;
+        private ImageView userImag;
+        private TextView username,gold_number;
         public ViewHolder(View itemView) {
             super(itemView);
-            reward_gold = (TextView) itemView.findViewById(R.id.tv_reward_gold);
-            reward_date = (TextView) itemView.findViewById(R.id.tv_reward_date);
-            reward_option= (Button) itemView.findViewById(R.id.btn_reward_option);
+            userImag = (ImageView) itemView.findViewById(R.id.item_userImag);
+            username = (TextView) itemView.findViewById(R.id.item_username);
+            gold_number= (TextView) itemView.findViewById(R.id.item_gold_number);
         }
     }
-    public void notify(List<UserBean> lists) {
+    public void notify(List<UserInfoBean> lists) {
         this.mDatas = lists;
         notifyDataSetChanged();
     }

@@ -80,14 +80,6 @@ public class PayH5Activity extends BaseActivity {
         getPayH5lUrl();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if(webView!=null&&urlPath!=null){
-//            fresh();
-//        }
-//    }
-
     private void loadUrl(){
         LogUtils.loge("图片新闻url="+urlPath,TAG);
         webView.loadUrl(urlPath.replace("\"", "/"));

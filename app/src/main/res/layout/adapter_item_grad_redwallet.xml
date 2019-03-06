@@ -7,73 +7,83 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp">
-    <com.game.smartremoteapp.view.RoundAngleImageView
-        android:id="@+id/ralv_user_header"
+    <RelativeLayout
+        android:id="@+id/rl_redwallet_bg"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:scaleType="fitXY" />
+        android:layout_height="170dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@drawable/icon_redwallet_bg"
+            android:scaleType="fitXY"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_item_redwallet_gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:text="100"
+            android:textStyle="bold"
+            android:textColor="#FFAE00"
+            android:textSize="28sp" />
+    </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:padding="3dp"
-        android:layout_below="@+id/ralv_user_header"
-        android:background="@drawable/zwwadapter_item_bottom_bg"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp">
+        android:layout_height="55dp"
+        android:padding="5dp"
+        android:layout_below="@+id/rl_redwallet_bg"
+        android:background="@drawable/zwwadapter_item_bottom_bg">
         <TextView
             android:id="@+id/tv_item_redwallet_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
             android:maxLength="20"
-            android:text="13262686621发了100红包"
+            android:text="13262686621发了10000红包"
             android:textColor="#333739"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
         <TextView
             android:id="@+id/tv_item_redwallet_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="1dp"
             android:text="1分钟前"
             android:layout_alignParentRight="true"
             android:textColor="#878888"
-            android:textSize="10sp" />
+            android:textSize="9sp" />
     <ImageView
         android:id="@+id/iv_item_redwallet"
-        android:layout_width="30dp"
+        android:layout_width="20dp"
         android:src="@drawable/icon_item_redwallet"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_height="35dp" />
+        android:layout_height="25dp" />
         <ImageView
             android:id="@+id/iv_item_user1"
-            android:layout_width="30dp"
-            android:src="@mipmap/app_mm_icon"
+            android:layout_width="20dp"
             android:layout_toRightOf="@id/iv_item_redwallet"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
-            android:layout_height="35dp" />
+            android:visibility="gone"
+            android:layout_height="25dp" />
         <ImageView
             android:id="@+id/iv_item_user2"
-            android:layout_width="30dp"
-            android:src="@mipmap/app_mm_icon"
+            android:layout_width="20dp"
             android:layout_toRightOf="@id/iv_item_user1"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:visibility="gone"
-            android:layout_height="35dp" />
+            android:layout_height="25dp" />
         <ImageView
             android:id="@+id/iv_item_user3"
-            android:layout_width="30dp"
-            android:src="@mipmap/app_mm_icon"
+            android:layout_width="20dp"
             android:layout_toRightOf="@id/iv_item_user2"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
             android:layout_marginLeft="10dp"
-            android:layout_height="35dp" />
+            android:layout_height="25dp" />
     </RelativeLayout>
 
 </RelativeLayout>

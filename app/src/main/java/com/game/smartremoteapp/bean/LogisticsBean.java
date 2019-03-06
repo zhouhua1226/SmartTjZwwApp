@@ -23,7 +23,7 @@ public class LogisticsBean implements Serializable{
     private String ID;               //订单ID
     private String CNEE_ADDRESS;    //地址
     private String POST_REMARK;     //发货明细
-    private String REMARK;          //备注
+    private Object REMARK;          //备注
     private String SEND_NUM_ID;     //订单号
 
     public String getSEND_NUM_ID() {
@@ -138,7 +138,7 @@ public class LogisticsBean implements Serializable{
         this.POST_REMARK = POST_REMARK;
     }
 
-    public String getREMARK() {
+    public Object getREMARK() {
         return REMARK;
     }
 

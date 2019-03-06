@@ -142,7 +142,7 @@ public class ShareDialog {
         web = new UMWeb(mContext.getString(R.string.load_web));
         web.setTitle(mContext.getString(R.string.app_name));
         web.setDescription(mContext.getString(R.string.app_description));
-        web.setThumb(new UMImage(mContext,BitmapFactory.decodeResource(mContext.getResources(), R.drawable.logo_share)));
+        web.setThumb(new UMImage(mContext,BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.app_mm_icon)));
     }
 
     //分享监听接口

@@ -14,13 +14,13 @@
         android:orientation="vertical">
        <RelativeLayout
            android:layout_width="match_parent"
-           android:layout_marginTop="33dp"
-           android:layout_height="wrap_content">
+           android:layout_height="50dp">
            <ImageButton
                android:id="@+id/ib_rank_doll"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_alignParentLeft="true"
+               android:layout_centerVertical="true"
                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                android:background="@drawable/icon_rank_doll"
                android:layout_gravity="center_vertical" />
@@ -350,7 +350,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="6dp"
         android:overScrollMode="never"
-        android:scrollbars="none"
-        android:background="@color/white"/>
+        android:scrollbars="none" />
 
 </LinearLayout>

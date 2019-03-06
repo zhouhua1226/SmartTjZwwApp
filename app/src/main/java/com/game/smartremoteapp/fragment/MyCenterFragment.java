@@ -27,7 +27,6 @@ import com.game.smartremoteapp.activity.home.MainActivity;
 import com.game.smartremoteapp.activity.home.MyCtachRecordActivity;
 import com.game.smartremoteapp.activity.home.MyJoinCodeActivity;
 import com.game.smartremoteapp.activity.home.MyLogisticsOrderActivity;
-import com.game.smartremoteapp.activity.home.PerfectInformationActivity;
 import com.game.smartremoteapp.activity.home.RechargeActivity;
 import com.game.smartremoteapp.activity.home.SendRedPackActivity;
 import com.game.smartremoteapp.activity.home.ServiceActivity;
@@ -191,6 +190,7 @@ public class MyCenterFragment extends BaseFragment {
             @Override
             public void _onSuccess(Result<HttpDataInfo> result) {
                 if (result.getMsg().equals(Utils.HTTP_OK)) {
+
                     UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
                     UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
                     UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
@@ -305,11 +305,7 @@ public class MyCenterFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), LevelActivity.class));
                 break;
             case R.id.mycenter_sendredwallet_layout:
-                if(UserUtils.AGE>0){
-                    startActivity(new Intent(getContext(), SendRedPackActivity.class));
-                }else{
-                    startActivity(new Intent(getContext(), PerfectInformationActivity.class));
-                }
+                startActivity(new Intent(getContext(), SendRedPackActivity.class));
                 break;
             default:
                 break;
@@ -347,6 +343,8 @@ public class MyCenterFragment extends BaseFragment {
                     if (result.getData().getAppUser() == null) {
                         return;
                     }
+                    UserUtils.GENDER=result.getData().getAppUser().getGENDER();
+                    UserUtils.AGE=result.getData().getAppUser().getAGE();
                     UserUtils.UserBalance = result.getData().getAppUser().getBALANCE();
                     UserUtils.UserCatchNum = result.getData().getAppUser().getDOLLTOTAL();
                     UserUtils.NickName = result.getData().getAppUser().getNICKNAME();

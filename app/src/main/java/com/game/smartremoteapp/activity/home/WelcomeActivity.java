@@ -135,12 +135,12 @@ public class WelcomeActivity extends BaseActivity{
                 return;
             }
             if (Utils.isNetworkAvailable(getApplicationContext())) {
-             //  getAuthLogin(uid); //真实发布
+              getAuthLogin(uid); //真实发布
             } else {
                 MyToast.getToast(getApplicationContext(), "请查看你的网络！").show();
             }
         }
-         setSelectServer();//测试
+        // setSelectServer();//测试
 
         btn_timer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,12 +183,16 @@ public class WelcomeActivity extends BaseActivity{
                     return;
                 }
                 if (loginInfoResult.getMsg().equals("success")) {
-                    isLogin=true;
                     YsdkUtils.loginResult = loginInfoResult;
                     SPUtils.putString(getApplicationContext(), UserUtils.SP_FIRET_CHARGE, loginInfoResult.getData().getAppUser().getFIRST_CHARGE());
                     UserUtils.USER_ID = loginInfoResult.getData().getAppUser().getUSER_ID();
-                    UserUtils.AGE = loginInfoResult.getData().getAppUser().getAGE();
+                    UserUtils.sessionID=loginInfoResult.getData().getSessionID();
+                    UserUtils.WXACCOUNT=loginInfoResult.getData().getAppUser().getWXACCOUNT();
+                    UserUtils.QQACCOUNT=loginInfoResult.getData().getAppUser().getQQACCOUNT();
+                    UserUtils.GENDER=loginInfoResult.getData().getAppUser().getGENDER();
+                    UserUtils.AGE=loginInfoResult.getData().getAppUser().getAGE();
                     UserUtils.isUserChanger = true;
+                    isLogin=true;
                 }
             }
             @Override
@@ -236,7 +240,7 @@ class MyCountDownTimer extends CountDownTimer {
             Utils.toActivity(WelcomeActivity.this, MainActivity.class);
             finish();
         } else {
-            Utils.toActivity(WelcomeActivity.this, SplashActivity.class);//汤姆抓娃娃
+             Utils.toActivity(WelcomeActivity.this, SplashActivity.class);//汤姆抓娃娃
              finish();
         }
     }

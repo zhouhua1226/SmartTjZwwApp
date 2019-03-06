@@ -34,7 +34,7 @@
         android:layout_width="80dp"
         android:src="@drawable/icon_infor_add_header"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:layout_height="80dp" />
 
     <LinearLayout
@@ -44,7 +44,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="55dp"
         android:layout_marginRight="55dp"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,7 +75,78 @@
         android:layout_marginLeft="55dp"
         android:layout_marginRight="55dp"
         android:layout_height="1dp"></View>
+    <LinearLayout
+        android:id="@+id/rl_youqq"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="QQ"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
 
+        <EditText
+            android:id="@+id/et_qq_number"
+            android:layout_width="match_parent"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp"
+            android:maxLength="12"
+            android:background="@color/white"
+            android:textColorHint="@color/hihtcolor"
+            android:inputType="number"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray_line"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_height="1dp"></View>
+
+    <LinearLayout
+        android:id="@+id/rl_youweixin"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="微信"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_weixin_number"
+            android:layout_width="match_parent"
+            android:textColor="@color/black_gray_color"
+            android:textSize="14sp"
+            android:maxLength="20"
+            android:background="@color/white"
+            android:textColorHint="@color/hihtcolor"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/gray_line"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_height="1dp"></View>
     <RelativeLayout
         android:id="@+id/rl_user_gener"
         android:layout_width="match_parent"

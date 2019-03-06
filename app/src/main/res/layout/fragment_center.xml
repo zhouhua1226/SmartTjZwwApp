@@ -7,10 +7,9 @@
     android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:background="@color/apptheme_bg"
             android:gravity="center"
-            android:paddingTop="20dp"
             android:text="我的"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -456,6 +455,7 @@
                      android:scaleType="centerInside"
                      android:src="@drawable/right_arrow" />
              </RelativeLayout>
+
              <RelativeLayout
                  android:id="@+id/mycenter_sendredwallet_layout"
                  android:layout_width="match_parent"
@@ -471,7 +471,7 @@
                      android:layout_marginStart="10dp"
                      android:drawableLeft="@drawable/icon_send_redwallet"
                      android:gravity="center"
-                     android:text="   发红包"
+                     android:text="     发红包"
                      android:textColor="@color/black"
                      android:textSize="15sp" />
 

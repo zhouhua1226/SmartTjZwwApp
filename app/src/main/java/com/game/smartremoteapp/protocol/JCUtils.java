@@ -18,4 +18,6 @@ public class JCUtils {
     public static String UID="";
     public static String GAMEJD="0";
 
+    public static String HOMEURL="http://47.100.15.18:8080/wwjiApp/index.html";
+
 }

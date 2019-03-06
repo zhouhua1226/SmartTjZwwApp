@@ -14,6 +14,9 @@ import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PictureListBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
+import com.game.smartremoteapp.bean.RedInfoBean;
+import com.game.smartremoteapp.bean.RedPackageBean;
+import com.game.smartremoteapp.bean.RedPackageListBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.SupportBean;
@@ -831,14 +834,56 @@ public interface SmartService {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.UPDATEUSERINFO)
-    Observable<Result<HttpDataInfo>> perfectInformation(@Field(UrlUtils.USERID)String userId,
+    Observable<Result<HttpDataInfo>> perfectInformation(@Field(UrlUtils.USERID) String userId,
                                                         @Field("nickname") String nickname,
                                                         @Field(UrlUtils.GENDER) String gender,
-                                                        @Field(UrlUtils.AGE) int age);
+                                                        @Field(UrlUtils.AGE) int age,
+                                                        @Field(UrlUtils.WXACCOUNT)String weixinnumber,
+                                                        @Field(UrlUtils.QQACCOUNT)String qqnumber);
 
     //完善用户信息
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST(UrlUtils.RECURL)
     Observable<Result<String>> getRecUrl(@Field(UrlUtils.APPVERSION)String appVersion, @Field(UrlUtils.USERID)String userId);
+
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.LNVITATIONCODECONTROL_URL)
+    Observable<Result<HttpDataInfo>> getLnvitationCodeControl();
+
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.SGAREREDPACKAGE)
+    Observable<Result<Void>> shareRedPackage(@Field(UrlUtils.USERID)String userId, @Field(UrlUtils.USERPLAYNUM) String redGold, @Field(UrlUtils.USERPLAYNUMBER)String redNumber);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.SHOWREDPACKAGE)
+    Observable<Result<RedPackageListBean>> showRedPackage(@Field(UrlUtils.USERID)String userId);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETREDPACKAGE)
+    Observable<Result<Void>> getRedPackage(@Field(UrlUtils.USERID)String userId, @Field(UrlUtils.REDUSERID)String redUserId, @Field(UrlUtils.REDID)String redId);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETREDPACKAGEINFO)
+    Observable<Result<RedInfoBean>> getRedPackdetail(@Field(UrlUtils.REDID)String redId);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETESNDREDPACKAGERECORD)
+    Observable<Result<RedPackageBean>> getSendRedPackageInfo(@Field(UrlUtils.USERID)String userId, @Field(UrlUtils.TIME)String time);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST(UrlUtils.GETRESIVEREDPACKAGERECORD)
+    Observable<Result<RedPackageBean>> getResiveRedPackageInfo(@Field(UrlUtils.USERID)String userId, @Field(UrlUtils.TIME)String time);
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @GET(UrlUtils.SLIDESHOW)
+    Observable<Result<HttpDataInfo>> getSlideShowList();
 }

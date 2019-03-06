@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,13 +57,15 @@ public class LnvitationCodeActivity extends BaseActivity {
     Button invitationcodeCopyBtn;
     @BindView(R.id.invitationcode_test_tv)
     TextView invitationcodeTestTv;
+    @BindView(R.id.lnvitationcode_bottom_layout)
+    LinearLayout lnvitationcodeBottomLayout;
 
     private String codeNum = "0";
     private String currencyNum = "0";
-    private String isExChange="";
-    private String inviteTotalNum="";  //兑换次数上限
-    private String inviteAmount="";    //邀请人奖励金额
-    private String exchangeAmount="";  //被邀请人奖励金额
+    private String isExChange = "";
+    private String inviteTotalNum = "";  //兑换次数上限
+     private String inviteAmount = "";    //邀请人奖励金额
+    private String exchangeAmount = "";  //被邀请人奖励金额
     private String TAG = "LnvitationCodeActivity";
     private String string;
     String newsString;
@@ -77,7 +80,9 @@ public class LnvitationCodeActivity extends BaseActivity {
     protected void afterCreate(Bundle savedInstanceState) {
         initView();
         getViewDate();
+        getLnvitationCodeControl();
         getUserAwardCode(UserUtils.USER_ID);
+
 //        invitationcodeTestTv.setText("APP版本=" + Utils.appVersion +
 //                "&手机IMEI=" + Utils.IMEI +
 //                "&手机型号=" + Utils.deviceType +
@@ -94,17 +99,18 @@ public class LnvitationCodeActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.image_back, R.id.submit_bt, R.id.invitationcode_share_btn, R.id.invitationcode_copy_btn})
+    @OnClick({R.id.image_back, R.id.submit_bt, R.id.invitationcode_share_btn,
+            R.id.invitationcode_copy_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
                 finish();
                 break;
             case R.id.submit_bt:
-                String code=codeEt.getText().toString();
-                if(!code.equals("")){
-                    doAwardByUserCode(UserUtils.USER_ID,code);
-                }else {
+                String code = codeEt.getText().toString();
+                if (!code.equals("")) {
+                    doAwardByUserCode(UserUtils.USER_ID, code);
+                } else {
                     Toast.makeText(this, "请输入邀请码!", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -127,24 +133,18 @@ public class LnvitationCodeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 
     private void getViewDate() {
         //boolean isExChange=(boolean) SPUtils.get(getApplicationContext(), UserUtils.SP_TAG_ISEXCHANGE, false);
-        if(isExChange.equals("Y")){
+        if (isExChange.equals("Y")) {
             invitationcodeSubmitLayout.setVisibility(View.GONE);
             invitationcodeTitleTv.setText("已输入过邀请码");
-        }else {
+        } else {
             invitationcodeSubmitLayout.setVisibility(View.VISIBLE);
             invitationcodeTitleTv.setText("输入邀请码");
         }
-        invitationcodeRuleTv.setText("1.每邀请一位好友，用户可获得"+inviteAmount+"金币，好友可获得"+exchangeAmount+"金币\r\n"
-                + "\n2.邀请奖励上限为"+inviteTotalNum+"名\r\n"
+        invitationcodeRuleTv.setText("1.每邀请一位好友，用户可获得" + inviteAmount + "金币，好友可获得" + exchangeAmount + "金币\r\n"
+                + "\n2.邀请奖励上限为" + inviteTotalNum + "名\r\n"
                 + "\n3.用户无法兑换自己的邀请码");
         invitationcodeHasnumTv.setText(Html.fromHtml("已邀请<font color='#ff9700'>" + codeNum
                 + "</font>" + "人获得<font color='#ff9700'>" + currencyNum + "</font>金币"));
@@ -152,35 +152,36 @@ public class LnvitationCodeActivity extends BaseActivity {
         LogUtils.loge("APP版本=" + Utils.appVersion +
                 "&手机IMEI=" + Utils.IMEI +
                 "&手机型号=" + Utils.deviceType +
-                "&系统版本=" + Utils.osVersion,TAG);
+                "&系统版本=" + Utils.osVersion, TAG);
     }
 
     /**
      * 查询邀请码
+     *
      * @param userId
      */
     private void getUserAwardCode(String userId) {
-        if(Utils.isEmpty(userId)){
+        if (Utils.isEmpty(userId)) {
             return;
         }
         HttpManager.getInstance().getUserAwardCode(userId, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if(httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)){
-                    HttpDataInfo httpDataInfo=httpDataInfoResult.getData();
-                    if(httpDataInfo!=null){
+                if (httpDataInfoResult.getMsg().equals(Utils.HTTP_OK)) {
+                    HttpDataInfo httpDataInfo = httpDataInfoResult.getData();
+                    if (httpDataInfo != null) {
                         invitationcodeMycodeTv.setText(httpDataInfo.getCodeVale());
-                        AwardCodeBean awardCodeBean=httpDataInfo.getAwardPd();
-                        AwardCodePdBean pdBean=httpDataInfo.getSetPd();
-                        isExChange=httpDataInfo.getAwradFlag();
-                        if(awardCodeBean!=null){
-                            codeNum=awardCodeBean.getAWARDCOUNT()+"";
-                            currencyNum=awardCodeBean.getAWARDSUM()+"";
+                        AwardCodeBean awardCodeBean = httpDataInfo.getAwardPd();
+                        AwardCodePdBean pdBean = httpDataInfo.getSetPd();
+                        isExChange = httpDataInfo.getAwradFlag();
+                        if (awardCodeBean != null) {
+                            codeNum = awardCodeBean.getAWARDCOUNT() + "";
+                            currencyNum = awardCodeBean.getAWARDSUM() + "";
                         }
-                        if(pdBean!=null){
-                            inviteTotalNum=pdBean.getInviteTotalNum();
-                            inviteAmount=pdBean.getInviteAmount();
-                            exchangeAmount=pdBean.getExchangeAmount();
+                        if (pdBean != null) {
+                            inviteTotalNum = pdBean.getInviteTotalNum();
+                            inviteAmount = pdBean.getInviteAmount();
+                            exchangeAmount = pdBean.getExchangeAmount();
                         }
                         getViewDate();
                     }
@@ -190,33 +191,61 @@ public class LnvitationCodeActivity extends BaseActivity {
 
             @Override
             public void _onError(Throwable e) {
-
+                MyToast.getToast(getApplicationContext(),getResources().getString(R.string.http_error)).show();
             }
         });
     }
 
     /**
      * 兑换邀请码
+     *
      * @param userId
      * @param awardCode
      */
-    private void doAwardByUserCode(String userId,String awardCode){
+    private void doAwardByUserCode(String userId, String awardCode) {
         HttpManager.getInstance().doAwardByUserCode(userId, awardCode, new RequestSubscriber<Result<HttpDataInfo>>() {
             @Override
             public void _onSuccess(Result<HttpDataInfo> httpDataInfoResult) {
-                if (httpDataInfoResult.getMsg().equals("success")){
-                    MyToast.getToast(getApplicationContext(),"兑换成功!").show();
+                if (httpDataInfoResult.getMsg().equals("success")) {
+                    MyToast.getToast(getApplicationContext(), "兑换成功!").show();
                     SPUtils.putBoolean(getApplicationContext(), UserUtils.SP_TAG_ISEXCHANGE, true);
                     invitationcodeSubmitLayout.setVisibility(View.GONE);
                     invitationcodeTitleTv.setText("已输入过邀请码");
-                }else {
-                    MyToast.getToast(getApplicationContext(),httpDataInfoResult.getMsg()).show();
+                } else {
+                    MyToast.getToast(getApplicationContext(), httpDataInfoResult.getMsg()).show();
                 }
             }
 
             @Override
             public void _onError(Throwable e) {
+                MyToast.getToast(getApplicationContext(),getResources().getString(R.string.http_error)).show();
+            }
+        });
+    }
 
+
+    /**
+     * 邀请码页面控制接口
+     * ANDROID_INVITATION   0 显示    1 隐藏
+     */
+    public void getLnvitationCodeControl() {
+        HttpManager.getInstance().getLnvitationCodeControl(new RequestSubscriber<Result<HttpDataInfo>>() {
+            @Override
+            public void _onSuccess(Result<HttpDataInfo> result) {
+                if (result.getMsg().equals(Utils.HTTP_OK)) {
+                    String showType = result.getData().getANDROID_INVITATION();
+                    if (showType.equals("1")){
+                        lnvitationcodeBottomLayout.setVisibility(View.GONE);
+                    }else {
+                        lnvitationcodeBottomLayout.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+
+            @Override
+            public void _onError(Throwable e) {
+                MyToast.getToast(getApplicationContext(),getResources().getString(R.string.http_error)).show();
             }
         });
     }

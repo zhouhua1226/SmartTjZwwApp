@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/apptheme_bg</item>
+        <item name="colorPrimaryDark">@color/apptheme_bg</item>
+        <item name="colorAccent">@color/apptheme_bg</item>
     </style>
     <style name="BlackBarAppTheme" parent="MyAppTheme">
     </style>

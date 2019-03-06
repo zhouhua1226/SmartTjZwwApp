@@ -12,10 +12,10 @@ import com.game.smartremoteapp.utils.UrlUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
 
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  * Created by zhouh on 2017/9/7.
  */
@@ -30,11 +30,11 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
         myApplication = this;
         //初始化组件化基础库, 统计SDK/推送SDK/分享SDK都必须调用此初始化接口
-        UMShareAPI.get(this);
+      //  UMShareAPI.get(this);
         startCoreService();
         getPushAgent();
         setCrashHandler();
-        LogUtils.logInit(true);//初始化logger 测试设置true    真实发布 设置false
+        LogUtils.logInit(true);//初始化logger   测试设置true    真实发布 设置false
     }
     private void setCrashHandler() {
 

@@ -13,6 +13,9 @@ import com.game.smartremoteapp.bean.NowPayBean;
 import com.game.smartremoteapp.bean.OrderBean;
 import com.game.smartremoteapp.bean.PictureListBean;
 import com.game.smartremoteapp.bean.PondResponseBean;
+import com.game.smartremoteapp.bean.RedInfoBean;
+import com.game.smartremoteapp.bean.RedPackageBean;
+import com.game.smartremoteapp.bean.RedPackageListBean;
 import com.game.smartremoteapp.bean.Result;
 import com.game.smartremoteapp.bean.RoomListBean;
 import com.game.smartremoteapp.bean.SupportBean;
@@ -830,8 +833,8 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(requestSubscriber);
     }
-    public void perfectInformation(String nickname,String gender, int age,String userId, RequestSubscriber<Result<HttpDataInfo>> requestSubscriber) {
-        Observable<Result<HttpDataInfo>> o = smartService.perfectInformation(userId,nickname,gender,age);
+    public void perfectInformation(String nickname,String gender, int age,String weixinnumber,String qqnumber,String userId, RequestSubscriber<Result<HttpDataInfo>> requestSubscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.perfectInformation(userId,nickname,gender,age,weixinnumber,qqnumber);
         o.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -845,5 +848,72 @@ public class HttpManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 
+    }
+    //邀请码页面控制接口
+    public void getLnvitationCodeControl(RequestSubscriber<Result<HttpDataInfo>> requestSubscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.getLnvitationCodeControl();
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+    public void shareRedPackage(String redGold, String redNumber, String userId, RequestSubscriber<Result<Void>> requestSubscriber) {
+        Observable<Result<Void>> o = smartService.shareRedPackage(userId,redGold,redNumber);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+    public void showRedPackage(String userId, RequestSubscriber<Result<RedPackageListBean>> requestSubscriber) {
+        Observable<Result<RedPackageListBean>> o = smartService.showRedPackage(userId );
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+
+    }
+
+    public void getRedPackage(String userId, String redUserId, String redId, RequestSubscriber<Result<Void>> requestSubscriber) {
+        Observable<Result<Void>> o = smartService.getRedPackage(userId,redUserId,redId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+
+    }
+
+    public void getRedPackdetail(String redId, RequestSubscriber<Result<RedInfoBean>> requestSubscriber) {
+        Observable<Result<RedInfoBean>> o = smartService.getRedPackdetail(redId);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+    public void getSendRedPackageInfo(String userId, String time, RequestSubscriber<Result<RedPackageBean>> requestSubscriber) {
+        Observable<Result<RedPackageBean>> o = smartService.getSendRedPackageInfo(userId,time);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+
+    public void getResiveRedPackageInfo(String userId, String yearTime, RequestSubscriber<Result<RedPackageBean>> requestSubscriber) {
+        Observable<Result<RedPackageBean>> o = smartService.getResiveRedPackageInfo(userId,yearTime);
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
+    }
+
+    public void getSlideShowList(RequestSubscriber<Result<HttpDataInfo>> requestSubscriber) {
+        Observable<Result<HttpDataInfo>> o = smartService.getSlideShowList();
+        o.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(requestSubscriber);
     }
 }

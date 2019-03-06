@@ -53,6 +53,23 @@ public class UserBean implements Serializable {
     private String LEVEL_16_TAG;
     private String LEVEL_18_TAG;
     private int AGE;
+    private String WX_ACCOUNT ;
+    private String QQ_ACCOUNT ;
+    public String getWXACCOUNT() {
+        return WX_ACCOUNT;
+    }
+
+    public void setWXACCOUNT(String WXACCOUNT) {
+        this.WX_ACCOUNT = WXACCOUNT;
+    }
+
+    public String getQQACCOUNT() {
+        return QQ_ACCOUNT;
+    }
+
+    public void setQQACCOUNT(String QQACCOUNT) {
+        this.QQ_ACCOUNT = QQACCOUNT;
+    }
 
     public int getAGE() {
         return AGE;

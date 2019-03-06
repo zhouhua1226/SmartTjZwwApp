@@ -38,6 +38,10 @@ public class PerfectInformationActivity extends BaseActivity{
     ImageView user_image;
     @BindView(R.id.et_nickname)
     EditText et_nickname;
+    @BindView(R.id.et_qq_number)
+    EditText et_qq_number;
+    @BindView(R.id.et_weixin_number)
+    EditText et_weixin_number;
     @BindView(R.id.tv_user_gener)
     TextView user_gener;
     @BindView(R.id.tv_user_age)
@@ -46,6 +50,7 @@ public class PerfectInformationActivity extends BaseActivity{
     private int age=0;
     private String gender;
     private String nickname;
+    private String qqnumber,weixinnumber;
     private TimePickerDialog mDialogAll;
 
 
@@ -66,12 +71,11 @@ public class PerfectInformationActivity extends BaseActivity{
         super.onResume();
         Glide.with(this)
                 .load(UserUtils.UserImage)
-                .error(R.mipmap.app_mm_icon)
+                .error(R.drawable.icon_infor_add_header)
                 .dontAnimate()
                 .transform(new GlideCircleTransform(this))
                 .into(user_image);
     }
-
     @Override
     protected void initView() {
         initTimeDialog();
@@ -98,22 +102,31 @@ public class PerfectInformationActivity extends BaseActivity{
                 break;
             case R.id.btn_sure_infor:
                 nickname=et_nickname.getText().toString();
+                weixinnumber=et_weixin_number.getText().toString();
+                qqnumber=et_qq_number.getText().toString();
                 gender=user_gener.getText().toString();
                 if (nickname.isEmpty()) {
-                    MyToast.getToast(this, "请输入手昵称").show();
+                    MyToast.getToast(this, "请输入昵称").show();
+                    return;
+                }
+                if (qqnumber.isEmpty()) {
+                    MyToast.getToast(this, "请输入你的QQ号").show();
+                    return;
+                }
+                if (weixinnumber.isEmpty()) {
+                    MyToast.getToast(this, "请输入你的微信号").show();
                     return;
                 }
                 if (gender.isEmpty()) {
                     MyToast.getToast(this, "请确认你的性别").show();
                     return;
                 }
-                if (age==0) {
+                if (age<1) {
                     MyToast.getToast(this, "请确认你的年龄").show();
                     return;
                 }
                 setPerfectInformation(UserUtils.USER_ID);
                 break;
-
         }
     }
 
@@ -156,11 +169,13 @@ public class PerfectInformationActivity extends BaseActivity{
                 .build();
     }
   private  void  setPerfectInformation(String userId){
-      HttpManager.getInstance().perfectInformation(nickname, gender, age, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
+      HttpManager.getInstance().perfectInformation(nickname, gender, age,weixinnumber,qqnumber, userId, new RequestSubscriber<Result<HttpDataInfo>>() {
           @Override
           public void _onSuccess(Result<HttpDataInfo> loginInfoResult) {
-              if(loginInfoResult.getMsg().equals("success")) {
+              if(loginInfoResult.getMsg().equals(Utils.HTTP_OK)) {
                   MyToast.getToast(PerfectInformationActivity.this,"信息已保存").show();
+                  UserUtils.WXACCOUNT=loginInfoResult.getData().getAppUser().getWXACCOUNT();
+                  UserUtils.QQACCOUNT=loginInfoResult.getData().getAppUser().getQQACCOUNT();
                   UserUtils.AGE= loginInfoResult.getData().getAppUser().getAGE();
                   UserUtils.GENDER=loginInfoResult.getData().getAppUser().getGENDER();
                   UserUtils.NickName = loginInfoResult.getData().getAppUser().getNICKNAME();
@@ -185,6 +200,8 @@ public class PerfectInformationActivity extends BaseActivity{
                     UserUtils.AGE= result.getData().getAppUser().getAGE();
                     UserUtils.GENDER=result.getData().getAppUser().getGENDER();
                     UserUtils.NickName = result.getData().getAppUser().getNICKNAME();
+                    UserUtils.WXACCOUNT=result.getData().getAppUser().getWXACCOUNT();
+                    UserUtils.QQACCOUNT=result.getData().getAppUser().getQQACCOUNT();
                     UserUtils.UserImage = UrlUtils.APPPICTERURL + result.getData().getAppUser().getIMAGE_URL();
                     getUserImageAndName();
                 }
@@ -200,6 +217,18 @@ public class PerfectInformationActivity extends BaseActivity{
         if (!UserUtils.NickName.equals("")) {
             et_nickname.setText(UserUtils.NickName);
         }
-        user_gener.setText(UserUtils.GENDER);
+        if (!UserUtils.GENDER.equals("")) {
+            user_gener.setText(UserUtils.GENDER);
+        }
+        if (UserUtils.AGE>0) {
+            age=UserUtils.AGE;
+            user_age.setText(UserUtils.AGE+"");
+        }
+        if (!UserUtils.WXACCOUNT.equals("")) {
+            et_weixin_number.setText(UserUtils.WXACCOUNT);
+        }
+        if (!UserUtils.QQACCOUNT.equals("")) {
+            et_qq_number.setText(UserUtils.QQACCOUNT);
+        }
     }
 }

@@ -49,11 +49,11 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.MyVi
         holder.sendname_tv.setText("收货人："+mDatas.get(position).getCNEE_NAME());
         holder.sendphone_tv.setText(mDatas.get(position).getCNEE_PHONE());
         holder.sendaddress_tv.setText("收货地址："+mDatas.get(position).getCNEE_ADDRESS());
-        if(mDatas.get(position).getREMARK().equals("")){
+       if(mDatas.get(position).getREMARK().equals("")){
             holder.sendremark_tv.setText("备注：暂无备注！");
-        }else {
+      }else {
             holder.sendremark_tv.setText("备注："+mDatas.get(position).getREMARK());
-        }
+       }
         if(mDatas.get(position).getSENDBOOLEAN().equals("0")){
             holder.results_tv.setText("待发货");
             holder.wl_layout.setVisibility(View.GONE);

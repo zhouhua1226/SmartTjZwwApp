@@ -61,21 +61,19 @@ public class MyCenterAdapter extends RecyclerView.Adapter<MyCenterAdapter.Center
 
     @Override
     public void onBindViewHolder(final CenterViewHolder holder, final int position) {
-//        if((int)(holder.getView().getTag()) == position){
-//            //TODO: 这里处理对应position的view设置
-//
-//        }
-//        else{
-//            //view被recycled了，重新设置view
-//        }
         holder.name.setText(mDatas.get(position).getDOLL_NAME());
         holder.times.setText(mDatas.get(position).getCREATE_DATE().replace("-","/"));
         holder.gold_tv.setText("可兑换金币:"+mDatas.get(position).getCONVERSIONGOLD());
         if(mDatas.get(position).getPOST_STATE().equals("0")){
-            holder.select_image.setVisibility(View.VISIBLE);
-            holder.type.setVisibility(View.GONE);
-            holder.select_image.setImageResource(R.drawable.mycatchrecord_unselect);
-
+            if(mDatas.get(position).getIs_select()){
+                holder.select_image.setVisibility(View.VISIBLE);
+                holder.type.setVisibility(View.GONE);
+                holder.select_image.setImageResource(R.drawable.mycatchrecord_select);
+            }else{
+                holder.select_image.setVisibility(View.VISIBLE);
+                holder.type.setVisibility(View.GONE);
+                holder.select_image.setImageResource(R.drawable.mycatchrecord_unselect);
+            }
         }else if(mDatas.get(position).getPOST_STATE().equals("1")){
             holder.select_image.setVisibility(View.GONE);
             holder.type.setVisibility(View.VISIBLE);

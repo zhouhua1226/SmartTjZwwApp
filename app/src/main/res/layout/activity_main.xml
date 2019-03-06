@@ -46,6 +46,6 @@
             android:id="@+id/iv_tab_zww"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/zww_icon" />
+            android:background="@drawable/zww_icon_christmans" />
     </FrameLayout>
 </RelativeLayout>
